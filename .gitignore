@@ -1,0 +1,7 @@
+/invest.aum.service/
+.classpath
+.mvn/
+.project
+.settings/
+target/
+.scannerwork/
