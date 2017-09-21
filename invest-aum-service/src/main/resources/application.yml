@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: @pom.artifactId@
+    
+  output:
+    ansi:
+      enabled: always
+server:
+  address: localhost
+  port: 16888
+  
+logging:
+  config: classpath:logback-spring.xml
+
+#banner properties
+application:
+  version: @pom.version@
+
+---
+spring:
+  profiles:
+    active: ut
+
+---
+spring:
+  profiles:
+    active: uat
+---
+spring:
+  profiles:
+    active: prod
+    
+...
