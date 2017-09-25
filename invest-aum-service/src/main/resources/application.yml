@@ -8,6 +8,9 @@
 # activate profile configuration.
 
 spring:
+  data:
+    rest:
+      basePath: /api/aum
   application:
     name: @pom.artifactId@
   profiles:
