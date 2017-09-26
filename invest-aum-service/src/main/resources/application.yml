@@ -10,7 +10,7 @@
 spring:
   data:
     rest:
-      basePath: /api/aum
+      basePath: /aum/api
   application:
     name: @pom.artifactId@
   profiles:
