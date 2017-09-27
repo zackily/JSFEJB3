@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AumFundCreateDlg" widgetVar="AumFundCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateAumFundTitle}">
+            <h:form id="AumFundCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{aumFundController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{aumFundController.selected.id}" title="#{bundle.CreateAumFundTitle_id}" required="true" requiredMessage="#{bundle.CreateAumFundRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldTstAcc}" for="FHldTstAcc" />
+                        <p:inputText id="FHldTstAcc" value="#{aumFundController.selected.FHldTstAcc}" title="#{bundle.CreateAumFundTitle_FHldTstAcc}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldCustNo}" for="FHldCustNo" />
+                        <p:inputText id="FHldCustNo" value="#{aumFundController.selected.FHldCustNo}" title="#{bundle.CreateAumFundTitle_FHldCustNo}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldDate}" for="FHldDate" />
+                        <p:inputText id="FHldDate" value="#{aumFundController.selected.FHldDate}" title="#{bundle.CreateAumFundTitle_FHldDate}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldFundNo}" for="FHldFundNo" />
+                        <p:inputText id="FHldFundNo" value="#{aumFundController.selected.FHldFundNo}" title="#{bundle.CreateAumFundTitle_FHldFundNo}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldNav}" for="FHldNav" />
+                        <p:inputText id="FHldNav" value="#{aumFundController.selected.FHldNav}" title="#{bundle.CreateAumFundTitle_FHldNav}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldNavDate}" for="FHldNavDate" />
+                        <p:inputText id="FHldNavDate" value="#{aumFundController.selected.FHldNavDate}" title="#{bundle.CreateAumFundTitle_FHldNavDate}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldUnit}" for="FHldUnit" />
+                        <p:inputText id="FHldUnit" value="#{aumFundController.selected.FHldUnit}" title="#{bundle.CreateAumFundTitle_FHldUnit}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldTwValue}" for="FHldTwValue" />
+                        <p:inputText id="FHldTwValue" value="#{aumFundController.selected.FHldTwValue}" title="#{bundle.CreateAumFundTitle_FHldTwValue}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldValue}" for="FHldValue" />
+                        <p:inputText id="FHldValue" value="#{aumFundController.selected.FHldValue}" title="#{bundle.CreateAumFundTitle_FHldValue}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldCost}" for="FHldCost" />
+                        <p:inputText id="FHldCost" value="#{aumFundController.selected.FHldCost}" title="#{bundle.CreateAumFundTitle_FHldCost}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldPortfolioNo}" for="FHldPortfolioNo" />
+                        <p:inputText id="FHldPortfolioNo" value="#{aumFundController.selected.FHldPortfolioNo}" title="#{bundle.CreateAumFundTitle_FHldPortfolioNo}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldCur}" for="FHldCur" />
+                        <p:inputText id="FHldCur" value="#{aumFundController.selected.FHldCur}" title="#{bundle.CreateAumFundTitle_FHldCur}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldExrate}" for="FHldExrate" />
+                        <p:inputText id="FHldExrate" value="#{aumFundController.selected.FHldExrate}" title="#{bundle.CreateAumFundTitle_FHldExrate}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldExrateDate}" for="FHldExrateDate" />
+                        <p:inputText id="FHldExrateDate" value="#{aumFundController.selected.FHldExrateDate}" title="#{bundle.CreateAumFundTitle_FHldExrateDate}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldCanvasser}" for="FHldCanvasser" />
+                        <p:inputText id="FHldCanvasser" value="#{aumFundController.selected.FHldCanvasser}" title="#{bundle.CreateAumFundTitle_FHldCanvasser}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldBranchId}" for="FHldBranchId" />
+                        <p:inputText id="FHldBranchId" value="#{aumFundController.selected.FHldBranchId}" title="#{bundle.CreateAumFundTitle_FHldBranchId}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldChannel}" for="FHldChannel" />
+                        <p:inputText id="FHldChannel" value="#{aumFundController.selected.FHldChannel}" title="#{bundle.CreateAumFundTitle_FHldChannel}" />
+                        <p:outputLabel value="#{bundle.CreateAumFundLabel_FHldDateTime}" for="FHldDateTime" />
+                        <p:calendar id="FHldDateTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{aumFundController.selected.FHldDateTime}" title="#{bundle.EditAumFundTitle_FHldDateTime}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{aumFundController.create}" value="#{bundle.Save}" update="display,:AumFundListForm:datalist,:growl" oncomplete="handleSubmit(args,'AumFundCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="AumFundCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

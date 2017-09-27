@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MgFeeRateViewDlg" widgetVar="MgFeeRateViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewMgFeeRateTitle}">
+            <h:form id="MgFeeRateViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{mgFeeRateController.selected != null}">
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_id}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.id}" title="#{bundle.ViewMgFeeRateTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_actCode}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.actCode}" title="#{bundle.ViewMgFeeRateTitle_actCode}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_ctSeq}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.ctSeq}" title="#{bundle.ViewMgFeeRateTitle_ctSeq}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_custId}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.custId}" title="#{bundle.ViewMgFeeRateTitle_custId}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_hldDate}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.hldDate}" title="#{bundle.ViewMgFeeRateTitle_hldDate}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_saleChnl}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.saleChnl}" title="#{bundle.ViewMgFeeRateTitle_saleChnl}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_actType}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.actType}" title="#{bundle.ViewMgFeeRateTitle_actType}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_aum}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.aum}" title="#{bundle.ViewMgFeeRateTitle_aum}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_chargeObj}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.chargeObj}" title="#{bundle.ViewMgFeeRateTitle_chargeObj}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_actSetType}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.actSetType}" title="#{bundle.ViewMgFeeRateTitle_actSetType}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_mgActDSetNo}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.mgActDSetNo}" title="#{bundle.ViewMgFeeRateTitle_mgActDSetNo}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_actFee}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.actFee}" title="#{bundle.ViewMgFeeRateTitle_actFee}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_aumTwFee}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.aumTwFee}" title="#{bundle.ViewMgFeeRateTitle_aumTwFee}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_mgFeeCostTwFee}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.mgFeeCostTwFee}" title="#{bundle.ViewMgFeeRateTitle_mgFeeCostTwFee}"/>
+                        <h:outputText value="#{bundle.ViewMgFeeRateLabel_dateTime}"/>
+                        <h:outputText value="#{mgFeeRateController.selected.dateTime}" title="#{bundle.ViewMgFeeRateTitle_dateTime}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="MgFeeRateViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

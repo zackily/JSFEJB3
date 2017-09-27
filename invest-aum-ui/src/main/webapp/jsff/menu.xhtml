@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                >
+<h:form id="header" prependId="false">
+     <p:panelMenu style="width:300px">      
+        <p:submenu label="單元測試" >
+            <p:menuitem value="AumFund" outcome="/aum/aumFund/List.xhtml" />
+             <p:menuitem value="AumFund_Query" outcome="/aum/aumFund/QueryList.xhtml" />
+            <p:menuitem value="BatchStatus" outcome="/aum/batchStatus/List.xhtml" />
+            <p:menuitem value="FSettlementStatus" outcome="/aum/fSettlementStatus/List.xhtml" />
+            <p:menuitem value="MgFee" outcome="/aum/mgFee/List.xhtml" />
+            <p:menuitem value="MgFeeMonth" outcome="/aum/mgFeeMonth/List.xhtml" />
+            <p:menuitem value="MgFeeRate" outcome="/aum/mgFeeRate/List.xhtml" />
+            <p:menuitem value="MgFeeRateWork" outcome="/aum/mgFeeRateWork/List.xhtml" />
+            <p:menuitem value="MgSetDetail" outcome="/aum/mgSetDetail/List.xhtml" />
+            <p:menuitem value="MgSetMaster" outcome="/aum/mgSetMaster/List.xhtml" />
+        </p:submenu>
+        
+        <p:submenu label="AUM相關" >              
+             
+            <p:menuitem value="Holding檔查詢" outcome="/aum/aumFund/QueryList.xhtml" />
+            
+             <p:menuitem value="管理費活動案設定" outcome="/aum/mgSetMaster/List.xhtml" />   
+             <p:menuitem value="管理費查詢" outcome="/aum/aumFund/QueryList.xhtml" />
+           
+        </p:submenu>
+
+    </p:panelMenu>
+</h:form>
+</ui:composition>

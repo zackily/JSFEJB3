@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AumFundViewDlg" widgetVar="AumFundViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewAumFundTitle}">
+            <h:form id="AumFundViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{aumFundController.selected != null}">
+                        <h:outputText value="#{bundle.ViewAumFundLabel_id}"/>
+                        <h:outputText value="#{aumFundController.selected.id}" title="#{bundle.ViewAumFundTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldTstAcc}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldTstAcc}" title="#{bundle.ViewAumFundTitle_FHldTstAcc}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldCustNo}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldCustNo}" title="#{bundle.ViewAumFundTitle_FHldCustNo}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldDate}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldDate}" title="#{bundle.ViewAumFundTitle_FHldDate}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldFundNo}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldFundNo}" title="#{bundle.ViewAumFundTitle_FHldFundNo}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldNav}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldNav}" title="#{bundle.ViewAumFundTitle_FHldNav}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldNavDate}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldNavDate}" title="#{bundle.ViewAumFundTitle_FHldNavDate}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldUnit}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldUnit}" title="#{bundle.ViewAumFundTitle_FHldUnit}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldTwValue}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldTwValue}" title="#{bundle.ViewAumFundTitle_FHldTwValue}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldValue}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldValue}" title="#{bundle.ViewAumFundTitle_FHldValue}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldCost}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldCost}" title="#{bundle.ViewAumFundTitle_FHldCost}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldPortfolioNo}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldPortfolioNo}" title="#{bundle.ViewAumFundTitle_FHldPortfolioNo}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldCur}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldCur}" title="#{bundle.ViewAumFundTitle_FHldCur}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldExrate}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldExrate}" title="#{bundle.ViewAumFundTitle_FHldExrate}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldExrateDate}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldExrateDate}" title="#{bundle.ViewAumFundTitle_FHldExrateDate}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldCanvasser}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldCanvasser}" title="#{bundle.ViewAumFundTitle_FHldCanvasser}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldBranchId}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldBranchId}" title="#{bundle.ViewAumFundTitle_FHldBranchId}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldChannel}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldChannel}" title="#{bundle.ViewAumFundTitle_FHldChannel}"/>
+                        <h:outputText value="#{bundle.ViewAumFundLabel_FHldDateTime}"/>
+                        <h:outputText value="#{aumFundController.selected.FHldDateTime}" title="#{bundle.ViewAumFundTitle_FHldDateTime}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="AumFundViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

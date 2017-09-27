@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MgSetMasterCreateDlg" widgetVar="MgSetMasterCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateMgSetMasterTitle}">
+            <h:form id="MgSetMasterCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{mgSetMasterController.selected != null}">
+
+                        <p:outputLabel value="活動代碼" for="mgActMCode" />
+                        <p:inputText id="mgActMCode" value="#{mgSetMasterController.selected.mgActMCode}" title="#{bundle.CreateMgSetMasterTitle_mgActMCode}" />
+                        <p:outputLabel value="活動名稱" for="mgActMName" />
+                        <p:inputText id="mgActMName" value="#{mgSetMasterController.selected.mgActMName}" title="#{bundle.CreateMgSetMasterTitle_mgActMName}" />
+                        <p:outputLabel value="活動案類型" for="mgActMType" />
+                        <p:selectOneRadio id="mgActMType" value="#{mgSetMasterController.selected.mgActMType}">                                  
+                            <f:selectItem itemLabel="AUM" itemValue="1" /> 
+                            <f:selectItem itemLabel="成本" itemValue="2" /> 
+                        </p:selectOneRadio> 
+                        <p:outputLabel value="費率" for="mgActMRateSet" />
+                        <p:selectOneRadio id="mgActMRateSet" value="#{mgSetMasterController.selected.mgActMRateSet}">                                            
+                            <f:selectItem itemLabel="Low" itemValue="1" /> 
+                            <f:selectItem itemLabel="High" itemValue="2" /> 
+                        </p:selectOneRadio> 
+
+                        <p:outputLabel value="適用通路" for="mgActMSaleChnl" />
+                        <p:selectOneRadio id="mgActMSaleChnl" value="#{mgSetMasterController.selected.mgActMSaleChnl}">                                           
+                            <f:selectItem itemLabel="櫃檯" itemValue="1" /> 
+                            <f:selectItem itemLabel="網路" itemValue="2" /> 
+                            <f:selectItem itemLabel="語音" itemValue="3" />
+                            <f:selectItem itemLabel="KOKO" itemValue="8" />
+                        </p:selectOneRadio> 
+
+                        <p:outputLabel value="活動案收費對象" for="mgActMChargeObj" />
+                        <p:selectOneRadio id="mgActMChargeObj" value="#{mgSetMasterController.selected.mgActMChargeObj}">                                           
+                            <f:selectItem itemLabel="向客戶收費" itemValue="C" /> 
+                            <f:selectItem itemLabel="支付合作對象" itemValue="P" />                             
+                        </p:selectOneRadio> 
+
+                        <p:outputLabel value="活動案最後計算日期" for="mgActMChargeObj" />
+                        <p:calendar pattern="yyyyMMdd" id="mgActDStartDate" value="#{mgSetMasterController.last_settle_date}" title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}">
+                            <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
+                        </p:calendar>
+
+                        <p:outputLabel value="備註" for="mgActMRemark" />
+                        <p:inputTextarea id="mgActMRemark" value="#{mgSetMasterController.selected.mgActMRemark}" title="#{bundle.CreateMgSetMasterTitle_mgActMRemark}" />
+
+                    </p:panelGrid>
+                    <center>
+                        <p:commandButton actionListener="#{mgSetMasterController.create}" value="#{bundle.Save}" update="display,:MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="MgSetMasterCreateDialog.hide()"/>
+                    </center>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="MgSetDetailCreateDlg" widgetVar="MgSetDetailCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="子活動案設定">
+            <h:form id="MgSetDetailCreateForm">
+
+
+                <p:wizard flowListener="#{mgSetMasterController.onFlowProcess}">
+                    <p:tab id="summary" title="子活動">
+
+                        <h:panelGroup id="displayDetail">
+                            <p:panelGrid columns="4" rendered="#{mgSetMasterController.mgSetDetail != null}">                     
+                                <p:outputLabel value="Detail活動代碼" for="mgActDCode" />
+                                <p:inputText id="mgActDCode" value="#{mgSetMasterController.mgSetDetail.mgActDCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDCode}" />
+                                <p:outputLabel value="Detail活動序號" for="mgActDSeq" />
+                                <p:inputText id="mgActDSeq" value="#{mgSetMasterController.mgSetDetail.mgActDSeq}" title="#{bundle.CreateMgSetDetailTitle_mgActDSeq}" />
+                                <p:outputLabel value="活動案種類" for="mgActSetType" />                  
+                                <p:selectOneRadio id="mgActSetType" value="#{mgSetMasterController.mgSetDetail.mgActSetType}" style="width:125px">                                           
+                                    <f:selectItem itemLabel="固定費用" itemValue="F" /> 
+                                    <f:selectItem itemLabel="費率" itemValue="R" /> 
+                                </p:selectOneRadio>
+                                <p:outputLabel value="Detail活動名稱" for="mgActDName" />
+                                <p:inputText id="mgActDName" value="#{mgSetMasterController.mgSetDetail.mgActDName}" title="#{bundle.CreateMgSetDetailTitle_mgActDName}" />
+                                <p:outputLabel value="產品代號" for="mgActDPrdCode" />
+                                <p:inputText id="mgActDPrdCode" value="#{mgSetMasterController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" />
+                                <p:outputLabel value="Security類型" for="mgActDSecType" />
+
+                                <p:selectOneRadio id="mgActDSecType" value="#{mgSetMasterController.mgSetDetail.mgActDSecType}">
+                                    <f:selectItem itemLabel="Stock" itemValue="1" />
+                                    <f:selectItem itemLabel="Bond" itemValue="2" />
+                                    <f:selectItem itemLabel="Fund" itemValue="3" />
+                                </p:selectOneRadio>
+                                <p:outputLabel value="Security公司" for="mgActDSecCmp" />
+                                <p:inputText id="mgActDSecCmp" value="#{mgSetMasterController.mgSetDetail.mgActDSecCmp}" title="#{bundle.CreateMgSetDetailTitle_mgActDSecCmp}" />
+                                <p:outputLabel value="Security Code" for="mgActDSecCode" />
+                                <p:inputText id="mgActDSecCode" value="#{mgSetMasterController.mgSetDetail.mgActDSecCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDSecCode}" />
+                                <p:outputLabel value="客戶代碼" for="mgActDCostId" />
+                                <p:inputText id="mgActDCostId" value="#{mgSetMasterController.mgSetDetail.mgActDCostId}" title="#{bundle.CreateMgSetDetailTitle_mgActDCostId}" />
+                                <p:outputLabel value="業務通路代碼" for="mgActDSaleChnl" />
+                                <p:inputText id="mgActDSaleChnl" value="#{mgSetMasterController.mgSetDetail.mgActDSaleChnl}" title="#{bundle.CreateMgSetDetailTitle_mgActDSaleChnl}" />
+                                <p:outputLabel value="活動案起日" for="mgActDStartDate" />
+                                <p:calendar pattern="yyyyMMdd" id="mgActDStartDate" value="#{mgSetMasterController.start_date}" title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}">
+                                    <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
+                                </p:calendar>
+                                <p:outputLabel value="活動案迄日" for="mgActDEndDate" />
+                                <p:calendar pattern="yyyyMMdd" id="mgActDEndDate" value="#{mgSetMasterController.end_date}" title="#{bundle.CreateMgSetDetailTitle_mgActDEndDate}">
+                                    <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
+                                </p:calendar>                       
+                                <p:outputLabel value="級距設定序號" for="mgActDSetNo" />
+                                <p:inputText id="mgActDSetNo" value="#{mgSetMasterController.mgSetDetail.mgActDSetNo}" title="#{bundle.CreateMgSetDetailTitle_mgActDSetNo}" />
+                                <p:outputLabel value="Base amount" for="mgActDBaseAmt" />
+                                <p:inputText id="mgActDBaseAmt" value="#{mgSetMasterController.mgSetDetail.mgActDBaseAmt}" title="#{bundle.CreateMgSetDetailTitle_mgActDBaseAmt}" />
+                                <p:outputLabel value="最低金額" for="mgActDLowAmt" />
+                                <p:inputText id="mgActDLowAmt" value="#{mgSetMasterController.mgSetDetail.mgActDLowAmt}" title="#{bundle.CreateMgSetDetailTitle_mgActDLowAmt}" />
+                                <p:outputLabel value="最高金額" for="mgActDHighAmt" />
+                                <p:inputText id="mgActDHighAmt" value="#{mgSetMasterController.mgSetDetail.mgActDHighAmt}" title="#{bundle.CreateMgSetDetailTitle_mgActDHighAmt}" />
+                                <p:outputLabel value="一年管理費率" for="mgActDRate" />
+                                <p:inputText id="mgActDRate" value="#{mgSetMasterController.mgSetDetail.mgActDRate}" title="#{bundle.CreateMgSetDetailTitle_mgActDRate}" />
+                                <p:outputLabel value="管理費金額" for="mgActDFee" />
+                                <p:inputText id="mgActDFee" value="#{mgSetMasterController.mgSetDetail.mgActDFee}" title="#{bundle.CreateMgSetDetailTitle_mgActDFee}" />
+                                <p:outputLabel value="備註" for="mgActDRemark" />                       
+                                <p:inputTextarea id="mgActDRemark" value="#{mgSetMasterController.mgSetDetail.mgActDRemark}" title="#{bundle.CreateMgSetDetailTitle_mgActDRemark}" />
+                            </p:panelGrid>
+                            <h:selectBooleanCheckbox value="#{mgSetMasterController.skip}" />
+                        </h:panelGroup>
+                    </p:tab>
+
+                    <p:tab  title="子活動案對應設定">
+                       
+                            <p:messages />
+                            <h:panelGrid columns="2" columnClasses="label, value">
+                                <h:outputLabel for="company" value="基金公司" />　
+                                <p:selectCheckboxMenu id="company" value="#{mgSetMasterController.selectedInvCorp}" label="Company" multiple="true"
+                                                      filter="true" filterMatchMode="endsWith" panelStyle="width:250px">
+                                    <f:selectItems value="#{mgSetMasterController.invCorp}" />
+                                    <p:ajax listener="#{mgSetMasterController.updateCheckBox()}" event="change" update=":MgSetDetailCreateForm:code" />
+                                </p:selectCheckboxMenu>
+                                
+                                 <h:outputLabel for="code" value="基金代碼" />　
+                                 <p:selectCheckboxMenu id="code" value="#{mgSetMasterController.selectedFundId}" label="Code" multiple="true"
+                                                      filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                     <f:selectItems value="#{mgSetMasterController.fundId}" />
+                                </p:selectCheckboxMenu>
+
+                            </h:panelGrid>
+                      
+                    </p:tab>
+
+                      <p:tab id="import" title="匯入ID">
+                          <h:panelGrid columns="2" columnClasses="label, value">
+                              
+                              
+                          </h:panelGrid>
+                    </p:tab>
+                    
+                   
+
+                    <p:tab id="confirm" title="Confirmation">
+                        <p:panel header="Confirmation">
+                       <!--<p:commandButton value="Submit"update="growl" process="@this"/>-->
+                        </p:panel>
+                    </p:tab>
+                </p:wizard>
+
+
+
+
+
+
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog id="MgSetDetailListDlg" widgetVar="MgSetDetailListDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateMgSetDetailTitle}">
+
+            <h:form id="MgSetDetailListForm">
+                   <!--<p:panel header="#{bundle.ListMgSetDetailTitle}">-->
+                <p:dataTable id="detailDatalist" value="#{mgSetMasterController.detailItems}" var="item"                             
+                             paginator="true"                            
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             >
+
+                    <!--                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                                            <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>-->
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDCode}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDCode}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSeq}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSeq}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActSetType}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActSetType}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDName}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDPrdCode}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDPrdCode}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSecType}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSecType}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSecCmp}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSecCmp}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSecCode}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSecCode}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDCostId}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDCostId}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSaleChnl}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSaleChnl}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDStartDate}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDStartDate}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDEndDate}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDEndDate}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSetNo}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSetNo}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDBaseAmt}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDBaseAmt}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDLowAmt}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDLowAmt}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDHighAmt}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDHighAmt}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDRate}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDRate}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDFee}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDFee}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDRemark}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDRemark}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgSetMasterId}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgSetMasterId}"/>
+                    </p:column>
+                    <!--                        <f:facet name="footer">                           
+                                                <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":MgSetDetailViewForm" oncomplete="PF('MgSetDetailViewDialog').show()" disabled="#{empty mgSetDetailController.selected}"/>
+                                                <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":MgSetDetailEditForm" oncomplete="PF('MgSetDetailEditDialog').show()" disabled="#{empty mgSetDetailController.selected}"/>
+                                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{mgSetDetailController.destroy}" update=":growl,datalist" disabled="#{empty mgSetDetailController.selected}"/>
+                                            </f:facet>-->
+                </p:dataTable>
+
+                <!--</p:panel>-->
+            </h:form>
+        </p:dialog>
+
+        <p:dialog id="MgSetDetailImportDlg" width="80%" widgetVar="MgSetDetailImportDlg" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateMgSetDetailTitle}">
+            <h:form id="MgSetDetailImportForm">
+                <!--<h:panelGroup id="displayImport">-->
+                <p:fileUpload 
+                    label="匯入檔案"                        
+                    uploadLabel="上傳" 
+                    fileUploadListener="#{mgSetMasterController.handleFileUpload}"
+                    multiple="true"  
+                    sizeLimit="40960"
+                    invalidSizeMessage="一個檔案大小最多為5Mbytes" 
+                    invalidFileMessage="上傳檔案格式僅接受CSV檔"                                       
+                    update=":MgSetDetailImportForm:detailDatalist"
+                    />   
+
+                <p:dataTable id="detailDatalist" value="#{mgSetMasterController.detailItems}" var="item"                              
+                             paginator="true"                            
+                             rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50"
+                             >
+
+                    <!--                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                                            <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>-->
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDCode}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDCode}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSeq}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSeq}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActSetType}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActSetType}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDName}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDName}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDPrdCode}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDPrdCode}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSecType}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSecType}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSecCmp}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSecCmp}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSecCode}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSecCode}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDCostId}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDCostId}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSaleChnl}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSaleChnl}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDStartDate}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDStartDate}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDEndDate}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDEndDate}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDSetNo}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDSetNo}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDBaseAmt}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDBaseAmt}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDLowAmt}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDLowAmt}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDHighAmt}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDHighAmt}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDRate}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDRate}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDFee}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDFee}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgActDRemark}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgActDRemark}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.ListMgSetDetailTitle_mgSetMasterId}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.mgSetMasterId}"/>
+                    </p:column>
+                    <!--                        <f:facet name="footer">                           
+                                                <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":MgSetDetailViewForm" oncomplete="PF('MgSetDetailViewDialog').show()" disabled="#{empty mgSetDetailController.selected}"/>
+                                                <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":MgSetDetailEditForm" oncomplete="PF('MgSetDetailEditDialog').show()" disabled="#{empty mgSetDetailController.selected}"/>
+                                                <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{mgSetDetailController.destroy}" update=":growl,datalist" disabled="#{empty mgSetDetailController.selected}"/>
+                                            </f:facet>-->
+                </p:dataTable>
+                <!--</h:panelGroup>-->
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

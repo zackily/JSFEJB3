@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MgFeeCreateDlg" widgetVar="MgFeeCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateMgFeeTitle}">
+            <h:form id="MgFeeCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{mgFeeController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{mgFeeController.selected.id}" title="#{bundle.CreateMgFeeTitle_id}" required="true" requiredMessage="#{bundle.CreateMgFeeRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeTstAcc}" for="mgFeeTstAcc" />
+                        <p:inputText id="mgFeeTstAcc" value="#{mgFeeController.selected.mgFeeTstAcc}" title="#{bundle.CreateMgFeeTitle_mgFeeTstAcc}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeCustId}" for="mgFeeCustId" />
+                        <p:inputText id="mgFeeCustId" value="#{mgFeeController.selected.mgFeeCustId}" title="#{bundle.CreateMgFeeTitle_mgFeeCustId}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeDate}" for="mgFeeDate" />
+                        <p:inputText id="mgFeeDate" value="#{mgFeeController.selected.mgFeeDate}" title="#{bundle.CreateMgFeeTitle_mgFeeDate}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeFundNo}" for="mgFeeFundNo" />
+                        <p:inputText id="mgFeeFundNo" value="#{mgFeeController.selected.mgFeeFundNo}" title="#{bundle.CreateMgFeeTitle_mgFeeFundNo}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgPortfolioNo}" for="mgPortfolioNo" />
+                        <p:inputText id="mgPortfolioNo" value="#{mgFeeController.selected.mgPortfolioNo}" title="#{bundle.CreateMgFeeTitle_mgPortfolioNo}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeActCode}" for="mgFeeActCode" />
+                        <p:inputText id="mgFeeActCode" value="#{mgFeeController.selected.mgFeeActCode}" title="#{bundle.CreateMgFeeTitle_mgFeeActCode}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeAumTwFee}" for="mgFeeAumTwFee" />
+                        <p:inputText id="mgFeeAumTwFee" value="#{mgFeeController.selected.mgFeeAumTwFee}" title="#{bundle.CreateMgFeeTitle_mgFeeAumTwFee}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeCostTwFee}" for="mgFeeCostTwFee" />
+                        <p:inputText id="mgFeeCostTwFee" value="#{mgFeeController.selected.mgFeeCostTwFee}" title="#{bundle.CreateMgFeeTitle_mgFeeCostTwFee}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeAumFee}" for="mgFeeAumFee" />
+                        <p:inputText id="mgFeeAumFee" value="#{mgFeeController.selected.mgFeeAumFee}" title="#{bundle.CreateMgFeeTitle_mgFeeAumFee}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeCostFee}" for="mgFeeCostFee" />
+                        <p:inputText id="mgFeeCostFee" value="#{mgFeeController.selected.mgFeeCostFee}" title="#{bundle.CreateMgFeeTitle_mgFeeCostFee}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeCur}" for="mgFeeCur" />
+                        <p:inputText id="mgFeeCur" value="#{mgFeeController.selected.mgFeeCur}" title="#{bundle.CreateMgFeeTitle_mgFeeCur}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeExrate}" for="mgFeeExrate" />
+                        <p:inputText id="mgFeeExrate" value="#{mgFeeController.selected.mgFeeExrate}" title="#{bundle.CreateMgFeeTitle_mgFeeExrate}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeCanvasser}" for="mgFeeCanvasser" />
+                        <p:inputText id="mgFeeCanvasser" value="#{mgFeeController.selected.mgFeeCanvasser}" title="#{bundle.CreateMgFeeTitle_mgFeeCanvasser}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeBranchId}" for="mgFeeBranchId" />
+                        <p:inputText id="mgFeeBranchId" value="#{mgFeeController.selected.mgFeeBranchId}" title="#{bundle.CreateMgFeeTitle_mgFeeBranchId}" />
+                        <p:outputLabel value="#{bundle.CreateMgFeeLabel_mgFeeDateTime}" for="mgFeeDateTime" />
+                        <p:calendar id="mgFeeDateTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{mgFeeController.selected.mgFeeDateTime}" title="#{bundle.EditMgFeeTitle_mgFeeDateTime}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{mgFeeController.create}" value="#{bundle.Save}" update="display,:MgFeeListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgFeeCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="MgFeeCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

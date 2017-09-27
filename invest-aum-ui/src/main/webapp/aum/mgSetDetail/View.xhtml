@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MgSetDetailViewDlg" widgetVar="MgSetDetailViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewMgSetDetailTitle}">
+            <h:form id="MgSetDetailViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{mgSetDetailController.selected != null}">
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_id}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.id}" title="#{bundle.ViewMgSetDetailTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDCode}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDCode}" title="#{bundle.ViewMgSetDetailTitle_mgActDCode}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDSeq}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDSeq}" title="#{bundle.ViewMgSetDetailTitle_mgActDSeq}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActSetType}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActSetType}" title="#{bundle.ViewMgSetDetailTitle_mgActSetType}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDName}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDName}" title="#{bundle.ViewMgSetDetailTitle_mgActDName}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDPrdCode}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDPrdCode}" title="#{bundle.ViewMgSetDetailTitle_mgActDPrdCode}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDSecType}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDSecType}" title="#{bundle.ViewMgSetDetailTitle_mgActDSecType}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDSecCmp}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDSecCmp}" title="#{bundle.ViewMgSetDetailTitle_mgActDSecCmp}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDSecCode}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDSecCode}" title="#{bundle.ViewMgSetDetailTitle_mgActDSecCode}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDCostId}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDCostId}" title="#{bundle.ViewMgSetDetailTitle_mgActDCostId}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDSaleChnl}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDSaleChnl}" title="#{bundle.ViewMgSetDetailTitle_mgActDSaleChnl}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDStartDate}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDStartDate}" title="#{bundle.ViewMgSetDetailTitle_mgActDStartDate}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDEndDate}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDEndDate}" title="#{bundle.ViewMgSetDetailTitle_mgActDEndDate}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDSetNo}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDSetNo}" title="#{bundle.ViewMgSetDetailTitle_mgActDSetNo}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDBaseAmt}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDBaseAmt}" title="#{bundle.ViewMgSetDetailTitle_mgActDBaseAmt}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDLowAmt}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDLowAmt}" title="#{bundle.ViewMgSetDetailTitle_mgActDLowAmt}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDHighAmt}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDHighAmt}" title="#{bundle.ViewMgSetDetailTitle_mgActDHighAmt}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDRate}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDRate}" title="#{bundle.ViewMgSetDetailTitle_mgActDRate}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDFee}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDFee}" title="#{bundle.ViewMgSetDetailTitle_mgActDFee}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgActDRemark}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgActDRemark}" title="#{bundle.ViewMgSetDetailTitle_mgActDRemark}"/>
+                        <h:outputText value="#{bundle.ViewMgSetDetailLabel_mgSetMasterId}"/>
+                        <h:outputText value="#{mgSetDetailController.selected.mgSetMasterId}" title="#{bundle.ViewMgSetDetailTitle_mgSetMasterId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="MgSetDetailViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

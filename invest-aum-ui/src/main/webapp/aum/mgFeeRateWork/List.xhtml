@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListMgFeeRateWorkTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="MgFeeRateWorkListForm">
+                <p:panel header="#{bundle.ListMgFeeRateWorkTitle}">
+                    <p:dataTable id="datalist" value="#{mgFeeRateWorkController.items}" var="item"
+                                 selectionMode="single" selection="#{mgFeeRateWorkController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_actCode}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.actCode}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_ctSeq}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ctSeq}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_custId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.custId}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_hldDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.hldDate}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_saleChnl}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.saleChnl}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_actType}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.actType}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_aum}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.aum}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_chargeObj}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.chargeObj}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_actSetType}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.actSetType}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_mgActDSetNo}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.mgActDSetNo}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_actFee}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.actFee}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_aumTwFee}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.aumTwFee}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_mgFeeCostTwFee}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.mgFeeCostTwFee}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListMgFeeRateWorkTitle_dateTime}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.dateTime}">
+                                <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{mgFeeRateWorkController.prepareCreate}" update=":MgFeeRateWorkCreateForm" oncomplete="PF('MgFeeRateWorkCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":MgFeeRateWorkViewForm" oncomplete="PF('MgFeeRateWorkViewDialog').show()" disabled="#{empty mgFeeRateWorkController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":MgFeeRateWorkEditForm" oncomplete="PF('MgFeeRateWorkEditDialog').show()" disabled="#{empty mgFeeRateWorkController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{mgFeeRateWorkController.destroy}" update=":growl,datalist" disabled="#{empty mgFeeRateWorkController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

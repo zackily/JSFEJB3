@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="AumFundEditDlg" widgetVar="AumFundEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditAumFundTitle}">
+            <h:form id="AumFundEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{aumFundController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{aumFundController.selected.id}" title="#{bundle.EditAumFundTitle_id}" required="true" requiredMessage="#{bundle.EditAumFundRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldTstAcc}" for="FHldTstAcc" />
+                        <p:inputText id="FHldTstAcc" value="#{aumFundController.selected.FHldTstAcc}" title="#{bundle.EditAumFundTitle_FHldTstAcc}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldCustNo}" for="FHldCustNo" />
+                        <p:inputText id="FHldCustNo" value="#{aumFundController.selected.FHldCustNo}" title="#{bundle.EditAumFundTitle_FHldCustNo}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldDate}" for="FHldDate" />
+                        <p:inputText id="FHldDate" value="#{aumFundController.selected.FHldDate}" title="#{bundle.EditAumFundTitle_FHldDate}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldFundNo}" for="FHldFundNo" />
+                        <p:inputText id="FHldFundNo" value="#{aumFundController.selected.FHldFundNo}" title="#{bundle.EditAumFundTitle_FHldFundNo}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldNav}" for="FHldNav" />
+                        <p:inputText id="FHldNav" value="#{aumFundController.selected.FHldNav}" title="#{bundle.EditAumFundTitle_FHldNav}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldNavDate}" for="FHldNavDate" />
+                        <p:inputText id="FHldNavDate" value="#{aumFundController.selected.FHldNavDate}" title="#{bundle.EditAumFundTitle_FHldNavDate}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldUnit}" for="FHldUnit" />
+                        <p:inputText id="FHldUnit" value="#{aumFundController.selected.FHldUnit}" title="#{bundle.EditAumFundTitle_FHldUnit}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldTwValue}" for="FHldTwValue" />
+                        <p:inputText id="FHldTwValue" value="#{aumFundController.selected.FHldTwValue}" title="#{bundle.EditAumFundTitle_FHldTwValue}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldValue}" for="FHldValue" />
+                        <p:inputText id="FHldValue" value="#{aumFundController.selected.FHldValue}" title="#{bundle.EditAumFundTitle_FHldValue}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldCost}" for="FHldCost" />
+                        <p:inputText id="FHldCost" value="#{aumFundController.selected.FHldCost}" title="#{bundle.EditAumFundTitle_FHldCost}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldPortfolioNo}" for="FHldPortfolioNo" />
+                        <p:inputText id="FHldPortfolioNo" value="#{aumFundController.selected.FHldPortfolioNo}" title="#{bundle.EditAumFundTitle_FHldPortfolioNo}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldCur}" for="FHldCur" />
+                        <p:inputText id="FHldCur" value="#{aumFundController.selected.FHldCur}" title="#{bundle.EditAumFundTitle_FHldCur}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldExrate}" for="FHldExrate" />
+                        <p:inputText id="FHldExrate" value="#{aumFundController.selected.FHldExrate}" title="#{bundle.EditAumFundTitle_FHldExrate}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldExrateDate}" for="FHldExrateDate" />
+                        <p:inputText id="FHldExrateDate" value="#{aumFundController.selected.FHldExrateDate}" title="#{bundle.EditAumFundTitle_FHldExrateDate}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldCanvasser}" for="FHldCanvasser" />
+                        <p:inputText id="FHldCanvasser" value="#{aumFundController.selected.FHldCanvasser}" title="#{bundle.EditAumFundTitle_FHldCanvasser}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldBranchId}" for="FHldBranchId" />
+                        <p:inputText id="FHldBranchId" value="#{aumFundController.selected.FHldBranchId}" title="#{bundle.EditAumFundTitle_FHldBranchId}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldChannel}" for="FHldChannel" />
+                        <p:inputText id="FHldChannel" value="#{aumFundController.selected.FHldChannel}" title="#{bundle.EditAumFundTitle_FHldChannel}" />
+                        <p:outputLabel value="#{bundle.EditAumFundLabel_FHldDateTime}" for="FHldDateTime" />
+                        <p:calendar id="FHldDateTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{aumFundController.selected.FHldDateTime}" title="#{bundle.EditAumFundTitle_FHldDateTime}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{aumFundController.update}" value="#{bundle.Save}" update="display,:AumFundListForm:datalist,:growl" oncomplete="handleSubmit(args, 'AumFundEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="AumFundEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

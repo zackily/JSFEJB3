@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MgFeeMonthEditDlg" widgetVar="MgFeeMonthEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditMgFeeMonthTitle}">
+            <h:form id="MgFeeMonthEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{mgFeeMonthController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{mgFeeMonthController.selected.id}" title="#{bundle.EditMgFeeMonthTitle_id}" required="true" requiredMessage="#{bundle.EditMgFeeMonthRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeMonthCustId}" for="mgFeeMonthCustId" />
+                        <p:inputText id="mgFeeMonthCustId" value="#{mgFeeMonthController.selected.mgFeeMonthCustId}" title="#{bundle.EditMgFeeMonthTitle_mgFeeMonthCustId}" />
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeMonthDate}" for="mgFeeMonthDate" />
+                        <p:inputText id="mgFeeMonthDate" value="#{mgFeeMonthController.selected.mgFeeMonthDate}" title="#{bundle.EditMgFeeMonthTitle_mgFeeMonthDate}" />
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeMonthActCode}" for="mgFeeMonthActCode" />
+                        <p:inputText id="mgFeeMonthActCode" value="#{mgFeeMonthController.selected.mgFeeMonthActCode}" title="#{bundle.EditMgFeeMonthTitle_mgFeeMonthActCode}" />
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeAumTwFee}" for="mgFeeAumTwFee" />
+                        <p:inputText id="mgFeeAumTwFee" value="#{mgFeeMonthController.selected.mgFeeAumTwFee}" title="#{bundle.EditMgFeeMonthTitle_mgFeeAumTwFee}" />
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeCostTwFee}" for="mgFeeCostTwFee" />
+                        <p:inputText id="mgFeeCostTwFee" value="#{mgFeeMonthController.selected.mgFeeCostTwFee}" title="#{bundle.EditMgFeeMonthTitle_mgFeeCostTwFee}" />
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeMonthcostTwFee}" for="mgFeeMonthcostTwFee" />
+                        <p:inputText id="mgFeeMonthcostTwFee" value="#{mgFeeMonthController.selected.mgFeeMonthcostTwFee}" title="#{bundle.EditMgFeeMonthTitle_mgFeeMonthcostTwFee}" />
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeMonthDateTime}" for="mgFeeMonthDateTime" />
+                        <p:calendar id="mgFeeMonthDateTime" pattern="MM/dd/yyyy HH:mm:ss" value="#{mgFeeMonthController.selected.mgFeeMonthDateTime}" title="#{bundle.EditMgFeeMonthTitle_mgFeeMonthDateTime}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeMonthMthsettleUserId}" for="mgFeeMonthMthsettleUserId" />
+                        <p:inputText id="mgFeeMonthMthsettleUserId" value="#{mgFeeMonthController.selected.mgFeeMonthMthsettleUserId}" title="#{bundle.EditMgFeeMonthTitle_mgFeeMonthMthsettleUserId}" />
+                        <p:outputLabel value="#{bundle.EditMgFeeMonthLabel_mgFeeMonthMthsettleDate}" for="mgFeeMonthMthsettleDate" />
+                        <p:calendar id="mgFeeMonthMthsettleDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{mgFeeMonthController.selected.mgFeeMonthMthsettleDate}" title="#{bundle.EditMgFeeMonthTitle_mgFeeMonthMthsettleDate}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{mgFeeMonthController.update}" value="#{bundle.Save}" update="display,:MgFeeMonthListForm:datalist,:growl" oncomplete="handleSubmit(args, 'MgFeeMonthEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="MgFeeMonthEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

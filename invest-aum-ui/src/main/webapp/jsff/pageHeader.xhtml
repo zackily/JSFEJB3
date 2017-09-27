@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    <!--<div class="innertube">-->
+    <!--<h:form id="header" prependId="false">-->
+
+    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+
+        <tr align="center">                   
+
+            <td style="vertical-align: top">
+        <h:outputText value="#{userSession.user.branchid} -#{userSession.user.branchname} - #{userSession.user.empname}您好!!權限為 #{userSession.user.authName} 歡迎來到投資平台管理系統 !!" style="font-family:'微軟正黑體' !important;font-size: 18px;" />
+
+        </td>                    
+        </tr>           
+    </table>  
+    <!--</h:form>-->
+</ui:composition>
+
