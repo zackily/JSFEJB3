@@ -58,6 +58,26 @@
             <version>2.6</version>
         </dependency>
 
+<dependency>
+    <groupId>com.oracle.jdbc</groupId>
+    <artifactId>ojdbc8</artifactId>
+    <version>12.2.0.1</version>
+</dependency>
+<dependency>
+    <groupId>com.oracle.jdbc</groupId>
+    <artifactId>ucp</artifactId>
+    <version>12.2.0.1</version>
+</dependency>
+<dependency>
+    <groupId>com.oracle.jdbc</groupId>
+    <artifactId>ons</artifactId>
+    <version>12.2.0.1</version>
+</dependency>
+<dependency>
+    <groupId>com.oracle.jdbc</groupId>
+    <artifactId>simplefan</artifactId>
+    <version>12.2.0.1</version>
+</dependency>
 
     </dependencies>
 
