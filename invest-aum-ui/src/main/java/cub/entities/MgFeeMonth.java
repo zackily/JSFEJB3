@@ -45,6 +45,64 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MgFeeMonth.findByMgFeeMonthMthsettleDate", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeMonthMthsettleDate = :mgFeeMonthMthsettleDate")})
 public class MgFeeMonth implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 11)
+    @Column(name = "CUST_ID")
+    private String custId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 6)
+    @Column(name = "BASE_DATE")
+    private String baseDate;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "ACT_CODE")
+    private String actCode;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    @Column(name = "ACT_SUB_CODE")
+    private String actSubCode;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 3)
+    @Column(name = "CUR")
+    private String cur;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "AUM_FEE")
+    private BigDecimal aumFee;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "AUM_REMAIN_FEE")
+    private BigDecimal aumRemainFee;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "COST_FEE")
+    private BigDecimal costFee;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "COST_REMAIN_FEE")
+    private BigDecimal costRemainFee;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    @Column(name = "SETTLE_USER_ID")
+    private String settleUserId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 8)
+    @Column(name = "SETTLE_DATE")
+    private String settleDate;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "UPDATE_DTTM")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateDttm;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -189,6 +247,102 @@ public class MgFeeMonth implements Serializable {
     @Override
     public String toString() {
         return "cub.entities.MgFeeMonth[ id=" + id + " ]";
+    }
+
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
+    }
+
+    public String getBaseDate() {
+        return baseDate;
+    }
+
+    public void setBaseDate(String baseDate) {
+        this.baseDate = baseDate;
+    }
+
+    public String getActCode() {
+        return actCode;
+    }
+
+    public void setActCode(String actCode) {
+        this.actCode = actCode;
+    }
+
+    public String getActSubCode() {
+        return actSubCode;
+    }
+
+    public void setActSubCode(String actSubCode) {
+        this.actSubCode = actSubCode;
+    }
+
+    public String getCur() {
+        return cur;
+    }
+
+    public void setCur(String cur) {
+        this.cur = cur;
+    }
+
+    public BigDecimal getAumFee() {
+        return aumFee;
+    }
+
+    public void setAumFee(BigDecimal aumFee) {
+        this.aumFee = aumFee;
+    }
+
+    public BigDecimal getAumRemainFee() {
+        return aumRemainFee;
+    }
+
+    public void setAumRemainFee(BigDecimal aumRemainFee) {
+        this.aumRemainFee = aumRemainFee;
+    }
+
+    public BigDecimal getCostFee() {
+        return costFee;
+    }
+
+    public void setCostFee(BigDecimal costFee) {
+        this.costFee = costFee;
+    }
+
+    public BigDecimal getCostRemainFee() {
+        return costRemainFee;
+    }
+
+    public void setCostRemainFee(BigDecimal costRemainFee) {
+        this.costRemainFee = costRemainFee;
+    }
+
+    public String getSettleUserId() {
+        return settleUserId;
+    }
+
+    public void setSettleUserId(String settleUserId) {
+        this.settleUserId = settleUserId;
+    }
+
+    public String getSettleDate() {
+        return settleDate;
+    }
+
+    public void setSettleDate(String settleDate) {
+        this.settleDate = settleDate;
+    }
+
+    public Date getUpdateDttm() {
+        return updateDttm;
+    }
+
+    public void setUpdateDttm(Date updateDttm) {
+        this.updateDttm = updateDttm;
     }
     
 }

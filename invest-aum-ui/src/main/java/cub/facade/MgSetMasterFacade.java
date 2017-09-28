@@ -33,6 +33,25 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
         super(MgSetMaster.class);
     }
 
+    public MgSetMaster findByLastIdMgMaster(String status) {
+        StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");
+        if (StringUtils.isNotEmpty(status)) {
+            sql.append(" and msm.status =:status ");
+        }
+        sql.append(" order by msm.id desc");
+        Query q = em.createQuery(sql.toString());
+        q.setMaxResults(1);
+        if (StringUtils.isNotEmpty(status)) {
+            q.setParameter("status", status);
+        }
+        try {
+            return (MgSetMaster) q.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public List<MgSetMaster> findByMgMasterVO(MgMasterVO vo) {
         StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");
         if (StringUtils.isNotEmpty(vo.getMgActMCode())) {
@@ -80,7 +99,6 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
         if (StringUtils.isNotEmpty(vo.getMgActMChargeObj())) {
             q.setParameter("mgActMChargeObj", vo.getMgActMChargeObj());
         }
-
         return q.getResultList();
     }
 }

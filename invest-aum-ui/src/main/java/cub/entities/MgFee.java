@@ -51,6 +51,76 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MgFee.findByMgFeeDateTime", query = "SELECT m FROM MgFee m WHERE m.mgFeeDateTime = :mgFeeDateTime")})
 public class MgFee implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "TRUSTACCT")
+    private Character trustacct;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "BASE_DATE")
+    private Character baseDate;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CUST_ID")
+    private Character custId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "FUND_ID")
+    private Character fundId;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "ACT_CODE")
+    private String actCode;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    @Column(name = "ACT_SUB_CODE")
+    private String actSubCode;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "PORTFOLIO_NO")
+    private String portfolioNo;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "AUM_TW_FEE")
+    private BigDecimal aumTwFee;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "COST_TW_FEE")
+    private BigDecimal costTwFee;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "AUM_FEE")
+    private BigDecimal aumFee;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "COST_FEE")
+    private BigDecimal costFee;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CUR")
+    private Character cur;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "EXRATE")
+    private BigDecimal exrate;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CANVASSER")
+    private Character canvasser;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "BRANCH_ID")
+    private Character branchId;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "UPDATE_DTTM")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updateDttm;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id   
@@ -258,6 +328,134 @@ public class MgFee implements Serializable {
     @Override
     public String toString() {
         return "cub.entities.MgFee[ id=" + id + " ]";
+    }
+
+    public Character getTrustacct() {
+        return trustacct;
+    }
+
+    public void setTrustacct(Character trustacct) {
+        this.trustacct = trustacct;
+    }
+
+    public Character getBaseDate() {
+        return baseDate;
+    }
+
+    public void setBaseDate(Character baseDate) {
+        this.baseDate = baseDate;
+    }
+
+    public Character getCustId() {
+        return custId;
+    }
+
+    public void setCustId(Character custId) {
+        this.custId = custId;
+    }
+
+    public Character getFundId() {
+        return fundId;
+    }
+
+    public void setFundId(Character fundId) {
+        this.fundId = fundId;
+    }
+
+    public String getActCode() {
+        return actCode;
+    }
+
+    public void setActCode(String actCode) {
+        this.actCode = actCode;
+    }
+
+    public String getActSubCode() {
+        return actSubCode;
+    }
+
+    public void setActSubCode(String actSubCode) {
+        this.actSubCode = actSubCode;
+    }
+
+    public String getPortfolioNo() {
+        return portfolioNo;
+    }
+
+    public void setPortfolioNo(String portfolioNo) {
+        this.portfolioNo = portfolioNo;
+    }
+
+    public BigDecimal getAumTwFee() {
+        return aumTwFee;
+    }
+
+    public void setAumTwFee(BigDecimal aumTwFee) {
+        this.aumTwFee = aumTwFee;
+    }
+
+    public BigDecimal getCostTwFee() {
+        return costTwFee;
+    }
+
+    public void setCostTwFee(BigDecimal costTwFee) {
+        this.costTwFee = costTwFee;
+    }
+
+    public BigDecimal getAumFee() {
+        return aumFee;
+    }
+
+    public void setAumFee(BigDecimal aumFee) {
+        this.aumFee = aumFee;
+    }
+
+    public BigDecimal getCostFee() {
+        return costFee;
+    }
+
+    public void setCostFee(BigDecimal costFee) {
+        this.costFee = costFee;
+    }
+
+    public Character getCur() {
+        return cur;
+    }
+
+    public void setCur(Character cur) {
+        this.cur = cur;
+    }
+
+    public BigDecimal getExrate() {
+        return exrate;
+    }
+
+    public void setExrate(BigDecimal exrate) {
+        this.exrate = exrate;
+    }
+
+    public Character getCanvasser() {
+        return canvasser;
+    }
+
+    public void setCanvasser(Character canvasser) {
+        this.canvasser = canvasser;
+    }
+
+    public Character getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(Character branchId) {
+        this.branchId = branchId;
+    }
+
+    public Date getUpdateDttm() {
+        return updateDttm;
+    }
+
+    public void setUpdateDttm(Date updateDttm) {
+        this.updateDttm = updateDttm;
     }
     
 }

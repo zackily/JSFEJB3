@@ -74,6 +74,10 @@ public class MgSetMaster implements Serializable {
     @Size(max = 1)
     @Column(name = "MG_ACT_M_CHARGE_OBJ")
     private String mgActMChargeObj;
+    
+    @Column(name = "STATUS")
+    private String status;
+    
     @Size(max = 8)
     @Column(name = "MG_ACT_LAST_SETTLE_DATE")
     private String mgActLastSettleDate;
@@ -166,6 +170,14 @@ public class MgSetMaster implements Serializable {
 
     public void setMgSetDetailCollection(Collection<MgSetDetail> mgSetDetailCollection) {
         this.mgSetDetailCollection = mgSetDetailCollection;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

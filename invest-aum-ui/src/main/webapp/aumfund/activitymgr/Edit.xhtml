@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="MgSetMasterEditDlg" widgetVar="MgSetMasterEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditMgSetMasterTitle}">
+            <h:form id="MgSetMasterEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{mgSetMasterController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{mgSetMasterController.selected.id}" title="#{bundle.EditMgSetMasterTitle_id}" required="true" requiredMessage="#{bundle.EditMgSetMasterRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_mgActMCode}" for="mgActMCode" />
+                        <p:inputText id="mgActMCode" value="#{mgSetMasterController.selected.mgActMCode}" title="#{bundle.EditMgSetMasterTitle_mgActMCode}" />
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_mgActMName}" for="mgActMName" />
+                        <p:inputText id="mgActMName" value="#{mgSetMasterController.selected.mgActMName}" title="#{bundle.EditMgSetMasterTitle_mgActMName}" />
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_mgActMType}" for="mgActMType" />
+                        <p:inputText id="mgActMType" value="#{mgSetMasterController.selected.mgActMType}" title="#{bundle.EditMgSetMasterTitle_mgActMType}" />
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_mgActMRateSet}" for="mgActMRateSet" />
+                        <p:inputText id="mgActMRateSet" value="#{mgSetMasterController.selected.mgActMRateSet}" title="#{bundle.EditMgSetMasterTitle_mgActMRateSet}" />
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_mgActMRemark}" for="mgActMRemark" />
+                        <p:inputText id="mgActMRemark" value="#{mgSetMasterController.selected.mgActMRemark}" title="#{bundle.EditMgSetMasterTitle_mgActMRemark}" />
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_mgActMSaleChnl}" for="mgActMSaleChnl" />
+                        <p:inputText id="mgActMSaleChnl" value="#{mgSetMasterController.selected.mgActMSaleChnl}" title="#{bundle.EditMgSetMasterTitle_mgActMSaleChnl}" />
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_mgActMChargeObj}" for="mgActMChargeObj" />
+                        <p:inputText id="mgActMChargeObj" value="#{mgSetMasterController.selected.mgActMChargeObj}" title="#{bundle.EditMgSetMasterTitle_mgActMChargeObj}" />
+                        <p:outputLabel value="#{bundle.EditMgSetMasterLabel_mgActLastSettleDate}" for="mgActLastSettleDate" />
+                        <p:inputText id="mgActLastSettleDate" value="#{mgSetMasterController.selected.mgActLastSettleDate}" title="#{bundle.EditMgSetMasterTitle_mgActLastSettleDate}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{mgSetMasterController.update}" value="#{bundle.Save}" update="display,:MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args, 'MgSetMasterEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="MgSetMasterEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

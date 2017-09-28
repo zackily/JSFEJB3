@@ -3,6 +3,7 @@ package cub.controller;
 import cub.entities.MgSetMaster;
 import cub.controller.util.JsfUtil;
 import cub.controller.util.JsfUtil.PersistAction;
+import cub.controller.util.Utils;
 import cub.entities.MgSetDetail;
 import cub.facade.MgSetMasterFacade;
 import cub.vo.AumFundVO;
@@ -42,7 +43,7 @@ import org.primefaces.model.UploadedFile;
 public class MgSetMasterController implements Serializable {
 
     @EJB
-    private cub.facade.MgSetMasterFacade ejbFacade;
+    private cub.facade.MgSetMasterFacade mgSetMasterFacade;
     private List<MgSetMaster> items = null;
     private MgSetMaster selected;
 
@@ -69,8 +70,8 @@ public class MgSetMasterController implements Serializable {
     private List<String> selectedInvCorp;
     private List<String> selectedFundId;
 
-    public MgSetMasterController() {
-    }
+    @EJB
+    private Utils utils;
 
     @PostConstruct
     public void init() {
@@ -123,18 +124,18 @@ public class MgSetMasterController implements Serializable {
     }
 
     private MgSetMasterFacade getFacade() {
-        return ejbFacade;
+        return mgSetMasterFacade;
     }
 
     public void search() {
         items.clear();
-        items = ejbFacade.findByMgMasterVO(masterVO);
+        items = mgSetMasterFacade.findByMgMasterVO(masterVO);
         masterVO = new MgMasterVO();
     }
 
     public void searchAll() {
         items.clear();
-        items = ejbFacade.findAll();
+        items = mgSetMasterFacade.findAll();
     }
 
     public void handleFileUpload(FileUploadEvent event) {
@@ -203,6 +204,7 @@ public class MgSetMasterController implements Serializable {
 
     public void create() {
         this.selected.setMgActLastSettleDate(toStringDate(last_settle_date));
+        this.selected.setMgActMCode(this.showCode());
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MgSetMasterCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -440,6 +442,15 @@ public class MgSetMasterController implements Serializable {
         } else {
             return event.getNewStep();
         }
+    }
+
+    public String showCode(){
+        MgSetMaster lastObj = mgSetMasterFacade.findByLastIdMgMaster("");
+        int seq = 0;
+        if(lastObj != null){
+            seq = lastObj.getId().intValue();
+        }
+        return utils.toPlusOneString(seq);
     }
 
     public boolean isSkip() {

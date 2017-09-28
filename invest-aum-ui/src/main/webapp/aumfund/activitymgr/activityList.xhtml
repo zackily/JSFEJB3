@@ -1,0 +1,167 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/generalPageTemplateHome.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="管理費活動案設定畫面"></h:outputText>
+    </ui:define>
+
+    <ui:define name="body">
+
+        <h:form id="MgSetMasterListForm">
+            <p:fieldset>
+                <p:commandButton id="createButton" icon="ui-icon-plus"   value="建立管理費主活動案" actionListener="#{mgSetMasterController.prepareCreate}" 
+                                 update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"/>
+                <p:separator />
+
+                <p:panelGrid style="width:100%" >
+                    <p:row>
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="活動案代碼"/>
+                        </p:column>
+                        <p:column> 
+                            <p:inputText value="#{mgSetMasterController.masterVO.mgActMCode}"/>
+                        </p:column>
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="活動案名稱"/>
+                        </p:column>
+                        <p:column>   
+                            <p:inputText value="#{mgSetMasterController.masterVO.mgActMName}"/>
+                        </p:column>
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="活動案類型"/>
+                        </p:column>
+                        <p:column>   
+
+                            <p:selectOneRadio  value="#{mgSetMasterController.masterVO.mgActMType}">                                  
+                                <f:selectItem itemLabel="AUM" itemValue="1" /> 
+                                <f:selectItem itemLabel="成本" itemValue="2" /> 
+                            </p:selectOneRadio>
+
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="活動案費率"/>
+                        </p:column>
+                        <p:column>                             
+                            <p:selectOneRadio value="#{mgSetMasterController.masterVO.mgActMRateSet}">                                            
+                                <f:selectItem itemLabel="Low" itemValue="1" /> 
+                                <f:selectItem itemLabel="High" itemValue="2" /> 
+                            </p:selectOneRadio> 
+                        </p:column>                       
+
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="適用通路"/>
+                        </p:column>
+                        <p:column>                            
+                            <p:selectOneRadio value="#{mgSetMasterController.masterVO.mgActMSaleChnl}">                                            
+                                <f:selectItem itemLabel="櫃檯" itemValue="1" /> 
+                                <f:selectItem itemLabel="網路" itemValue="2" /> 
+                                <f:selectItem itemLabel="語音" itemValue="3" />
+                                <f:selectItem itemLabel="KOKO" itemValue="8" />
+                            </p:selectOneRadio> 
+                        </p:column>
+
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="活動案收費對象"/>
+                        </p:column>
+                        <p:column>                            
+                            <p:selectOneRadio id="mgActMChargeObj" value="#{mgSetMasterController.masterVO.mgActMChargeObj}">                                           
+                                <f:selectItem itemLabel="向客戶收費" itemValue="C" /> 
+                                <f:selectItem itemLabel="支付合作對象" itemValue="P" />                             
+                            </p:selectOneRadio> 
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="6">
+                            <center>
+                                <p:commandButton icon="ui-icon-search" value="查詢" actionListener="#{mgSetMasterController.search()}" update=":MgSetMasterCreateForm :MgSetMasterListForm:datalist :MgSetDetailCreateForm" />                     
+                                <p:commandButton icon="ui-icon-search" value="查詢全部" actionListener="#{mgSetMasterController.search()}" update=":MgSetMasterCreateForm :MgSetMasterListForm:datalist :MgSetDetailCreateForm" />                     
+                  
+                            </center>
+                        </p:column>
+                        
+                    </p:row>
+                    
+                </p:panelGrid>
+            </p:fieldset>
+
+            <p:spacer height="10"/>
+            <!--<p:fieldset>-->
+            <p:dataTable id="datalist" value="#{mgSetMasterController.items}" var="item"
+                         selectionMode="single" selection="#{mgSetMasterController.selected}"
+                         paginator="true"
+                         rowKey="#{item.id}"
+                         rows="10"                         
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         emptyMessage="查無資料"
+                         >
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="活動案代碼"/>
+                    </f:facet>
+                    <h:outputText value="#{item.mgActMCode}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="活動案名稱"/>
+                    </f:facet>
+                    <h:outputText value="#{item.mgActMName}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="活動案類型"/>
+                    </f:facet>
+                    <h:outputText value="#{mgSetMasterController.toMgMType(item.mgActMType)}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="活動案費率"/>
+                    </f:facet>
+                    <h:outputText value="#{mgSetMasterController.toMgActMRateSet(item.mgActMRateSet)}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="活動案備註"/>
+                    </f:facet>
+                    <h:outputText value="#{item.mgActMRemark}"/>
+                </p:column>
+
+                <!--                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="目前子活動"/>
+                                    </f:facet>
+                                    <h:outputText value="#{mgSetMasterController.toCollectionSize(item.mgSetDetailCollection)}"/>
+                                </p:column>-->
+
+
+                <p:column style="width:20%">
+                    <f:facet name="header">
+                        <h:outputText value=""/>
+                    </f:facet>
+                    <p:commandButton icon="ui-icon-plus" value="建立子活動" actionListener="#{mgSetMasterController.addDetail(item)}" update=":MgSetMasterCreateForm :MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDialog').show()"/>                     
+                    <p:commandButton icon="ui-icon-document" value="匯入子活動" actionListener="#{mgSetMasterController.importDetail(item)}" update=":MgSetMasterCreateForm :MgSetDetailImportForm :MgSetDetailCreateForm" oncomplete="PF('MgSetDetailImportDlg').show()"/> 
+                    <p:commandButton icon="ui-icon-search" value="子活動清單" actionListener="#{mgSetMasterController.findByMasterId(item)}" update=":MgSetMasterCreateForm :MgSetDetailListForm:detailDatalist" oncomplete="PF('MgSetDetailListDlg').show()"/>
+                </p:column>
+
+
+                <!--                <f:facet name="footer">
+                                    <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{mgSetMasterController.prepareCreate}" update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"/>
+                                    <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":MgSetMasterViewForm" oncomplete="PF('MgSetMasterViewDialog').show()" disabled="#{empty mgSetMasterController.selected}"/>
+                                    <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":MgSetMasterEditForm" oncomplete="PF('MgSetMasterEditDialog').show()" disabled="#{empty mgSetMasterController.selected}"/>
+                                    <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{mgSetMasterController.destroy}" update=":growl,datalist" disabled="#{empty mgSetMasterController.selected}"/>
+                                </f:facet>-->
+            </p:dataTable>
+            <!--</p:fieldset>-->
+        </h:form>
+
+        <ui:include src="activityDialog.xhtml"/>
+        <ui:include src="Edit.xhtml"/>             
+        <ui:include src="/jsff/ajaxStatusDlg.xhtml"/>  
+    </ui:define>
+</ui:composition>
