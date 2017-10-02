@@ -34,6 +34,7 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.model.UploadedFile;
@@ -44,6 +45,11 @@ public class MgSetMasterController implements Serializable {
 
     @EJB
     private cub.facade.MgSetMasterFacade mgSetMasterFacade;
+    
+    
+    @EJB
+    private cub.facade.MgSetDetailFacade mgSetDetailFacade;
+    
     private List<MgSetMaster> items = null;
     private MgSetMaster selected;
 
@@ -93,6 +99,11 @@ public class MgSetMasterController implements Serializable {
         selectedFundId = new ArrayList<String>();
     }
 
+    public void reset(){
+        System.out.println("test");
+        RequestContext.getCurrentInstance().reset(":MgSetMasterCreateForm");
+    }
+    
     public List<String> getInvCorp() {
         return invCorp;
     }
@@ -175,7 +186,8 @@ public class MgSetMasterController implements Serializable {
     }
 
     public MgSetMaster prepareCreate() {
-        selected = new MgSetMaster();
+        this.selected = null;
+        this.selected = new MgSetMaster();
         mgSetDetail = new MgSetDetail();
         start_date = new Date();
         end_date = new Date();
@@ -204,7 +216,7 @@ public class MgSetMasterController implements Serializable {
 
     public void create() {
         this.selected.setMgActLastSettleDate(toStringDate(last_settle_date));
-        this.selected.setMgActMCode(this.showCode());
+        this.selected.setMgActMCode(this.showMgSetMasterCode());
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MgSetMasterCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -444,13 +456,22 @@ public class MgSetMasterController implements Serializable {
         }
     }
 
-    public String showCode(){
+    public String showMgSetMasterCode(){
         MgSetMaster lastObj = mgSetMasterFacade.findByLastIdMgMaster("");
         int seq = 0;
         if(lastObj != null){
             seq = lastObj.getId().intValue();
         }
-        return utils.toPlusOneString(seq);
+        return utils.toPlusOneString(seq,5);
+    }
+    
+    public String showMgSetDetailCode(){
+        MgSetDetail lastObj = mgSetDetailFacade.findByLastSeqMgSetDetail(selected);
+        int seq = 0;
+        if(lastObj != null){
+            seq = lastObj.getId().intValue();
+        }
+        return utils.toPlusOneString(seq,2);
     }
 
     public boolean isSkip() {

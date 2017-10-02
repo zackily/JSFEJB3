@@ -47,7 +47,7 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
         try {
             return (MgSetMaster) q.getSingleResult();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
     }

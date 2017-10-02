@@ -6,9 +6,12 @@
 package cub.facade;
 
 import cub.entities.MgSetDetail;
+import cub.entities.MgSetMaster;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -28,5 +31,22 @@ public class MgSetDetailFacade extends AbstractFacade<MgSetDetail> {
     public MgSetDetailFacade() {
         super(MgSetDetail.class);
     }
-    
+     public MgSetDetail findByLastSeqMgSetDetail(MgSetMaster m) {
+        StringBuffer sql = new StringBuffer("SELECT msd FROM MgSetDetail msd WHERE 1=1 ");
+        if (m != null) {
+            sql.append(" and msd.mgSetMasterId =:mgSetMasterId");
+        }
+        sql.append(" order by msd.mgActDSeq desc");
+        Query q = em.createQuery(sql.toString());
+        q.setMaxResults(1);
+         if (m != null) {
+            q.setParameter("mgSetMasterId", m);
+        }
+        try {
+            return (MgSetDetail) q.getSingleResult();
+        } catch (Exception e) {
+//            e.printStackTrace();
+            return null;
+        }
+    }
 }

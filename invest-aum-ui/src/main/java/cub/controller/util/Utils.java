@@ -14,7 +14,7 @@ import org.apache.commons.lang.StringUtils;
  */
 @Singleton
 public class Utils {
-    public String toPlusOneString(int seq){
-        return StringUtils.leftPad(Integer.toString(++seq), 5,'0');
+    public String toPlusOneString(int seq,int size){
+        return StringUtils.leftPad(Integer.toString(++seq), size,'0');
     }
 }
