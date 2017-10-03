@@ -108,14 +108,14 @@
                                     <p:outputLabel id="mgActDCode" value="#{mgSetMasterController.selected.mgActMCode}-#{mgSetMasterController.showMgSetDetailCode()}" 
                                                    title="#{bundle.CreateMgSetDetailTitle_mgActDCode}" />                          
                                 </p:column>
-                                 <p:column styleClass="ui-widget-header">
+                                <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="子活動案序號" for="mgActDSeq" />
                                 </p:column>
                                 <p:column>
                                     <p:outputLabel id="mgActDSeq" value="#{mgSetMasterController.showMgSetDetailCode()}" title="#{bundle.CreateMgSetDetailTitle_mgActDSeq}" />            
                                 </p:column>
                             </p:row>
-                   
+
                             <p:row>
                                 <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="子活動案名稱" for="mgActDName" />
@@ -124,7 +124,7 @@
                                     <p:inputText size="30" id="mgActDName" value="#{mgSetMasterController.mgSetDetail.mgActDName}" title="#{bundle.CreateMgSetDetailTitle_mgActDName}" 
                                                  required="true" requiredMessage="請輸入子活動案名稱"/>       
                                 </p:column>
-                                   <p:column styleClass="ui-widget-header">
+                                <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="子活動案種類" for="mgActSetType" />  
                                 </p:column>
                                 <p:column>
@@ -141,9 +141,9 @@
                                 </p:column>
                                 <p:column>
                                     <p:inputText id="mgActDPrdCode" value="#{mgSetMasterController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" 
-                                                  required="true" requiredMessage="請輸入產品代號"/>
+                                                 required="true" requiredMessage="請輸入產品代號"/>
                                 </p:column>
-                                 <p:column styleClass="ui-widget-header">
+                                <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="SECURITY類型" for="mgActDSecType" />  
                                 </p:column>
                                 <p:column>
@@ -154,7 +154,7 @@
                                     </p:selectOneRadio>
                                 </p:column>
                             </p:row>
-                          
+
                             <p:row>
                                 <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="Security Company" for="mgActDSecCmp" />
@@ -163,7 +163,7 @@
                                     <p:inputText id="mgActDSecCmp" value="#{mgSetMasterController.mgSetDetail.mgActDSecCmp}" title="#{bundle.CreateMgSetDetailTitle_mgActDSecCmp}" 
                                                  required="true" requiredMessage="請輸入Security Company"/>
                                 </p:column>
-                                 <p:column styleClass="ui-widget-header">
+                                <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="Security Code" for="mgActDSecCode" />
                                 </p:column>
                                 <p:column>
@@ -178,13 +178,13 @@
                                 </p:column>
                                 <p:column>
                                     <p:inputText id="mgActDCostId" value="#{mgSetMasterController.mgSetDetail.mgActDCostId}" title="#{bundle.CreateMgSetDetailTitle_mgActDCostId}" 
-                                                  required="true" requiredMessage="請輸入客戶代碼"/>
+                                                 required="true" requiredMessage="請輸入客戶代碼"/>
                                 </p:column>
-                                 <p:column styleClass="ui-widget-header">
+                                <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="業務通路代碼" for="mgActDSaleChnl" />
                                 </p:column>
                                 <p:column>                                    
-                                     <p:selectOneRadio id="mgActDSaleChnl" value="#{mgSetMasterController.mgSetDetail.mgActDSaleChnl}" required="true" requiredMessage="請選擇業務通路代碼">
+                                    <p:selectOneRadio id="mgActDSaleChnl" value="#{mgSetMasterController.mgSetDetail.mgActDSaleChnl}" required="true" requiredMessage="請選擇業務通路代碼">
                                         <f:selectItem itemLabel="櫃檯" itemValue="1" />
                                         <f:selectItem itemLabel="網路" itemValue="2" />
                                         <f:selectItem itemLabel="語音" itemValue="3" />
@@ -203,7 +203,7 @@
                                         <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
                                     </p:calendar>
                                 </p:column>
-                                 <p:column styleClass="ui-widget-header">
+                                <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="子活動案結束日期" for="mgActDEndDate" />
                                 </p:column>
                                 <p:column>
@@ -213,7 +213,7 @@
                                     </p:calendar>
                                 </p:column>
                             </p:row>
-                  
+
                             <p:row>
                                 <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="級距設定序號???" for="mgActDSetNo" />
@@ -221,14 +221,14 @@
                                 <p:column>
                                     <p:inputNumber id="mgActDSetNo" value="#{mgSetMasterController.mgSetDetail.mgActDSetNo}" title="#{bundle.CreateMgSetDetailTitle_mgActDSetNo}" />
                                 </p:column>
-                                 <p:column styleClass="ui-widget-header">
+                                <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="Base amount" for="mgActDBaseAmt" />
                                 </p:column>
                                 <p:column>
                                     <p:inputNumber id="mgActDBaseAmt" value="#{mgSetMasterController.mgSetDetail.mgActDBaseAmt}" title="#{bundle.CreateMgSetDetailTitle_mgActDBaseAmt}" />
                                 </p:column>
                             </p:row>
-                   
+
                             <p:row>
                                 <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="最低金額" for="mgActDLowAmt" />
@@ -236,7 +236,7 @@
                                 <p:column>
                                     <p:inputNumber id="mgActDLowAmt" value="#{mgSetMasterController.mgSetDetail.mgActDLowAmt}" title="#{bundle.CreateMgSetDetailTitle_mgActDLowAmt}" />
                                 </p:column>
-                                 <p:column styleClass="ui-widget-header">
+                                <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="最高金額" for="mgActDHighAmt" />
                                 </p:column>
                                 <p:column>
@@ -258,7 +258,7 @@
                                     <p:inputNumber id="mgActDFee" value="#{mgSetMasterController.mgSetDetail.mgActDFee}" title="#{bundle.CreateMgSetDetailTitle_mgActDFee}" />
                                 </p:column>
                             </p:row> 
-                      
+
                             <p:row>
                                 <p:column styleClass="ui-widget-header">
                                     <p:outputLabel value="備註" for="mgActDRemark" />
@@ -269,38 +269,63 @@
                             </p:row> 
 
                         </p:panelGrid>
-                        <h:selectBooleanCheckbox value="#{mgSetMasterController.skip}" />
+                        <!--<h:selectBooleanCheckbox value="#{mgSetMasterController.skip}" />-->
 
                     </p:tab>
 
-                    <p:tab  title="子活動案對應設定">
+                    <p:tab  title="基金對應設定">
 
-                        <p:messages />
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                            <h:outputLabel for="company" value="基金公司" />　
-                            <p:selectCheckboxMenu id="company" value="#{mgSetMasterController.selectedInvCorp}" label="Company" multiple="true"
-                                                  filter="true" filterMatchMode="endsWith" panelStyle="width:250px">
-                                <f:selectItems value="#{mgSetMasterController.invCorp}" />
-                                <p:ajax listener="#{mgSetMasterController.updateCheckBox()}" event="change" update=":MgSetDetailCreateForm:code" />
-                            </p:selectCheckboxMenu>
-
-                            <h:outputLabel for="code" value="基金代碼" />　
-                            <p:selectCheckboxMenu id="code" value="#{mgSetMasterController.selectedFundId}" label="Code" multiple="true"
-                                                  filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
-                                <f:selectItems value="#{mgSetMasterController.fundId}" />
-                            </p:selectCheckboxMenu>
-
-                        </h:panelGrid>
+                        <p:panelGrid style="width: 100%">
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <h:outputLabel for="company" value="基金公司" />　
+                                </p:column>
+                                <p:column>
+                                    <p:selectCheckboxMenu id="company" value="#{mgSetMasterController.selectedInvCorp}" label="Company" multiple="true"
+                                                          filter="true" filterMatchMode="endsWith" panelStyle="width:250px">
+                                        <f:selectItems value="#{mgSetMasterController.invCorp}" var="invcorp" itemLabel="#{invcorp.corpCName}" itemValue="#{invcorp.corpID}" />
+                                        <p:ajax listener="#{mgSetMasterController.updateFundList()}" event="change" update=":MgSetDetailCreateForm:code" />
+                                    </p:selectCheckboxMenu>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <h:outputLabel for="code" value="基金代碼" />
+                                </p:column>
+                                <p:column>
+                                    <p:selectCheckboxMenu id="code" value="#{mgSetMasterController.selectedFundId}" label="Code" multiple="true"
+                                                          filter="true" filterMatchMode="startsWith" panelStyle="width:250px">
+                                        <f:selectItems value="#{mgSetMasterController.fundId}" var="fund" itemLabel="#{fund.fundCShortNM}" itemValue="#{fund.fundID}" />
+                                    </p:selectCheckboxMenu>
+                                </p:column>
+                            </p:row>
+                        </p:panelGrid>
 
                     </p:tab>
 
-                    <p:tab id="import" title="匯入ID">
-                        <h:panelGrid columns="2" columnClasses="label, value">
-                        </h:panelGrid>
+                    <p:tab id="import" title="匯入IDN" >
+                        <p:panelGrid>
+                            <p:row>
+                                <p:fileUpload label="選擇檔案" auto="true" fileUploadListener="#{mgSetMasterController.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                                         update="idnlist" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(csv)$/" />
+                            </p:row>  
+                        </p:panelGrid>
+                        <p:dataTable id="idnlist" value="#{mgSetMasterController.idnList}" var="item"                             
+                                             paginator="true"                            
+                                             rows="10"
+                                             rowsPerPageTemplate="10,20,30,40,50"
+                                             paginatorPosition="bottom"
+                                             emptyMessage="無資料"
+                                             style="width: 100%">
+                            <p:column style="text-align: center">
+                                        <f:facet name="header">
+                                            <h:outputText value="IDN"/>
+                                        </f:facet>
+                                        <h:outputText value="#{item}"/>
+                                    </p:column>
+                                </p:dataTable>
                     </p:tab>
 
-                    <p:tab id="confirm" title="Confirmation">
-                        <p:panel header="Confirmation">
+                    <p:tab id="confirm" title="子活動資料確認">
+                        <p:panel header="子活動資料確認">
                             <!--<p:commandButton value="Submit"update="growl" process="@this"/>-->
                         </p:panel>
                     </p:tab>

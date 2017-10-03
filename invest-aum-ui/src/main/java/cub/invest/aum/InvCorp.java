@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author nt48810
  */
 @Entity
-@Table(name = "InvCorp")
+@Table(name = "INVCOMPANY")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "InvCorp.findAll", query = "SELECT i FROM InvCorp i")
@@ -46,28 +46,28 @@ public class InvCorp implements Serializable {
     @Column(name = "ID")
     private BigDecimal id;
     @Size(max = 4)
-    @Column(name = "CorpID")
+    @Column(name = "CORPID")
     private String corpID;
     @Size(max = 5)
-    @Column(name = "AssocCorpID")
+    @Column(name = "ASSOCCORPID")
     private String assocCorpID;
     @Size(max = 60)
-    @Column(name = "CorpCName")
+    @Column(name = "CORPCNAME")
     private String corpCName;
     @Size(max = 60)
-    @Column(name = "CorpCShortNM")
+    @Column(name = "CORPCSHORTNM")
     private String corpCShortNM;
     @Size(max = 60)
-    @Column(name = "CorpEName")
+    @Column(name = "CORPENAME")
     private String corpEName;
     @Size(max = 30)
-    @Column(name = "CorpEShortNM")
+    @Column(name = "CORPESHORTNM")
     private String corpEShortNM;
     @Size(max = 60)
-    @Column(name = "ParCorpEName")
+    @Column(name = "PARCORPENAME")
     private String parCorpEName;
     @Size(max = 60)
-    @Column(name = "ParCorpEShortNM")
+    @Column(name = "PARCORPESHORTNM")
     private String parCorpEShortNM;
 
     public InvCorp() {

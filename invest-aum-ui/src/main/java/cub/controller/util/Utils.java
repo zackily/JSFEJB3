@@ -5,6 +5,10 @@
  */
 package cub.controller.util;
 
+import cub.facade.FundFacade;
+import cub.invest.aum.Fund;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import org.apache.commons.lang.StringUtils;
 
@@ -14,7 +18,15 @@ import org.apache.commons.lang.StringUtils;
  */
 @Singleton
 public class Utils {
+    
+//    @EJB
+//    private FundFacade fundFacade;
+    
     public String toPlusOneString(int seq,int size){
         return StringUtils.leftPad(Integer.toString(++seq), size,'0');
     }
+    
+//    public List<Fund> findByFundStatus(String status){
+//        return fundFacade.findByFundStatus(status);
+//    }
 }

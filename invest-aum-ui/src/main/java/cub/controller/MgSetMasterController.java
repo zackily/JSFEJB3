@@ -4,8 +4,13 @@ import cub.entities.MgSetMaster;
 import cub.controller.util.JsfUtil;
 import cub.controller.util.JsfUtil.PersistAction;
 import cub.controller.util.Utils;
+import cub.dev.themes.ThemeService;
+import cub.dev.themes.ThemeSwitcherView;
 import cub.entities.MgSetDetail;
+import cub.facade.FundFacade;
 import cub.facade.MgSetMasterFacade;
+import cub.invest.aum.Fund;
+import cub.invest.aum.InvCorp;
 import cub.vo.AumFundVO;
 import cub.vo.MgMasterVO;
 import java.io.IOException;
@@ -27,6 +32,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -44,11 +50,16 @@ import org.primefaces.model.UploadedFile;
 public class MgSetMasterController implements Serializable {
 
     @EJB
-    private cub.facade.MgSetMasterFacade mgSetMasterFacade;
-    
+    private cub.facade.MgSetMasterFacade mgSetMasterFacade;    
     
     @EJB
     private cub.facade.MgSetDetailFacade mgSetDetailFacade;
+    
+    @EJB
+    private cub.facade.InvCorpFacade invCorpFacade;
+    
+    @EJB
+    private FundFacade fundFacade;
     
     private List<MgSetMaster> items = null;
     private MgSetMaster selected;
@@ -56,6 +67,8 @@ public class MgSetMasterController implements Serializable {
     private MgSetDetail mgSetDetail;
     private List<MgSetDetail> detailItems = null;
 
+    private List<String> idnList = null;
+    
     private Date start_date;
     private Date end_date;
     private Date last_settle_date;
@@ -68,55 +81,55 @@ public class MgSetMasterController implements Serializable {
     private boolean skip;
 
     //for multiple checkbox
-    private List<String> invCorp;
+    private List<InvCorp> invCorp;
     private Map<String, String> invCorpFundMapping;
-    private List<String> fundId;
+    private List<Fund> fundId;
 
     //for selected
     private List<String> selectedInvCorp;
-    private List<String> selectedFundId;
+    private List<Fund> selectedFundId;
 
     @EJB
     private Utils utils;
 
+    @ManagedProperty("#{themeSwitchService}")
+    private ThemeSwitcherView service;
+    
     @PostConstruct
     public void init() {
+        System.out.println(service.getThemes().size());
         queryVO = new AumFundVO();
         masterVO = new MgMasterVO();
-        invCorp = new ArrayList<String>();
+        invCorp = invCorpFacade.findAll();
         invCorpFundMapping = new HashMap<String, String>();
-        for (int i = 1; i <= 10; i++) {
-            String company = "company" + i;
-              invCorp.add(company);
-            for (int j = 1; j <= 10; j++) {
-                invCorpFundMapping.put("fund" + i + "-" + j, company);
-            }
-          
-        }
-        fundId = new ArrayList<String>();
+     
+        fundId = new ArrayList<Fund>();
         mgSetDetail = new MgSetDetail();
+        idnList = new ArrayList<String>();
         selectedInvCorp = new ArrayList<String>();
-        selectedFundId = new ArrayList<String>();
+        selectedFundId = new ArrayList<Fund>();
     }
+    
 
+    
     public void reset(){
         System.out.println("test");
         RequestContext.getCurrentInstance().reset(":MgSetMasterCreateForm");
     }
     
-    public List<String> getInvCorp() {
+    public List<InvCorp> getInvCorp() {
         return invCorp;
     }
 
-    public void setInvCorp(List<String> invCorp) {
+    public void setInvCorp(List<InvCorp> invCorp) {
         this.invCorp = invCorp;
     }
 
-    public List<String> getFundId() {
+    public List<Fund> getFundId() {
         return fundId;
     }
 
-    public void setFundId(List<String> fundId) {
+    public void setFundId(List<Fund> fundId) {
         this.fundId = fundId;
     }
 
@@ -150,35 +163,13 @@ public class MgSetMasterController implements Serializable {
     }
 
     public void handleFileUpload(FileUploadEvent event) {
-        if (!detailItems.isEmpty()) {
-            detailItems.clear();
+        if (!idnList.isEmpty()) {
+            idnList.clear();
         }
         try {
             System.out.println(event.getFile().getFileName());
             UploadedFile uploadedFile = event.getFile();
-            List<String> sub_lists = IOUtils.readLines(uploadedFile.getInputstream());
-            for (String line : sub_lists) {
-                System.out.println(line);
-                String[] line_spilt = line.split("\\,");
-                MgSetDetail d = new MgSetDetail();
-                int index = 0;
-                d.setMgActDCode(line_spilt[index++]);
-                d.setMgActDName(line_spilt[index++]);
-                d.setMgActDPrdCode(line_spilt[index++]);
-                d.setMgActDSecType(line_spilt[index++]);
-                d.setMgActDSecCmp(line_spilt[index++]);
-                d.setMgActDSecCode(line_spilt[index++]);
-                d.setMgActDCostId(line_spilt[index++]);
-                d.setMgActDSaleChnl(line_spilt[index++]);
-                d.setMgActDStartDate(line_spilt[index++]);
-                d.setMgActDEndDate(line_spilt[index++]);
-                d.setMgActDBaseAmt(new BigDecimal(line_spilt[index++].trim()));
-                d.setMgActDLowAmt(new BigDecimal(line_spilt[index++].trim()));
-                d.setMgActDHighAmt(new BigDecimal(line_spilt[index++].trim()));
-                d.setMgActDRate(new BigDecimal(line_spilt[index++].trim()));
-                d.setMgActDFee(new BigDecimal(line_spilt[index++].trim()));
-                detailItems.add(d);
-            }
+            idnList = IOUtils.readLines(uploadedFile.getInputstream());       
         } catch (IOException ex) {
             Logger.getLogger(MgSetMasterController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -243,21 +234,13 @@ public class MgSetMasterController implements Serializable {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MgSetMasterUpdated"));
     }
 
-    public void updateCheckBox() {
+    public void updateFundList() {
+        
         fundId.clear();
-        for (String str : selectedInvCorp) {            
-            System.out.println("Select Company:" + str);            
-            Set s = invCorpFundMapping.keySet();
-            Iterator i = s.iterator();
-            while (i.hasNext()) {
-                String key = (String) i.next();
-               
-                if (invCorpFundMapping.get(key).equalsIgnoreCase(str)) {                    
-                     System.out.println("Select key:"+key);
-                    fundId.add(key);
-                }
-            }
-
+        for (String invcorp : selectedInvCorp) {            
+//            List<Fund> funds_result = fundFacade.findByInvCorpId("0", invcorp.getCorpID());
+            fundId.addAll((List)fundFacade.findByInvCorpId("0", invcorp));
+            
         }
     }
 
@@ -490,12 +473,28 @@ public class MgSetMasterController implements Serializable {
         this.selectedInvCorp = selectedInvCorp;
     }
 
-    public List<String> getSelectedFundId() {
+    public List<Fund> getSelectedFundId() {
         return selectedFundId;
     }
 
-    public void setSelectedFundId(List<String> selectedFundId) {
+    public void setSelectedFundId(List<Fund> selectedFundId) {
         this.selectedFundId = selectedFundId;
+    }
+
+    public ThemeSwitcherView getService() {
+        return service;
+    }
+
+    public void setService(ThemeSwitcherView service) {
+        this.service = service;
+    }
+
+    public List<String> getIdnList() {
+        return idnList;
+    }
+
+    public void setIdnList(List<String> idnList) {
+        this.idnList = idnList;
     }
 
 }

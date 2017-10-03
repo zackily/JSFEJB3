@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author nt48810
  */
 @Entity
-@Table(name = "Fund")
+@Table(name = "FUND")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Fund.findAll", query = "SELECT f FROM Fund f")
@@ -48,27 +48,27 @@ public class Fund implements Serializable {
     @Column(name = "ID")
     private BigDecimal id;
     @Size(max = 8)
-    @Column(name = "FundID")
+    @Column(name = "FUNDID")
     private String fundID;
     @Size(max = 15)
-    @Column(name = "AssocFundNo")
+    @Column(name = "ASSOCFUNDNO")
     private String assocFundNo;
     @Size(max = 80)
-    @Column(name = "FundCName")
+    @Column(name = "FUNDCNAME")
     private String fundCName;
     @Size(max = 40)
-    @Column(name = "FundCShortNM")
+    @Column(name = "FUNDCSHORTNM")
     private String fundCShortNM;
     @Size(max = 100)
     @Column(name = "FundEName")
     private String fundEName;
     @Size(max = 40)
-    @Column(name = "FundEShortNM")
+    @Column(name = "FUNDESHORTNM")
     private String fundEShortNM;
-    @Column(name = "CategoryID")
+    @Column(name = "CATEGORYID")
     private BigInteger categoryID;
     @Size(max = 2)
-    @Column(name = "FundStatus")
+    @Column(name = "FUNDSTATUS")
     private String fundStatus;
     @Size(max = 4)
     @Column(name = "CORPID")
