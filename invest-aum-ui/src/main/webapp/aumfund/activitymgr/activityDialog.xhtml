@@ -327,6 +327,211 @@
                     <p:tab id="confirm" title="子活動資料確認">
                         <p:panel header="子活動資料確認">
                             <!--<p:commandButton value="Submit"update="growl" process="@this"/>-->
+                            <p:panelGrid rendered="#{mgSetMasterController.mgSetDetail != null}" style="width: 100%">                     
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="子活動案代碼" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel  value="#{mgSetMasterController.selected.mgActMCode}-#{mgSetMasterController.showMgSetDetailCode()}" 
+                                                   title="#{bundle.CreateMgSetDetailTitle_mgActDCode}" />                          
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="子活動案序號" />
+                                </p:column>
+                                <p:column>
+                                    <p:outputLabel value="#{mgSetMasterController.showMgSetDetailCode()}" title="#{bundle.CreateMgSetDetailTitle_mgActDSeq}" />            
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="子活動案名稱"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inplace>
+                                    <p:inputText size="30" value="#{mgSetMasterController.mgSetDetail.mgActDName}" title="#{bundle.CreateMgSetDetailTitle_mgActDName}" 
+                                                 required="true" requiredMessage="請輸入子活動案名稱"/>       
+                                    </p:inplace>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="子活動案種類" />  
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:selectOneRadio value="#{mgSetMasterController.mgSetDetail.mgActSetType}" required="true" requiredMessage="請選擇子活動案種類">                                           
+                                        <f:selectItem itemLabel="固定費用" itemValue="F" /> 
+                                        <f:selectItem itemLabel="費率" itemValue="R" /> 
+                                    </p:selectOneRadio>
+                                     </p:inplace>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="產品代號"  />  
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputText  value="#{mgSetMasterController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" 
+                                                 required="true" requiredMessage="請輸入產品代號"/>
+                                     </p:inplace>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="SECURITY類型"  />  
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:selectOneRadio value="#{mgSetMasterController.mgSetDetail.mgActDSecType}" required="true" requiredMessage="請選擇SECURITY類型">
+                                        <f:selectItem itemLabel="Stock" itemValue="1" />
+                                        <f:selectItem itemLabel="Bond" itemValue="2" />
+                                        <f:selectItem itemLabel="Fund" itemValue="3" />
+                                    </p:selectOneRadio>
+                                     </p:inplace>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="Security Company" />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputText value="#{mgSetMasterController.mgSetDetail.mgActDSecCmp}" title="#{bundle.CreateMgSetDetailTitle_mgActDSecCmp}" 
+                                                 required="true" requiredMessage="請輸入Security Company"/>
+                                     </p:inplace>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="Security Code" />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputText  value="#{mgSetMasterController.mgSetDetail.mgActDSecCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDSecCode}" 
+                                                 required="true" requiredMessage="請輸入Security Code"/>
+                                     </p:inplace>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="客戶代碼"  />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputText value="#{mgSetMasterController.mgSetDetail.mgActDCostId}" title="#{bundle.CreateMgSetDetailTitle_mgActDCostId}" 
+                                                 required="true" requiredMessage="請輸入客戶代碼"/>
+                                     </p:inplace>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="業務通路代碼" />
+                                </p:column>
+                                <p:column>   
+                                     <p:inplace>
+                                    <p:selectOneRadio value="#{mgSetMasterController.mgSetDetail.mgActDSaleChnl}" required="true" requiredMessage="請選擇業務通路代碼">
+                                        <f:selectItem itemLabel="櫃檯" itemValue="1" />
+                                        <f:selectItem itemLabel="網路" itemValue="2" />
+                                        <f:selectItem itemLabel="語音" itemValue="3" />
+                                        <f:selectItem itemLabel="KOKO" itemValue="4" />
+                                    </p:selectOneRadio>
+                                     </p:inplace>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="子活動案開始日期"  />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:calendar pattern="yyyyMMdd" value="#{mgSetMasterController.start_date}" title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}"
+                                                required="true" requiredMessage="請選擇子活動案開始日期">
+                                        <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
+                                    </p:calendar>
+                                     </p:inplace>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="子活動案結束日期" for="mgActDEndDate" />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:calendar pattern="yyyyMMdd" value="#{mgSetMasterController.end_date}" title="#{bundle.CreateMgSetDetailTitle_mgActDEndDate}"
+                                                required="true" requiredMessage="請選擇子活動案結束日期">
+                                        <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
+                                    </p:calendar>
+                                     </p:inplace>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="級距設定序號???" />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputNumber value="#{mgSetMasterController.mgSetDetail.mgActDSetNo}" title="#{bundle.CreateMgSetDetailTitle_mgActDSetNo}" />
+                                     </p:inplace>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="Base amount" />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputNumber thousandSeparator="."  decimalSeparator="," value="#{mgSetMasterController.mgSetDetail.mgActDBaseAmt}" title="#{bundle.CreateMgSetDetailTitle_mgActDBaseAmt}" />
+                                     </p:inplace>
+                                </p:column>
+                            </p:row>
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="最低金額"  />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputNumber  value="#{mgSetMasterController.mgSetDetail.mgActDLowAmt}" title="#{bundle.CreateMgSetDetailTitle_mgActDLowAmt}" />
+                                     </p:inplace>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="最高金額" />
+                                </p:column>
+                                <p:column>
+                                    <p:inplace>
+                                    <p:inputNumber  value="#{mgSetMasterController.mgSetDetail.mgActDHighAmt}" title="#{bundle.CreateMgSetDetailTitle_mgActDHighAmt}" />
+                                    </p:inplace>
+                                </p:column>
+                            </p:row>   
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="一年管理費率"/>
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputNumber value="#{mgSetMasterController.mgSetDetail.mgActDRate}" title="#{bundle.CreateMgSetDetailTitle_mgActDRate}" />
+                                     </p:inplace>
+                                </p:column>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="管理費金額??" />
+                                </p:column>
+                                <p:column>
+                                     <p:inplace>
+                                    <p:inputNumber  value="#{mgSetMasterController.mgSetDetail.mgActDFee}" title="#{bundle.CreateMgSetDetailTitle_mgActDFee}" />
+                                     </p:inplace>
+                                </p:column>
+                            </p:row> 
+
+                            <p:row>
+                                <p:column styleClass="ui-widget-header">
+                                    <p:outputLabel value="備註" />
+                                </p:column>
+                                <p:column colspan="3">
+                                     <p:inplace>
+                                    <p:inputTextarea cols="100" rows="8" value="#{mgSetMasterController.mgSetDetail.mgActDRemark}" title="#{bundle.CreateMgSetDetailTitle_mgActDRemark}" />
+                                     </p:inplace>
+                                </p:column>
+                            </p:row> 
+
+                        </p:panelGrid>
+                            
                         </p:panel>
                     </p:tab>
                 </p:wizard>
