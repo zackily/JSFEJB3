@@ -51,6 +51,19 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
             return null;
         }
     }
+    
+     public List<MgSetMaster> findByStatusMgMaster(String status) {
+        StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");
+        if (StringUtils.isNotEmpty(status)) {
+            sql.append(" and msm.status =:status ");
+        }
+        sql.append(" order by msm.id desc");
+        Query q = em.createQuery(sql.toString());  
+        if (StringUtils.isNotEmpty(status)) {
+            q.setParameter("status", status);
+        }
+        return q.getResultList();
+    }
 
     public List<MgSetMaster> findByMgMasterVO(MgMasterVO vo) {
         StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");

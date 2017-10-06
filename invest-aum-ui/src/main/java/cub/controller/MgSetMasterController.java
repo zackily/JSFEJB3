@@ -7,7 +7,9 @@ import cub.controller.util.Utils;
 import cub.dev.themes.ThemeService;
 import cub.dev.themes.ThemeSwitcherView;
 import cub.entities.MgSetDetail;
+import cub.entities.MgSetDetailSecCfg;
 import cub.facade.FundFacade;
+import cub.facade.MgSetDetailSecCfgFacade;
 import cub.facade.MgSetMasterFacade;
 import cub.invest.aum.Fund;
 import cub.invest.aum.InvCorp;
@@ -31,6 +33,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -43,14 +46,15 @@ import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.UploadedFile;
 
 @ManagedBean(name = "mgSetMasterController")
 @ViewScoped
 public class MgSetMasterController implements Serializable {
-
+    
     @EJB
-    private cub.facade.MgSetMasterFacade mgSetMasterFacade;    
+    private cub.facade.MgSetMasterFacade mgSetMasterFacade;
     
     @EJB
     private cub.facade.MgSetDetailFacade mgSetDetailFacade;
@@ -61,12 +65,15 @@ public class MgSetMasterController implements Serializable {
     @EJB
     private FundFacade fundFacade;
     
+    @EJB
+    private MgSetDetailSecCfgFacade mgSetDetailSecCfgFacade;
+    
     private List<MgSetMaster> items = null;
     private MgSetMaster selected;
-
+    
     private MgSetDetail mgSetDetail;
     private List<MgSetDetail> detailItems = null;
-
+    
     private List<String> idnList = null;
     
     private Date start_date;
@@ -87,32 +94,30 @@ public class MgSetMasterController implements Serializable {
 
     //for selected
     private List<String> selectedInvCorp;
-    private List<Fund> selectedFundId;
-
+    private List<String> selectedFundId;
+    
     @EJB
     private Utils utils;
-
+    
     @ManagedProperty("#{themeSwitchService}")
     private ThemeSwitcherView service;
     
     @PostConstruct
     public void init() {
-        System.out.println(service.getThemes().size());
+        items = mgSetMasterFacade.findByStatusMgMaster("");
         queryVO = new AumFundVO();
         masterVO = new MgMasterVO();
         invCorp = invCorpFacade.findAll();
         invCorpFundMapping = new HashMap<String, String>();
-     
         fundId = new ArrayList<Fund>();
         mgSetDetail = new MgSetDetail();
+        
         idnList = new ArrayList<String>();
         selectedInvCorp = new ArrayList<String>();
-        selectedFundId = new ArrayList<Fund>();
+        selectedFundId = new ArrayList<String>();
     }
     
-
-    
-    public void reset(){
+    public void reset() {
         System.out.println("test");
         RequestContext.getCurrentInstance().reset(":MgSetMasterCreateForm");
     }
@@ -120,48 +125,48 @@ public class MgSetMasterController implements Serializable {
     public List<InvCorp> getInvCorp() {
         return invCorp;
     }
-
+    
     public void setInvCorp(List<InvCorp> invCorp) {
         this.invCorp = invCorp;
     }
-
+    
     public List<Fund> getFundId() {
         return fundId;
     }
-
+    
     public void setFundId(List<Fund> fundId) {
         this.fundId = fundId;
     }
-
+    
     public MgSetMaster getSelected() {
         return selected;
     }
-
+    
     public void setSelected(MgSetMaster selected) {
         this.selected = selected;
     }
-
+    
     protected void setEmbeddableKeys() {
     }
-
+    
     protected void initializeEmbeddableKey() {
     }
-
+    
     private MgSetMasterFacade getFacade() {
         return mgSetMasterFacade;
     }
-
+    
     public void search() {
         items.clear();
         items = mgSetMasterFacade.findByMgMasterVO(masterVO);
         masterVO = new MgMasterVO();
     }
-
+    
     public void searchAll() {
         items.clear();
         items = mgSetMasterFacade.findAll();
     }
-
+    
     public void handleFileUpload(FileUploadEvent event) {
         if (!idnList.isEmpty()) {
             idnList.clear();
@@ -169,52 +174,76 @@ public class MgSetMasterController implements Serializable {
         try {
             System.out.println(event.getFile().getFileName());
             UploadedFile uploadedFile = event.getFile();
-            idnList = IOUtils.readLines(uploadedFile.getInputstream());       
+            idnList = IOUtils.readLines(uploadedFile.getInputstream());
         } catch (IOException ex) {
             Logger.getLogger(MgSetMasterController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
-
+    
     public MgSetMaster prepareCreate() {
         this.selected = null;
         this.selected = new MgSetMaster();
         mgSetDetail = new MgSetDetail();
+        selected.setMgActMType("1");
+        selected.setMgActMRateSet("1");
+        selected.setMgActMSaleChnl("2");
+        selected.setMgActMChargeObj("C");
+//        mgSetDetail.setMgActDSecType("1");
         start_date = new Date();
         end_date = new Date();
         last_settle_date = new Date();
         initializeEmbeddableKey();
         return selected;
     }
-
+    
     public void findByMasterId(MgSetMaster m) {
         this.detailItems = (List) m.getMgSetDetailCollection();
     }
-
+    
     public void addDetail(MgSetMaster m) {
         this.selected = m;
         mgSetDetail = new MgSetDetail();
+        mgSetDetail.setMgActDSecType("3");
+        mgSetDetail.setMgActSetType("F");
+        mgSetDetail.setMgActDSaleChnl("2");
+     
         start_date = new Date();
         end_date = new Date();
         last_settle_date = new Date();
         System.out.println(m.getId());
     }
-
+    
     public void importDetail(MgSetMaster m) {
         this.selected = m;
         detailItems = new ArrayList<MgSetDetail>();
     }
-
+    
     public void create() {
         this.selected.setMgActLastSettleDate(toStringDate(last_settle_date));
         this.selected.setMgActMCode(this.showMgSetMasterCode());
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MgSetMasterCreated"));
+        
+        persist(PersistAction.CREATE, "管理費主活動案設定完成");
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
-
+    
+    public void onRowEdit(RowEditEvent event) {
+        MgSetMaster m = (MgSetMaster) event.getObject();
+        mgSetMasterFacade.edit(m);
+        FacesMessage msg = new FacesMessage("已修改管理費主活動案編號為" + m.getMgActMCode());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("取消修改");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+    
     public void createDetail() {
+        mgSetDetail.setMgActDCode(selected.getMgActMCode()+this.showMgSetDetailCode());        
+        mgSetDetail.setMgActDSeq(this.showMgSetDetailCode());
         mgSetDetail.setMgActDStartDate(toStringDate(start_date));
         mgSetDetail.setMgActDEndDate(toStringDate(end_date));
         mgSetDetail.setMgSetMasterId(selected);
@@ -225,25 +254,38 @@ public class MgSetMasterController implements Serializable {
         } else {
             selected.getMgSetDetailCollection().add(mgSetDetail);
         }
+
 //       mgSetDetail.setMgSetMasterId(selected);
 //        update();
         getFacade().edit(selected);
+        for (String fid : selectedFundId) {
+          System.out.println(fid);
+            Fund f = fundFacade.findByFundId(fid);
+            MgSetDetailSecCfg msdsc = new MgSetDetailSecCfg();
+            msdsc.setMgActCode(mgSetDetail.getMgActDCode());
+            msdsc.setMgActSubCode(mgSetDetail.getMgActDSeq());
+            msdsc.setMgActCounterparty(f.getFundID().substring(0,4));
+            msdsc.setMgActFundNo(f.getFundID());
+            mgSetDetailSecCfgFacade.create(msdsc);
+        }
+        FacesMessage msg = new FacesMessage("儲存成功");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-
+    
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MgSetMasterUpdated"));
     }
-
+    
     public void updateFundList() {
         
         fundId.clear();
-        for (String invcorp : selectedInvCorp) {            
+        for (String invcorp : selectedInvCorp) {
 //            List<Fund> funds_result = fundFacade.findByInvCorpId("0", invcorp.getCorpID());
-            fundId.addAll((List)fundFacade.findByInvCorpId("0", invcorp));
+            fundId.addAll((List) fundFacade.findByInvCorpId("0", invcorp));
             
         }
     }
-
+    
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("MgSetMasterDeleted"));
         if (!JsfUtil.isValidationFailed()) {
@@ -251,14 +293,14 @@ public class MgSetMasterController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
-
+    
     public List<MgSetMaster> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
         return items;
     }
-
+    
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();
@@ -286,22 +328,22 @@ public class MgSetMasterController implements Serializable {
             }
         }
     }
-
+    
     public MgSetMaster getMgSetMaster(Long id) {
         return getFacade().find(id);
     }
-
+    
     public List<MgSetMaster> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
-
+    
     public List<MgSetMaster> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
-
+    
     @FacesConverter(forClass = MgSetMaster.class)
     public static class MgSetMasterControllerConverter implements Converter {
-
+        
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
@@ -311,19 +353,19 @@ public class MgSetMasterController implements Serializable {
                     getValue(facesContext.getELContext(), null, "mgSetMasterController");
             return controller.getMgSetMaster(getKey(value));
         }
-
+        
         Long getKey(String value) {
             Long key;
             key = new Long(value);
             return key;
         }
-
+        
         String getStringKey(Long value) {
             StringBuilder sb = new StringBuilder();
             sb.append(value);
             return sb.toString();
         }
-
+        
         @Override
         public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
             if (object == null) {
@@ -337,9 +379,9 @@ public class MgSetMasterController implements Serializable {
                 return null;
             }
         }
-
+        
     }
-
+    
     public String toMgMType(String str) {
         if (str.equalsIgnoreCase("1")) {
             return "AUM";
@@ -349,7 +391,7 @@ public class MgSetMasterController implements Serializable {
             return "error";
         }
     }
-
+    
     public String toMgActMRateSet(String str) {
         if (str.equalsIgnoreCase("1")) {
             return "Low";
@@ -359,77 +401,81 @@ public class MgSetMasterController implements Serializable {
             return "error";
         }
     }
-
+    
     public int toCollectionSize(Collection selected) {
-
+        
         if (selected == null || selected.isEmpty()) {
             return 0;
         } else {
             return selected.size();
         }
     }
-
+    
     public MgSetDetail getMgSetDetail() {
         return mgSetDetail;
     }
-
+    
     public void setMgSetDetail(MgSetDetail mgSetDetail) {
         this.mgSetDetail = mgSetDetail;
     }
-
+    
     public List<MgSetDetail> getDetailItems() {
         return detailItems;
     }
-
+    
     public void setDetailItems(List<MgSetDetail> detailItems) {
         this.detailItems = detailItems;
     }
-
+    
     public String toStringDate(Date d) {
         DateTime s = new DateTime(d);
         return s.toString("yyyyMMdd");
     }
-
+    
+    public Date toDate(String yyyyMMdd) {
+        return new DateTime(yyyyMMdd).toDate();
+    }
+    
     public Date getStart_date() {
         return start_date;
     }
-
+    
     public void setStart_date(Date start_date) {
         this.start_date = start_date;
     }
-
+    
     public Date getEnd_date() {
         return end_date;
     }
-
+    
     public void setEnd_date(Date end_date) {
         this.end_date = end_date;
     }
-
+    
     public Date getLast_settle_date() {
         return last_settle_date;
     }
-
+    
     public void setLast_settle_date(Date last_settle_date) {
         this.last_settle_date = last_settle_date;
     }
-
+    
     public AumFundVO getQueryVO() {
         return queryVO;
     }
-
+    
     public void setQueryVO(AumFundVO queryVO) {
         this.queryVO = queryVO;
     }
-
+    
     public MgMasterVO getMasterVO() {
         return masterVO;
     }
-
+    
     public void setMasterVO(MgMasterVO masterVO) {
         this.masterVO = masterVO;
     }
-
+    
     public String onFlowProcess(FlowEvent event) {
         if (skip) {
             skip = false;   //reset in case user goes back
@@ -438,63 +484,63 @@ public class MgSetMasterController implements Serializable {
             return event.getNewStep();
         }
     }
-
-    public String showMgSetMasterCode(){
+    
+    public String showMgSetMasterCode() {
         MgSetMaster lastObj = mgSetMasterFacade.findByLastIdMgMaster("");
         int seq = 0;
-        if(lastObj != null){
+        if (lastObj != null) {
             seq = lastObj.getId().intValue();
         }
-        return utils.toPlusOneString(seq,5);
+        return utils.toPlusOneString(seq, 5);
     }
     
-    public String showMgSetDetailCode(){
+    public String showMgSetDetailCode() {
         MgSetDetail lastObj = mgSetDetailFacade.findByLastSeqMgSetDetail(selected);
         int seq = 0;
-        if(lastObj != null){
+        if (lastObj != null) {
             seq = lastObj.getId().intValue();
         }
-        return utils.toPlusOneString(seq,2);
+        return utils.toPlusOneString(seq, 2);
     }
-
+    
     public boolean isSkip() {
         return skip;
     }
-
+    
     public void setSkip(boolean skip) {
         this.skip = skip;
     }
-
+    
     public List<String> getSelectedInvCorp() {
         return selectedInvCorp;
     }
-
+    
     public void setSelectedInvCorp(List<String> selectedInvCorp) {
         this.selectedInvCorp = selectedInvCorp;
     }
-
-    public List<Fund> getSelectedFundId() {
+    
+    public List<String> getSelectedFundId() {
         return selectedFundId;
     }
-
-    public void setSelectedFundId(List<Fund> selectedFundId) {
+    
+    public void setSelectedFundId(List<String> selectedFundId) {
         this.selectedFundId = selectedFundId;
     }
-
+    
     public ThemeSwitcherView getService() {
         return service;
     }
-
+    
     public void setService(ThemeSwitcherView service) {
         this.service = service;
     }
-
+    
     public List<String> getIdnList() {
         return idnList;
     }
-
+    
     public void setIdnList(List<String> idnList) {
         this.idnList = idnList;
     }
-
+    
 }

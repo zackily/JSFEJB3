@@ -6,6 +6,7 @@
 package cub.facade;
 
 import cub.invest.aum.Fund;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,8 +33,27 @@ public class FundFacade extends AbstractFacade<Fund> {
         super(Fund.class);
     }
 
+    public Fund findByFundId(String fundID) {
+        StringBuffer sql = new StringBuffer("SELECT f FROM Fund f WHERE 1=1 ");
+        if (StringUtils.isNotEmpty(fundID)) {
+            sql.append(" and f.fundID =:fundID ");
+        }
+
+//        sql.append(" order by f.fundID");
+
+        Query q = em.createQuery(sql.toString());
+        if (StringUtils.isNotEmpty(fundID)) {
+            q.setParameter("fundID",fundID);
+        }
+        try {
+            return (Fund) q.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public List<Fund> findByFundStatus(String status) {
-        StringBuffer sql = new StringBuffer("SELECT f FROM Fund af WHERE 1=1 ");
+        StringBuffer sql = new StringBuffer("SELECT f FROM Fund f WHERE 1=1 ");
         if (StringUtils.isNotEmpty(status)) {
             sql.append(" and f.fundStatus =:fundStatus ");
         }
@@ -65,7 +85,7 @@ public class FundFacade extends AbstractFacade<Fund> {
             q.setParameter("fundStatus", status);
         }
         if (StringUtils.isNotEmpty(invcorp)) {
-            q.setParameter("invcorp", invcorp+"%");
+            q.setParameter("invcorp", invcorp + "%");
         }
         return q.getResultList();
     }
