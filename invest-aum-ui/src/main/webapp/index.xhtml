@@ -2,13 +2,59 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-        <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
-    </h:body>
+
+    <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                    xmlns:ui="http://java.sun.com/jsf/facelets"
+                    xmlns:h="http://java.sun.com/jsf/html"
+                    xmlns:f="http://java.sun.com/jsf/core"
+                    xmlns:p="http://primefaces.org/ui"
+                    >
+
+
+        <h:head>
+            <title>Facelet Title</title>
+        </h:head>
+        <h:body>
+            Hello from Facelets
+            <br />
+            <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+            <p/>
+            <h:form>
+                <p:fieldset legend="Fake Login" toggleable="true" toggleSpeed="500">
+                    <h:panelGrid id="grid" columns="3" cellpadding="5">
+                        <h:outputLabel for="empId" value="EmpId" />
+                        <p:inputText id="empId" value="#{fakeLogin.empId}" required="true" label="empId" >
+                            <f:validateLength minimum="5" maximum="5" /> 
+                        </p:inputText>
+                        <p:message for="empId" />
+                        <h:outputLabel for="empname" value="Empname" />
+                        <p:inputText id="empname" value="#{fakeLogin.empname}" required="false" label="empname" />
+                        <p:message for="empname" />
+                        <h:outputLabel for="branchid" value="Branchid" />
+                        <p:inputText id="branchid" value="#{fakeLogin.branchid}" required="true" label="branchid" >
+                            <f:validateLength minimum="3" maximum="3" /> 
+                        </p:inputText>
+                        <p:message for="branchid" />
+                        <p:outputLabel for="role" value="Role:" />
+                        <p:selectOneMenu id="role" value="#{fakeLogin.role}"  >
+                            <p:ajax update="authName" listener="#{fakeLogin.onRoleChange}"/>
+                            <f:selectItems value="#{fakeLogin.roles}" />
+                        </p:selectOneMenu>
+                        <p:message for="role" />
+                        <h:outputLabel for="authName" value="AuthName" />
+                        <p:inputText id="authName" value="#{fakeLogin.authName}" required="true" label="authName"  />
+                        <p:message for="authName" />
+                        <f:facet name="footer">
+                            <p:commandButton value="Login"  actionListener="#{fakeLogin.login}" 
+                                            update="grid" validateClient="true"/>
+                        </f:facet>  
+
+                    </h:panelGrid>
+                </p:fieldset>
+
+            </h:form>
+        </h:body>
+
+    </ui:composition>
 </html>
 
