@@ -1,0 +1,79 @@
+# GENERAL CONFIGURATION 
+#
+# General configuration defined basic configuration for application.
+# Configuration in this section can be override by configurations in 
+# other profile sections with same key.
+# 
+# Use "-Dspring.profiles.active=<profile_name>" in startup command to
+# activate profile configuration.
+
+spring:
+  data:
+    rest:
+      basePath: /aum/api
+  application:
+    name: @pom.artifactId@
+  profiles:
+    active: ut      
+  output:
+    ansi:
+      enabled: always
+server:
+  #address: localhost
+  port: 16888
+  
+logging:
+  config: classpath:logback-spring.xml
+
+# banner properties
+application:
+  version: @pom.version@
+  
+# actuator
+management:
+  port: 9001
+  address: localhost
+  security:
+    enabled: false
+
+# spring-boot-admin-client
+info:
+  name: @pom.artifactId@
+  description: AUM service of Investment Platform
+  version: @pom.version@
+
+---
+
+# UT ENV CONFIGURATION
+#
+spring:
+  profiles: ut
+  boot:
+    admin:
+      url: http://88.8.141.105:8123
+#      url: http://localhost:9999
+
+info:
+  spring-profile: ut
+
+---
+
+# UAT ENV CONFIGURATION
+#
+spring:
+  profiles: uat
+
+info:
+  spring-profile: uat
+
+---
+
+# PROD ENV CONFIGURATION
+#
+spring:
+  profiles: prod
+
+info:
+  spring-profile: prod
+
+...
