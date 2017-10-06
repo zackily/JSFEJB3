@@ -25,13 +25,13 @@
 	<dependencies>
 		<!-- spring boot rest & jpa -->
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 		<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
 		<!-- for spring test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -39,9 +39,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
 		<!-- for monitor endpoint -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -80,28 +80,42 @@
 				</configuration>
 			</plugin>
 			<plugin>
-            <groupId>ch.acanda.maven</groupId>
-            <artifactId>spring-banner-plugin</artifactId>
-            <version>1.0</version>
-            <executions>
-                <execution>
-                    <id>generate-spring-banner</id>
-                    <phase>generate-resources</phase>
-                    <goals>
-                        <goal>generate</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <text>${project.name}</text>
-                <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                <filename>banner.txt</filename>
-                <includeInfo>true</includeInfo>
-                <info>Version: ${application.version}, Server: ${server.address}:${server.port}, Active Profiles: ${spring.profiles.active}, Spring-boot Version: ${spring-boot.version}</info>
-                <version>${project.version}</version>
-                <color>default</color>
-            </configuration>
-        </plugin>
+				<groupId>ch.acanda.maven</groupId>
+				<artifactId>spring-banner-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>generate-spring-banner</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<text>${project.name}</text>
+					<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+					<filename>banner.txt</filename>
+					<includeInfo>true</includeInfo>
+					<info>Version: ${application.version}, Server:
+						${server.address}:${server.port}, Active Profiles:
+						${spring.profiles.active}, Spring-boot Version:
+						${spring-boot.version}</info>
+					<version>${project.version}</version>
+					<color>default</color>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<classpathDependencyExcludes>
+						<classpathDependencyExclude>de.codecentric:spring-boot-admin-starter-client</classpathDependencyExclude>
+						<classpathDependencyExclude>io.springfox:springfox-swagger2</classpathDependencyExclude>
+						<classpathDependencyExclude>io.springfox:springfox-swagger-ui</classpathDependencyExclude>
+					</classpathDependencyExcludes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
