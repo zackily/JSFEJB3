@@ -37,6 +37,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActFundNo", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActFundNo = :mgActFundNo")})
 public class MgSetDetailSecCfg implements Serializable {
 
+    @Size(max = 1)
+    @Column(name = "MG_ACT_FUND_TYPE")
+    private String mgActFundType;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -129,6 +133,14 @@ public class MgSetDetailSecCfg implements Serializable {
     @Override
     public String toString() {
         return "cub.entities.MgSetDetailSecCfg[ id=" + id + " ]";
+    }
+
+    public String getMgActFundType() {
+        return mgActFundType;
+    }
+
+    public void setMgActFundType(String mgActFundType) {
+        this.mgActFundType = mgActFundType;
     }
 
 }

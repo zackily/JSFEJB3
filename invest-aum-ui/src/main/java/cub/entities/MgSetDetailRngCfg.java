@@ -7,6 +7,7 @@ package cub.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -38,6 +39,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MgSetDetailRngCfg.findByMgActRate", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.mgActRate = :mgActRate")
     , @NamedQuery(name = "MgSetDetailRngCfg.findByChangedate", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.changedate = :changedate")})
 public class MgSetDetailRngCfg implements Serializable {
+
+    @Column(name = "MG_ACT_MG_RTN_RATE")
+    private BigInteger mgActMgRtnRate;
+    @Column(name = "MG_ACT_MG_MAP_RATE")
+    private BigInteger mgActMgMapRate;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -148,6 +154,22 @@ public class MgSetDetailRngCfg implements Serializable {
     @Override
     public String toString() {
         return "cub.entities.MgSetDetailRngCfg[ id=" + id + " ]";
+    }
+
+    public BigInteger getMgActMgRtnRate() {
+        return mgActMgRtnRate;
+    }
+
+    public void setMgActMgRtnRate(BigInteger mgActMgRtnRate) {
+        this.mgActMgRtnRate = mgActMgRtnRate;
+    }
+
+    public BigInteger getMgActMgMapRate() {
+        return mgActMgMapRate;
+    }
+
+    public void setMgActMgMapRate(BigInteger mgActMgMapRate) {
+        this.mgActMgMapRate = mgActMgMapRate;
     }
     
 }
