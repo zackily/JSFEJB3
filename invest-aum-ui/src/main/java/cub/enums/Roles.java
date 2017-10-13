@@ -10,6 +10,7 @@ package cub.enums;
  * @author NT48810
  */
 public enum Roles {
+    
     分行經辦(1),
     分行主管(2),
     信託部經辦(3),

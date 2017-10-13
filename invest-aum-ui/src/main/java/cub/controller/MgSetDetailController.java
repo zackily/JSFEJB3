@@ -3,34 +3,52 @@ package cub.controller;
 import cub.entities.MgSetDetail;
 import cub.controller.util.JsfUtil;
 import cub.controller.util.JsfUtil.PersistAction;
+import cub.entities.MgSetMaster;
 import cub.facade.MgSetDetailFacade;
+import cub.sso.UserSession;
+import cub.vo.MgDetailVO;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.joda.time.DateTime;
 
 @Named("mgSetDetailController")
 @SessionScoped
 public class MgSetDetailController implements Serializable {
-
+    @ManagedProperty("#{userSession}")
+    private UserSession userSession;
+    
     @EJB
-    private cub.facade.MgSetDetailFacade ejbFacade;
+    private cub.facade.MgSetDetailFacade mgSetDetailFacade;
     private List<MgSetDetail> items = null;
     private MgSetDetail selected;
 
-    public MgSetDetailController() {
+    //VO
+    private MgDetailVO mgDetailVO;
+    
+   @PostConstruct
+    public void init() {
+        
     }
 
+     public void prepareUpdate(MgSetDetail item) {
+        this.selected = item;       
+    }
+    
     public MgSetDetail getSelected() {
         return selected;
     }
@@ -46,7 +64,7 @@ public class MgSetDetailController implements Serializable {
     }
 
     private MgSetDetailFacade getFacade() {
-        return ejbFacade;
+        return mgSetDetailFacade;
     }
 
     public MgSetDetail prepareCreate() {
@@ -160,6 +178,41 @@ public class MgSetDetailController implements Serializable {
             }
         }
 
+    }
+
+    public String toStringDate(Date d, String pattern) {
+        if (d != null) {
+            DateTime s = new DateTime(d);
+            return s.toString(pattern);
+        } else {
+            return "N/A";
+        }
+    }
+
+    public Date toDate(String yyyyMMdd) {
+        return new DateTime(yyyyMMdd).toDate();
+    }
+    
+    public void search() {
+        items.clear();
+        items= mgSetDetailFacade.findAll();
+        mgDetailVO = new MgDetailVO();
+    }
+    
+    public UserSession getUserSession() {
+        return userSession;
+    }
+
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
+    }
+
+    public MgDetailVO getMgDetailVO() {
+        return mgDetailVO;
+    }
+
+    public void setMgDetailVO(MgDetailVO mgDetailVO) {
+        this.mgDetailVO = mgDetailVO;
     }
 
 }

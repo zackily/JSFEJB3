@@ -14,17 +14,23 @@
         <tr align="center">                   
 
             <td style="vertical-align: top">
-        <h:form>
-        <h:panelGrid columns="2" cellpadding="10">
-        <p:outputLabel for="basic" value="Theme Switch for Dev" /> 
-        <p:themeSwitcher id="basic" style="width:165px" >
-            <f:selectItem itemLabel="Choose Theme" itemValue="" />
-            <f:selectItems var="theme" value="#{mgSetMasterController.service.themes}" itemLabel="#{theme.displayName}" itemValue="#{theme}" />
-            
-        </p:themeSwitcher>
- 
-        
-    </h:panelGrid>
+
+        <h:form id="headerForm">
+                <h:panelGrid columns="2" cellpadding="10">
+                <p:outputLabel for="basic" value="Theme Switch for Dev" /> 
+                <p:themeSwitcher id="basic" style="width:165px" >
+                    <f:selectItem itemLabel="Choose Theme" itemValue="" />
+                    <f:selectItems var="theme" value="#{userSession.service.themes}" itemLabel="#{theme.displayName}" itemValue="#{theme}" />
+
+                </p:themeSwitcher>
+
+                <h:outputLabel id="roleview" value="目前身分為#{userSession.toRoleName()}"/>
+                <p:selectOneRadio id="roleid" value="#{userSession.user.role}" >                                            
+                    <f:selectItems value="#{userSession.roleList}" var="role" itemLabel="#{role}" itemValue="#{role.value}" /> 
+                    <p:ajax  event="change" update="@all" />
+                </p:selectOneRadio> 
+
+            </h:panelGrid>
         </h:form>
         </td>                    
         </tr>           

@@ -160,7 +160,7 @@ public class CubSSOServlet extends HttpServlet {
 
 			}
 
-			resp.sendRedirect("/invest-aum-ui/faces/aum/aumFund/QueryList.xhtml");
+			resp.sendRedirect("/invest-aum-ui/faces/aumfund/activitymgr/masterActivityList.xhtml");
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

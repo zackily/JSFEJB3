@@ -6,17 +6,10 @@
                 >
 <h:form id="header" prependId="false">
      <p:panelMenu style="width:168px">      
-
-        
-        <p:submenu label="AUM相關" >              
-             
-            <p:menuitem value="Holding檔查詢" outcome="/aum/aumFund/QueryList.xhtml" />
-            
-             <p:menuitem value="管理費活動案設定" outcome="/aumfund/activitymgr/activityList.xhtml" />   
-             <p:menuitem value="管理費查詢" outcome="/aumfund/aumfundList.xhtml" />
-           
+        <p:submenu label="管理費" >  
+             <p:menuitem value="主活動設定" outcome="/aumfund/activitymgr/masterActivityList.xhtml" />   
+             <p:menuitem value="子活動設定" outcome="/aumfund/activitymgr/detailActivityList.xhtml" />
         </p:submenu>
-
     </p:panelMenu>
 </h:form>
 </ui:composition>

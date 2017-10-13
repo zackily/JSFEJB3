@@ -26,16 +26,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author NT48810
  */
 @Entity
-@Table(name = "MG_SET_DETAIL_SEC_CFG")
+@Table(name = "MG_SET_DETAIL_CUST_ACT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MgSetDetailSecCfg.findAll", query = "SELECT m FROM MgSetDetailSecCfg m")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findById", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.id = :id")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActCode", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActCode = :mgActCode")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActSubCode", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActSubCode = :mgActSubCode")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActCounterparty", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActCounterparty = :mgActCounterparty")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActFundNo", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActFundNo = :mgActFundNo")})
-public class MgSetDetailSecCfg implements Serializable {
+    @NamedQuery(name = "MgSetDetailCustAct.findAll", query = "SELECT m FROM MgSetDetailCustAct m")
+    , @NamedQuery(name = "MgSetDetailCustAct.findById", query = "SELECT m FROM MgSetDetailCustAct m WHERE m.id = :id")
+    , @NamedQuery(name = "MgSetDetailCustAct.findByMgActCode", query = "SELECT m FROM MgSetDetailCustAct m WHERE m.mgActCode = :mgActCode")
+    , @NamedQuery(name = "MgSetDetailCustAct.findByMgActSubCode", query = "SELECT m FROM MgSetDetailCustAct m WHERE m.mgActSubCode = :mgActSubCode")
+    , @NamedQuery(name = "MgSetDetailCustAct.findByCustomerId", query = "SELECT m FROM MgSetDetailCustAct m WHERE m.customerId = :customerId")
+    , @NamedQuery(name = "MgSetDetailCustAct.findByStatus", query = "SELECT m FROM MgSetDetailCustAct m WHERE m.status = :status")})
+public class MgSetDetailCustAct implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -43,8 +43,8 @@ public class MgSetDetailSecCfg implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID")
-    @SequenceGenerator(name = "MSDSC_SEQ", sequenceName = "MG_SET_DETAIL_SEC_CFG_SEQ", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSDSC_SEQ")
+     @SequenceGenerator(name = "MSDCA_SEQ", sequenceName = "MG_SET_DETAIL_CUST_ACT_SEQ", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSDCA_SEQ")
     private BigDecimal id;
     @Size(max = 20)
     @Column(name = "MG_ACT_CODE")
@@ -52,17 +52,17 @@ public class MgSetDetailSecCfg implements Serializable {
     @Size(max = 5)
     @Column(name = "MG_ACT_SUB_CODE")
     private String mgActSubCode;
-    @Size(max = 30)
-    @Column(name = "MG_ACT_COUNTERPARTY")
-    private String mgActCounterparty;
-    @Size(max = 8)
-    @Column(name = "MG_ACT_FUND_NO")
-    private String mgActFundNo;
+    @Size(max = 11)
+    @Column(name = "CUSTOMER_ID")
+    private String customerId;
+    @Size(max = 5)
+    @Column(name = "STATUS")
+    private String status;
 
-    public MgSetDetailSecCfg() {
+    public MgSetDetailCustAct() {
     }
 
-    public MgSetDetailSecCfg(BigDecimal id) {
+    public MgSetDetailCustAct(BigDecimal id) {
         this.id = id;
     }
 
@@ -90,20 +90,20 @@ public class MgSetDetailSecCfg implements Serializable {
         this.mgActSubCode = mgActSubCode;
     }
 
-    public String getMgActCounterparty() {
-        return mgActCounterparty;
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public void setMgActCounterparty(String mgActCounterparty) {
-        this.mgActCounterparty = mgActCounterparty;
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
-    public String getMgActFundNo() {
-        return mgActFundNo;
+    public String getStatus() {
+        return status;
     }
 
-    public void setMgActFundNo(String mgActFundNo) {
-        this.mgActFundNo = mgActFundNo;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -116,10 +116,10 @@ public class MgSetDetailSecCfg implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MgSetDetailSecCfg)) {
+        if (!(object instanceof MgSetDetailCustAct)) {
             return false;
         }
-        MgSetDetailSecCfg other = (MgSetDetailSecCfg) object;
+        MgSetDetailCustAct other = (MgSetDetailCustAct) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -128,7 +128,7 @@ public class MgSetDetailSecCfg implements Serializable {
 
     @Override
     public String toString() {
-        return "cub.entities.MgSetDetailSecCfg[ id=" + id + " ]";
+        return "cub.entities.MgSetDetailCustAct[ id=" + id + " ]";
     }
-
+    
 }

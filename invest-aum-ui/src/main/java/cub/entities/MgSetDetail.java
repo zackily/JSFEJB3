@@ -5,12 +5,16 @@
  */
 package cub.entities;
 
+import cub.enums.MgSetMasterStatus;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +24,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -55,9 +61,31 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MgSetDetail.findByMgActDRemark", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDRemark = :mgActDRemark")})
 public class MgSetDetail implements Serializable {
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS")
+    private MgSetMasterStatus status;
+    @Size(max = 10)
+    @Column(name = "CRT_EMP_ID")
+    private String crtEmpId;
+    @Size(max = 20)
+    @Column(name = "CRT_EMP_NAME")
+    private String crtEmpName;
+    @Size(max = 10)
+    @Column(name = "CFM_EMP_ID")
+    private String cfmEmpId;
+    @Size(max = 20)
+    @Column(name = "CFM_EMP_NAME")
+    private String cfmEmpName;
+    @Column(name = "CRT_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date crtDate;
+    @Column(name = "CFM_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date cfmDate;
+
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Id    
+    @Id
     @NotNull
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSD_SEQ")
@@ -317,5 +345,61 @@ public class MgSetDetail implements Serializable {
     public String toString() {
         return "cub.entities.MgSetDetail[ id=" + id + " ]";
     }
-    
+
+    public MgSetMasterStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MgSetMasterStatus status) {
+        this.status = status;
+    }
+
+    public String getCrtEmpId() {
+        return crtEmpId;
+    }
+
+    public void setCrtEmpId(String crtEmpId) {
+        this.crtEmpId = crtEmpId;
+    }
+
+    public String getCrtEmpName() {
+        return crtEmpName;
+    }
+
+    public void setCrtEmpName(String crtEmpName) {
+        this.crtEmpName = crtEmpName;
+    }
+
+    public String getCfmEmpId() {
+        return cfmEmpId;
+    }
+
+    public void setCfmEmpId(String cfmEmpId) {
+        this.cfmEmpId = cfmEmpId;
+    }
+
+    public String getCfmEmpName() {
+        return cfmEmpName;
+    }
+
+    public void setCfmEmpName(String cfmEmpName) {
+        this.cfmEmpName = cfmEmpName;
+    }
+
+    public Date getCrtDate() {
+        return crtDate;
+    }
+
+    public void setCrtDate(Date crtDate) {
+        this.crtDate = crtDate;
+    }
+
+    public Date getCfmDate() {
+        return cfmDate;
+    }
+
+    public void setCfmDate(Date cfmDate) {
+        this.cfmDate = cfmDate;
+    }
+
 }

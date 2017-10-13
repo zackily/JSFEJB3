@@ -5,13 +5,16 @@
  */
 package cub.entities;
 
+import com.sun.javafx.tk.quantum.MasterTimer;
+import cub.enums.MgSetMasterStatus;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
-import javax.persistence.Basic;
+import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +24,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -45,6 +50,32 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "MgSetMaster.findByMgActMChargeObj", query = "SELECT m FROM MgSetMaster m WHERE m.mgActMChargeObj = :mgActMChargeObj")
     , @NamedQuery(name = "MgSetMaster.findByMgActLastSettleDate", query = "SELECT m FROM MgSetMaster m WHERE m.mgActLastSettleDate = :mgActLastSettleDate")})
 public class MgSetMaster implements Serializable {
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS")
+    private MgSetMasterStatus status;
+
+    @Size(max = 10)
+    @Column(name = "CRT_EMP_ID")
+    private String crtEmpId;
+    @Size(max = 20)
+    @Column(name = "CRT_EMP_NAME")
+    private String crtEmpName;
+    @Size(max = 10)
+    @Column(name = "CFM_EMP_ID")
+    private String cfmEmpId;
+    @Size(max = 20)
+    @Column(name = "CFM_EMP_NAME")
+    private String cfmEmpName;
+    @Column(name = "CRT_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date crtDate;
+    @Column(name = "UPD_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updDate;
+    @Column(name = "CFM_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date cfmDate;
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -76,8 +107,7 @@ public class MgSetMaster implements Serializable {
     @Column(name = "MG_ACT_M_CHARGE_OBJ")
     private String mgActMChargeObj;
     
-    @Column(name = "STATUS")
-    private String status;
+   
     
     @Size(max = 8)
     @Column(name = "MG_ACT_LAST_SETTLE_DATE")
@@ -174,13 +204,8 @@ public class MgSetMaster implements Serializable {
         this.mgSetDetailCollection = mgSetDetailCollection;
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+
 
     @Override
     public int hashCode() {
@@ -206,5 +231,71 @@ public class MgSetMaster implements Serializable {
     public String toString() {
         return "cub.entities.MgSetMaster[ id=" + id + " ]";
     }
+
+    public String getCrtEmpId() {
+        return crtEmpId;
+    }
+
+    public void setCrtEmpId(String crtEmpId) {
+        this.crtEmpId = crtEmpId;
+    }
+
+    public String getCrtEmpName() {
+        return crtEmpName;
+    }
+
+    public void setCrtEmpName(String crtEmpName) {
+        this.crtEmpName = crtEmpName;
+    }
+
+    public String getCfmEmpId() {
+        return cfmEmpId;
+    }
+
+    public void setCfmEmpId(String cfmEmpId) {
+        this.cfmEmpId = cfmEmpId;
+    }
+
+    public String getCfmEmpName() {
+        return cfmEmpName;
+    }
+
+    public void setCfmEmpName(String cfmEmpName) {
+        this.cfmEmpName = cfmEmpName;
+    }
+
+    public Date getCrtDate() {
+        return crtDate;
+    }
+
+    public void setCrtDate(Date crtDate) {
+        this.crtDate = crtDate;
+    }
+
+    public Date getUpdDate() {
+        return updDate;
+    }
+
+    public void setUpdDate(Date updDate) {
+        this.updDate = updDate;
+    }
+
+    public Date getCfmDate() {
+        return cfmDate;
+    }
+
+    public void setCfmDate(Date cfmDate) {
+        this.cfmDate = cfmDate;
+    }
+
+    public MgSetMasterStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(MgSetMasterStatus status) {
+        this.status = status;
+    }
+
+
     
 }

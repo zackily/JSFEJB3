@@ -6,6 +6,7 @@
 package cub.facade;
 
 import cub.entities.MgSetMaster;
+import cub.enums.MgSetMasterStatus;
 import cub.vo.MgMasterVO;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -52,14 +53,14 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
         }
     }
     
-     public List<MgSetMaster> findByStatusMgMaster(String status) {
+     public List<MgSetMaster> findByStatusNotInMgMaster(MgSetMasterStatus status) {
         StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");
-        if (StringUtils.isNotEmpty(status)) {
-            sql.append(" and msm.status =:status ");
+        if (status != null) {
+            sql.append(" and msm.status !=:status ");
         }
         sql.append(" order by msm.id desc");
         Query q = em.createQuery(sql.toString());  
-        if (StringUtils.isNotEmpty(status)) {
+        if (status != null) {
             q.setParameter("status", status);
         }
         return q.getResultList();

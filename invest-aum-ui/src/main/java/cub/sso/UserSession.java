@@ -5,8 +5,10 @@
  */
 package cub.sso;
 
+import cub.dev.themes.ThemeSwitcherView;
 import cub.enums.Roles;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 /**
@@ -18,6 +20,21 @@ import javax.faces.bean.SessionScoped;
 public class UserSession {
     private CubSSOOutputDto user;
 
+    private Roles[] roleList;
+    
+    @ManagedProperty("#{themeSwitchService}")
+    private ThemeSwitcherView service;
+
+    public Roles[] getRoleList() {
+        return Roles.values();
+    }
+
+    public void setRoleList(Roles[] roleList) {
+        this.roleList = roleList;
+    }
+    
+  
+    
     public CubSSOOutputDto getUser() {
         return user;
     }
@@ -28,6 +45,14 @@ public class UserSession {
 
     public String toRoleName(){
         return Roles.getName(Integer.parseInt(user.getRole()));
+    }
+
+    public ThemeSwitcherView getService() {
+        return service;
+    }
+
+    public void setService(ThemeSwitcherView service) {
+        this.service = service;
     }
             
    
