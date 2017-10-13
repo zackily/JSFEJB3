@@ -107,6 +107,9 @@ public class MgSetMasterController implements Serializable {
     @ManagedProperty("#{userSession}")
     private UserSession userSession;
 
+     @ManagedProperty("#{themeSwitchService}")
+    private ThemeSwitcherView service;
+    
     @PostConstruct
     public void init() {
         
@@ -605,6 +608,14 @@ public class MgSetMasterController implements Serializable {
 
     public void setUserSession(UserSession userSession) {
         this.userSession = userSession;
+    }
+
+    public ThemeSwitcherView getService() {
+        return service;
+    }
+
+    public void setService(ThemeSwitcherView service) {
+        this.service = service;
     }
 
 }

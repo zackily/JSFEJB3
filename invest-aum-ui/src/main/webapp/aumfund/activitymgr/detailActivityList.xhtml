@@ -17,7 +17,7 @@
             <p:fieldset>
                 <p:commandButton id="createButton" icon="ui-icon-plus"   value="新增子活動"
                                  actionListener="#{mgSetDetailController.prepareCreate}" 
-                                 update=":MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDlg').show()"
+                                 update=":MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDialog').show()"
                                  rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>
                 <p:separator />
 
@@ -42,11 +42,11 @@
                         </p:column>
                         <p:column>                             
                             <p:calendar pattern="yyyyMMdd" id="mgActDStartDate" value="#{mgSetDetailController.mgDetailVO.queryStartDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}"
-                                        required="true" requiredMessage="請選擇查詢開始日期">
+                                       >
                                 <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
                             </p:calendar>~
                             <p:calendar pattern="yyyyMMdd" id="mgActDEndDate" value="#{mgSetDetailController.mgDetailVO.queryEndDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}"
-                                        required="true" requiredMessage="請選擇查詢結束日期">
+                                        >
                                 <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
                             </p:calendar>
                         </p:column>                      
@@ -55,7 +55,8 @@
                     <p:row>
                         <p:column colspan="6">
                             <center>
-                                <p:commandButton icon="ui-icon-search" value="查詢" actionListener="#{mgSetDetailController.search()}" update=":MgSetDetailListForm :MgSetDetailListForm:datalist :MgSetDetailCreateForm" />                                                                                           
+                                <p:commandButton icon="ui-icon-search" value="查詢" actionListener="#{mgSetDetailController.search()}" 
+                                                 update=":MgSetDetailListForm :MgSetDetailListForm:datalist :MgSetDetailCreateForm" />                                                                                           
                             </center>
                         </p:column>
 

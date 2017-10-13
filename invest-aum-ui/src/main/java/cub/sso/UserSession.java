@@ -22,8 +22,7 @@ public class UserSession {
 
     private Roles[] roleList;
     
-    @ManagedProperty("#{themeSwitchService}")
-    private ThemeSwitcherView service;
+   
 
     public Roles[] getRoleList() {
         return Roles.values();
@@ -47,13 +46,5 @@ public class UserSession {
         return Roles.getName(Integer.parseInt(user.getRole()));
     }
 
-    public ThemeSwitcherView getService() {
-        return service;
-    }
-
-    public void setService(ThemeSwitcherView service) {
-        this.service = service;
-    }
-            
    
 }

@@ -3,8 +3,11 @@ package cub.controller;
 import cub.entities.MgSetDetail;
 import cub.controller.util.JsfUtil;
 import cub.controller.util.JsfUtil.PersistAction;
+import cub.controller.util.Utils;
 import cub.entities.MgSetMaster;
+import cub.enums.MgSetMasterStatus;
 import cub.facade.MgSetDetailFacade;
+import cub.facade.MgSetMasterFacade;
 import cub.sso.UserSession;
 import cub.vo.MgDetailVO;
 
@@ -25,6 +28,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.joda.time.DateTime;
+import org.primefaces.event.FlowEvent;
 
 @Named("mgSetDetailController")
 @SessionScoped
@@ -34,21 +38,56 @@ public class MgSetDetailController implements Serializable {
     
     @EJB
     private cub.facade.MgSetDetailFacade mgSetDetailFacade;
+    
+    @EJB
+    private MgSetMasterFacade mgSetMasterFacade;
+    
+    private List<MgSetMaster> mgSetMasterList;
+    
     private List<MgSetDetail> items = null;
     private MgSetDetail selected;
+    private MgSetDetail mgSetDetail;
+    
+    private List<String> selectedChannel;
 
+    private boolean skip;
+    
     //VO
     private MgDetailVO mgDetailVO;
     
+    @EJB
+    private Utils utils;    
+    
    @PostConstruct
     public void init() {
-        
+        selected = new MgSetDetail();
+        mgDetailVO = new MgDetailVO();
+        mgSetDetail = new MgSetDetail();
+        mgSetMasterList = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
     }
 
      public void prepareUpdate(MgSetDetail item) {
         this.selected = item;       
     }
     
+     public String onFlowProcess(FlowEvent event) {
+        if (skip) {
+            skip = false;   //reset in case user goes back
+            return "confirm";
+        } else {
+            return event.getNewStep();
+        }
+    }
+     
+     
+     public String showMgSetDetailCode() {
+        MgSetDetail lastObj = mgSetDetailFacade.findByLastSeqMgSetDetail(mgSetDetail.getMgSetMasterId());
+        int seq = 0;
+        if (lastObj != null) {
+            seq = lastObj.getId().intValue();
+        }
+        return utils.toPlusOneString(seq, 2);
+    }
     public MgSetDetail getSelected() {
         return selected;
     }
@@ -69,6 +108,9 @@ public class MgSetDetailController implements Serializable {
 
     public MgSetDetail prepareCreate() {
         selected = new MgSetDetail();
+        mgDetailVO = new MgDetailVO();
+        mgSetDetail = new MgSetDetail();
+        mgSetMasterList = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
         initializeEmbeddableKey();
         return selected;
     }
@@ -213,6 +255,38 @@ public class MgSetDetailController implements Serializable {
 
     public void setMgDetailVO(MgDetailVO mgDetailVO) {
         this.mgDetailVO = mgDetailVO;
+    }
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
+    public MgSetDetail getMgSetDetail() {
+        return mgSetDetail;
+    }
+
+    public void setMgSetDetail(MgSetDetail mgSetDetail) {
+        this.mgSetDetail = mgSetDetail;
+    }
+
+    public List<MgSetMaster> getMgSetMasterList() {
+        return mgSetMasterList;
+    }
+
+    public void setMgSetMasterList(List<MgSetMaster> mgSetMasterList) {
+        this.mgSetMasterList = mgSetMasterList;
+    }
+
+    public List<String> getSelectedChannel() {
+        return selectedChannel;
+    }
+
+    public void setSelectedChannel(List<String> selectedChannel) {
+        this.selectedChannel = selectedChannel;
     }
 
 }

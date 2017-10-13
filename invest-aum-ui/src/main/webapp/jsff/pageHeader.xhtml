@@ -20,7 +20,7 @@
                 <p:outputLabel for="basic" value="Theme Switch for Dev" /> 
                 <p:themeSwitcher id="basic" style="width:165px" >
                     <f:selectItem itemLabel="Choose Theme" itemValue="" />
-                    <f:selectItems var="theme" value="#{userSession.service.themes}" itemLabel="#{theme.displayName}" itemValue="#{theme}" />
+                    <f:selectItems var="theme" value="#{mgSetMasterController.service.themes}" itemLabel="#{theme.displayName}" itemValue="#{theme}" />
 
                 </p:themeSwitcher>
 
