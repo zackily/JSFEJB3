@@ -7,252 +7,233 @@
       xmlns:p="http://primefaces.org/ui">
 
     <ui:composition>
-
-
-
-        <p:dialog id="MgSetDetailCreateDlg" widgetVar="MgSetDetailCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="管理費子活動案設定" width="800px">
+        <p:dialog id="MgSetDetailCreateDlg" widgetVar="MgSetDetailCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="管理費子活動案設定" width="1200px">
             <h:form id="MgSetDetailCreateForm" prependId="false">
+                <p:growl id="dlgMsg"/>
+                <p:scrollPanel style="width:1200px;height:600px">
+                    <p:panelGrid style="width: 100%"> 
+                        <p:row>
+                            <p:column styleClass="ui-widget-header" style="width: 110px">
+                                <p:outputLabel value="主活動案" />
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu  id="mgActSetType" value="#{mgSetDetailController.mgSetDetail.mgSetMasterId}" >                                           
+                                    <f:selectItem itemLabel="Select One" itemValue="" />             
+                                    <f:selectItems value="#{mgSetDetailController.mgSetMasterList}" var="master" itemLabel="#{master.mgActMCode}-#{master.mgActMName}" itemValue="#{master}" /> 
+                                    <p:ajax  event="change" update=":MgSetDetailCreateForm:mgActDCode" />
+                                </p:selectOneMenu>                         
+                            </p:column>
+                        </p:row>
 
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="子活動案代碼" for="mgActDCode" />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel id="mgActDCode" value="#{mgSetDetailController.mgSetDetail.mgSetMasterId.mgActMChargeObj}#{mgSetDetailController.mgSetDetail.mgSetMasterId.mgActMCode}#{mgSetDetailController.showMgSetDetailCode()}" 
+                                               title="#{bundle.CreateMgSetDetailTitle_mgActDCode}" />                          
+                            </p:column>
+                        </p:row>                       
 
-                <p:panelGrid style="width: 100%"> 
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="主活動案" />
-                        </p:column>
-                        <p:column>
-                            <p:selectOneMenu  id="mgActSetType" value="#{mgSetDetailController.mgSetDetail.mgSetMasterId}" required="true" requiredMessage="請選擇主活動">                                           
-                                <f:selectItem itemLabel="Select One" itemValue="" />             
-                                <f:selectItems value="#{mgSetDetailController.mgSetMasterList}" var="master" itemLabel="#{master.mgActMCode}-#{master.mgActMName}" itemValue="#{master}" /> 
-                                <p:ajax  event="change" update=":MgSetDetailCreateForm:mgActDCode" />
-                            </p:selectOneMenu>                         
-                        </p:column>
-                    </p:row>
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="子活動案名稱" for="mgActDName" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText size="30" id="mgActDName" value="#{mgSetDetailController.mgSetDetail.mgActDName}" title="#{bundle.CreateMgSetDetailTitle_mgActDName}" />       
+                            </p:column>                            
+                        </p:row>
 
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="子活動案代碼" for="mgActDCode" />
-                        </p:column>
-                        <p:column>
-                            <p:outputLabel id="mgActDCode" value="#{mgSetDetailController.mgSetDetail.mgSetMasterId.mgActMCode}-#{mgSetDetailController.showMgSetDetailCode()}" 
-                                           title="#{bundle.CreateMgSetDetailTitle_mgActDCode}" />                          
-                        </p:column>
-                    </p:row>                       
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="活動期間" for="mgActDStartDate" />
+                            </p:column>
+                            <p:column>
+                                <p:calendar pattern="yyyyMMdd" id="mgActDStartDate" value="#{mgSetDetailController.mgSetActDetailStartDate}" 
+                                            title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}">
+                                    <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
+                                </p:calendar>
+                                ~
+                                <p:calendar pattern="yyyyMMdd" id="mgActDEndDate" value="#{mgSetDetailController.mgSetActDetailEndDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDEndDate}">
+                                    <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
+                                </p:calendar>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="適用通路" for="mgActDSaleChnl" />
+                            </p:column>
+                            <p:column>                                    
+                                <p:selectCheckboxMenu label="Channel" id="mgActDSaleChnl" value="#{mgSetDetailController.selectedChannel}" multiple="true">
+                                    <f:selectItem itemLabel="ALL" itemValue="9" />
+                                    <f:selectItem itemLabel="臨櫃" itemValue="1" />
+                                    <f:selectItem itemLabel="網路" itemValue="2" />
+                                    <f:selectItem itemLabel="語音" itemValue="3" />
+                                    <f:selectItem itemLabel="電話下單" itemValue="4" />
+                                    <f:selectItem itemLabel="Phone Banking" itemValue="5" />
+                                    <f:selectItem itemLabel="KOKO" itemValue="6" />
+                                    <f:selectItem itemLabel="ROBO" itemValue="7" />
+                                </p:selectCheckboxMenu>
+                            </p:column>
+                        </p:row>                       
 
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="子活動案名稱" for="mgActDName" />
-                        </p:column>
-                        <p:column>
-                            <p:inputText size="30" id="mgActDName" value="#{mgSetDetailController.mgSetDetail.mgActDName}" title="#{bundle.CreateMgSetDetailTitle_mgActDName}" 
-                                         required="true" requiredMessage="請輸入子活動案名稱"/>       
-                        </p:column>                            
-                    </p:row>
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="適用產品代碼" for="mgActDPrdCode" />  
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="資產總額計算方式" for="mgActDSecType" />  
+                            </p:column>
+                            <p:column>
+                                <p:selectOneRadio id="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}">
+                                    <f:selectItem itemLabel="客戶ID" itemValue="1" />
+                                    <f:selectItem itemLabel="單一標的" itemValue="2" />
+                                    <f:selectItem itemLabel="系列代碼" itemValue="3" />
+                                    <f:selectItem itemLabel="產品類型" itemValue="4" />
+                                    <f:selectItem itemLabel="自訂" itemValue="5" />                                   
+                                </p:selectOneRadio>     
+                            </p:column>
+                        </p:row>
 
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="活動期間" for="mgActDStartDate" />
-                        </p:column>
-                        <p:column>
-                            <p:calendar pattern="yyyyMMdd" id="mgActDStartDate" value="#{mgSetDetailController.mgSetDetail.mgActDStartDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}"
-                                        required="true" requiredMessage="請選擇活動開始日期">
-                                <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
-                            </p:calendar>
-                            ~
-                            <p:calendar pattern="yyyyMMdd" id="mgActDEndDate" value="#{mgSetDetailController.mgSetDetail.mgActDEndDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDEndDate}"
-                                        required="true" requiredMessage="請選擇活動結束日期">
-                                <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
-                            </p:calendar>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="適用通路" for="mgActDSaleChnl" />
-                        </p:column>
-                        <p:column>                                    
-                            <p:selectCheckboxMenu label="Channel" id="mgActDSaleChnl" value="#{mgSetDetailController.selectedChannel}" 
-                                                  required="true" requiredMessage="請選擇適用通路" multiple="true">
-                                <f:selectItem itemLabel="ALL" itemValue="9" />
-                                <f:selectItem itemLabel="臨櫃" itemValue="1" />
-                                <f:selectItem itemLabel="網路" itemValue="2" />
-                                <f:selectItem itemLabel="語音" itemValue="3" />
-                                <f:selectItem itemLabel="電話下單" itemValue="4" />
-                                <f:selectItem itemLabel="Phone Banking" itemValue="5" />
-                                <f:selectItem itemLabel="KOKO" itemValue="6" />
-                                <f:selectItem itemLabel="ROBO" itemValue="7" />
-                            </p:selectCheckboxMenu>
-                        </p:column>
-                    </p:row>                       
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="費率規則"  />  
+                            </p:column>
+                            <p:column>
+                                <p:selectOneRadio value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}">
+                                    <f:selectItem itemLabel="級距式費率" itemValue="1" />
+                                    <f:selectItem itemLabel="累進式費率" itemValue="2" />
 
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="適用產品代碼" for="mgActDPrdCode" />  
-                        </p:column>
-                        <p:column>
-                            <p:inputText id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" 
-                                         required="true" requiredMessage="請輸入適用產品代碼"/>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="資產總額計算方式" for="mgActDSecType" />  
-                        </p:column>
-                        <p:column>
-                            <p:selectOneRadio id="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}"
-                                              required="true" requiredMessage="請選擇資產總額計算方式" >
-                                <f:selectItem itemLabel="Stock" itemValue="1" />
-                                <f:selectItem itemLabel="Bond" itemValue="2" />
-                                <f:selectItem itemLabel="Fund" itemValue="3" />
-                            </p:selectOneRadio>
-                        </p:column>
-                    </p:row>
+                                </p:selectOneRadio>
+                            </p:column>
+                        </p:row>
 
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="費率規則"  />  
-                        </p:column>
-                        <p:column>
-                            <p:selectOneRadio value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}"
-                                              required="true" requiredMessage="請選擇費率規則" >
-                                <f:selectItem itemLabel="級距式費率" itemValue="1" />
-                                <f:selectItem itemLabel="累進式費率" itemValue="2" />
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="級距規則"  />  
+                            </p:column>
+                            <p:column>
+                                <p:selectBooleanCheckbox />
+                                <p:spacer width="5"/>
+                                <h:outputText value="依對應管理費計算" />
 
-                            </p:selectOneRadio>
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="級距規則"  />  
-                        </p:column>
-                        <p:column>
-                            <p:dataTable id="datalist" value="#{mgSetDetailController.items}" var="item"
-                                         selectionMode="single" selection="#{mgSetDetailController.selected}"
-                                         paginator="true"
-                                         rowKey="#{item.id}"
-                                         rows="10"                         
-                                         rowsPerPageTemplate="10,20,30,40,50"
-                                         emptyMessage="查無資料"
-                                         editable="true" 
-                                         rowIndexVar="index"
-                                         >             
-
-                                <p:column style="width:32px">
+                                <p:dataTable id="datalist" value="#{mgSetDetailController.rangeList}" var="item"
+                                             paginator="true"
+                                             rowKey="#{item.id}"
+                                             rows="10"                         
+                                             rowsPerPageTemplate="10,20,30,40,50"
+                                             emptyMessage="查無資料"
+                                             editable="true" 
+                                             rowIndexVar="index"                                             
+                                             paginatorPosition="bottom"
+                                             style="text-align: center"
+                                             >             
                                     <f:facet name="header">
-                                        <h:outputText value="序號"/>
+                                        <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-plus" value="新增級距" 
+                                                         actionListener="#{mgSetDetailController.addMSDRC()}" 
+                                                         update=":MgSetDetailCreateForm:datalist" />   
                                     </f:facet>
-                                    <h:outputText value="#{index}"/>
-                                </p:column>
+                                    <p:column style="width:32px">
+                                        <p:rowEditor />
+                                    </p:column>
+                                    <p:column style="width:32px">
+                                        <f:facet name="header">
+                                            <h:outputText value="序號"/>
+                                        </f:facet>
+                                        <h:outputText value="#{index + 1}"/>
+                                    </p:column>
 
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="子活動代碼"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.mgActDCode}"/>
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="子活動名稱"/>
-                                    </f:facet>
+                                    <p:column style="width:60px">
+                                        <f:facet name="header">
+                                            <h:outputText value="幣別"/>
+                                        </f:facet>
+                                        <h:selectOneMenu value="#{item.mgActCurrency}">
+                                            <f:selectItem itemLabel="TWD" itemValue="TWD" />
+                                            <f:selectItem itemLabel="USD" itemValue="USD" />
+                                            <f:selectItem itemLabel="EUR" itemValue="EUR" />
+                                        </h:selectOneMenu>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="最低金額"/>
+                                        </f:facet>
+                                        <p:inputNumber size="15" value="#{item.mgActLowAmt}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="最高金額"/>
+                                        </f:facet>
+                                        <p:inputNumber size="15" value="#{item.mgActHightAmt}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="經理費率(%)"/>
+                                        </f:facet>
+                                        <p:inputNumber size="15" value="#{item.mgActMgMapRate}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="費率(bps)"/>
+                                        </f:facet>
+                                        <p:inputNumber size="15" value="#{item.mgActBps}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="經理費分成(%)"/>
+                                        </f:facet>
+                                        <p:inputNumber size="15" value="#{item.mgActMgRtnRate}"/>
 
-                                    <h:outputText value="#{item.mgActDName}"/>
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="活動起日"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.mgActDStartDate}"/>
+                                    </p:column>
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value=""/>
+                                        </f:facet>
 
-                                </p:column>
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="活動迄日"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.mgActDEndDate}"/>
-
-                                </p:column>
-
-
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="建立經辦"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.crtEmpId}"/><br/>
-                                    <h:outputText value="#{item.crtEmpName}"/>
-                                </p:column>
-
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="建立時間"/>
-                                    </f:facet>
-                                    <h:outputText value="#{mgSetDetailController.toStringDate(item.crtDate,'yyyyMMdd HH:mm')}"/>
-                                </p:column>
-
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="覆核主管"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.cfmEmpId}"/><br/>
-                                    <h:outputText value="#{item.cfmEmpName}"/>
-                                </p:column>
-
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="覆核時間"/>
-                                    </f:facet>
-                                    <h:outputText value="#{mgSetDetailController.toStringDate(item.cfmDate,'yyyyMMdd HH:mm')}"/>
-                                </p:column>
-
-                                <p:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="狀態"/>
-                                    </f:facet>
-                                    <h:outputText value="#{item.status.status}"/>
-                                </p:column>
-
-                                <p:column style="width:20%">
-                                    <f:facet name="header">
-                                        <h:outputText value=""/>
-                                    </f:facet>
-
-                                    <p:commandButton icon="ui-icon-pencil" value="查看/修改" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
-                                                     update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                                     rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
-                                    <p:commandButton icon="ui-icon-minus" value="刪除" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
-                                                     update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                                     rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
-                                    <p:commandButton icon="ui-icon-confirm" value="覆核同意" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
-                                                     update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                                     rendered="#{userSession.user.role.equalsIgnoreCase('4')}"/> 
-                                    <p:commandButton icon="ui-icon-reject" value="退回" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
-                                                     update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                                     rendered="#{userSession.user.role.equalsIgnoreCase('4')}"/> 
-
-                                </p:column>
-
-                            </p:dataTable>
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="適用客群" for="mgActDCostId" />
-                        </p:column>
-                        <p:column>
-
-                            <p:selectOneRadio id="mgActDCostId" value="#{mgSetDetailController.mgSetDetail.mgActDCostId}"
-                                              required="true" requiredMessage="請輸入適用客群" >
-                                <f:selectItem itemLabel="ALL" itemValue="1" />
-                                <f:selectItem itemLabel="名單" itemValue="2" />                                       
-                            </p:selectOneRadio>
-                        </p:column>
-                    </p:row>
+                                        <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-minus" value="刪除" 
+                                                         actionListener="#{mgSetDetailController.minusMSDRC(item)}" 
+                                                         update=":MgSetDetailCreateForm:datalist" />  
+                                    </p:column>
 
 
-                </p:panelGrid>
-                <!--<h:selectBooleanCheckbox value="#{mgSetMasterController.skip}" />-->
+                                </p:dataTable>
+                            </p:column>
+                        </p:row>
 
-
-
+                        <p:row>
+                            <p:column styleClass="ui-widget-header">
+                                <p:outputLabel value="適用客群" for="mgActDCostId" />
+                            </p:column>
+                            <p:column>
+                                <p:selectOneRadio id="mgActDCostId" value="#{mgSetDetailController.mgSetDetail.mgActDCostId}">
+                                    <f:selectItem itemLabel="ALL" itemValue="1" />
+                                    <f:selectItem itemLabel="名單" itemValue="2" />                                       
+                                </p:selectOneRadio>
+                                <p:spacer width="5"/>
+                                <p:commandButton value="設定"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <center>
+                        <p:commandButton icon="ui-icon-plus" value="取消" actionListener="#{mgSetDetailController.cancel()}" 
+                                         oncomplete="PF('MgSetDetailCreateDlg').hide()"
+                                         update=":MgSetDetailCreateForm" 
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>                     
+                        <p:commandButton icon="ui-icon-pencil" value="暫存" actionListener="#{mgSetDetailController.update()}" 
+                                         update=":MgSetDetailCreateForm" 
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
+                        <p:commandButton icon="ui-icon-minus" value="資料匯出" actionListener="#{mgSetDetailController.export()}" 
+                                         update=":MgSetDetailCreateForm" 
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
+                        <p:commandButton icon="ui-icon-confirm" value="提交覆核" actionListener="#{mgSetDetailController.create()}" 
+                                         update=":MgSetDetailCreateForm :MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist" 
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
+                    </center>
+                </p:scrollPanel>
 
 
 

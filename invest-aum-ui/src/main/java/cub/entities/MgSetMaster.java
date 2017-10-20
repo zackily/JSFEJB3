@@ -55,16 +55,16 @@ public class MgSetMaster implements Serializable {
     @Column(name = "STATUS")
     private MgSetMasterStatus status;
 
-    @Size(max = 10)
+    
     @Column(name = "CRT_EMP_ID")
     private String crtEmpId;
-    @Size(max = 20)
+    
     @Column(name = "CRT_EMP_NAME")
     private String crtEmpName;
-    @Size(max = 10)
+    
     @Column(name = "CFM_EMP_ID")
     private String cfmEmpId;
-    @Size(max = 20)
+    
     @Column(name = "CFM_EMP_NAME")
     private String cfmEmpName;
     @Column(name = "CRT_DATE")
@@ -85,31 +85,28 @@ public class MgSetMaster implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSM_SEQ")
     @SequenceGenerator(name = "MSM_SEQ", sequenceName = "MG_SET_MASTER_SEQ", initialValue = 1, allocationSize = 1)
     private Long id;
-    @Size(max = 20)
+   
     @Column(name = "MG_ACT_M_CODE")
     private String mgActMCode;
-    @Size(max = 50)
+    
     @Column(name = "MG_ACT_M_NAME")
     private String mgActMName;
-    @Size(max = 1)
+    
     @Column(name = "MG_ACT_M_TYPE")
     private String mgActMType;
-    @Size(max = 1)
+   
     @Column(name = "MG_ACT_M_RATE_SET")
     private String mgActMRateSet;
-    @Size(max = 100)
+    
     @Column(name = "MG_ACT_M_REMARK")
     private String mgActMRemark;
-    @Size(max = 1)
+   
     @Column(name = "MG_ACT_M_SALE_CHNL")
     private String mgActMSaleChnl;
-    @Size(max = 1)
+    
     @Column(name = "MG_ACT_M_CHARGE_OBJ")
     private String mgActMChargeObj;
     
-   
-    
-    @Size(max = 8)
     @Column(name = "MG_ACT_LAST_SETTLE_DATE")
     private String mgActLastSettleDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mgSetMasterId")

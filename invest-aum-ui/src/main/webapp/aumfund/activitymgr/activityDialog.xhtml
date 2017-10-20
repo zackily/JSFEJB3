@@ -12,14 +12,29 @@
             <h:form id="MgSetMasterCreateForm">
 
                 <p:panelGrid rendered="#{mgSetMasterController.selected != null}" style="width: 100%">
+                    
+                    <p:row>
+                        <p:column styleClass="ui-widget-header">
+                            <p:outputLabel value="活動案收費對象" for="mgActMChargeObj" />
+                        </p:column>
+                        <p:column>
+                            <p:selectOneRadio id="mgActMChargeObj" value="#{mgSetMasterController.selected.mgActMChargeObj}" 
+                                              required="true" requiredMessage="請選擇活動案收費對象" disabled="#{userSession.user.role.equalsIgnoreCase('4')}">                                           
+                                <f:selectItem itemLabel="向客戶收費" itemValue="C" /> 
+                                <f:selectItem itemLabel="支付合作對象" itemValue="P" />      
+                                <p:ajax event="change" update=":MgSetMasterCreateForm:mgActMCode"/>
+                            </p:selectOneRadio> 
+                        </p:column>
+                    </p:row>
+                    
                     <p:row>
                         <p:column styleClass="ui-widget-header">
                             <p:outputLabel value="活動類型代碼" for="mgActMCode" />
                         </p:column>
                         <p:column>
-                            <p:outputLabel id="mgActMCode" value="#{mgSetMasterController.showMgSetMasterCode()}"  />
+                            <p:outputLabel id="mgActMCode" value="#{mgSetMasterController.selected.mgActMChargeObj}#{mgSetMasterController.showMgSetMasterCode()}"  />
                         </p:column>
-                         </p:row>
+                    </p:row>
                     <p:row>
                         <p:column styleClass="ui-widget-header">
                             <p:outputLabel value="活動名稱" for="mgActMName" />
@@ -27,7 +42,7 @@
                         <p:column>
                             <p:inputText size="50" id="mgActMName" value="#{mgSetMasterController.selected.mgActMName}" 
                                          title="#{bundle.CreateMgSetMasterTitle_mgActMName}" required="true" requiredMessage="請輸入活動名稱" 
-                                         disabled="#{userSession.user.role.equalsIgnoreCase('2')}"/>
+                                         disabled="#{userSession.user.role.equalsIgnoreCase('4')}"/>
                         </p:column>
                     </p:row>
                     <p:row>
@@ -36,63 +51,25 @@
                         </p:column>
                         <p:column>
                             <p:selectOneRadio id="mgActMType" value="#{mgSetMasterController.selected.mgActMType}"
-                                              required="true" requiredMessage="請選擇活動計算基礎" disabled="#{userSession.user.role.equalsIgnoreCase('2')}">                                  
+                                              required="true" requiredMessage="請選擇活動計算基礎" disabled="#{userSession.user.role.equalsIgnoreCase('4')}">                                  
                                 <f:selectItem itemLabel="AUM(參考現值)" itemValue="1" /> 
                                 <f:selectItem itemLabel="成本(信託本金)" itemValue="2" /> 
                             </p:selectOneRadio> 
                         </p:column>
-                         </p:row>
+                    </p:row>
                     <p:row>
                         <p:column styleClass="ui-widget-header">
                             <p:outputLabel value="活動計算規則" for="mgActMRateSet" />
                         </p:column>
                         <p:column>
                             <p:selectOneRadio id="mgActMRateSet" value="#{mgSetMasterController.selected.mgActMRateSet}" 
-                                              required="true" requiredMessage="請選擇活動計算規則" disabled="#{userSession.user.role.equalsIgnoreCase('2')}">                                            
+                                              required="true" requiredMessage="請選擇活動計算規則" disabled="#{userSession.user.role.equalsIgnoreCase('4')}">                                            
                                 <f:selectItem itemLabel="LOW(取最小值)" itemValue="1" /> 
                                 <f:selectItem itemLabel="HIGH(取最大值)" itemValue="2" /> 
-                                 <f:selectItem itemLabel="依子活動代碼" itemValue="3" /> 
+                                <f:selectItem itemLabel="依子活動代碼" itemValue="3" /> 
                             </p:selectOneRadio> 
                         </p:column>
                     </p:row>
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="適用通路" for="mgActMSaleChnl" />
-                        </p:column>
-                        <p:column>
-                            <p:selectOneRadio id="mgActMSaleChnl" value="#{mgSetMasterController.selected.mgActMSaleChnl}" 
-                                              required="true" requiredMessage="請選擇活動案適用通路" disabled="#{userSession.user.role.equalsIgnoreCase('2')}">                                           
-                                <f:selectItem itemLabel="櫃檯" itemValue="1" /> 
-                                <f:selectItem itemLabel="網路" itemValue="2" /> 
-                                <f:selectItem itemLabel="語音" itemValue="3" />
-                                <f:selectItem itemLabel="KOKO" itemValue="8" />
-                            </p:selectOneRadio> 
-                        </p:column>
-                         </p:row>
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="活動案收費對象" for="mgActMChargeObj" />
-                        </p:column>
-                        <p:column>
-                            <p:selectOneRadio id="mgActMChargeObj" value="#{mgSetMasterController.selected.mgActMChargeObj}" 
-                                              required="true" requiredMessage="請選擇活動案收費對象" disabled="#{userSession.user.role.equalsIgnoreCase('2')}">                                           
-                                <f:selectItem itemLabel="向客戶收費" itemValue="C" /> 
-                                <f:selectItem itemLabel="支付合作對象" itemValue="P" />                             
-                            </p:selectOneRadio> 
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">
-                            <p:outputLabel value="活動案最後計算日期" for="mgActDStartDate" />
-                        </p:column>
-                        <p:column>
-                            <p:calendar pattern="yyyyMMdd" id="mgActDStartDate" value="#{mgSetMasterController.last_settle_date}" 
-                                        title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}" required="true" requiredMessage="請選擇活動案最後計算日期" disabled="#{userSession.user.role.equalsIgnoreCase('2')}">
-                                <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
-                            </p:calendar>
-                        </p:column>
-                         </p:row>
-                        
                     <p:row>
                         <p:column styleClass="ui-widget-header">
                             <p:outputLabel value="備註" for="mgActMRemark" />
@@ -107,17 +84,17 @@
                     <p:commandButton icon="ui-icon-cancel" actionListener="#{mgSetMasterController.reset}" value="取消" onclick="PF('MgSetMasterCreateDialog').hide();" process="@this" />
                     <p:commandButton icon="ui-icon-plus" actionListener="#{mgSetMasterController.create}" value="送出覆核" 
                                      update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>
                     <p:commandButton icon="ui-icon-confirm" actionListener="#{mgSetMasterController.confirm('CONFIRM')}" value="同意覆核" 
                                      update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('2')}"/>
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('4')}"/>
                     <p:commandButton icon="ui-icon-reject" actionListener="#{mgSetMasterController.confirm('REJECT')}" value="退回" 
                                      update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('2')}"/>
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('4')}"/>
                     <p:commandButton icon="ui-icon-minus" actionListener="#{mgSetMasterController.update('DELETE')}" value="刪除" 
                                      update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>
-                    
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>
+
                 </center>
 
             </h:form>

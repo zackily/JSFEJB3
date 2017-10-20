@@ -56,7 +56,7 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
      public List<MgSetMaster> findByStatusNotInMgMaster(MgSetMasterStatus status) {
         StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");
         if (status != null) {
-            sql.append(" and msm.status !=:status ");
+            sql.append(" and (msm.status !=:status and msm.status is not null) ");
         }
         sql.append(" order by msm.id desc");
         Query q = em.createQuery(sql.toString());  

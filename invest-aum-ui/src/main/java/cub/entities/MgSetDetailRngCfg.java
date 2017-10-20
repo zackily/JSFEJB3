@@ -40,6 +40,10 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MgSetDetailRngCfg.findByChangedate", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.changedate = :changedate")})
 public class MgSetDetailRngCfg implements Serializable {
 
+    @Column(name = "MG_ACT_CURRENCY")
+    private String mgActCurrency;
+    @Column(name = "MG_ACT_BPS")
+    private BigInteger mgActBps;
     @Column(name = "MG_ACT_MG_RTN_RATE")
     private BigInteger mgActMgRtnRate;
     @Column(name = "MG_ACT_MG_MAP_RATE")
@@ -170,6 +174,22 @@ public class MgSetDetailRngCfg implements Serializable {
 
     public void setMgActMgMapRate(BigInteger mgActMgMapRate) {
         this.mgActMgMapRate = mgActMgMapRate;
+    }
+
+    public String getMgActCurrency() {
+        return mgActCurrency;
+    }
+
+    public void setMgActCurrency(String mgActCurrency) {
+        this.mgActCurrency = mgActCurrency;
+    }
+
+    public BigInteger getMgActBps() {
+        return mgActBps;
+    }
+
+    public void setMgActBps(BigInteger mgActBps) {
+        this.mgActBps = mgActBps;
     }
     
 }

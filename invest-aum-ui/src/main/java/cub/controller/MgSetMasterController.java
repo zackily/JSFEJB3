@@ -275,6 +275,7 @@ public class MgSetMasterController implements Serializable {
         this.selected.setStatus(MgSetMasterStatus.SEND);
 
         persist(PersistAction.CREATE, "管理費主活動案設定完成");
+        findByStatusNotInMaster();
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }

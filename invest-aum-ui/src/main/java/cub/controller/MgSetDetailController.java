@@ -4,14 +4,17 @@ import cub.entities.MgSetDetail;
 import cub.controller.util.JsfUtil;
 import cub.controller.util.JsfUtil.PersistAction;
 import cub.controller.util.Utils;
+import cub.entities.MgSetDetailRngCfg;
 import cub.entities.MgSetMaster;
 import cub.enums.MgSetMasterStatus;
 import cub.facade.MgSetDetailFacade;
+import cub.facade.MgSetDetailRngCfgFacade;
 import cub.facade.MgSetMasterFacade;
 import cub.sso.UserSession;
 import cub.vo.MgDetailVO;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,43 +25,56 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.joda.time.DateTime;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.RowEditEvent;
 
 @Named("mgSetDetailController")
 @SessionScoped
 public class MgSetDetailController implements Serializable {
+
     @ManagedProperty("#{userSession}")
     private UserSession userSession;
-    
+
     @EJB
     private cub.facade.MgSetDetailFacade mgSetDetailFacade;
-    
+
     @EJB
     private MgSetMasterFacade mgSetMasterFacade;
-    
+
+    @EJB
+    private MgSetDetailRngCfgFacade mgSetDetailRngCfgFacade;
+
     private List<MgSetMaster> mgSetMasterList;
-    
+
     private List<MgSetDetail> items = null;
+
+    private List<MgSetDetailRngCfg> rangeList;
+    private MgSetDetailRngCfg selectedRange;
+
     private MgSetDetail selected;
     private MgSetDetail mgSetDetail;
-    
+    private Date mgSetActDetailStartDate;
+    private Date mgSetActDetailEndDate;
+
     private List<String> selectedChannel;
 
     private boolean skip;
-    
+
     //VO
     private MgDetailVO mgDetailVO;
-    
+
     @EJB
-    private Utils utils;    
-    
-   @PostConstruct
+    private Utils utils;
+
+    @PostConstruct
     public void init() {
         selected = new MgSetDetail();
         mgDetailVO = new MgDetailVO();
@@ -66,11 +82,28 @@ public class MgSetDetailController implements Serializable {
         mgSetMasterList = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
     }
 
-     public void prepareUpdate(MgSetDetail item) {
-        this.selected = item;       
+    public void prepareUpdate(MgSetDetail item) {
+        this.selected = item;
     }
-    
-     public String onFlowProcess(FlowEvent event) {
+
+    public void cancel() {
+
+    }
+
+    public void update() {
+
+    }
+
+    public void confirm() {
+
+    }
+
+    public void export() {
+
+    }
+
+ 
+    public String onFlowProcess(FlowEvent event) {
         if (skip) {
             skip = false;   //reset in case user goes back
             return "confirm";
@@ -78,9 +111,31 @@ public class MgSetDetailController implements Serializable {
             return event.getNewStep();
         }
     }
-     
-     
-     public String showMgSetDetailCode() {
+
+    public void onRowEdit(RowEditEvent event) {
+
+        MgSetDetail detail = (MgSetDetail) event.getObject();
+        FacesMessage msg = new FacesMessage("修改資料完成");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        MgSetDetail detail = (MgSetDetail) event.getObject();
+        FacesMessage msg = new FacesMessage("取消");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+
+        if (newValue != null && !newValue.equals(oldValue)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+    }
+
+    public String showMgSetDetailCode() {
         MgSetDetail lastObj = mgSetDetailFacade.findByLastSeqMgSetDetail(mgSetDetail.getMgSetMasterId());
         int seq = 0;
         if (lastObj != null) {
@@ -88,6 +143,7 @@ public class MgSetDetailController implements Serializable {
         }
         return utils.toPlusOneString(seq, 2);
     }
+
     public MgSetDetail getSelected() {
         return selected;
     }
@@ -107,6 +163,8 @@ public class MgSetDetailController implements Serializable {
     }
 
     public MgSetDetail prepareCreate() {
+        rangeList = new ArrayList<MgSetDetailRngCfg>();
+        selectedRange = new MgSetDetailRngCfg();
         selected = new MgSetDetail();
         mgDetailVO = new MgDetailVO();
         mgSetDetail = new MgSetDetail();
@@ -115,17 +173,43 @@ public class MgSetDetailController implements Serializable {
         return selected;
     }
 
+    public void addMSDRC() {
+        rangeList.add(new MgSetDetailRngCfg());
+        System.out.println(rangeList.size());
+    }
+
+    public void minusMSDRC(MgSetDetailRngCfg msdrc) {
+        rangeList.remove(msdrc);
+    }
+    
     public void create() {
+        mgSetDetail.setMgActDCode(mgSetDetail.getMgSetMasterId().getMgActMCode());
+        mgSetDetail.setMgActDSeq(showMgSetDetailCode());
+        mgSetDetail.setCrtEmpId(userSession.getUser().getEmpId());
+        mgSetDetail.setCrtEmpName(userSession.getUser().getEmpname());
+        mgSetDetail.setCrtDate(new Date());
+        mgSetDetail.setStatus(MgSetMasterStatus.SEND);
+
+        mgSetDetail.setMgActDEndDate(toStringDate(mgSetActDetailEndDate, "yyyyMMdd"));
+        mgSetDetail.setMgActDStartDate(toStringDate(mgSetActDetailStartDate, "yyyyMMdd"));
+
+        for (MgSetDetailRngCfg rng : rangeList) {
+            rng.setChangedate(new Date());
+            rng.setMgActCode(mgSetDetail.getMgActDCode());
+            rng.setMgActSubCode(mgSetDetail.getMgActDCode());
+            mgSetDetailRngCfgFacade.save(rng);
+        }
+
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailCreated"));
         if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
+            rangeList = null;    // Invalidate list of items to trigger re-query.
         }
+
     }
 
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailUpdated"));
-    }
-
+//    public void update() {
+//        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailUpdated"));
+//    }
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailDeleted"));
         if (!JsfUtil.isValidationFailed()) {
@@ -234,13 +318,13 @@ public class MgSetDetailController implements Serializable {
     public Date toDate(String yyyyMMdd) {
         return new DateTime(yyyyMMdd).toDate();
     }
-    
+
     public void search() {
         items.clear();
-        items= mgSetDetailFacade.findAll();
+        items = mgSetDetailFacade.findAll();
         mgDetailVO = new MgDetailVO();
     }
-    
+
     public UserSession getUserSession() {
         return userSession;
     }
@@ -287,6 +371,38 @@ public class MgSetDetailController implements Serializable {
 
     public void setSelectedChannel(List<String> selectedChannel) {
         this.selectedChannel = selectedChannel;
+    }
+
+    public List<MgSetDetailRngCfg> getRangeList() {
+        return rangeList;
+    }
+
+    public void setRangeList(List<MgSetDetailRngCfg> rangeList) {
+        this.rangeList = rangeList;
+    }
+
+    public MgSetDetailRngCfg getSelectedRange() {
+        return selectedRange;
+    }
+
+    public void setSelectedRange(MgSetDetailRngCfg selectedRange) {
+        this.selectedRange = selectedRange;
+    }
+
+    public Date getMgSetActDetailStartDate() {
+        return mgSetActDetailStartDate;
+    }
+
+    public void setMgSetActDetailStartDate(Date mgSetActDetailStartDate) {
+        this.mgSetActDetailStartDate = mgSetActDetailStartDate;
+    }
+
+    public Date getMgSetActDetailEndDate() {
+        return mgSetActDetailEndDate;
+    }
+
+    public void setMgSetActDetailEndDate(Date mgSetActDetailEndDate) {
+        this.mgSetActDetailEndDate = mgSetActDetailEndDate;
     }
 
 }

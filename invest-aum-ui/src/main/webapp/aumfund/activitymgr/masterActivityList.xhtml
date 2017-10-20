@@ -35,51 +35,9 @@
                         <p:column>   
                             <p:inputText value="#{mgSetMasterController.masterVO.mgActMName}"/>
                         </p:column>
-                        <p:column styleClass="ui-widget-header">   
-                            <p:outputLabel value="活動計算基礎"/>
-                        </p:column>
-                        <p:column>   
 
-                            <p:selectOneRadio  value="#{mgSetMasterController.masterVO.mgActMType}">                                  
-                                <f:selectItem itemLabel="AUM" itemValue="1" /> 
-                                <f:selectItem itemLabel="成本" itemValue="2" /> 
-                            </p:selectOneRadio>
-
-                        </p:column>
                     </p:row>
-                    <p:row>
-                        <p:column styleClass="ui-widget-header">   
-                            <p:outputLabel value="活動計算規則"/>
-                        </p:column>
-                        <p:column>                             
-                            <p:selectOneRadio value="#{mgSetMasterController.masterVO.mgActMRateSet}">                                            
-                                <f:selectItem itemLabel="Low" itemValue="1" /> 
-                                <f:selectItem itemLabel="High" itemValue="2" /> 
-                            </p:selectOneRadio> 
-                        </p:column>                       
 
-                        <p:column styleClass="ui-widget-header">   
-                            <p:outputLabel value="適用通路"/>
-                        </p:column>
-                        <p:column>                            
-                            <p:selectOneRadio value="#{mgSetMasterController.masterVO.mgActMSaleChnl}">                                            
-                                <f:selectItem itemLabel="櫃檯" itemValue="1" /> 
-                                <f:selectItem itemLabel="網路" itemValue="2" /> 
-                                <f:selectItem itemLabel="語音" itemValue="3" />
-                                <f:selectItem itemLabel="KOKO" itemValue="8" />
-                            </p:selectOneRadio> 
-                        </p:column>
-
-                        <p:column styleClass="ui-widget-header">   
-                            <p:outputLabel value="活動案收費對象"/>
-                        </p:column>
-                        <p:column>                            
-                            <p:selectOneRadio id="mgActMChargeObj" value="#{mgSetMasterController.masterVO.mgActMChargeObj}">                                           
-                                <f:selectItem itemLabel="向客戶收費" itemValue="C" /> 
-                                <f:selectItem itemLabel="支付合作對象" itemValue="P" />                             
-                            </p:selectOneRadio> 
-                        </p:column>
-                    </p:row>
                     <p:row>
                         <p:column colspan="6">
                             <center>
@@ -103,13 +61,9 @@
                          emptyMessage="查無資料"
                          editable="true" 
                          >
-                <p:ajax event="rowEdit" listener="#{mgSetMasterController.onRowEdit}" update=":MgSetMasterListForm:msgs" />
-                <p:ajax event="rowEditCancel" listener="#{mgSetMasterController.onRowCancel}" update=":MgSetMasterListForm:msgs" />
-                
-                 <p:column style="width:32px">
-           <p:rowEditor />
-       </p:column>
-                
+
+
+
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="主活動代碼"/>
@@ -120,101 +74,80 @@
                     <f:facet name="header">
                         <h:outputText value="主活動名稱"/>
                     </f:facet>
+                    <h:outputText value="#{item.mgActMName}"/>
 
-                    <p:cellEditor>
-                        <f:facet name="output">  <h:outputText value="#{item.mgActMName}"/></f:facet>
-                        <f:facet name="input"><p:inputText value="#{item.mgActMName}"/></f:facet>
-                    </p:cellEditor>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="活動計算基礎"/>
                     </f:facet>
 
+                    <h:outputText value="#{mgSetMasterController.toMgMType(item.mgActMType)}"/>
 
-                    <p:cellEditor>
-                        <f:facet name="output">   <h:outputText value="#{mgSetMasterController.toMgMType(item.mgActMType)}"/></f:facet>
-                        <f:facet name="input"> <p:selectOneRadio  value="#{item.mgActMType}">                                  
-                                <f:selectItem itemLabel="AUM" itemValue="1" /> 
-                                <f:selectItem itemLabel="成本" itemValue="2" /> 
-                            </p:selectOneRadio></f:facet>
-                    </p:cellEditor>
 
                 </p:column>
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="活動計算規則"/>
                     </f:facet>
-                    <p:cellEditor>
-                        <f:facet name="output"> <h:outputText value="#{mgSetMasterController.toMgActMRateSet(item.mgActMRateSet)}"/></f:facet>
-                        <f:facet name="input"><p:selectOneRadio value="#{item.mgActMRateSet}">                                            
-                                <f:selectItem itemLabel="Low" itemValue="1" /> 
-                                <f:selectItem itemLabel="High" itemValue="2" /> 
-                            </p:selectOneRadio> </f:facet>
-                    </p:cellEditor>
+                    <h:outputText value="#{mgSetMasterController.toMgActMRateSet(item.mgActMRateSet)}"/>
+
                 </p:column>
-                
-                 <p:column>
+
+                <p:column>
                     <f:facet name="header">
                         <h:outputText value="建立經辦"/>
                     </f:facet>
-                     <h:outputText value="#{item.crtEmpId}"/><br/>
-                     <h:outputText value="#{item.crtEmpName}"/>
+                    <h:outputText value="#{item.crtEmpId}"/><br/>
+                    <h:outputText value="#{item.crtEmpName}"/>
                 </p:column>
-                
-                 <p:column>
+
+                <p:column>
                     <f:facet name="header">
                         <h:outputText value="建立時間"/>
                     </f:facet>
-                     <h:outputText value="#{mgSetMasterController.toStringDate(item.crtDate,'yyyyMMdd HH:mm')}"/>
+                    <h:outputText value="#{mgSetMasterController.toStringDate(item.crtDate,'yyyyMMdd HH:mm')}"/>
                 </p:column>
-                
+
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="覆核主管"/>
                     </f:facet>
                     <h:outputText value="#{item.cfmEmpId}"/><br/>
-                     <h:outputText value="#{item.cfmEmpName}"/>
+                    <h:outputText value="#{item.cfmEmpName}"/>
                 </p:column>
-                
-                 <p:column>
+
+                <p:column>
                     <f:facet name="header">
                         <h:outputText value="覆核時間"/>
                     </f:facet>
-                     <h:outputText value="#{mgSetMasterController.toStringDate(item.cfmDate,'yyyyMMdd HH:mm')}"/>
+                    <h:outputText value="#{mgSetMasterController.toStringDate(item.cfmDate,'yyyyMMdd HH:mm')}"/>
                 </p:column>
-                
+
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="狀態"/>
                     </f:facet>
                     <h:outputText value="#{item.status.status}"/>
                 </p:column>
-                
+
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="活動案最後計算日期"/>
+                        <h:outputText value="收費對象"/>
                     </f:facet>
-
-                    <p:cellEditor>
-                        <f:facet name="output">  <h:outputText value="#{item.mgActLastSettleDate}"/></f:facet>
-                        <f:facet name="input"><p:inputText value="#{item.mgActLastSettleDate}"/>
-                                
-                           </f:facet>
-                    </p:cellEditor>
+                    <h:outputText value="#{item.status.status}"/>
                 </p:column>
 
-<!--                <p:column>
+
+
+                <p:column>
                     <f:facet name="header">
                         <h:outputText value="活動案備註"/>
                     </f:facet>
                     <h:outputText value="#{item.mgActMRemark}"/>
 
-                    <p:cellEditor>
-                        <f:facet name="output">  <h:outputText value="#{item.mgActMName}"/></f:facet>
-                        <f:facet name="input"><p:inputTextarea rows="10" cols="60" id="mgActMRemark" value="#{item.mgActMRemark}" title="#{bundle.CreateMgSetMasterTitle_mgActMRemark}" /></f:facet>
-                    </p:cellEditor>
-                </p:column>-->
+
+                </p:column>
 
                 <!--                <p:column>
                                     <f:facet name="header">
