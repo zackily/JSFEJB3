@@ -82,7 +82,31 @@
                                 <p:outputLabel value="適用產品代碼" for="mgActDPrdCode" />  
                             </p:column>
                             <p:column>
-                                <p:inputText id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" />
+                                <!--<p:inputText id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" />-->
+                                <p:outputPanel id="mgActDPrdCodePanel" style="margin-bottom:10px">
+                                    <p:selectOneRadio id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}"  layout="custom">
+                                        <f:selectItem itemLabel="ALL" itemValue="1" />
+                                        <f:selectItem itemLabel="系列代碼" itemValue="2" />
+                                        <f:selectItem itemLabel="產品類型" itemValue="3" />
+                                        <f:selectItem itemLabel="自定" itemValue="4" />
+                                    </p:selectOneRadio>
+                                    <h:panelGrid columns="11" cellpadding="5">
+                                        <p:radioButton id="opt0" for="mgActDPrdCode" itemIndex="0" />
+                                        <h:outputLabel for="opt0" value="ALL" />
+                                        
+                                        <p:radioButton id="opt1" for="mgActDPrdCode" itemIndex="1" />
+                                        <h:outputLabel for="opt1" value="系列代碼" />
+                                        <p:commandButton value="設定"/>
+                                            
+                                        <p:radioButton id="opt2" for="mgActDPrdCode" itemIndex="2" />
+                                        <h:outputLabel for="opt2" value="產品類型" />
+                                        <p:commandButton value="設定"/>
+                                      
+                                        <p:radioButton id="opt3" for="mgActDPrdCode" itemIndex="3" />
+                                        <h:outputLabel for="opt3" value="自定" />
+                                        <p:commandButton value="設定"/>
+                                    </h:panelGrid>
+                                </p:outputPanel>
                             </p:column>
                         </p:row>
                         <p:row>
