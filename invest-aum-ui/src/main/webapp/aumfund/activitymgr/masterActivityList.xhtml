@@ -18,7 +18,7 @@
                 <p:commandButton id="createButton" icon="ui-icon-plus"   value="新增主活動"
                                  actionListener="#{mgSetMasterController.prepareCreate}" 
                                  update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                 rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>
+                                 rendered="#{userSession.user.role eq '3'}"/>
                 <p:separator />
 
                 <p:panelGrid style="width:100%" >
@@ -135,7 +135,7 @@
                     <f:facet name="header">
                         <h:outputText value="收費對象"/>
                     </f:facet>
-                    <h:outputText value="#{item.status.status}"/>
+                    <h:outputText value="#{item.mgActMChargeObj}"/>
                 </p:column>
 
 
