@@ -182,16 +182,18 @@
                                                          actionListener="#{mgSetDetailController.addMSDRC()}" 
                                                          update=":MgSetDetailCreateForm:datalist" />   
                                     </f:facet>
+                                    <!--
                                     <p:column style="width:32px">
                                         <p:rowEditor />
-                                    </p:column>
+                                    </p:column>-->
+                                    <!-- 拖拉排序後序號會亂
                                     <p:column style="width:32px">
                                         <f:facet name="header">
                                             <h:outputText value="序號"/>
                                         </f:facet>
                                         <h:outputText value="#{index + 1}"/>
                                     </p:column>
-
+                                    -->
                                     <p:column style="width:60px">
                                         <f:facet name="header">
                                             <h:outputText value="幣別"/>
