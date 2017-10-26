@@ -91,19 +91,19 @@
                                         <f:selectItem itemLabel="自定" itemValue="4" />
                                     </p:selectOneRadio>
                                     <h:panelGrid columns="11" cellpadding="5">
-                                        <p:radioButton id="opt0" for="mgActDPrdCode" itemIndex="0" />
-                                        <h:outputLabel for="opt0" value="ALL" />
+                                        <p:radioButton id="mgActDPrdCodeopt0" for="mgActDPrdCode" itemIndex="0" />
+                                        <h:outputLabel for="mgActDPrdCodeopt0" value="ALL" />
                                         
-                                        <p:radioButton id="opt1" for="mgActDPrdCode" itemIndex="1" />
-                                        <h:outputLabel for="opt1" value="系列代碼" />
+                                        <p:radioButton id="mgActDPrdCodeopt1" for="mgActDPrdCode" itemIndex="1" />
+                                        <h:outputLabel for="mgActDPrdCodeopt1" value="系列代碼" />
                                         <p:commandButton value="設定"/>
                                             
-                                        <p:radioButton id="opt2" for="mgActDPrdCode" itemIndex="2" />
-                                        <h:outputLabel for="opt2" value="產品類型" />
+                                        <p:radioButton id="mgActDPrdCodeopt2" for="mgActDPrdCode" itemIndex="2" />
+                                        <h:outputLabel for="mgActDPrdCodeopt2" value="產品類型" />
                                         <p:commandButton value="設定"/>
                                       
-                                        <p:radioButton id="opt3" for="mgActDPrdCode" itemIndex="3" />
-                                        <h:outputLabel for="opt3" value="自定" />
+                                        <p:radioButton id="mgActDPrdCodeopt3" for="mgActDPrdCode" itemIndex="3" />
+                                        <h:outputLabel for="mgActDPrdCodeopt3" value="自定" />
                                         <p:commandButton value="設定"/>
                                     </h:panelGrid>
                                 </p:outputPanel>
@@ -114,13 +114,31 @@
                                 <p:outputLabel value="資產總額計算方式" for="mgActDSecType" />  
                             </p:column>
                             <p:column>
-                                <p:selectOneRadio id="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}">
-                                    <f:selectItem itemLabel="客戶ID" itemValue="1" />
-                                    <f:selectItem itemLabel="單一標的" itemValue="2" />
-                                    <f:selectItem itemLabel="系列代碼" itemValue="3" />
-                                    <f:selectItem itemLabel="產品類型" itemValue="4" />
-                                    <f:selectItem itemLabel="自訂" itemValue="5" />                                   
-                                </p:selectOneRadio>     
+                                <p:outputPanel id="mgActDSecTypePanel" style="margin-bottom:10px">
+                                    <p:selectOneRadio id="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}" layout="custom">
+                                        <f:selectItem itemLabel="客戶ID" itemValue="1" />
+                                        <f:selectItem itemLabel="單一標的" itemValue="2" />
+                                        <f:selectItem itemLabel="系列代碼" itemValue="3" />
+                                        <f:selectItem itemLabel="產品類型" itemValue="4" />
+                                        <f:selectItem itemLabel="自訂" itemValue="5" />                                   
+                                    </p:selectOneRadio>   
+                                    <h:panelGrid columns="13" cellpadding="5">
+                                        <p:radioButton id="mgActDSecTypeopt0" for="mgActDSecType" itemIndex="0" />
+                                        <h:outputLabel for="mgActDSecTypeopt0" value="客戶ID" />
+                                        <p:radioButton id="mgActDSecTypeopt1" for="mgActDSecType" itemIndex="1" />
+                                        <h:outputLabel for="mgActDSecTypeopt1" value="單一標的" />
+                                        <p:radioButton id="mgActDSecTypeopt2" for="mgActDSecType" itemIndex="2" />
+                                        <h:outputLabel for="mgActDSecTypeopt2" value="系列代碼" />
+                                        <p:commandButton value="設定"/>
+                                        <p:radioButton id="mgActDSecTypeopt3" for="mgActDSecType" itemIndex="3" />
+                                        <h:outputLabel for="mgActDSecTypeopt3" value="產品類型" />
+                                        <p:commandButton value="設定"/>                                      
+                                        <p:radioButton id="mgActDSecTypeopt4" for="mgActDSecType" itemIndex="4" />
+                                        <h:outputLabel for="mgActDSecTypeopt4" value="自定" />
+                                        <p:commandButton value="設定"/>
+                                        
+                                    </h:panelGrid>
+                                </p:outputPanel> 
                             </p:column>
                         </p:row>
 
@@ -156,7 +174,9 @@
                                              rowIndexVar="index"                                             
                                              paginatorPosition="bottom"
                                              style="text-align: center"
+                                             draggableRows="true"
                                              >             
+                                    <p:ajax event="rowReorder"  />
                                     <f:facet name="header">
                                         <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-plus" value="新增級距" 
                                                          actionListener="#{mgSetDetailController.addMSDRC()}" 
