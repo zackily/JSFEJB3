@@ -12,6 +12,7 @@ import cub.facade.MgSetDetailRngCfgFacade;
 import cub.facade.MgSetMasterFacade;
 import cub.sso.UserSession;
 import cub.vo.MgDetailVO;
+import cub.vo.ProductVO;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -55,21 +56,22 @@ public class MgSetDetailController implements Serializable {
     private List<MgSetMaster> mgSetMasterList;
 
     private List<MgSetDetail> items = null;
+    //TODO 暫時
+    //private List<String> productClassList;
+    private List<String> productTypeList;
+    private List<String> productSeriesList;
 
     private List<MgSetDetailRngCfg> rangeList;
     private MgSetDetailRngCfg selectedRange;
-
     private MgSetDetail selected;
     private MgSetDetail mgSetDetail;
     private Date mgSetActDetailStartDate;
     private Date mgSetActDetailEndDate;
-
     private List<String> selectedChannel;
-
     private boolean skip;
-
     //VO
     private MgDetailVO mgDetailVO;
+    private ProductVO productVO;
 
     @EJB
     private Utils utils;
@@ -79,7 +81,11 @@ public class MgSetDetailController implements Serializable {
         selected = new MgSetDetail();
         mgDetailVO = new MgDetailVO();
         mgSetDetail = new MgSetDetail();
+        
         mgSetMasterList = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
+        productVO = new ProductVO();
+        productTypeList = new ArrayList<String>();
+        productSeriesList = new ArrayList<String>();
     }
 
     public void prepareUpdate(MgSetDetail item) {
@@ -102,6 +108,11 @@ public class MgSetDetailController implements Serializable {
 
     }
 
+    public void preSetting(){
+        productVO = new ProductVO();
+        productTypeList = new ArrayList<String>();
+        productSeriesList = new ArrayList<String>();
+    }
  
     public String onFlowProcess(FlowEvent event) {
         if (skip) {
@@ -403,6 +414,32 @@ public class MgSetDetailController implements Serializable {
 
     public void setMgSetActDetailEndDate(Date mgSetActDetailEndDate) {
         this.mgSetActDetailEndDate = mgSetActDetailEndDate;
+    }
+
+    public ProductVO getProductVO() {
+        return productVO;
+    }
+
+    public void setProductVO(ProductVO productVO) {
+        this.productVO = productVO;
+    }
+
+ 
+
+    public List<String> getProductTypeList() {
+        return productTypeList;
+    }
+
+    public void setProductTypeList(List<String> productTypeList) {
+        this.productTypeList = productTypeList;
+    }
+
+    public List<String> getProductSeriesList() {
+        return productSeriesList;
+    }
+
+    public void setProductSeriesList(List<String> productSeriesList) {
+        this.productSeriesList = productSeriesList;
     }
 
 }

@@ -79,7 +79,7 @@
 
                         <p:row>
                             <p:column styleClass="ui-widget-header">
-                                <p:outputLabel value="適用產品代碼" for="mgActDPrdCode" />  
+                                <p:outputLabel value="適用產品代碼1" for="mgActDPrdCode" />  
                             </p:column>
                             <p:column>
                                 <!--<p:inputText id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" />-->
@@ -93,18 +93,19 @@
                                     <h:panelGrid columns="11" cellpadding="5">
                                         <p:radioButton id="mgActDPrdCodeopt0" for="mgActDPrdCode" itemIndex="0" />
                                         <h:outputLabel for="mgActDPrdCodeopt0" value="ALL" />
-                                        
+
                                         <p:radioButton id="mgActDPrdCodeopt1" for="mgActDPrdCode" itemIndex="1" />
                                         <h:outputLabel for="mgActDPrdCodeopt1" value="系列代碼" />
                                         <p:commandButton value="設定"/>
-                                            
+
                                         <p:radioButton id="mgActDPrdCodeopt2" for="mgActDPrdCode" itemIndex="2" />
                                         <h:outputLabel for="mgActDPrdCodeopt2" value="產品類型" />
                                         <p:commandButton value="設定"/>
-                                      
+
                                         <p:radioButton id="mgActDPrdCodeopt3" for="mgActDPrdCode" itemIndex="3" />
                                         <h:outputLabel for="mgActDPrdCodeopt3" value="自定" />
-                                        <p:commandButton value="設定"/>
+                                        <p:commandButton value="設定" actionListener="#{mgSetDetailController.preSetting()}" update="MgSetProductSettingForm" 
+                                                         onclick="PF('MgSetProductSettingDialog').show()"/>
                                     </h:panelGrid>
                                 </p:outputPanel>
                             </p:column>
@@ -128,7 +129,7 @@
                                         <p:commandButton id="btnMgActDSecType" value="設定" rendered="#{'3' le mgSetDetailController.mgSetDetail.mgActDSecType}">
                                             <f:param name="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}" />
                                         </p:commandButton>
-                                            
+
                                     </h:panelGrid>
                                 </p:outputPanel> 
                             </p:column>
@@ -272,14 +273,109 @@
                                          rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
                     </center>
                 </p:scrollPanel>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog id="MgSetProductSettingDlg" widgetVar="MgSetProductSettingDialog" modal="true" resizable="false" appendTo="@(body)" header="產品設定" width="900px">
+            <h:form id="MgSetProductSettingForm" prependId="false">
+                <p:growl id="settingDlgMsg"/>
+
+                <p:panelGrid style="width: 100%"> 
+                    <p:row>
+                        <p:column styleClass="ui-widget-header" style="width: 110px">
+                            <p:outputLabel value="產品類別" />
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:selectOneMenu  id="productClass" value="#{mgSetDetailController.productVO.productClass}" >                                           
+                                <f:selectItem itemLabel="Stock" itemValue="stock" />             
+                                <f:selectItem itemLabel="Bond" itemValue="bond" /> 
+                                <f:selectItem itemLabel="Fund" itemValue="fund" />                                  
+                            </p:selectOneMenu>                         
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="ui-widget-header">
+                            <p:outputLabel value="國內/外基金"  />
+                        </p:column>
+                        <p:column colspan="3">
+                            <p:selectOneMenu  id="productAbroad" value="#{mgSetDetailController.productVO.productAbroad}" >                                           
+                                <f:selectItem itemLabel="全部" itemValue="all" />           
+                                <f:selectItem itemLabel="國內" itemValue="1" />             
+                                <f:selectItem itemLabel="國外" itemValue="2" />
+                            </p:selectOneMenu>                         
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column styleClass="ui-widget-header">
+                            <p:outputLabel value="系列代碼" for="productSeries" />
+                        </p:column>
+                        <p:column>
+                            <p:selectCheckboxMenu label="系列代碼"  id="productSeries" value="#{mgSetDetailController.productVO.productSeries}" >                                                                                        
+                                <f:selectItems value="#{mgSetDetailController.productSeriesList}" var="pSeries" itemLabel="#{pSeries}" itemValue="#{pSeries}" /> 
+                                <p:ajax event="change" update=":MgSetProductSettingForm:productType" />
+                            </p:selectCheckboxMenu> 
+
+                        </p:column>                            
+                        <p:column styleClass="ui-widget-header">
+                            <p:outputLabel value="產品類型" for="productType" />
+                        </p:column>
+                        <p:column>
+                            <p:selectCheckboxMenu label="產品類型"  id="productType" value="#{mgSetDetailController.productVO.productType}" >                                                                                        
+                                <f:selectItems value="#{mgSetDetailController.productTypeList}" var="pType" itemLabel="#{pType}" itemValue="#{pType}" /> 
+                                <p:ajax event="change" update=":MgSetProductSettingForm:" />
+                            </p:selectCheckboxMenu> 
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="ui-widget-header">
+                            <p:outputLabel value="產品名稱" for="productName" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="productName" value="#{mgSetDetailController.productVO.productName}"/>
+                        </p:column>                            
+                        <p:column styleClass="ui-widget-header">
+                            <p:outputLabel value="產品代碼" for="productCode" />
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="productCode" value="#{mgSetDetailController.productVO.productCode}"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:spacer height="5px"/>
+                <center>
+                    <p:commandButton icon="ui-icon-plus" value="查詢" actionListener="#{mgSetDetailController.cancel()}" />    
+                </center>
+                <hr/>
+                <p:panelGrid style="width: 100%"> 
+                    <p:row>
+                        <p:column styleClass="ui-widget-header" style="width: 110px">
+                            <p:pickList id="PojoPickList" value="#{pickListView.themes}" var="theme" effect="bounce"
+                                        itemValue="#{theme}" itemLabel="#{theme.displayName}" showSourceControls="true" showTargetControls="true" showCheckbox="true" responsive="true"
+                                        showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" converter="theme">
+
+
+                                <p:column style="width:10%">
+                                    <h:outputText styleClass="ui-theme ui-theme-#{theme.name}" />
+                                </p:column>
+
+                                <p:column style="width:90%;">
+                                    <h:outputText value="#{theme.displayName}" />
+                                </p:column>
+                            </p:pickList>
+                        </p:column>
+
+                    </p:row>
+
+
+
+                </p:panelGrid>
 
 
 
             </h:form>
         </p:dialog>
-
-
-
 
     </ui:composition>
 </html>
