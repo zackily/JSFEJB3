@@ -115,28 +115,20 @@
                             </p:column>
                             <p:column>
                                 <p:outputPanel id="mgActDSecTypePanel" style="margin-bottom:10px">
-                                    <p:selectOneRadio id="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}" layout="custom">
-                                        <f:selectItem itemLabel="客戶ID" itemValue="1" />
-                                        <f:selectItem itemLabel="單一標的" itemValue="2" />
-                                        <f:selectItem itemLabel="系列代碼" itemValue="3" />
-                                        <f:selectItem itemLabel="產品類型" itemValue="4" />
-                                        <f:selectItem itemLabel="自訂" itemValue="5" />                                   
-                                    </p:selectOneRadio>   
-                                    <h:panelGrid columns="13" cellpadding="5">
-                                        <p:radioButton id="mgActDSecTypeopt0" for="mgActDSecType" itemIndex="0" />
-                                        <h:outputLabel for="mgActDSecTypeopt0" value="客戶ID" />
-                                        <p:radioButton id="mgActDSecTypeopt1" for="mgActDSecType" itemIndex="1" />
-                                        <h:outputLabel for="mgActDSecTypeopt1" value="單一標的" />
-                                        <p:radioButton id="mgActDSecTypeopt2" for="mgActDSecType" itemIndex="2" />
-                                        <h:outputLabel for="mgActDSecTypeopt2" value="系列代碼" />
-                                        <p:commandButton value="設定"/>
-                                        <p:radioButton id="mgActDSecTypeopt3" for="mgActDSecType" itemIndex="3" />
-                                        <h:outputLabel for="mgActDSecTypeopt3" value="產品類型" />
-                                        <p:commandButton value="設定"/>                                      
-                                        <p:radioButton id="mgActDSecTypeopt4" for="mgActDSecType" itemIndex="4" />
-                                        <h:outputLabel for="mgActDSecTypeopt4" value="自定" />
-                                        <p:commandButton value="設定"/>
-                                        
+
+                                    <h:panelGrid columns="2" cellpadding="5">
+                                        <p:selectOneMenu id="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}"  >
+                                            <p:ajax update="mgActDSecTypePanel"  />
+                                            <f:selectItem itemLabel="客戶ID" itemValue="1" />
+                                            <f:selectItem itemLabel="單一標的" itemValue="2" />
+                                            <f:selectItem itemLabel="系列代碼" itemValue="3" />
+                                            <f:selectItem itemLabel="產品類型" itemValue="4" />
+                                            <f:selectItem itemLabel="自訂" itemValue="5" />          
+                                        </p:selectOneMenu>
+                                        <p:commandButton id="btnMgActDSecType" value="設定" rendered="#{'3' le mgSetDetailController.mgSetDetail.mgActDSecType}">
+                                            <f:param name="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}" />
+                                        </p:commandButton>
+                                            
                                     </h:panelGrid>
                                 </p:outputPanel> 
                             </p:column>
