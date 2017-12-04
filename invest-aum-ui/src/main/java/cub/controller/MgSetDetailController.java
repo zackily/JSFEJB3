@@ -4,15 +4,26 @@ import cub.entities.MgSetDetail;
 import cub.controller.util.JsfUtil;
 import cub.controller.util.JsfUtil.PersistAction;
 import cub.controller.util.Utils;
+import cub.entities.AcctFundHoldingRenew;
+import cub.entities.EricMgFeeMonth;
+import cub.entities.EricMgFeeMonthDetail;
+import cub.entities.MgCustActList;
+import cub.entities.MgSetDetailChlCfg;
 import cub.entities.MgSetDetailRngCfg;
 import cub.entities.MgSetMaster;
 import cub.enums.MgSetMasterStatus;
+import cub.facade.AcctFundHoldingRenewFacade;
+import cub.facade.EricMgFeeMonthDetailFacade;
+import cub.facade.EricMgFeeMonthFacade;
+import cub.facade.MgCustActListFacade;
+import cub.facade.MgSetDetailChlCfgFacade;
 import cub.facade.MgSetDetailFacade;
 import cub.facade.MgSetDetailRngCfgFacade;
 import cub.facade.MgSetMasterFacade;
 import cub.sso.UserSession;
 import cub.vo.MgDetailVO;
 import cub.vo.ProductVO;
+import java.io.IOException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -24,21 +35,25 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
+import org.primefaces.model.UploadedFile;
 
-@Named("mgSetDetailController")
-@SessionScoped
+@ManagedBean(name = "mgSetDetailController")
+@ViewScoped
 public class MgSetDetailController implements Serializable {
 
     @ManagedProperty("#{userSession}")
@@ -52,6 +67,9 @@ public class MgSetDetailController implements Serializable {
 
     @EJB
     private MgSetDetailRngCfgFacade mgSetDetailRngCfgFacade;
+
+    @EJB
+    private MgSetDetailChlCfgFacade mgSetDetailChlCfgFacade;
 
     private List<MgSetMaster> mgSetMasterList;
 
@@ -76,20 +94,104 @@ public class MgSetDetailController implements Serializable {
     @EJB
     private Utils utils;
 
+    private String queryMonCustId;
+    private Date queryMonStartDate;
+    private Date queryMonEndDate;
+    private List<EricMgFeeMonth> emfList;
+    @EJB
+    private EricMgFeeMonthFacade ericMgMonthFacade;
+
+    private String queryMonDCustId;
+    private Date queryMonDStartDate;
+    private Date queryMonDEndDate;
+    private List<EricMgFeeMonthDetail> emfDlist;
+    @EJB
+    private EricMgFeeMonthDetailFacade ericMgMonthDetailFacade;
+
+    private String queryHoldingCustId;
+    private Date queryHoldingStartDate;
+    private Date queryHoldingEndDate;
+    private List<AcctFundHoldingRenew> holdingList;
+    @EJB
+    private AcctFundHoldingRenewFacade acctFundHoldingRenewFacade;
+
+    private List<MgCustActList> idnList = null;
+
+    
+    private String queryIdnCustId;
+    private List<MgCustActList> queryIdnList;
+    @EJB
+    private MgCustActListFacade mgCustActListFacade;
+    
     @PostConstruct
     public void init() {
+
+        emfList = new ArrayList<EricMgFeeMonth>();
+        emfDlist = new ArrayList<EricMgFeeMonthDetail>();
+        holdingList = new ArrayList<AcctFundHoldingRenew>();
+        idnList = new ArrayList<MgCustActList>();
+        
         selected = new MgSetDetail();
         mgDetailVO = new MgDetailVO();
         mgSetDetail = new MgSetDetail();
-        
+
         mgSetMasterList = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
         productVO = new ProductVO();
         productTypeList = new ArrayList<String>();
         productSeriesList = new ArrayList<String>();
     }
 
+    public void prepareDelete(MgSetDetail item) {
+        this.selected = item;
+        item.setStatus(MgSetMasterStatus.DELETE);
+        mgSetDetailFacade.save(item);
+        JsfUtil.addSuccessMessage("子活動案已刪除");
+    }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        if (!idnList.isEmpty()) {
+            idnList.clear();
+        }
+        try {
+//            System.out.println(event.getFile().getFileName());
+            List<String> tmpList = new ArrayList<String>();
+            UploadedFile uploadedFile = event.getFile();
+            tmpList = IOUtils.readLines(uploadedFile.getInputstream());
+            for(String idn:tmpList){
+                String[] idnary = idn.split("\\,");
+                MgCustActList obj = new MgCustActList();
+                obj.setCustId(idnary[0]);
+                obj.setActDataDt(idnary[1]);
+                obj.setActStartDt(idnary[2]);
+                obj.setActEndDt(idnary[3]);
+                System.out.println("fuxk"+mgSetDetail.getMgSetMasterId().getMgActMCode());
+                obj.setActCode(mgSetDetail.getMgSetMasterId().getMgActMCode());
+                obj.setActSubCode(showMgSetDetailCode());
+                obj.setUpdateDttm(new Date());                
+                obj.setStatus("Y");
+                idnList.add(obj);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MgSetMasterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     public void prepareUpdate(MgSetDetail item) {
         this.selected = item;
+        this.mgSetDetail = item;
+        mgSetActDetailStartDate = new DateTime(mgSetDetail.getMgActDStartDate()).toDate();
+        mgSetActDetailEndDate = new DateTime(mgSetDetail.getMgActDEndDate()).toDate();
+        List<MgSetDetailChlCfg> msdcc = mgSetDetailChlCfgFacade.findBySelectChannel(item.getMgActDCode(), item.getMgActDSeq());
+        if (selectedChannel != null) {
+            selectedChannel.clear();
+        } else {
+            selectedChannel = new ArrayList<String>();
+        }
+        for (MgSetDetailChlCfg m : msdcc) {
+            selectedChannel.add(m.getMgActSaleChnlCode());
+        }
+        rangeList = mgSetDetailRngCfgFacade.findByRng(item.getMgActDCode(), item.getMgActDSeq());
     }
 
     public void cancel() {
@@ -108,12 +210,23 @@ public class MgSetDetailController implements Serializable {
 
     }
 
-    public void preSetting(){
+    public void autoFill() {
+        for (String channel : selectedChannel) {
+            if (channel.equalsIgnoreCase("7")) {
+                mgSetDetail.setMgActDPrdCode("1");
+                mgSetDetail.setMgActDSecType("1");
+                mgSetDetail.setMgActDRemark("1");
+                //mgSetDetail.setmgactd
+            }
+        }
+    }
+
+    public void preSetting() {
         productVO = new ProductVO();
         productTypeList = new ArrayList<String>();
         productSeriesList = new ArrayList<String>();
     }
- 
+
     public String onFlowProcess(FlowEvent event) {
         if (skip) {
             skip = false;   //reset in case user goes back
@@ -173,7 +286,13 @@ public class MgSetDetailController implements Serializable {
         return mgSetDetailFacade;
     }
 
+    public void prepareIdn() {
+      idnList = new ArrayList<MgCustActList>();
+    }
+
+    
     public MgSetDetail prepareCreate() {
+        selectedChannel = new ArrayList<String>();
         rangeList = new ArrayList<MgSetDetailRngCfg>();
         selectedRange = new MgSetDetailRngCfg();
         selected = new MgSetDetail();
@@ -192,8 +311,17 @@ public class MgSetDetailController implements Serializable {
     public void minusMSDRC(MgSetDetailRngCfg msdrc) {
         rangeList.remove(msdrc);
     }
+
+    public void saveIdn(){
+        for(MgCustActList obj:idnList){
+            System.out.println(obj.getActCode()+"="+obj.getActSubCode()+"="+obj.getStatus());
+            mgCustActListFacade.save(obj);
+        }
+         JsfUtil.addSuccessMessage("IDN新增完成");
+    }
     
     public void create() {
+        System.out.println("Fuxk==>" + mgSetDetail.getMgSetMasterId().getId());
         mgSetDetail.setMgActDCode(mgSetDetail.getMgSetMasterId().getMgActMCode());
         mgSetDetail.setMgActDSeq(showMgSetDetailCode());
         mgSetDetail.setCrtEmpId(userSession.getUser().getEmpId());
@@ -207,11 +335,24 @@ public class MgSetDetailController implements Serializable {
         for (MgSetDetailRngCfg rng : rangeList) {
             rng.setChangedate(new Date());
             rng.setMgActCode(mgSetDetail.getMgActDCode());
-            rng.setMgActSubCode(mgSetDetail.getMgActDCode());
+            rng.setMgActSubCode(mgSetDetail.getMgActDSeq());
             mgSetDetailRngCfgFacade.save(rng);
         }
 
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailCreated"));
+        for (String chl : selectedChannel) {
+            MgSetDetailChlCfg msdcc = new MgSetDetailChlCfg();
+            msdcc.setMgActCode(mgSetDetail.getMgActDCode());
+            msdcc.setMgActSubCode(mgSetDetail.getMgActDSeq());
+            msdcc.setMgActSaleChnlCode(chl);
+            mgSetDetailChlCfgFacade.save(msdcc);
+        }
+        mgSetDetailFacade.save(mgSetDetail);
+        search();
+        JsfUtil.addSuccessMessage("子活動案新增完成");
+
+        // FacesMessage msg = new FacesMessage("子活動案新增完成==>" + mgSetDetail.getId());
+        //   FacesContext.getCurrentInstance().addMessage(null, msg);
+//        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailCreated"));
         if (!JsfUtil.isValidationFailed()) {
             rangeList = null;    // Invalidate list of items to trigger re-query.
         }
@@ -330,6 +471,22 @@ public class MgSetDetailController implements Serializable {
         return new DateTime(yyyyMMdd).toDate();
     }
 
+    public void searchIdn() {
+        queryIdnList = mgCustActListFacade.findByQuery("", "", queryIdnCustId);
+    }
+    
+    public void searchHolding() {
+        holdingList = acctFundHoldingRenewFacade.findByQuery(queryHoldingCustId, queryHoldingStartDate, queryHoldingEndDate);
+    }
+
+    public void searchRoboMon() {
+        emfList = ericMgMonthFacade.findByQuery(queryMonCustId, queryMonStartDate, queryMonEndDate);
+    }
+
+    public void searchRoboMonDetail() {
+        emfDlist = ericMgMonthDetailFacade.findByQuery(queryMonCustId, queryMonStartDate, queryMonEndDate);
+    }
+
     public void search() {
         items.clear();
         items = mgSetDetailFacade.findAll();
@@ -424,8 +581,6 @@ public class MgSetDetailController implements Serializable {
         this.productVO = productVO;
     }
 
- 
-
     public List<String> getProductTypeList() {
         return productTypeList;
     }
@@ -440,6 +595,126 @@ public class MgSetDetailController implements Serializable {
 
     public void setProductSeriesList(List<String> productSeriesList) {
         this.productSeriesList = productSeriesList;
+    }
+
+    public String getQueryMonCustId() {
+        return queryMonCustId;
+    }
+
+    public void setQueryMonCustId(String queryMonCustId) {
+        this.queryMonCustId = queryMonCustId;
+    }
+
+    public Date getQueryMonStartDate() {
+        return queryMonStartDate;
+    }
+
+    public void setQueryMonStartDate(Date queryMonStartDate) {
+        this.queryMonStartDate = queryMonStartDate;
+    }
+
+    public Date getQueryMonEndDate() {
+        return queryMonEndDate;
+    }
+
+    public void setQueryMonEndDate(Date queryMonEndDate) {
+        this.queryMonEndDate = queryMonEndDate;
+    }
+
+    public String getQueryMonDCustId() {
+        return queryMonDCustId;
+    }
+
+    public void setQueryMonDCustId(String queryMonDCustId) {
+        this.queryMonDCustId = queryMonDCustId;
+    }
+
+    public Date getQueryMonDStartDate() {
+        return queryMonDStartDate;
+    }
+
+    public void setQueryMonDStartDate(Date queryMonDStartDate) {
+        this.queryMonDStartDate = queryMonDStartDate;
+    }
+
+    public Date getQueryMonDEndDate() {
+        return queryMonDEndDate;
+    }
+
+    public void setQueryMonDEndDate(Date queryMonDEndDate) {
+        this.queryMonDEndDate = queryMonDEndDate;
+    }
+
+    public List<EricMgFeeMonth> getEmfList() {
+        return emfList;
+    }
+
+    public void setEmfList(List<EricMgFeeMonth> emfList) {
+        this.emfList = emfList;
+    }
+
+    public List<EricMgFeeMonthDetail> getEmfDlist() {
+        return emfDlist;
+    }
+
+    public void setEmfDlist(List<EricMgFeeMonthDetail> emfDlist) {
+        this.emfDlist = emfDlist;
+    }
+
+    public String getQueryHoldingCustId() {
+        return queryHoldingCustId;
+    }
+
+    public void setQueryHoldingCustId(String queryHoldingCustId) {
+        this.queryHoldingCustId = queryHoldingCustId;
+    }
+
+    public Date getQueryHoldingStartDate() {
+        return queryHoldingStartDate;
+    }
+
+    public void setQueryHoldingStartDate(Date queryHoldingStartDate) {
+        this.queryHoldingStartDate = queryHoldingStartDate;
+    }
+
+    public Date getQueryHoldingEndDate() {
+        return queryHoldingEndDate;
+    }
+
+    public void setQueryHoldingEndDate(Date queryHoldingEndDate) {
+        this.queryHoldingEndDate = queryHoldingEndDate;
+    }
+
+    public List<AcctFundHoldingRenew> getHoldingList() {
+        return holdingList;
+    }
+
+    public void setHoldingList(List<AcctFundHoldingRenew> holdingList) {
+        this.holdingList = holdingList;
+    }
+
+    public List<MgCustActList> getIdnList() {
+        return idnList;
+    }
+
+    public void setIdnList(List<MgCustActList> idnList) {
+        this.idnList = idnList;
+    }
+
+    public String getQueryIdnCustId() {
+        return queryIdnCustId;
+    }
+
+    public void setQueryIdnCustId(String queryIdnCustId) {
+        this.queryIdnCustId = queryIdnCustId;
+    }
+
+    public List<MgCustActList> getQueryIdnList() {
+        return queryIdnList;
+    }
+
+    public void setQueryIdnList(List<MgCustActList> queryIdnList) {
+        this.queryIdnList = queryIdnList;
     }
 
 }

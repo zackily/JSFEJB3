@@ -153,10 +153,10 @@
                     </f:facet>
                                      
                     <p:commandButton icon="ui-icon-pencil" value="查看/修改" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
-                                     update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
+                                     update=":MgSetDetailCreateForm " oncomplete="PF('MgSetDetailCreateDialog').show()"
                                      rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
-                    <p:commandButton icon="ui-icon-minus" value="刪除" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
-                                     update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
+                    <p:commandButton icon="ui-icon-minus" value="刪除" actionListener="#{mgSetDetailController.prepareDelete(item)}" 
+                                     update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist " oncomplete="PF('MgSetMasterCreateDialog').show()"
                                      rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
                     <p:commandButton icon="ui-icon-confirm" value="覆核同意" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
                                      update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"

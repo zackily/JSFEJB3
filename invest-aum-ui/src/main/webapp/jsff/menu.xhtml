@@ -5,10 +5,19 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 >
 <h:form id="header" prependId="false">
-     <p:panelMenu style="width:168px">      
+    <p:growl id="messages" showDetail="false"/>
+<!--     <p:panelMenu model="#{menuController.model}"  style="width:200px"/>
+     <p:spacer height="10"/>
+     <p:tieredMenu model="#{menuController.model}"  style="width:200px"/>-->
+     
+        <p:panelMenu style="width:168px">      
         <p:submenu label="管理費" >  
              <p:menuitem value="主活動設定" outcome="/aumfund/activitymgr/masterActivityList.xhtml" />   
              <p:menuitem value="子活動設定" outcome="/aumfund/activitymgr/detailActivityList.xhtml" />
+             <p:menuitem value="Holding檔查詢測試" outcome="/aumfund/activitymgr/holdingQueryList.xhtml" />
+             <p:menuitem value="IDN檔查詢測試" outcome="/aumfund/activitymgr/idnQueryList.xhtml" />
+             <p:menuitem value="ROBO管理費(月)查詢測試" outcome="/aumfund/activitymgr/roboAumQueryList.xhtml" />
+             <p:menuitem value="ROBO管理費(月明細)查詢測試" outcome="/aumfund/activitymgr/roboAumQueryDetailList.xhtml" />
         </p:submenu>
     </p:panelMenu>
 </h:form>

@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/generalPageTemplateHome.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="ROBO Month管理費查詢"></h:outputText>
+    </ui:define>
+
+    <ui:define name="body">
+
+        <h:form id="MgSetQueryListForm">
+            <p:growl id="msgs" autoUpdate="true"/>
+            <p:fieldset>
+
+                <p:separator />
+
+                <p:panelGrid style="width:100%" >
+                    <p:row>
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="客戶ID"/>
+                        </p:column>
+                        <p:column> 
+                            <p:inputText value="#{mgSetDetailController.queryHoldingCustId}"/>
+                        </p:column>
+
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="活動期間"/>
+                        </p:column>
+                        <p:column>                             
+                            <p:calendar pattern="yyyyMM"  value="#{mgSetDetailController.queryHoldingStartDate}"
+                                        >
+                                <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMM" />
+                            </p:calendar>~
+                            <p:calendar pattern="yyyyMM"  value="#{mgSetDetailController.queryHoldingEndDate}"
+                                        >
+                                <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMM" />
+                            </p:calendar>
+                        </p:column>                      
+
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="6">
+                            <center>
+                                <p:commandButton icon="ui-icon-search" value="查詢" actionListener="#{mgSetDetailController.searchHolding()}" 
+                                                 update=":MgSetQueryListForm:datalist " />                                                                                           
+                            </center>
+                        </p:column>
+
+                    </p:row>
+
+                </p:panelGrid>
+            </p:fieldset>
+
+            <p:spacer height="10"/>
+            <!--<p:fieldset>-->
+            <p:dataTable id="datalist" value="#{mgSetDetailController.holdingList}" var="item"                         
+                         paginator="true"
+                         rowKey="#{item.id}"
+                         rows="10"                         
+                         rowsPerPageTemplate="10,20,30,40,50"
+                         emptyMessage="查無資料"
+                         editable="true" 
+                         >             
+
+                <p:column style="width:32px">
+                    <p:rowEditor />
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="客戶ID"/>
+                    </f:facet>
+                    <h:outputText value="#{item.custId}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="TST_ACCT"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tstAcct}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="日期"/>
+                    </f:facet>
+
+                    <h:outputText value="#{item.navDt}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="幣別"/>
+                    </f:facet>
+                    <h:outputText value="#{item.currency}"/>
+
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Value"/>
+                    </f:facet>
+                    <h:outputText value="#{item.value}"/>
+
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Cost"/>
+                    </f:facet>
+                    <h:outputText value="#{item.cost}"/>
+
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="台幣"/>
+                    </f:facet>
+                    <h:outputText value="#{item.twdValue}"/>
+
+                </p:column>
+
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="美金"/>
+                    </f:facet>
+                    <h:outputText value="#{item.usdValue}"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>
+
+        <ui:include src="detailActivityDialog.xhtml"/>               
+        <ui:include src="/jsff/ajaxStatusDlg.xhtml"/>  
+    </ui:define>
+</ui:composition>

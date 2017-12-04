@@ -5,22 +5,21 @@
  */
 package cub.facade;
 
-import cub.entities.MgSetDetailRngCfg;
-import cub.entities.MgSetDetailSecCfg;
-import cub.invest.aum.Fund;
+import cub.entities.MgSetDetailChlCfg;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.DateTime;
 
 /**
  *
  * @author NT48810
  */
 @Stateless
-public class MgSetDetailRngCfgFacade extends AbstractFacade<MgSetDetailRngCfg> {
+public class MgSetDetailChlCfgFacade extends AbstractFacade<MgSetDetailChlCfg> {
 
     @PersistenceContext(unitName = "AUMPU")
     private EntityManager em;
@@ -30,12 +29,12 @@ public class MgSetDetailRngCfgFacade extends AbstractFacade<MgSetDetailRngCfg> {
         return em;
     }
 
-    public MgSetDetailRngCfgFacade() {
-        super(MgSetDetailRngCfg.class);
+    public MgSetDetailChlCfgFacade() {
+        super(MgSetDetailChlCfg.class);
     }
 
-      public List<MgSetDetailRngCfg> findByRng(String act_code, String act_sub_code) {
-        StringBuffer sql = new StringBuffer("SELECT msdrc FROM MgSetDetailRngCfg msdrc WHERE msdrc.mgActCode =:mgActCode and msdrc.mgActSubCode =:mgActSubCode ");
+    public List<MgSetDetailChlCfg> findBySelectChannel(String act_code, String act_sub_code) {
+        StringBuffer sql = new StringBuffer("SELECT msdcc FROM MgSetDetailChlCfg msdcc WHERE msdcc.mgActCode =:mgActCode and msdcc.mgActSubCode =:mgActSubCode ");
 
         Query q = em.createQuery(sql.toString());
 
