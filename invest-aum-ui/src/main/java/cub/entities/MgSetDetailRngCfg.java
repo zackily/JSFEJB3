@@ -161,7 +161,19 @@ public class MgSetDetailRngCfg implements Serializable {
 
     @Override
     public String toString() {
-        return "cub.entities.MgSetDetailRngCfg[ id=" + id + " ]";
+        StringBuffer sb = new StringBuffer("cub.entities.MgSetDetailRngCfg");
+        sb.append("[ id=" ).append( id).append( " ]");
+        sb.append("[mgActCode=" ).append(mgActCode).append( "]");
+        sb.append("[mgActSubCode=" ).append(mgActSubCode).append(  "]");
+        sb.append("[mgActLowAmt=" ).append(mgActLowAmt).append( "]");
+        sb.append("[mgActHightAmt=" ).append(mgActHightAmt).append( "]");
+        sb.append("[mgActRate=" ).append(mgActRate).append( "]");
+        sb.append("[changedate=" ).append(changedate).append( "]");
+        sb.append("[mgActCurrency=" ).append(mgActCurrency).append( "]");
+        sb.append("[mgActBps=" ).append(mgActBps).append( "]");
+        sb.append("[mgActMgRtnRate=" ).append(mgActMgRtnRate).append( "]");
+        sb.append("[mgActMgMapRate=" ).append(mgActMgMapRate).append( "]");
+        return sb.toString();
     }
 
     public BigInteger getMgActMgRtnRate() {
