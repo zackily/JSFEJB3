@@ -128,7 +128,7 @@ public class MgSetDetailController implements Serializable {
     
     @PostConstruct
     public void init() {
-        
+        items = mgSetDetailFacade.findByStatusNotInMgDetail(MgSetMasterStatus.DELETE);
         emfList = new ArrayList<EricMgFeeMonth>();
         emfDlist = new ArrayList<EricMgFeeMonthDetail>();
         holdingList = new ArrayList<AcctFundHoldingRenew>();
@@ -402,12 +402,12 @@ public class MgSetDetailController implements Serializable {
         }
     }
     
-    public List<MgSetDetail> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
-    }
+//    public List<MgSetDetail> getItems() {
+//        if (items == null) {
+//            items = getFacade().findAll();
+//        }
+//        return items;
+//    }
     
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
@@ -747,6 +747,14 @@ public class MgSetDetailController implements Serializable {
     
     public void setQueryIdnList(List<MgCustActList> queryIdnList) {
         this.queryIdnList = queryIdnList;
+    }
+
+    public List<MgSetDetail> getItems() {
+        return items;
+    }
+
+    public void setItems(List<MgSetDetail> items) {
+        this.items = items;
     }
     
 }

@@ -68,16 +68,12 @@
             <p:spacer height="10"/>
             <!--<p:fieldset>-->
             <p:dataTable id="datalist" value="#{mgSetDetailController.items}" var="item"
-                         
                          paginator="true"
                          rowKey="#{item.id}"
                          rows="10"                         
                          rowsPerPageTemplate="10,20,30,40,50"
-                         emptyMessage="查無資料"
-                         editable="true" 
+                         emptyMessage="查無資料"                       
                          >             
-
-              
 
                 <p:column>
                     <f:facet name="header">
@@ -154,11 +150,12 @@
                                      update=":MgSetDetailCreateForm " oncomplete="PF('MgSetDetailCreateDialog').show()"
                                      rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
                     <p:commandButton icon="ui-icon-minus" value="刪除" actionListener="#{mgSetDetailController.prepareDelete(item)}" 
-                                     update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist " oncomplete="PF('MgSetMasterCreateDialog').show()"
+                                     update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist " 
+                                     oncomplete="PF('MgSetMasterCreateDialog').show()"
                                      rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
                     <p:commandButton icon="ui-icon-confirm" value="覆核同意" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
                                      update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()" 
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('2')}"/> 
+                                     rendered="#{mgSetDetailController.showConfirm(item)}"/> 
                     <p:commandButton icon="ui-icon-reject" value="退回" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
                                      update=":MgSetDetailCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
                                      rendered="#{userSession.user.role.equalsIgnoreCase('2')}"/> 

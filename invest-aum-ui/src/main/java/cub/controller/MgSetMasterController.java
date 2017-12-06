@@ -365,9 +365,6 @@ public class MgSetMasterController implements Serializable {
     }
 
     public List<MgSetMaster> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
         return items;
     }
 

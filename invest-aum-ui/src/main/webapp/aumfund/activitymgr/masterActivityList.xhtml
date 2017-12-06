@@ -52,14 +52,12 @@
 
             <p:spacer height="10"/>
             <!--<p:fieldset>-->
-            <p:dataTable id="datalist" value="#{mgSetMasterController.items}" var="item"
-                         selectionMode="single" selection="#{mgSetMasterController.selected}"
+            <p:dataTable id="datalist" value="#{mgSetMasterController.items}" var="item"                       
                          paginator="true"
                          rowKey="#{item.id}"
                          rows="10"                         
                          rowsPerPageTemplate="10,20,30,40,50"
-                         emptyMessage="查無資料"
-                         editable="true" 
+                         emptyMessage="查無資料"                        
                          >
 
 

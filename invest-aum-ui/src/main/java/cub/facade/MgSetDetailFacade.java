@@ -7,6 +7,8 @@ package cub.facade;
 
 import cub.entities.MgSetDetail;
 import cub.entities.MgSetMaster;
+import cub.enums.MgSetMasterStatus;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -48,5 +50,18 @@ public class MgSetDetailFacade extends AbstractFacade<MgSetDetail> {
 //            e.printStackTrace();
             return null;
         }
+    }
+     
+      public List<MgSetDetail> findByStatusNotInMgDetail(MgSetMasterStatus status) {
+        StringBuffer sql = new StringBuffer("SELECT msd FROM MgSetDetail msd WHERE 1=1 ");
+        if (status != null) {
+            sql.append(" and (msd.status !=:status and msd.status is not null) ");
+        }
+        sql.append(" order by msd.id desc");
+        Query q = em.createQuery(sql.toString());  
+        if (status != null) {
+            q.setParameter("status", status);
+        }
+        return q.getResultList();
     }
 }
