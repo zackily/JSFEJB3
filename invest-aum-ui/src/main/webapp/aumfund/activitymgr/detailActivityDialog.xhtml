@@ -263,7 +263,7 @@
                                          rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
                         <p:commandButton icon="ui-icon-confirm" value="提交覆核" actionListener="#{mgSetDetailController.create()}" 
                                          update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist " 
-                                         oncomplete="handleSubmit(args,'MgSetDetailCreateDialog');"
+                                       
                                          rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
                     </center>
                 </p:scrollPanel>

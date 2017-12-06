@@ -243,7 +243,13 @@ public class MgSetMasterController implements Serializable {
         mgSetMasterFacade.save(item);
         findByStatusNotInMaster();
     }
-
+ public boolean showConfirm(MgSetMaster item){
+     System.out.println(userSession.getUser().getRole());
+        if(userSession.getUser().getRole().equalsIgnoreCase("2") && item.getStatus().compareTo(MgSetMasterStatus.SEND) == 0){
+            return true;
+        }
+        return false;
+    }
     private void findByStatusNotInMaster() {
         items = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
     }
