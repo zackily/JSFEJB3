@@ -246,7 +246,7 @@
                                 <p:commandButton value="IDN上傳設定" icon="ui-icon-plus" 
                                                  actionListener="#{mgSetDetailController.prepareIdn}" 
                                                  update=":MgCustActListForm" oncomplete="PF('MgCustActListDlg').show()"
-                                                 rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>
+                                                 rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>
                             </p:column>
                         </p:row>
                     </p:panelGrid>
@@ -254,17 +254,17 @@
                         <p:commandButton icon="ui-icon-plus" value="取消" actionListener="#{mgSetDetailController.cancel()}" 
                                          oncomplete="PF('MgSetDetailCreateDlg').hide()"
                                          update=":MgSetDetailCreateForm" 
-                                         rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>                     
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>                     
                         <p:commandButton icon="ui-icon-pencil" value="暫存" actionListener="#{mgSetDetailController.update()}" 
                                          update=":MgSetDetailCreateForm" 
-                                         rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
                         <p:commandButton icon="ui-icon-minus" value="資料匯出" actionListener="#{mgSetDetailController.export()}" 
                                          update=":MgSetDetailCreateForm" 
-                                         rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
                         <p:commandButton icon="ui-icon-confirm" value="提交覆核" actionListener="#{mgSetDetailController.create()}" 
                                          update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist " 
                                        
-                                         rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/> 
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
                     </center>
                 </p:scrollPanel>
             </h:form>
@@ -397,7 +397,7 @@
                 <p:commandButton icon="ui-icon-confirm" value="確認" actionListener="#{mgSetDetailController.saveIdn()}" 
                                  update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm "  
                                  oncomplete="PF('MgCustActListDlg').hide()"
-                                 rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>
+                                 rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>
 
 
             </h:form>

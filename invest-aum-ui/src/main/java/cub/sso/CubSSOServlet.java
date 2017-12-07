@@ -47,7 +47,7 @@ public class CubSSOServlet extends HttpServlet {
 		CubSSOInputDto dto = new CubSSOInputDto();
 		dto.setAppname("W06219");
 		dto.setEmpid(userid);
-		dto.setIp("88.8.121.52");
+		dto.setIp("88.8.196.62");
 		dto.setToken(token);
 
 		StringWriter sw = new StringWriter();
@@ -63,7 +63,7 @@ public class CubSSOServlet extends HttpServlet {
 
 		String xml = sw.toString();
 
-		String url = "https://disecurity02/secuservice/SecuAuth.asp";
+		String url = "https://88.8.194.131/secuservice/SecuAuth.asp";
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
 				return null;
