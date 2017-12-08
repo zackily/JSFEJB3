@@ -41,7 +41,8 @@
                     <p:row>
                         <p:column colspan="6">
                             <center>
-                                <p:commandButton icon="ui-icon-search" value="查詢" actionListener="#{mgSetMasterController.search()}" update=":MgSetMasterCreateForm :MgSetMasterListForm:datalist :MgSetDetailCreateForm" />                                                                                           
+                                <p:commandButton icon="ui-icon-search" value="查詢" actionListener="#{mgSetMasterController.search()}" 
+                                                 update=":MgSetMasterCreateForm :MgSetMasterListForm:datalist :MgSetDetailCreateForm" />                                                                                           
                             </center>
                         </p:column>
 
@@ -59,9 +60,6 @@
                          rowsPerPageTemplate="10,20,30,40,50"
                          emptyMessage="查無資料"                        
                          >
-
-
-
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="主活動代碼"/>
@@ -133,7 +131,7 @@
                     <f:facet name="header">
                         <h:outputText value="收費對象"/>
                     </f:facet>
-                    <h:outputText value="#{item.mgActMChargeObj}"/>
+                    <h:outputText value="#{mgSetMasterController.toMgActMChargeObj(item.mgActMChargeObj)}"/>
                 </p:column>
 
 
@@ -159,9 +157,9 @@
                     <f:facet name="header">
                         <h:outputText value=""/>
                     </f:facet>
-                    <p:commandButton icon="ui-icon-plus" value="建立子活動" actionListener="#{mgSetMasterController.addDetail(item)}" 
+<!--                    <p:commandButton icon="ui-icon-plus" value="建立子活動" actionListener="#{mgSetMasterController.addDetail(item)}" 
                                      update=":MgSetMasterCreateForm :MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDialog').show()" 
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>                     
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>                     -->
                     <p:commandButton icon="ui-icon-pencil" value="修改" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
                                      update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
                                      rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
@@ -175,8 +173,8 @@
                                      update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
                                      rendered="#{userSession.user.role.equalsIgnoreCase('2')}"/> 
                     <!--<p:commandButton icon="ui-icon-document" value="匯入子活動" actionListener="#{mgSetMasterController.importDetail(item)}" update=":MgSetMasterCreateForm :MgSetDetailImportForm :MgSetDetailCreateForm" oncomplete="PF('MgSetDetailImportDlg').show()"/>--> 
-                    <p:commandButton icon="ui-icon-search" value="子活動清單" actionListener="#{mgSetMasterController.findByMasterId(item)}" 
-                                     update=":MgSetMasterCreateForm :MgSetDetailListForm:detailDatalist" oncomplete="PF('MgSetDetailListDlg').show()" />
+<!--                    <p:commandButton icon="ui-icon-search" value="子活動清單" actionListener="#{mgSetMasterController.findByMasterId(item)}" 
+                                     update=":MgSetMasterCreateForm :MgSetDetailListForm:detailDatalist" oncomplete="PF('MgSetDetailListDlg').show()" />-->
                 </p:column>
 
 
@@ -191,7 +189,6 @@
         </h:form>
 
         <ui:include src="activityDialog.xhtml"/>
-        <ui:include src="Edit.xhtml"/>             
         <ui:include src="/jsff/ajaxStatusDlg.xhtml"/>  
     </ui:define>
 </ui:composition>

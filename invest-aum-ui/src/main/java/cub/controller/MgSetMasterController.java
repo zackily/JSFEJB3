@@ -102,17 +102,17 @@ public class MgSetMasterController implements Serializable {
     private List<String> selectedFundId;
 
     @EJB
-    private Utils utils;    
+    private Utils utils;
 
     @ManagedProperty("#{userSession}")
     private UserSession userSession;
 
-     @ManagedProperty("#{themeSwitchService}")
+    @ManagedProperty("#{themeSwitchService}")
     private ThemeSwitcherView service;
-    
+
     @PostConstruct
     public void init() {
-        
+
         findByStatusNotInMaster();
         queryVO = new AumFundVO();
         masterVO = new MgMasterVO();
@@ -191,7 +191,8 @@ public class MgSetMasterController implements Serializable {
     }
 
     public MgSetMaster prepareCreate() {
-        this.selected = null;
+        //init form
+        RequestContext.getCurrentInstance().reset(":MgSetMasterCreateForm");
         this.selected = new MgSetMaster();
         mgSetDetail = new MgSetDetail();
         selected.setMgActMType("1");
@@ -205,22 +206,26 @@ public class MgSetMasterController implements Serializable {
         initializeEmbeddableKey();
         return selected;
     }
-    
+
     public void prepareUpdate(MgSetMaster item) {
-        this.selected = item;       
+        //init form
+        RequestContext.getCurrentInstance().reset(":MgSetMasterCreateForm");
+        this.selected = item;
     }
 
     public void findByMasterId(MgSetMaster m) {
         this.detailItems = (List) m.getMgSetDetailCollection();
     }
-    public void update(String status){
-        updateMaster(selected,status);
-         FacesMessage msg = new FacesMessage(MgSetMasterStatus.valueOf(status).getStatus()+"主活動編號為" + selected.getMgActMCode());
+
+    public void update(String status) {
+        updateMaster(selected, status);
+        FacesMessage msg = new FacesMessage(MgSetMasterStatus.valueOf(status).getStatus() + "主活動編號為" + selected.getMgActMCode());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    public void confirm(String status){
-        confirmMaster(selected,status);
-        FacesMessage msg = new FacesMessage(MgSetMasterStatus.valueOf(status).getStatus()+"主活動編號為" + selected.getMgActMCode());
+
+    public void confirm(String status) {
+        confirmMaster(selected, status);
+        FacesMessage msg = new FacesMessage(MgSetMasterStatus.valueOf(status).getStatus() + "主活動編號為" + selected.getMgActMCode());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
@@ -243,13 +248,15 @@ public class MgSetMasterController implements Serializable {
         mgSetMasterFacade.save(item);
         findByStatusNotInMaster();
     }
- public boolean showConfirm(MgSetMaster item){
-     System.out.println(userSession.getUser().getRole());
-        if(userSession.getUser().getRole().equalsIgnoreCase("2") && item.getStatus().compareTo(MgSetMasterStatus.SEND) == 0){
+
+    public boolean showConfirm(MgSetMaster item) {
+        System.out.println(userSession.getUser().getRole());
+        if (userSession.getUser().getRole().equalsIgnoreCase("2") && item.getStatus().compareTo(MgSetMasterStatus.SEND) == 0) {
             return true;
         }
         return false;
     }
+
     private void findByStatusNotInMaster() {
         items = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
     }
@@ -285,6 +292,7 @@ public class MgSetMasterController implements Serializable {
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
+        findByStatusNotInMaster();
     }
 
     public void onRowEdit(RowEditEvent event) {
@@ -454,6 +462,16 @@ public class MgSetMasterController implements Serializable {
             return "AUM";
         } else if (str.equalsIgnoreCase("2")) {
             return "成本";
+        } else {
+            return "error";
+        }
+    }
+
+    public String toMgActMChargeObj(String str) {
+        if (str.equalsIgnoreCase("C")) {
+            return "向客戶收費";
+        } else if (str.equalsIgnoreCase("P")) {
+            return "支付合作對象";
         } else {
             return "error";
         }
