@@ -18,7 +18,7 @@
                 <p:commandButton id="createButton" icon="ui-icon-plus"   value="新增子活動"
                                  actionListener="#{mgSetDetailController.prepareCreate}" 
                                  update=":MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDialog').show()"
-                                 rendered="#{userSession.user.role.equalsIgnoreCase('3')}"/>
+                                 rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>
                 <p:separator />
 
                 <p:panelGrid style="width:100%" >

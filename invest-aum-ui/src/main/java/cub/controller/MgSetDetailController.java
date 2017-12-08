@@ -341,7 +341,7 @@ public class MgSetDetailController implements Serializable {
         mgSetDetail.setCrtDate(new Date());
         mgSetDetail.setStatus(MgSetMasterStatus.SEND);
         
-        if(mgSetActDetailEndDate.after(mgSetActDetailStartDate)){
+        if(mgSetActDetailEndDate.before(mgSetActDetailStartDate)){
              JsfUtil.addErrorMessage("起迄日期設定有誤，請起迄日期設定");            
             return;
         }
@@ -365,10 +365,10 @@ public class MgSetDetailController implements Serializable {
             rng.setMgActSubCode(mgSetDetail.getMgActDSeq());
             mgSetDetailRngCfgFacade.save(rng);
         }
-        if (rangeError) {
-            JsfUtil.addErrorMessage("級距設定異常，請確認級距設定");            
-            return;
-        }
+//        if (rangeError) {
+//            JsfUtil.addErrorMessage("級距設定異常，請確認級距設定");            
+//            return;
+//        }
         
         for (String chl : selectedChannel) {
             MgSetDetailChlCfg msdcc = new MgSetDetailChlCfg();
