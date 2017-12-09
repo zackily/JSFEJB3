@@ -10,8 +10,8 @@
         <p:dialog id="MgSetDetailCreateDlg" widgetVar="MgSetDetailCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="管理費子活動案設定" width="1200px">
             <h:form id="MgSetDetailCreateForm" prependId="false">
                 <p:growl id="dlgMsg"/>
-                <p:scrollPanel style="width:1200px;height:600px">
-                    <p:panelGrid style="width: 100%"> 
+                <p:scrollPanel mode="native" style="width:1175px;height:500px" >
+                    <p:panelGrid style="width: 95%"> 
                         <p:row>
                             <p:column styleClass="ui-widget-header" style="width: 110px">
                                 <p:outputLabel value="主活動案" />
@@ -30,9 +30,7 @@
                                 <p:outputLabel value="子活動案代碼" for="mgActDCode" />
                             </p:column>
                             <p:column>
-                                <p:outputLabel id="mgActDCode" value="#{mgSetDetailController.mgSetDetail.mgSetMasterId.mgActMChargeObj}
-                                               #{mgSetDetailController.mgSetDetail.mgSetMasterId.mgActMCode}
-                                               #{mgSetDetailController.showMgSetDetailCode()}" 
+                                <p:outputLabel id="mgActDCode" value="#{mgSetDetailController.mgSetDetail.mgSetMasterId.mgActMChargeObj}#{mgSetDetailController.mgSetDetail.mgSetMasterId.mgActMCode}#{mgSetDetailController.showMgSetDetailCode()}" 
                                                title="#{bundle.CreateMgSetDetailTitle_mgActDCode}"/>                          
                             </p:column>
                         </p:row>                       
@@ -150,91 +148,6 @@
                                 </p:selectOneRadio>
                             </p:column>
                         </p:row>
-
-                        <p:row>
-                            <p:column styleClass="ui-widget-header">
-                                <p:outputLabel value="級距規則"  />  
-                            </p:column>
-                            <p:column>
-
-                                <p:selectBooleanCheckbox />
-                                <p:spacer width="5"/>
-                                <h:outputText value="依對應管理費計算" />
-
-                                <p:dataTable id="datalist" value="#{mgSetDetailController.rangeList}" var="item"
-                                             paginator="true"
-                                             rowKey="#{item.id}"
-                                             rows="10"                         
-                                             rowsPerPageTemplate="10,20,30,40,50"
-                                             emptyMessage="查無資料"                                            
-                                             rowIndexVar="index"                                             
-                                             paginatorPosition="bottom"
-                                             style="text-align: center"                                           
-                                             >            
-
-                                    <f:facet name="header">
-                                        <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-plus" value="新增級距" 
-                                                         actionListener="#{mgSetDetailController.addMSDRC()}" 
-                                                         update=":MgSetDetailCreateForm:datalist" />   
-                                    </f:facet>
-
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="幣別"/>
-                                        </f:facet>
-                                        <p:selectOneMenu value="#{item.mgActCurrency}" >
-                                            <f:selectItem itemLabel="TWD" itemValue="TWD" />
-                                            <f:selectItem itemLabel="USD" itemValue="USD" />
-                                            <f:selectItem itemLabel="EUR" itemValue="EUR" />
-                                        </p:selectOneMenu>
-                                    </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="最低金額"/>
-                                        </f:facet>
-                                        <p:inputNumber size="15" value="#{item.mgActLowAmt}"/>
-                                    </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="最高金額"/>
-                                        </f:facet>
-                                        <p:inputNumber size="15" value="#{item.mgActHightAmt}"/>
-                                    </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="經理費率(%)"/>
-                                        </f:facet>
-                                        <p:inputNumber size="15" value="#{item.mgActMgMapRate}"/>
-                                    </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="費率(bps)"/>
-                                        </f:facet>
-                                        <p:inputNumber size="15" value="#{item.mgActBps}"/>
-                                    </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value="經理費分成(%)"/>
-                                        </f:facet>
-                                        <p:inputNumber size="15" value="#{item.mgActMgRtnRate}"/>
-
-                                    </p:column>
-                                    <p:column>
-                                        <f:facet name="header">
-                                            <h:outputText value=""/>
-                                        </f:facet>
-
-                                        <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-minus" value="刪除" 
-                                                         actionListener="#{mgSetDetailController.minusMSDRC(item)}" 
-                                                         update=":MgSetDetailCreateForm:datalist" />  
-                                    </p:column>
-
-
-                                </p:dataTable>
-
-                            </p:column>
-                        </p:row>
-
                         <p:row>
                             <p:column styleClass="ui-widget-header">
                                 <p:outputLabel value="適用客群" for="mgActDCostId" />
@@ -252,23 +165,102 @@
                             </p:column>
                         </p:row>
                     </p:panelGrid>
-                    <center>
-                        
-                        <p:commandButton icon="ui-icon-cancel" actionListener="#{mgSetDetailController.cancel()}" value="取消"                                      
-                                          oncomplete="PF('MgSetDetailCreateDlg').hide()"
-                                         update=":MgSetDetailCreateForm" 
-                                          process="@this" />
-                    <p:commandButton icon="ui-icon-plus" actionListener="#{mgSetDetailController.create()}" value="送出覆核" 
-                                      update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist " 
-                                      rendered="#{mgSetDetailController.showSend()}" />
-                    <p:commandButton icon="ui-icon-confirm" actionListener="#{mgSetDetailController.confirm('CONFIRM')}" value="同意覆核" 
-                                     update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist "                                    
-                                    rendered="#{mgSetDetailController.showConfirm()}" />
-                    <p:commandButton icon="ui-icon-reject" actionListener="#{mgSetDetailController.confirm('REJECT')}" value="退回" 
-                                     update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist "                                    
-                                     rendered="s#{mgSetDetailController.showRejectBtn()}" />
 
-                        
+
+                    <p:fieldset legend="級距設定">
+                    <p:selectBooleanCheckbox />
+                    <p:spacer width="5"/>
+                    <h:outputText value="依對應管理費計算" />
+
+                    <p:dataTable id="datalist" 
+                                 value="#{mgSetDetailController.rangeList}" var="item"
+                                 paginator="true"                                            
+                                 rows="10"                         
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 emptyMessage="查無資料"              
+                                 paginatorPosition="bottom"
+
+                                 >            
+
+                        <f:facet name="header">
+                            <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-plus" value="新增級距" 
+                                             actionListener="#{mgSetDetailController.addMSDRC()}" 
+                                             update=":MgSetDetailCreateForm:datalist" />   
+                        </f:facet>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="幣別"/>
+                            </f:facet>
+                            <p:selectOneMenu value="#{item.mgActCurrency}" >
+                                <f:selectItem itemLabel="TWD" itemValue="TWD" />
+                                <f:selectItem itemLabel="USD" itemValue="USD" />
+                                <f:selectItem itemLabel="EUR" itemValue="EUR" />
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="最低金額"/>
+                            </f:facet>
+                            <p:inputNumber size="15" value="#{item.mgActLowAmt}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="最高金額"/>
+                            </f:facet>
+                            <p:inputNumber size="15" value="#{item.mgActHightAmt}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="經理費率(%)"/>
+                            </f:facet>
+                            <p:inputNumber size="15" value="#{item.mgActMgMapRate}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="費率(bps)"/>
+                            </f:facet>
+                            <p:inputNumber size="15" value="#{item.mgActBps}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="經理費分成(%)"/>
+                            </f:facet>
+                            <p:inputNumber size="15" value="#{item.mgActMgRtnRate}"/>
+
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="功能"/>
+                            </f:facet>
+
+                            <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-minus" value="刪除" 
+                                             actionListener="#{mgSetDetailController.minusMSDRC(item)}" 
+                                             update=":MgSetDetailCreateForm:datalist" />  
+                        </p:column>
+
+
+                    </p:dataTable>
+
+                    </p:fieldset>
+
+                    <center>
+
+                        <p:commandButton icon="ui-icon-cancel" actionListener="#{mgSetDetailController.cancel()}" value="取消"                                      
+                                         oncomplete="PF('MgSetDetailCreateDlg').hide()"
+                                         update=":MgSetDetailCreateForm" 
+                                         process="@this" />
+                        <p:commandButton icon="ui-icon-plus" actionListener="#{mgSetDetailController.create()}" value="送出覆核" 
+                                         update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist " 
+                                         rendered="#{mgSetDetailController.showSend()}" />
+                        <p:commandButton icon="ui-icon-confirm" actionListener="#{mgSetDetailController.confirm('CONFIRM')}" value="同意覆核" 
+                                         update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist "                                    
+                                         rendered="#{mgSetDetailController.showConfirm()}" />
+                        <p:commandButton icon="ui-icon-reject" actionListener="#{mgSetDetailController.confirm('REJECT')}" value="退回" 
+                                         update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist "                                    
+                                         rendered="s#{mgSetDetailController.showRejectBtn()}" />
+
+
 
                     </center>
                 </p:scrollPanel>

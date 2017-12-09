@@ -142,11 +142,12 @@
 
                 <p:column style="width:20%">
                     <f:facet name="header">
-                        <h:outputText value=""/>
+                        <h:outputText value="#{item.status}"/>
                     </f:facet>
                                      
-                    <p:commandButton icon="ui-icon-pencil" value="查看/修改" actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
-                                     update=":MgSetDetailCreateForm " oncomplete="PF('MgSetDetailCreateDialog').show()"
+                    <p:commandButton icon="ui-icon-pencil"  value="查看/修改" 
+                                     actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
+                                     update=":MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDialog').show()"
                                     /> 
 
                    

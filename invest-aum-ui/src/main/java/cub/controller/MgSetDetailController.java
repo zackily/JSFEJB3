@@ -256,6 +256,7 @@ public class MgSetDetailController implements Serializable {
     }
 
     public void prepareUpdate(MgSetDetail item) {
+//        RequestContext.getCurrentInstance().update(":MgSetDetailCreateForm :MgSetDetailCreateForm:datalist");
         this.selected = item;
         this.mgSetDetail = item;
         mgSetActDetailStartDate = new DateTime(mgSetDetail.getMgActDStartDate()).toDate();
@@ -340,14 +341,16 @@ public class MgSetDetailController implements Serializable {
     public String showMgSetDetailCode() {
         MgSetDetail lastObj = null;
         int seq = 0;
+        System.out.println(mgSetDetail.getMgActDSeq());
         if (StringUtils.isEmpty(mgSetDetail.getMgActDSeq())) {
             lastObj = mgSetDetailFacade.findByLastSeqMgSetDetail(mgSetDetail.getMgSetMasterId());
             seq = lastObj.getId().intValue();
+            return utils.toPlusOneString(seq, 2);
         } else {
-            seq = Integer.parseInt(mgSetDetail.getMgActDSeq());
+           return mgSetDetail.getMgActDSeq();
         }
 
-        return utils.toPlusOneString(seq, 2);
+       
     }
 
     public MgSetDetail getSelected() {
@@ -373,6 +376,7 @@ public class MgSetDetailController implements Serializable {
     }
 
     public MgSetDetail prepareCreate() {
+        RequestContext.getCurrentInstance().reset(":MgSetDetailCreateForm");
         selectedChannel = new ArrayList<String>();
         rangeList = new ArrayList<MgSetDetailRngCfg>();
         selectedRange = new MgSetDetailRngCfg();
