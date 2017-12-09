@@ -46,6 +46,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
@@ -128,7 +129,7 @@ public class MgSetDetailController implements Serializable {
     
     @PostConstruct
     public void init() {
-        items = mgSetDetailFacade.findByStatusNotInMgDetail(MgSetMasterStatus.DELETE);
+       findByStatusNotInDetail();
         emfList = new ArrayList<EricMgFeeMonth>();
         emfDlist = new ArrayList<EricMgFeeMonthDetail>();
         holdingList = new ArrayList<AcctFundHoldingRenew>();
@@ -144,6 +145,10 @@ public class MgSetDetailController implements Serializable {
         productSeriesList = new ArrayList<String>();
     }
     
+    public void findByStatusNotInDetail(){
+         items = mgSetDetailFacade.findByStatusNotInMgDetail(MgSetMasterStatus.DELETE);
+    }
+    
     public void prepareDelete(MgSetDetail item) {
         this.selected = item;
         item.setStatus(MgSetMasterStatus.DELETE);
@@ -151,10 +156,68 @@ public class MgSetDetailController implements Serializable {
         JsfUtil.addSuccessMessage("子活動案已刪除");
     }
     
+     public void update(String status) {
+        updateDetail(mgSetDetail, status);
+        FacesMessage msg = new FacesMessage(MgSetMasterStatus.valueOf(status).getStatus() + "主活動編號為" + mgSetDetail.getMgSetMasterId()+"子活動編號為"+mgSetDetail.getMgActDSeq());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void confirm(String status) {
+        confirmDetail(selected, status);
+        FacesMessage msg = new FacesMessage(MgSetMasterStatus.valueOf(status).getStatus() + "主活動編號為" + mgSetDetail.getMgSetMasterId()+"子活動編號為"+mgSetDetail.getMgActDSeq());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void updateDetail(MgSetDetail item, String status) {
+        item.setCrtDate(new Date());
+        item.setCrtEmpId(userSession.getUser().getEmpId());
+        item.setCrtEmpName(userSession.getUser().getEmpname());
+        if (StringUtils.isNotEmpty(status)) {
+            item.setStatus(MgSetMasterStatus.valueOf(status));
+        }
+        mgSetDetailFacade.save(item);
+        findByStatusNotInDetail();
+    }
+
+    public void confirmDetail(MgSetDetail item, String status) {
+        item.setCfmDate(new Date());
+        item.setCfmEmpId(userSession.getUser().getEmpId());
+        item.setCfmEmpName(userSession.getUser().getEmpname());
+        item.setStatus(MgSetMasterStatus.valueOf(status));
+        mgSetDetailFacade.save(item);
+        findByStatusNotInDetail();
+    }
+    
     public boolean showConfirm(MgSetDetail item){
         System.out.println(userSession.getUser().getRole()+"=="+item.getStatus().getStatus());
         if(userSession.getUser().getRole().equalsIgnoreCase("2") ){
             System.out.println("fuxk = true");
+            return true;
+        }
+        return false;
+    }
+    
+       public boolean showConfirm() {
+
+        if (userSession.getUser().getRole().equalsIgnoreCase("2") && selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showSend() {
+
+        if (userSession.getUser().getRole().equalsIgnoreCase("1")
+                && (selected.getStatus() == null || selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0
+                || selected.getStatus().compareTo(MgSetMasterStatus.REJECT) == 0)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showDelete() {
+        if (userSession.getUser().getRole().equalsIgnoreCase("1")
+                && (selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0 || selected.getStatus().compareTo(MgSetMasterStatus.REJECT) == 0)) {
             return true;
         }
         return false;

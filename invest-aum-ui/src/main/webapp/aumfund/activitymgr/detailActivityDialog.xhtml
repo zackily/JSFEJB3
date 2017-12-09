@@ -251,6 +251,26 @@
                         </p:row>
                     </p:panelGrid>
                     <center>
+                        
+                        <p:commandButton icon="ui-icon-cancel" actionListener="#{mgSetDetailController.cancel()}" value="取消"                                      
+                                          oncomplete="PF('MgSetDetailCreateDlg').hide()"
+                                         update=":MgSetDetailCreateForm" 
+                                          process="@this" />
+                    <p:commandButton icon="ui-icon-plus" actionListener="#{mgSetDetailController.create}" value="送出覆核" 
+                                      update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist "
+                                      oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
+                                     rendered="#{mgSetDetailController.showSend()}"/>
+                    <p:commandButton icon="ui-icon-confirm" actionListener="#{mgSetDetailController.confirm('CONFIRM')}" value="同意覆核" 
+                                     update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
+                                      rendered="#{mgSetDetailController.showConfirm()}"/>
+                    <p:commandButton icon="ui-icon-reject" actionListener="#{mgSetDetailController.confirm('REJECT')}" value="退回" 
+                                     update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
+                                     rendered="#{mgSetDetailController.showRejectBtn()}"/>
+                    <p:commandButton icon="ui-icon-minus" actionListener="#{mgSetDetailController.update('DELETE')}" value="刪除" 
+                                     update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
+                                     rendered="#{mgSetDetailController.showDelete()}"/>
+                        
+                        
                         <p:commandButton icon="ui-icon-plus" value="取消" actionListener="#{mgSetDetailController.cancel()}" 
                                          oncomplete="PF('MgSetDetailCreateDlg').hide()"
                                          update=":MgSetDetailCreateForm" 
@@ -258,12 +278,11 @@
                         <p:commandButton icon="ui-icon-pencil" value="暫存" actionListener="#{mgSetDetailController.update()}" 
                                          update=":MgSetDetailCreateForm" 
                                          rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
-                        <p:commandButton icon="ui-icon-minus" value="資料匯出" actionListener="#{mgSetDetailController.export()}" 
+<!--                        <p:commandButton icon="ui-icon-minus" value="資料匯出" actionListener="#{mgSetDetailController.export()}" 
                                          update=":MgSetDetailCreateForm" 
-                                         rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
+                                         rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> -->
                         <p:commandButton icon="ui-icon-confirm" value="提交覆核" actionListener="#{mgSetDetailController.create()}" 
-                                         update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist " 
-                                       
+                                         update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm :MgSetDetailListForm:datalist "                                        
                                          rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
                     </center>
                 </p:scrollPanel>
