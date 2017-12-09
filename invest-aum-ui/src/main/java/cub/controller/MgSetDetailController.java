@@ -49,6 +49,8 @@ import javax.faces.convert.FacesConverter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.FileUploadEvent;
@@ -259,8 +261,10 @@ public class MgSetDetailController implements Serializable {
 //        RequestContext.getCurrentInstance().update(":MgSetDetailCreateForm :MgSetDetailCreateForm:datalist");
         this.selected = item;
         this.mgSetDetail = item;
-        mgSetActDetailStartDate = new DateTime(mgSetDetail.getMgActDStartDate()).toDate();
-        mgSetActDetailEndDate = new DateTime(mgSetDetail.getMgActDEndDate()).toDate();
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
+
+        mgSetActDetailStartDate = formatter.parseDateTime(mgSetDetail.getMgActDStartDate()).toDate();
+        mgSetActDetailEndDate =formatter.parseDateTime(mgSetDetail.getMgActDEndDate()).toDate();
         List<MgSetDetailChlCfg> msdcc = mgSetDetailChlCfgFacade.findBySelectChannel(item.getMgActDCode(), item.getMgActDSeq());
         if (selectedChannel != null) {
             selectedChannel.clear();
