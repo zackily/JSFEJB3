@@ -207,6 +207,28 @@ public class MgSetMasterController implements Serializable {
         return selected;
     }
 
+    public boolean showRejectBtn(MgSetMaster item) {
+        if (userSession.getUser().getRole().equalsIgnoreCase("2") && (item.getStatus().compareTo(MgSetMasterStatus.SEND) == 0)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showRejectBtn() {
+        if (userSession.getUser().getRole().equalsIgnoreCase("2") && (selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showDelete(MgSetMaster item) {
+        if (userSession.getUser().getRole().equalsIgnoreCase("1")
+                && (item.getStatus().compareTo(MgSetMasterStatus.SEND) == 0)) {
+            return true;
+        }
+        return false;
+    }
+
     public void prepareUpdate(MgSetMaster item) {
         //init form
         RequestContext.getCurrentInstance().reset(":MgSetMasterCreateForm");
@@ -252,6 +274,32 @@ public class MgSetMasterController implements Serializable {
     public boolean showConfirm(MgSetMaster item) {
         System.out.println(userSession.getUser().getRole());
         if (userSession.getUser().getRole().equalsIgnoreCase("2") && item.getStatus().compareTo(MgSetMasterStatus.SEND) == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showConfirm() {
+
+        if (userSession.getUser().getRole().equalsIgnoreCase("2") && selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showSend() {
+
+        if (userSession.getUser().getRole().equalsIgnoreCase("1")
+                && (selected.getStatus() == null || selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0
+                || selected.getStatus().compareTo(MgSetMasterStatus.REJECT) == 0)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean showDelete() {
+        if (userSession.getUser().getRole().equalsIgnoreCase("1")
+                && (selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0 || selected.getStatus().compareTo(MgSetMasterStatus.REJECT) == 0)) {
             return true;
         }
         return false;

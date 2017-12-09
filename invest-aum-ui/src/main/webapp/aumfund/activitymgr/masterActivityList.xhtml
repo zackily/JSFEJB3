@@ -160,18 +160,21 @@
 <!--                    <p:commandButton icon="ui-icon-plus" value="建立子活動" actionListener="#{mgSetMasterController.addDetail(item)}" 
                                      update=":MgSetMasterCreateForm :MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDialog').show()" 
                                      rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>                     -->
-                    <p:commandButton icon="ui-icon-pencil" value="修改" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
+                     <p:commandButton icon="ui-icon-pencil" value="內容" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
+                                     update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()" 
+                                     /> 
+<!--                    <p:commandButton icon="ui-icon-pencil" value="修改" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
                                      update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
-                    <p:commandButton icon="ui-icon-minus" value="刪除" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> -->
+<!--                    <p:commandButton icon="ui-icon-minus" value="刪除" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
                                      update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
-                    <p:commandButton icon="ui-icon-confirm" value="覆核同意" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> -->
+<!--                    <p:commandButton icon="ui-icon-confirm" value="覆核同意" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
                                      update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                     rendered="#{mgSetMasterController.showConfirm(item)}"/> 
-                    <p:commandButton icon="ui-icon-reject" value="退回" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
+                                     rendered="#{mgSetMasterController.showConfirm(item)}"/> -->
+<!--                    <p:commandButton icon="ui-icon-reject" value="退回" actionListener="#{mgSetMasterController.prepareUpdate(item)}" 
                                      update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
-                                     rendered="#{userSession.user.role.equalsIgnoreCase('2')}"/> 
+                                     rendered="#{mgSetMasterController.showRejectBtn(item)}"/> -->
                     <!--<p:commandButton icon="ui-icon-document" value="匯入子活動" actionListener="#{mgSetMasterController.importDetail(item)}" update=":MgSetMasterCreateForm :MgSetDetailImportForm :MgSetDetailCreateForm" oncomplete="PF('MgSetDetailImportDlg').show()"/>--> 
 <!--                    <p:commandButton icon="ui-icon-search" value="子活動清單" actionListener="#{mgSetMasterController.findByMasterId(item)}" 
                                      update=":MgSetMasterCreateForm :MgSetDetailListForm:detailDatalist" oncomplete="PF('MgSetDetailListDlg').show()" />-->
