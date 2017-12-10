@@ -27,6 +27,7 @@ import cub.vo.ProductVO;
 import java.io.IOException;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -89,6 +90,8 @@ public class MgSetDetailController implements Serializable {
     private List<String> productSeriesList;
 
     private List<MgSetDetailRngCfg> rangeList;
+    private List<MgSetDetailChlCfg> chlList;
+
     private MgSetDetailRngCfg selectedRange;
     private MgSetDetail selected;
     private MgSetDetail mgSetDetail;
@@ -264,14 +267,15 @@ public class MgSetDetailController implements Serializable {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
 
         mgSetActDetailStartDate = formatter.parseDateTime(mgSetDetail.getMgActDStartDate()).toDate();
-        mgSetActDetailEndDate =formatter.parseDateTime(mgSetDetail.getMgActDEndDate()).toDate();
-        List<MgSetDetailChlCfg> msdcc = mgSetDetailChlCfgFacade.findBySelectChannel(item.getMgActDCode(), item.getMgActDSeq());
+        mgSetActDetailEndDate = formatter.parseDateTime(mgSetDetail.getMgActDEndDate()).toDate();
+        chlList = mgSetDetailChlCfgFacade.findBySelectChannel(item.getMgActDCode(), item.getMgActDSeq());
+
         if (selectedChannel != null) {
             selectedChannel.clear();
         } else {
             selectedChannel = new ArrayList<String>();
         }
-        for (MgSetDetailChlCfg m : msdcc) {
+        for (MgSetDetailChlCfg m : chlList) {
             selectedChannel.add(m.getMgActSaleChnlCode());
         }
         rangeList = mgSetDetailRngCfgFacade.findByRng(item.getMgActDCode(), item.getMgActDSeq());
@@ -351,10 +355,9 @@ public class MgSetDetailController implements Serializable {
             seq = lastObj.getId().intValue();
             return utils.toPlusOneString(seq, 2);
         } else {
-           return mgSetDetail.getMgActDSeq();
+            return mgSetDetail.getMgActDSeq();
         }
 
-       
     }
 
     public MgSetDetail getSelected() {
@@ -429,25 +432,43 @@ public class MgSetDetailController implements Serializable {
 
         boolean rangeError = false;
         String errMsg = "";
+        BigDecimal tmpHigh = null;
         for (MgSetDetailRngCfg rng : rangeList) {
+            System.out.println("Low=" + rng.getMgActLowAmt() + "High=" + rng.getMgActHightAmt());
             if (rng.getMgActLowAmt().compareTo(rng.getMgActHightAmt()) == 1) {
+                System.out.println("error");
                 rangeError = true;
                 errMsg = "級距設定異常，請確認級距設定。";
+                break;
             }
-            if (rng.getMgActBps() != null && rng.getMgActBps().compareTo(BigInteger.ZERO) == 1) {
+            if (rng.getMgActBps() != null && BigInteger.ZERO.compareTo(rng.getMgActBps()) == 1) {
                 rangeError = true;
                 errMsg = "費率(bps)設定異常，請確認費率(bps)設定。";
+                break;
             }
-            rng.setChangedate(new Date());
-            rng.setMgActCode(mgSetDetail.getMgActDCode());
-            rng.setMgActSubCode(mgSetDetail.getMgActDSeq());
-            mgSetDetailRngCfgFacade.save(rng);
+            if (tmpHigh == null || tmpHigh.compareTo(rng.getMgActLowAmt()) == 0) {
+                tmpHigh = rng.getMgActHightAmt();
+            } else {
+                rangeError = true;
+                errMsg = "級距設定異常，請確認級距設定。";
+                break;
+            }
         }
-//        if (rangeError) {
-//            JsfUtil.addErrorMessage("級距設定異常，請確認級距設定");            
-//            return;
-//        }
-
+        if (rangeError) {
+            JsfUtil.addErrorMessage(errMsg);
+            return;
+        } else {
+            for (MgSetDetailRngCfg rng : rangeList) {
+                rng.setChangedate(new Date());
+                rng.setMgActCode(mgSetDetail.getMgActDCode());
+                rng.setMgActSubCode(mgSetDetail.getMgActDSeq());
+                mgSetDetailRngCfgFacade.save(rng);
+            }
+        }
+        for (MgSetDetailChlCfg dbChl : chlList) {
+            mgSetDetailChlCfgFacade.remove(dbChl);
+        }
+        System.out.println("channel="+selectedChannel.size());
         for (String chl : selectedChannel) {
             MgSetDetailChlCfg msdcc = new MgSetDetailChlCfg();
             msdcc.setMgActCode(mgSetDetail.getMgActDCode());
@@ -455,23 +476,24 @@ public class MgSetDetailController implements Serializable {
             msdcc.setMgActSaleChnlCode(chl);
             mgSetDetailChlCfgFacade.save(msdcc);
         }
+
+        //   mgSetDetailChlCfgFacade.save(msdcc);
         mgSetDetailFacade.save(mgSetDetail);
 //        search();
-        JsfUtil.addSuccessMessage("子活動案新增完成");
+
+        JsfUtil.addSuccessMessage(
+                "子活動案新增完成");
         findByStatusNotInDetail();
-        // FacesMessage msg = new FacesMessage("子活動案新增完成==>" + mgSetDetail.getId());
-        //   FacesContext.getCurrentInstance().addMessage(null, msg);
-//        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailCreated"));
+
         if (!JsfUtil.isValidationFailed()) {
             rangeList = null;    // Invalidate list of items to trigger re-query.
         }
-        RequestContext.getCurrentInstance().execute("PF('MgSetDetailCreateDialog').hide();");
+
+        RequestContext.getCurrentInstance()
+                .execute("PF('MgSetDetailCreateDialog').hide();");
 
     }
 
-//    public void update() {
-//        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailUpdated"));
-//    }
     public void destroy() {
         persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("MgSetDetailDeleted"));
         if (!JsfUtil.isValidationFailed()) {
