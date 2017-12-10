@@ -62,12 +62,23 @@ public class MgCustActListFacade extends AbstractFacade<MgCustActList> {
             sql.append(" and  mcal.custId =:custId ");
         }
 
+        if (obj != null && StringUtils.isNotEmpty(obj.getActCode())) {
+            sql.append(" and  mcal.actCode =:actCode ");
+        }
+        if (obj != null && StringUtils.isNotEmpty(obj.getActSubCode())) {
+            sql.append(" and  mcal.actSubCode =:actSubCode ");
+        }
         Query q = em.createQuery(sql.toString());
 
         if (obj != null && StringUtils.isNotEmpty(obj.getCustId())) {
-            q.setParameter("custId", obj.getCustId());
+            q.setParameter("actCode", obj.getCustId());
         }
-
+        if (obj != null && StringUtils.isNotEmpty(obj.getActCode())) {
+            q.setParameter("custId", obj.getActCode());
+        }
+        if (obj != null && StringUtils.isNotEmpty(obj.getActSubCode())) {
+            q.setParameter("actSubCode", obj.getActSubCode());
+        }
         try {
             return (MgCustActList) q.getSingleResult();
         } catch (Exception e) {

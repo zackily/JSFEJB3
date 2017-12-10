@@ -411,11 +411,11 @@ public class MgSetDetailController implements Serializable {
     }
 
     public void saveIdn() {
-        mgCustActListFacade.removeByMgSetDetail(mgSetDetail);
-        for (MgCustActList obj : idnList) {
-            System.out.println(obj.getActCode() + "=" + obj.getActSubCode() + "=" + obj.getStatus());
-            mgCustActListFacade.save(obj);
-        }
+//        mgCustActListFacade.removeByMgSetDetail(mgSetDetail);
+//        for (MgCustActList obj : idnList) {
+//            System.out.println(obj.getActCode() + "=" + obj.getActSubCode() + "=" + obj.getStatus());
+//            mgCustActListFacade.save(obj);
+//        }
         JsfUtil.addSuccessMessage("IDN新增完成");
     }
 
@@ -487,6 +487,7 @@ public class MgSetDetailController implements Serializable {
         }
 
         mgCustActListFacade.removeByMgSetDetail(mgSetDetail);
+        System.out.println("custlist=" + idnList.size());
         for (MgCustActList obj : idnList) {
             System.out.println(obj.getActCode() + "=" + obj.getActSubCode() + "=" + obj.getStatus());
             mgCustActListFacade.findBySaveOrUpdate(obj);
