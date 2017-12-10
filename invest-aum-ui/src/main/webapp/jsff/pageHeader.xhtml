@@ -17,19 +17,19 @@
 
         <h:form id="headerForm">
             <h:panelGrid columns="2" cellpadding="10">
-<!--                <p:outputLabel for="lang" value="語系切換展示" />                 
+                <p:outputLabel for="lang" value="語系切換展示" />                 
                 <p:selectOneButton id="lang" value="#{menuController.language}">
                      <f:selectItem itemLabel="繁中" itemValue="TW" />      
                     <f:selectItem itemLabel="English" itemValue="EN" />                 
                     <p:ajax event="change" update=":header" listener="#{menuController.changeModel()}" />
-                </p:selectOneButton>-->
+                </p:selectOneButton>
                 
-<!--                <p:outputLabel for="basic" value="Theme Switch for Dev" /> 
+                <p:outputLabel for="basic" value="Theme Switch for Dev" /> 
                 <p:themeSwitcher id="basic" style="width:165px" >
                     <f:selectItem itemLabel="Choose Theme" itemValue="" />
                     <f:selectItems var="theme" value="#{mgSetMasterController.service.themes}" itemLabel="#{theme.displayName}" itemValue="#{theme}" />
 
-                </p:themeSwitcher>-->
+                </p:themeSwitcher>
 
                 <h:outputLabel id="roleview" value="目前身分為#{userSession.toRoleName()}"/>
                 <p:selectOneRadio id="roleid" value="#{userSession.user.role}" >                                            
