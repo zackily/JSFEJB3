@@ -16,7 +16,7 @@
             <p:growl id="msgs" autoUpdate="true"/>
             <p:fieldset>
                 <p:commandButton id="createButton" icon="ui-icon-plus"   value="新增主活動"
-                                 actionListener="#{mgSetMasterController.prepareCreate}" 
+                                 actionListener="#{mgSetMasterController.prepareCreate()}" 
                                  update=":MgSetMasterCreateForm" oncomplete="PF('MgSetMasterCreateDialog').show()"
                                  rendered="#{userSession.user.role eq '1'}"/>
                 <p:separator />

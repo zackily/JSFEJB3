@@ -83,8 +83,9 @@
                 <center>
                     <p:commandButton icon="ui-icon-cancel" actionListener="#{mgSetMasterController.reset}" value="取消" 
                                      onclick="PF('MgSetMasterCreateDialog').hide();" process="@this" />
-                    <p:commandButton icon="ui-icon-plus" actionListener="#{mgSetMasterController.create}" value="送出覆核" 
-                                     update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"
+                    <p:commandButton icon="ui-icon-plus" actionListener="#{mgSetMasterController.create()}" value="送出覆核" 
+                                     update=":MgSetMasterListForm :MgSetMasterListForm:datalist :MgSetMasterCreateForm :MgSetMasterListForm:msgs"    
+                                     onclick="PF('MgSetMasterCreateDialog').hide();"
                                      rendered="#{mgSetMasterController.showSend()}"/>
                     <p:commandButton icon="ui-icon-confirm" actionListener="#{mgSetMasterController.confirm('CONFIRM')}" value="同意覆核" 
                                      update=":MgSetMasterListForm:datalist,:growl" oncomplete="handleSubmit(args,'MgSetMasterCreateDialog');"

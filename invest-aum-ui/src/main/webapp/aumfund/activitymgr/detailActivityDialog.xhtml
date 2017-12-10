@@ -391,7 +391,7 @@
                     </p:column>
                 </p:dataTable>
 
-                <p:commandButton icon="ui-icon-confirm" value="確認" actionListener="#{mgSetDetailController.saveIdn()}" 
+                <p:commandButton icon="ui-icon-confirm" value="確認" 
                                  update=":MgSetDetailCreateForm:dlgMsg :MgSetDetailCreateForm:datalist :MgSetDetailListForm "  
                                  oncomplete="PF('MgCustActListDlg').hide()"
                                  rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>

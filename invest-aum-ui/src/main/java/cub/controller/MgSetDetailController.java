@@ -31,8 +31,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -240,6 +242,7 @@ public class MgSetDetailController implements Serializable {
             List<String> tmpList = new ArrayList<String>();
             UploadedFile uploadedFile = event.getFile();
             tmpList = IOUtils.readLines(uploadedFile.getInputstream());
+          //   Set<String> sortSet = new HashSet<String>(tmpList);
             for (String idn : tmpList) {
                 String[] idnary = idn.split("\\,");
                 MgCustActList obj = new MgCustActList();
@@ -352,7 +355,9 @@ public class MgSetDetailController implements Serializable {
         System.out.println(mgSetDetail.getMgActDSeq());
         if (StringUtils.isEmpty(mgSetDetail.getMgActDSeq())) {
             lastObj = mgSetDetailFacade.findByLastSeqMgSetDetail(mgSetDetail.getMgSetMasterId());
+            if(lastObj != null){
             seq = lastObj.getId().intValue();
+            }
             return utils.toPlusOneString(seq, 2);
         } else {
             return mgSetDetail.getMgActDSeq();
@@ -379,7 +384,8 @@ public class MgSetDetailController implements Serializable {
     }
 
     public void prepareIdn() {
-        idnList = new ArrayList<MgCustActList>();
+        idnList = mgCustActListFacade.findByQuery(mgSetDetail.getMgSetMasterId().getMgActMCode(), mgSetDetail.getMgActDSeq(), "");
+//        idnList = new ArrayList<MgCustActList>();
     }
 
     public MgSetDetail prepareCreate() {
@@ -405,6 +411,7 @@ public class MgSetDetailController implements Serializable {
     }
 
     public void saveIdn() {
+        mgCustActListFacade.removeByMgSetDetail(mgSetDetail);
         for (MgCustActList obj : idnList) {
             System.out.println(obj.getActCode() + "=" + obj.getActSubCode() + "=" + obj.getStatus());
             mgCustActListFacade.save(obj);
@@ -465,16 +472,24 @@ public class MgSetDetailController implements Serializable {
                 mgSetDetailRngCfgFacade.save(rng);
             }
         }
-        for (MgSetDetailChlCfg dbChl : chlList) {
-            mgSetDetailChlCfgFacade.remove(dbChl);
-        }
-        System.out.println("channel="+selectedChannel.size());
+
+        mgSetDetailChlCfgFacade.removeByMgSetDetail(mgSetDetail);
+//        for (MgSetDetailChlCfg dbChl : chlList) {
+//            mgSetDetailChlCfgFacade.remove(dbChl);
+//        }
+        System.out.println("channel=" + selectedChannel.size());
         for (String chl : selectedChannel) {
             MgSetDetailChlCfg msdcc = new MgSetDetailChlCfg();
             msdcc.setMgActCode(mgSetDetail.getMgActDCode());
             msdcc.setMgActSubCode(mgSetDetail.getMgActDSeq());
             msdcc.setMgActSaleChnlCode(chl);
             mgSetDetailChlCfgFacade.save(msdcc);
+        }
+
+        mgCustActListFacade.removeByMgSetDetail(mgSetDetail);
+        for (MgCustActList obj : idnList) {
+            System.out.println(obj.getActCode() + "=" + obj.getActSubCode() + "=" + obj.getStatus());
+            mgCustActListFacade.findBySaveOrUpdate(obj);
         }
 
         //   mgSetDetailChlCfgFacade.save(msdcc);

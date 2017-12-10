@@ -5,6 +5,7 @@
  */
 package cub.facade;
 
+import cub.entities.MgSetDetail;
 import cub.entities.MgSetDetailChlCfg;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -31,6 +32,14 @@ public class MgSetDetailChlCfgFacade extends AbstractFacade<MgSetDetailChlCfg> {
 
     public MgSetDetailChlCfgFacade() {
         super(MgSetDetailChlCfg.class);
+    }
+
+    public int removeByMgSetDetail(MgSetDetail detail) {
+        StringBuffer sql = new StringBuffer("DELETE FROM MgSetDetailChlCfg msdc WHERE msdc.mgActCode =:mgActCode and msdc.mgActSubCode =:mgActSubCode  ");
+        Query q = em.createQuery(sql.toString());
+        q.setParameter("mgActCode", detail.getMgSetMasterId().getMgActMCode());
+        q.setParameter("mgActSubCode", detail.getMgActDSeq());
+        return q.executeUpdate();
     }
 
     public List<MgSetDetailChlCfg> findBySelectChannel(String act_code, String act_sub_code) {

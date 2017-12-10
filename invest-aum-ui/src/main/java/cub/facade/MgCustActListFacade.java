@@ -6,6 +6,7 @@
 package cub.facade;
 
 import cub.entities.MgCustActList;
+import cub.entities.MgSetDetail;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -32,6 +33,46 @@ public class MgCustActListFacade extends AbstractFacade<MgCustActList> {
 
     public MgCustActListFacade() {
         super(MgCustActList.class);
+    }
+
+    public MgCustActList findBySaveOrUpdate(MgCustActList obj) {
+        MgCustActList newObj = findByQuery(obj);
+        if (newObj == null) {
+            return save(obj);
+        } else {
+            newObj.setActStartDt(obj.getActStartDt());
+            newObj.setActEndDt(obj.getActEndDt());
+            newObj.setActDataDt(obj.getActDataDt());
+            newObj.setUpdateDttm(new Date());
+            return save(newObj);
+        }
+    }
+
+    public int removeByMgSetDetail(MgSetDetail detail) {
+        StringBuffer sql = new StringBuffer("DELETE FROM MgCustActList mcal WHERE mcal.actCode =:actCode and mcal.actSubCode =:actSubCode  ");
+        Query q = em.createQuery(sql.toString());
+        q.setParameter("actCode", detail.getMgSetMasterId().getMgActMCode());
+        q.setParameter("actSubCode", detail.getMgActDSeq());
+        return q.executeUpdate();
+    }
+
+    public MgCustActList findByQuery(MgCustActList obj) {
+        StringBuffer sql = new StringBuffer("SELECT mcal FROM MgCustActList mcal WHERE 1=1 ");
+        if (obj != null && StringUtils.isNotEmpty(obj.getCustId())) {
+            sql.append(" and  mcal.custId =:custId ");
+        }
+
+        Query q = em.createQuery(sql.toString());
+
+        if (obj != null && StringUtils.isNotEmpty(obj.getCustId())) {
+            q.setParameter("custId", obj.getCustId());
+        }
+
+        try {
+            return (MgCustActList) q.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<MgCustActList> findByQuery(String act_code, String act_sub_code, String custId) {
