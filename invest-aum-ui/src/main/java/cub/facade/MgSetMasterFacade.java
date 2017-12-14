@@ -69,10 +69,10 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
     public List<MgSetMaster> findByMgMasterVO(MgMasterVO vo) {
         StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");
         if (StringUtils.isNotEmpty(vo.getMgActMCode())) {
-            sql.append(" and msm.mgActMCode =:mgActMCode ");
+            sql.append(" and msm.mgActMCode like :mgActMCode ");
         }
         if (StringUtils.isNotEmpty(vo.getMgActMName())) {
-            sql.append(" and msm.mgActMName =:mgActMName ");
+            sql.append(" and msm.mgActMName like :mgActMName ");
         }
         if (StringUtils.isNotEmpty(vo.getMgActMType())) {
             sql.append(" and msm.mgActMType =:mgActMType ");
@@ -93,11 +93,11 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
         Query q = em.createQuery(sql.toString());
 
         if (StringUtils.isNotEmpty(vo.getMgActMCode())) {
-            q.setParameter("mgActMCode", vo.getMgActMCode());
+            q.setParameter("mgActMCode", "%"+vo.getMgActMCode()+"%");
 
         }
         if (StringUtils.isNotEmpty(vo.getMgActMName())) {
-            q.setParameter("mgActMName", vo.getMgActMName());
+            q.setParameter("mgActMName", "%"+vo.getMgActMName()+"%");
         }
         if (StringUtils.isNotEmpty(vo.getMgActMType())) {
             q.setParameter("mgActMType", vo.getMgActMType());

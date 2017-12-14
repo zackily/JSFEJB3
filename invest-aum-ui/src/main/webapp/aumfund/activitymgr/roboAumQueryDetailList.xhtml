@@ -65,52 +65,58 @@
                          rows="10"                         
                          rowsPerPageTemplate="10,20,30,40,50"
                          emptyMessage="查無資料"
-                       
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                          >             
 
-              
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel.png" width="24"/>
+                        <p:dataExporter type="xls" target="datalist" fileName="roboAumDetailList" />
+                    </h:commandLink>             
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="客戶ID"/>
-                    </f:facet>
-                    <h:outputText value="#{item.custId}"/>
-                </p:column>
-                
-                 <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="TRUSTACCT"/>
-                    </f:facet>
-                     <h:outputText value="#{item.trustacct}"/>
-                </p:column>
-         
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="幣別"/>
-                    </f:facet>
-                    <h:outputText value="#{item.currency}"/>
+                </f:facet>
 
-                </p:column>
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="AUM 管理費"/>
-                    </f:facet>
-                    <h:outputText value="#{item.aumFee}"/>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="客戶ID"/>
+                        </f:facet>
+                        <h:outputText value="#{item.custId}"/>
+                    </p:column>
 
-                </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="TRUSTACCT"/>
+                        </f:facet>
+                        <h:outputText value="#{item.trustacct}"/>
+                    </p:column>
 
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="AUM 管理費 Remain"/>
-                    </f:facet>
-                    <h:outputText value="#{item.aumRemainFee}"/>
-                </p:column>
-                
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="幣別"/>
+                        </f:facet>
+                        <h:outputText value="#{item.currency}"/>
+
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="AUM 管理費"/>
+                        </f:facet>
+                        <h:outputText value="#{item.aumFee}"/>
+
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="AUM 管理費 Remain"/>
+                        </f:facet>
+                        <h:outputText value="#{item.aumRemainFee}"/>
+                    </p:column>
+
             </p:dataTable>
 
         </h:form>
 
-       
+
         <ui:include src="/jsff/ajaxStatusDlg.xhtml"/>  
     </ui:define>
 </ui:composition>

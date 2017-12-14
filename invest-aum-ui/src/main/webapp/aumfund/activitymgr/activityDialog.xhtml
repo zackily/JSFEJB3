@@ -10,7 +10,7 @@
 
         <p:dialog id="MgSetMasterCreateDlg" widgetVar="MgSetMasterCreateDialog" modal="true" resizable="false"  header="管理費主活動案新增設定" width="60%">
             <h:form id="MgSetMasterCreateForm">
-
+                <p:messages id="dlgmsg" autoUpdate="true"/>
                 <p:panelGrid rendered="#{mgSetMasterController.selected != null}" style="width: 100%">
                     
                     <p:row>
@@ -42,7 +42,10 @@
                         <p:column>
                             <p:inputText size="50" id="mgActMName" value="#{mgSetMasterController.selected.mgActMName}" 
                                          title="#{bundle.CreateMgSetMasterTitle_mgActMName}" required="true" requiredMessage="請輸入活動名稱" 
-                                         disabled="#{userSession.user.role.equalsIgnoreCase('2')}"/>
+                                         disabled="#{userSession.user.role.equalsIgnoreCase('2')}">
+                                <f:validateLength maximum="25" />
+                                <p:ajax update="dlgmsg" event="blur" />
+                            </p:inputText>
                         </p:column>
                     </p:row>
                     <p:row>
