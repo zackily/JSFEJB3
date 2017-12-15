@@ -11,7 +11,7 @@ package cub.enums;
  */
 public enum MgSetMasterStatus {
 
-    SEND("送出待覆核"), PROCESSING("處理中"), REJECT("退回"), CONFIRM("已覆核"), CLOSED("結案"),DELETE("刪除");
+    SEND("待覆核"), PROCESSING("處理中"), REJECT("退回"), CONFIRM("已覆核"), CLOSED("結案"),DELETE("刪除");
     
     private String name;
 

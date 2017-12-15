@@ -300,7 +300,11 @@ public class MgSetMasterController implements Serializable {
     public boolean showDelete() {
         if (userSession.getUser().getRole().equalsIgnoreCase("1")
                 && (selected.getStatus() != null && (selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0 || selected.getStatus().compareTo(MgSetMasterStatus.REJECT) == 0))) {
-            return true;
+            if (selected.getMgSetDetailCollection() != null && !selected.getMgSetDetailCollection().isEmpty()) {
+                return true;
+            } else {
+                return false;
+            }
         }
         return false;
     }
@@ -626,12 +630,16 @@ public class MgSetMasterController implements Serializable {
     }
 
     public String showMgSetMasterCode() {
-        MgSetMaster lastObj = mgSetMasterFacade.findByLastIdMgMaster("");
         int seq = 0;
-        if (lastObj != null) {
-            seq = lastObj.getId().intValue();
+        if (StringUtils.isEmpty(selected.getMgActMCode())) {
+            MgSetMaster lastObj = mgSetMasterFacade.findByLastIdMgMaster("");
+            if (lastObj != null) {
+                seq = lastObj.getId().intValue();
+            }
+            return utils.toPlusOneString(seq, 5);
+        } else {
+            return selected.getMgActMCode();
         }
-        return utils.toPlusOneString(seq, 5);
     }
 
     public String showMgSetDetailCode() {

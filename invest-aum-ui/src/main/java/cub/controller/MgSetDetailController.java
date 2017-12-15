@@ -136,6 +136,8 @@ public class MgSetDetailController implements Serializable {
     @EJB
     private MgCustActListFacade mgCustActListFacade;
 
+    private boolean mgActMgRtnRateFlag;
+
     @PostConstruct
     public void init() {
         findByStatusNotInDetail();
@@ -148,7 +150,7 @@ public class MgSetDetailController implements Serializable {
         mgDetailVO = new MgDetailVO();
         mgSetDetail = new MgSetDetail();
 
-        mgSetMasterList = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
+        mgSetMasterList = mgSetMasterFacade.findByStatusInMgMaster(MgSetMasterStatus.CONFIRM);
         productVO = new ProductVO();
         productTypeList = new ArrayList<String>();
         productSeriesList = new ArrayList<String>();
@@ -201,7 +203,7 @@ public class MgSetDetailController implements Serializable {
     public boolean showConfirm() {
         System.out.println(userSession.getUser().getRole());
         if (userSession.getUser().getRole().equalsIgnoreCase("2")
-                && (mgSetDetail.getStatus() != null && mgSetDetail.getStatus().compareTo(MgSetMasterStatus.SEND) == 0)) {
+                && (mgSetDetail != null && mgSetDetail.getStatus() != null && mgSetDetail.getStatus().compareTo(MgSetMasterStatus.SEND) == 0)) {
             return true;
         }
         return false;
@@ -242,7 +244,7 @@ public class MgSetDetailController implements Serializable {
             List<String> tmpList = new ArrayList<String>();
             UploadedFile uploadedFile = event.getFile();
             tmpList = IOUtils.readLines(uploadedFile.getInputstream());
-          //   Set<String> sortSet = new HashSet<String>(tmpList);
+            //   Set<String> sortSet = new HashSet<String>(tmpList);
             for (String idn : tmpList) {
                 String[] idnary = idn.split("\\,");
                 MgCustActList obj = new MgCustActList();
@@ -265,6 +267,7 @@ public class MgSetDetailController implements Serializable {
 
     public void prepareUpdate(MgSetDetail item) {
 //        RequestContext.getCurrentInstance().update(":MgSetDetailCreateForm :MgSetDetailCreateForm:datalist");
+        RequestContext.getCurrentInstance().reset(":MgSetDetailCreateForm");
         this.selected = item;
         this.mgSetDetail = item;
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
@@ -354,9 +357,13 @@ public class MgSetDetailController implements Serializable {
         int seq = 0;
         System.out.println(mgSetDetail.getMgActDSeq());
         if (StringUtils.isEmpty(mgSetDetail.getMgActDSeq())) {
-            lastObj = mgSetDetailFacade.findByLastSeqMgSetDetail(mgSetDetail.getMgSetMasterId());
-            if(lastObj != null){
-            seq = lastObj.getId().intValue();
+            try {
+                lastObj = mgSetDetailFacade.findByLastSeqMgSetDetail(mgSetDetail.getMgSetMasterId());
+            } catch (Exception e) {
+                //  lastObj = null;
+            }
+            if (lastObj != null) {
+                seq = Integer.parseInt(lastObj.getMgActDSeq());
             }
             return utils.toPlusOneString(seq, 2);
         } else {
@@ -396,6 +403,7 @@ public class MgSetDetailController implements Serializable {
         selected = new MgSetDetail();
         mgDetailVO = new MgDetailVO();
         mgSetDetail = new MgSetDetail();
+        mgSetDetail.setMgActDRemark("1");
 //        mgSetMasterList = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
         initializeEmbeddableKey();
         return selected;
@@ -428,8 +436,9 @@ public class MgSetDetailController implements Serializable {
         mgSetDetail.setCrtEmpName(userSession.getUser().getEmpname());
         mgSetDetail.setCrtDate(new Date());
         mgSetDetail.setStatus(MgSetMasterStatus.SEND);
+        Date nowDt = new DateTime(new DateTime(new Date()).toString("yyyy-MM-dd")).toDate();
 
-        if (mgSetActDetailEndDate.before(mgSetActDetailStartDate)) {
+        if (mgSetActDetailStartDate.before(nowDt) || mgSetActDetailEndDate.before(mgSetActDetailStartDate)) {
             JsfUtil.addErrorMessage("起迄日期設定有誤，請起迄日期設定");
             return;
         }
@@ -637,7 +646,7 @@ public class MgSetDetailController implements Serializable {
 
     public void search() {
         items.clear();
-        items = mgSetDetailFacade.findAll();
+        items = mgSetDetailFacade.findByMgDetailVO(mgDetailVO);
         mgDetailVO = new MgDetailVO();
     }
 
@@ -879,6 +888,14 @@ public class MgSetDetailController implements Serializable {
 
     public void setService(ThemeSwitcherView service) {
         this.service = service;
+    }
+
+    public boolean isMgActMgRtnRateFlag() {
+        return mgActMgRtnRateFlag;
+    }
+
+    public void setMgActMgRtnRateFlag(boolean mgActMgRtnRateFlag) {
+        this.mgActMgRtnRateFlag = mgActMgRtnRateFlag;
     }
 
 }

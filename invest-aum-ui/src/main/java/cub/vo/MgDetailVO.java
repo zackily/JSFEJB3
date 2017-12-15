@@ -17,7 +17,7 @@ public class MgDetailVO implements Serializable{
     private String mgActDName;
     private Date queryStartDate;
     private Date queryEndDate;
-
+ private String status;
     public String getMgActDCode() {
         return mgActDCode;
     }
@@ -48,6 +48,14 @@ public class MgDetailVO implements Serializable{
 
     public void setQueryEndDate(Date queryEndDate) {
         this.queryEndDate = queryEndDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
 }

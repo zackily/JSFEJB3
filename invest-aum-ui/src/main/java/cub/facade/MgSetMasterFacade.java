@@ -53,6 +53,19 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
         }
     }
     
+    public List<MgSetMaster> findByStatusInMgMaster(MgSetMasterStatus status) {
+        StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");
+        if (status != null) {
+            sql.append(" and (msm.status =:status and msm.status is not null) ");
+        }
+        sql.append(" order by msm.id desc");
+        Query q = em.createQuery(sql.toString());  
+        if (status != null) {
+            q.setParameter("status", status);
+        }
+        return q.getResultList();
+    }
+    
      public List<MgSetMaster> findByStatusNotInMgMaster(MgSetMasterStatus status) {
         StringBuffer sql = new StringBuffer("SELECT msm FROM MgSetMaster msm WHERE 1=1 ");
         if (status != null) {
@@ -88,6 +101,11 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
         if (StringUtils.isNotEmpty(vo.getMgActMChargeObj())) {
             sql.append(" and msm.mgActMChargeObj =:mgActMChargeObj ");
         }
+        
+        if (StringUtils.isNotEmpty(vo.getStatus())) {
+            sql.append(" and msm.status =:status ");
+        }
+        
 //        sql.append(" order by af.")
 
         Query q = em.createQuery(sql.toString());
@@ -112,6 +130,9 @@ public class MgSetMasterFacade extends AbstractFacade<MgSetMaster> {
 
         if (StringUtils.isNotEmpty(vo.getMgActMChargeObj())) {
             q.setParameter("mgActMChargeObj", vo.getMgActMChargeObj());
+        }
+        if (StringUtils.isNotEmpty(vo.getStatus())) {
+             q.setParameter("status", MgSetMasterStatus.valueOf(vo.getStatus()));
         }
         return q.getResultList();
     }

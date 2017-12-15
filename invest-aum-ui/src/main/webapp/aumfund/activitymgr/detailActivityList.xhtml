@@ -41,7 +41,7 @@
                         </p:column>
                         <p:column>                             
                             <p:calendar pattern="yyyyMMdd" id="mgActDStartDate" value="#{mgSetDetailController.mgDetailVO.queryStartDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}"
-                                       >
+                                        >
                                 <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
                             </p:calendar>~
                             <p:calendar pattern="yyyyMMdd" id="mgActDEndDate" value="#{mgSetDetailController.mgDetailVO.queryEndDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}"
@@ -49,7 +49,21 @@
                                 <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
                             </p:calendar>
                         </p:column>                      
+                        <p:column styleClass="ui-widget-header">   
+                            <p:outputLabel value="活動狀態"/>
+                        </p:column>
 
+                        <p:column>                            
+                            <p:selectOneRadio value="#{mgSetDetailController.mgDetailVO.status}">
+                                <f:selectItem itemLabel="ALL" itemValue="" />
+                                <f:selectItem itemLabel="待覆核" itemValue="SEND" />
+                                <f:selectItem itemLabel="處理中" itemValue="PROCESSING" />
+                                <f:selectItem itemLabel="退回" itemValue="REJECT" />
+                                <f:selectItem itemLabel="已覆核" itemValue="CONFIRM" />
+                                <f:selectItem itemLabel="結案" itemValue="CLOSED" />
+                                <f:selectItem itemLabel="刪除" itemValue="DELETE" />
+                            </p:selectOneRadio>
+                        </p:column>
                     </p:row>
                     <p:row>
                         <p:column colspan="6">
@@ -101,7 +115,7 @@
                     <h:outputText value="#{item.mgActDEndDate}"/>
 
                 </p:column>
-        
+
 
                 <p:column>
                     <f:facet name="header">
@@ -144,13 +158,18 @@
                     <f:facet name="header">
                         <h:outputText value="#{item.status}"/>
                     </f:facet>
-                                     
+
                     <p:commandButton icon="ui-icon-pencil"  value="查看/修改" 
                                      actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
                                      update=":MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDialog').show()"
-                                    /> 
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/> 
 
-                   
+                    <p:commandButton icon="ui-icon-pencil"  value="查看/覆核" 
+                                     actionListener="#{mgSetDetailController.prepareUpdate(item)}" 
+                                     update=":MgSetDetailCreateForm" oncomplete="PF('MgSetDetailCreateDialog').show()"
+                                     rendered="#{userSession.user.role.equalsIgnoreCase('2')}"/> 
+
+
                 </p:column>
 
             </p:dataTable>

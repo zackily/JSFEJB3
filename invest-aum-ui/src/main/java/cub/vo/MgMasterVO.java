@@ -19,6 +19,7 @@ public class MgMasterVO implements Serializable{
    private String mgActMRateSet;
    private String mgActMSaleChnl;
    private String mgActMChargeObj;
+   private String status;
 
     public String getMgActMCode() {
         return mgActMCode;
@@ -66,6 +67,14 @@ public class MgMasterVO implements Serializable{
 
     public void setMgActMType(String mgActMType) {
         this.mgActMType = mgActMType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
    
 
