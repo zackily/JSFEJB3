@@ -17,7 +17,7 @@
                                 <p:outputLabel value="主活動案" />
                             </p:column>
                             <p:column>
-                                <p:selectOneMenu  id="mgActSetType" value="#{mgSetDetailController.mgSetDetail.mgSetMasterId}" >                                           
+                                <p:selectOneMenu  id="mgActSetType" value="#{mgSetDetailController.mgSetDetail.mgSetMasterId}" disabled="#{mgSetDetailController.showReadonly()}">                                           
                                     <f:selectItem itemLabel="Select One" itemValue="" />             
                                     <f:selectItems value="#{mgSetDetailController.mgSetMasterList}" var="master" itemLabel="#{master.mgActMCode}-#{master.mgActMName}" itemValue="#{master}" /> 
                                     <p:ajax  event="change" update=":MgSetDetailCreateForm:mgActDCode" />
@@ -40,7 +40,7 @@
                                 <p:outputLabel value="子活動案名稱" for="mgActDName" />
                             </p:column>
                             <p:column>
-                                <p:inputText size="50" id="mgActDName" value="#{mgSetDetailController.mgSetDetail.mgActDName}" title="#{bundle.CreateMgSetDetailTitle_mgActDName}" >       
+                                <p:inputText size="50" id="mgActDName" value="#{mgSetDetailController.mgSetDetail.mgActDName}" title="#{bundle.CreateMgSetDetailTitle_mgActDName}" disabled="#{mgSetDetailController.showReadonly()}">       
                                     <f:validateLength maximum="100" />
                                 <p:ajax update="dlgMsg" event="blur" />
                                 </p:inputText>
@@ -53,11 +53,11 @@
                             </p:column>
                             <p:column>
                                 <p:calendar pattern="yyyyMMdd" id="mgActDStartDate" value="#{mgSetDetailController.mgSetActDetailStartDate}" 
-                                            title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}">
+                                            title="#{bundle.CreateMgSetDetailTitle_mgActDStartDate}" disabled="#{mgSetDetailController.showReadonly()}">
                                     <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
                                 </p:calendar>
                                 ~
-                                <p:calendar pattern="yyyyMMdd"  id="mgActDEndDate" value="#{mgSetDetailController.mgSetActDetailEndDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDEndDate}">
+                                <p:calendar pattern="yyyyMMdd"  id="mgActDEndDate" value="#{mgSetDetailController.mgSetActDetailEndDate}" title="#{bundle.CreateMgSetDetailTitle_mgActDEndDate}" disabled="#{mgSetDetailController.showReadonly()}">
                                     <f:convertDateTime type="date"  dateStyle="short" pattern="yyyyMMdd" />
                                 </p:calendar>
                             </p:column>
@@ -67,7 +67,7 @@
                                 <p:outputLabel value="適用通路" for="mgActDSaleChnl" />
                             </p:column>
                             <p:column>                                    
-                                <p:selectCheckboxMenu label="Channel" id="mgActDSaleChnl" value="#{mgSetDetailController.selectedChannel}" multiple="true">
+                                <p:selectCheckboxMenu label="Channel" id="mgActDSaleChnl" value="#{mgSetDetailController.selectedChannel}" multiple="true" disabled="#{mgSetDetailController.showReadonly()}">
                                     <f:selectItem itemLabel="ALL" itemValue="9" />
                                     <f:selectItem itemLabel="臨櫃" itemValue="1" />
                                     <f:selectItem itemLabel="網路" itemValue="2" />
@@ -88,7 +88,7 @@
                             <p:column>
                                 <!--<p:inputText id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}" title="#{bundle.CreateMgSetDetailTitle_mgActDPrdCode}" />-->
                                 <p:outputPanel id="mgActDPrdCodePanel" style="margin-bottom:10px">
-                                    <p:selectOneRadio id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}"  layout="custom">
+                                    <p:selectOneRadio id="mgActDPrdCode" value="#{mgSetDetailController.mgSetDetail.mgActDPrdCode}"  layout="custom" disabled="#{mgSetDetailController.showReadonly()}">
                                         <f:selectItem itemLabel="ALL" itemValue="1" />
                                         <f:selectItem itemLabel="系列代碼" itemValue="2" />
                                         <f:selectItem itemLabel="產品類型" itemValue="3" />
@@ -122,7 +122,7 @@
                                 <p:outputPanel id="mgActDSecTypePanel" style="margin-bottom:10px">
 
                                     <h:panelGrid columns="2" cellpadding="5">
-                                        <p:selectOneMenu id="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}"  >
+                                        <p:selectOneMenu id="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}" disabled="#{mgSetDetailController.showReadonly()}" >
                                             <p:ajax update="mgActDSecTypePanel"  />
                                             <f:selectItem itemLabel="客戶ID" itemValue="1" />
                                             <f:selectItem itemLabel="單一標的" itemValue="2" />
@@ -130,7 +130,7 @@
                                             <f:selectItem itemLabel="產品類型" itemValue="4" />
                                             <f:selectItem itemLabel="自訂" itemValue="5" />          
                                         </p:selectOneMenu>
-                                        <p:commandButton id="btnMgActDSecType" value="設定" rendered="#{'3' le mgSetDetailController.mgSetDetail.mgActDSecType}">
+                                        <p:commandButton id="btnMgActDSecType" value="設定"  disabled="#{mgSetDetailController.showReadonly()}">
                                             <f:param name="mgActDSecType" value="#{mgSetDetailController.mgSetDetail.mgActDSecType}" />
                                         </p:commandButton>
 
@@ -144,7 +144,7 @@
                                 <p:outputLabel value="費率規則"  />  
                             </p:column>
                             <p:column>
-                                <p:selectOneRadio id="mgActDRemark" value="#{mgSetDetailController.mgSetDetail.mgActDRemark}" >
+                                <p:selectOneRadio id="mgActDRemark" value="#{mgSetDetailController.mgSetDetail.mgActDRemark}" disabled="#{mgSetDetailController.showReadonly()}">
                                     <f:selectItem itemLabel="級距式費率" itemValue="1" />
                                     <f:selectItem itemLabel="累進式費率" itemValue="2" />
                                 </p:selectOneRadio>
@@ -156,7 +156,7 @@
                                 <p:outputLabel value="適用客群" for="mgActDCostId" />
                             </p:column>
                             <p:column>
-                                <p:selectOneRadio id="mgActDCostId" value="#{mgSetDetailController.mgSetDetail.mgActDCostId}">
+                                <p:selectOneRadio id="mgActDCostId" value="#{mgSetDetailController.mgSetDetail.mgActDCostId}" disabled="#{mgSetDetailController.showReadonly()}">
                                     <f:selectItem itemLabel="ALL" itemValue="1" />
                                     <f:selectItem itemLabel="名單" itemValue="2" />                                       
                                 </p:selectOneRadio>
@@ -164,14 +164,14 @@
                                 <p:commandButton value="IDN上傳設定" icon="ui-icon-plus" 
                                                  actionListener="#{mgSetDetailController.prepareIdn}" 
                                                  update=":MgCustActListForm" oncomplete="PF('MgCustActListDlg').show()"
-                                                 rendered="#{userSession.user.role.equalsIgnoreCase('1')}"/>
+                                                 rendered="#{mgSetDetailController.showReadonly()}" />
                             </p:column>
                         </p:row>
                     </p:panelGrid>
 
 
                     <p:fieldset legend="級距設定">
-                        <p:selectBooleanCheckbox value="#{mgSetDetailController.mgActMgRtnRateFlag}"  >
+                        <p:selectBooleanCheckbox value="#{mgSetDetailController.mgActMgRtnRateFlag}"  disabled="#{mgSetDetailController.showReadonly()}">
                             <p:ajax update="datalist"/>
                         </p:selectBooleanCheckbox>
                     <p:spacer width="5"/>
@@ -184,20 +184,19 @@
                                  rowsPerPageTemplate="10,20,30,40,50"
                                  emptyMessage="查無資料"              
                                  paginatorPosition="bottom"
-
                                  >            
 
                         <f:facet name="header">
                             <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-plus" value="新增級距" 
                                              actionListener="#{mgSetDetailController.addMSDRC()}" 
-                                             update=":MgSetDetailCreateForm:datalist" />   
+                                             update=":MgSetDetailCreateForm:datalist" disabled="#{mgSetDetailController.showReadonly()}"/>   
                         </f:facet>
 
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="幣別"/>
                             </f:facet>
-                            <p:selectOneMenu value="#{item.mgActCurrency}" >
+                            <p:selectOneMenu value="#{item.mgActCurrency}" disabled="#{mgSetDetailController.showReadonly()}">
                                 <f:selectItem itemLabel="TWD" itemValue="TWD" />
                                 <f:selectItem itemLabel="USD" itemValue="USD" />
                                 <f:selectItem itemLabel="EUR" itemValue="EUR" />
@@ -207,33 +206,33 @@
                             <f:facet name="header">
                                 <h:outputText value="最低金額"/>
                             </f:facet>
-                            <p:inputNumber size="15" value="#{item.mgActLowAmt}" decimalPlaces="2"/>   
+                            <p:inputNumber size="15" value="#{item.mgActLowAmt}" decimalPlaces="2" disabled="#{mgSetDetailController.showReadonly()}"/>   
                         </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="最高金額"/>
                             </f:facet>
-                            <p:inputNumber size="15" value="#{item.mgActHightAmt}" decimalPlaces="2"/>
+                            <p:inputNumber size="15" value="#{item.mgActHightAmt}" decimalPlaces="2" disabled="#{mgSetDetailController.showReadonly()}"/>
                         </p:column>
                         <p:column rendered="#{mgSetDetailController.mgActMgRtnRateFlag}">
                             <f:facet name="header">
                                 <h:outputText value="經理費率(%)"/>
                             </f:facet>
                             <p:inputNumber size="4" value="#{item.mgActMgMapRate}" symbol="%" 
-                                symbolPosition="s" emptyValue="zero"/>
+                                symbolPosition="s" emptyValue="zero" disabled="#{mgSetDetailController.showReadonly()}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="費率(bps)"/>
                             </f:facet>
-                            <p:inputNumber size="8" value="#{item.mgActBps}" minValue="0.01" maxValue="999.99"/>
+                            <p:inputNumber size="8" value="#{item.mgActBps}" minValue="0.01" maxValue="999.99" disabled="#{mgSetDetailController.showReadonly()}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="經理費分成(%)"/>
                             </f:facet>
                             <p:inputNumber size="4" value="#{item.mgActMgRtnRate}" symbol="%" 
-                                symbolPosition="s" emptyValue="zero" />
+                                symbolPosition="s" emptyValue="zero" disabled="#{mgSetDetailController.showReadonly()}"/>
 
                         </p:column>
                         <p:column>
@@ -243,7 +242,7 @@
 
                             <p:commandButton process=":MgSetDetailCreateForm:datalist" icon="ui-icon-minus" value="刪除" 
                                              actionListener="#{mgSetDetailController.minusMSDRC(item)}" 
-                                             update=":MgSetDetailCreateForm:datalist" />  
+                                             update=":MgSetDetailCreateForm:datalist" disabled="#{mgSetDetailController.showReadonly()}"/>  
                         </p:column>
 
 

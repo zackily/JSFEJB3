@@ -395,6 +395,14 @@ public class MgSetDetailController implements Serializable {
 //        idnList = new ArrayList<MgCustActList>();
     }
 
+    public boolean showReadonly(){
+        if (userSession.getUser().getRole().equalsIgnoreCase("2") || (mgSetDetail.getStatus() != null && !(mgSetDetail.getStatus().compareTo(MgSetMasterStatus.SEND) == 0))) {
+            return true;
+        }
+        return false;
+    }
+    
+    
     public MgSetDetail prepareCreate() {
         RequestContext.getCurrentInstance().reset(":MgSetDetailCreateForm");
         selectedChannel = new ArrayList<String>();
@@ -404,6 +412,8 @@ public class MgSetDetailController implements Serializable {
         mgDetailVO = new MgDetailVO();
         mgSetDetail = new MgSetDetail();
         mgSetDetail.setMgActDRemark("1");
+        mgSetActDetailEndDate = null;
+        mgSetActDetailStartDate = null;
 //        mgSetMasterList = mgSetMasterFacade.findByStatusNotInMgMaster(MgSetMasterStatus.DELETE);
         initializeEmbeddableKey();
         return selected;
