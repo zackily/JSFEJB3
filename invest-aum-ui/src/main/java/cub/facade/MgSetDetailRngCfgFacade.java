@@ -5,6 +5,7 @@
  */
 package cub.facade;
 
+import cub.entities.MgSetDetail;
 import cub.entities.MgSetDetailRngCfg;
 import cub.entities.MgSetDetailSecCfg;
 import cub.invest.aum.Fund;
@@ -44,4 +45,13 @@ public class MgSetDetailRngCfgFacade extends AbstractFacade<MgSetDetailRngCfg> {
 
         return q.getResultList();
     }
+      
+       public int removeByMgSetDetail(MgSetDetail detail) {
+        StringBuffer sql = new StringBuffer("DELETE FROM MgSetDetailRngCfg msdrc WHERE msdrc.mgActCode =:mgActCode and msdrc.mgActSubCode =:mgActSubCode  ");
+        Query q = em.createQuery(sql.toString());
+        q.setParameter("mgActCode", detail.getMgSetMasterId().getMgActMCode());
+        q.setParameter("mgActSubCode", detail.getMgActDSeq());
+        return q.executeUpdate();
+    }
+      
 }

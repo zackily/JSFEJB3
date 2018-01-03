@@ -20,86 +20,86 @@ import org.primefaces.model.menu.MenuModel;
 public class MenuController implements Serializable {
 
     private MenuModel model;
-    @EJB
-    private MenuTableFacade menuFacade;
+//    @EJB
+//    private MenuTableFacade menuFacade;
 
     private String language;
 
     @PostConstruct
     public void init() {
         language ="TW";
-        model = new DefaultMenuModel();
-        //First submenu
-        List<MenuTable> firstList = menuFacade.findRoot();
-        for (MenuTable menu : firstList) {
-
-            DefaultSubMenu firstSubmenu = new DefaultSubMenu(menu.getMenuLabelTw());
-            List<MenuTable> secondList = menuFacade.findChild(menu);
-            for (MenuTable subMenu : secondList) {
-                List<MenuTable> thirdList = menuFacade.findChild(subMenu);
-                if (thirdList.isEmpty()) {
-                    DefaultMenuItem item = new DefaultMenuItem(subMenu.getMenuLabelTw());
-                    item.setUrl(subMenu.getMemuUrl());
-                    item.setIcon(subMenu.getMenuIcon());
-                    firstSubmenu.addElement(item);
-                } else {
-                    DefaultSubMenu secondSubmenu = new DefaultSubMenu(subMenu.getMenuLabelTw());
-                    for (MenuTable thirdMenu : thirdList) {
-                        DefaultMenuItem item = new DefaultMenuItem(thirdMenu.getMenuLabelTw());
-                        item.setUrl(thirdMenu.getMemuUrl());
-                        item.setIcon(thirdMenu.getMenuIcon());
-                        secondSubmenu.addElement(item);
-                    }
-                    firstSubmenu.addElement(secondSubmenu);
-                }
-
-            }
-
-            model.addElement(firstSubmenu);
-        }
+//        model = new DefaultMenuModel();
+//        //First submenu
+//        List<MenuTable> firstList = menuFacade.findRoot();
+//        for (MenuTable menu : firstList) {
+//
+//            DefaultSubMenu firstSubmenu = new DefaultSubMenu(menu.getMenuLabelTw());
+//            List<MenuTable> secondList = menuFacade.findChild(menu);
+//            for (MenuTable subMenu : secondList) {
+//                List<MenuTable> thirdList = menuFacade.findChild(subMenu);
+//                if (thirdList.isEmpty()) {
+//                    DefaultMenuItem item = new DefaultMenuItem(subMenu.getMenuLabelTw());
+//                    item.setUrl(subMenu.getMemuUrl());
+//                    item.setIcon(subMenu.getMenuIcon());
+//                    firstSubmenu.addElement(item);
+//                } else {
+//                    DefaultSubMenu secondSubmenu = new DefaultSubMenu(subMenu.getMenuLabelTw());
+//                    for (MenuTable thirdMenu : thirdList) {
+//                        DefaultMenuItem item = new DefaultMenuItem(thirdMenu.getMenuLabelTw());
+//                        item.setUrl(thirdMenu.getMemuUrl());
+//                        item.setIcon(thirdMenu.getMenuIcon());
+//                        secondSubmenu.addElement(item);
+//                    }
+//                    firstSubmenu.addElement(secondSubmenu);
+//                }
+//
+//            }
+//
+//            model.addElement(firstSubmenu);
+//        }
 
     }
 
-    public void changeModel() {
-        if (!model.getElements().isEmpty()) {
-            model.getElements().clear();
-        }
-        List<MenuTable> firstList = menuFacade.findRoot();
-        for (MenuTable menu : firstList) {
+//    public void changeModel() {
+//        if (!model.getElements().isEmpty()) {
+//            model.getElements().clear();
+//        }
+//        List<MenuTable> firstList = menuFacade.findRoot();
+//        for (MenuTable menu : firstList) {
+//
+//            String firstlabel = this.getLanguage().equalsIgnoreCase("TW") ? menu.getMenuLabelTw() : menu.getMenuLabelEn();
+//            DefaultSubMenu firstSubmenu = new DefaultSubMenu(firstlabel);
+//
+//            List<MenuTable> secondList = menuFacade.findChild(menu);
+//            for (MenuTable subMenu : secondList) {
+//                String secondlabel = this.getLanguage().equalsIgnoreCase("TW") ? subMenu.getMenuLabelTw() : subMenu.getMenuLabelEn();
+//                List<MenuTable> thirdList = menuFacade.findChild(subMenu);
+//                if (thirdList.isEmpty()) {
+//                    DefaultMenuItem item = new DefaultMenuItem(secondlabel);
+//                    item.setUrl(subMenu.getMemuUrl());
+//                    item.setIcon(subMenu.getMenuIcon());
+//                    firstSubmenu.addElement(item);
+//                } else {
+//                    DefaultSubMenu secondSubmenu = new DefaultSubMenu(secondlabel);
+//                    for (MenuTable thirdMenu : thirdList) {
+//                        String thirdlabel = this.getLanguage().equalsIgnoreCase("TW") ? thirdMenu.getMenuLabelTw() : thirdMenu.getMenuLabelEn();
+//                        DefaultMenuItem item = new DefaultMenuItem(thirdlabel);
+//                        item.setUrl(thirdMenu.getMemuUrl());
+//                        item.setIcon(thirdMenu.getMenuIcon());
+//                        secondSubmenu.addElement(item);
+//                    }
+//                    firstSubmenu.addElement(secondSubmenu);
+//                }
+//
+//            }
+//
+//            model.addElement(firstSubmenu);
+//        }
+//    }
 
-            String firstlabel = this.getLanguage().equalsIgnoreCase("TW") ? menu.getMenuLabelTw() : menu.getMenuLabelEn();
-            DefaultSubMenu firstSubmenu = new DefaultSubMenu(firstlabel);
-
-            List<MenuTable> secondList = menuFacade.findChild(menu);
-            for (MenuTable subMenu : secondList) {
-                String secondlabel = this.getLanguage().equalsIgnoreCase("TW") ? subMenu.getMenuLabelTw() : subMenu.getMenuLabelEn();
-                List<MenuTable> thirdList = menuFacade.findChild(subMenu);
-                if (thirdList.isEmpty()) {
-                    DefaultMenuItem item = new DefaultMenuItem(secondlabel);
-                    item.setUrl(subMenu.getMemuUrl());
-                    item.setIcon(subMenu.getMenuIcon());
-                    firstSubmenu.addElement(item);
-                } else {
-                    DefaultSubMenu secondSubmenu = new DefaultSubMenu(secondlabel);
-                    for (MenuTable thirdMenu : thirdList) {
-                        String thirdlabel = this.getLanguage().equalsIgnoreCase("TW") ? thirdMenu.getMenuLabelTw() : thirdMenu.getMenuLabelEn();
-                        DefaultMenuItem item = new DefaultMenuItem(thirdlabel);
-                        item.setUrl(thirdMenu.getMemuUrl());
-                        item.setIcon(thirdMenu.getMenuIcon());
-                        secondSubmenu.addElement(item);
-                    }
-                    firstSubmenu.addElement(secondSubmenu);
-                }
-
-            }
-
-            model.addElement(firstSubmenu);
-        }
-    }
-
-    public MenuModel getModel() {
-        return model;
-    }
+//    public MenuModel getModel() {
+//        return model;
+//    }
 
     public void save() {
         addMessage("Success", "Data saved");

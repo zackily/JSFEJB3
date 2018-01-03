@@ -31,17 +31,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "MG_CUST_ACT_LIST")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgCustActList.findAll", query = "SELECT m FROM MgCustActList m")
-    , @NamedQuery(name = "MgCustActList.findByCustId", query = "SELECT m FROM MgCustActList m WHERE m.custId = :custId")
-    , @NamedQuery(name = "MgCustActList.findByActCode", query = "SELECT m FROM MgCustActList m WHERE m.actCode = :actCode")
-    , @NamedQuery(name = "MgCustActList.findByActSubCode", query = "SELECT m FROM MgCustActList m WHERE m.actSubCode = :actSubCode")
-    , @NamedQuery(name = "MgCustActList.findByActDataDt", query = "SELECT m FROM MgCustActList m WHERE m.actDataDt = :actDataDt")
-    , @NamedQuery(name = "MgCustActList.findByActStartDt", query = "SELECT m FROM MgCustActList m WHERE m.actStartDt = :actStartDt")
-    , @NamedQuery(name = "MgCustActList.findByActEndDt", query = "SELECT m FROM MgCustActList m WHERE m.actEndDt = :actEndDt")
-    , @NamedQuery(name = "MgCustActList.findById", query = "SELECT m FROM MgCustActList m WHERE m.id = :id")
-    , @NamedQuery(name = "MgCustActList.findByStatus", query = "SELECT m FROM MgCustActList m WHERE m.status = :status")
-    , @NamedQuery(name = "MgCustActList.findByUpdateDttm", query = "SELECT m FROM MgCustActList m WHERE m.updateDttm = :updateDttm")})
 public class MgCustActList implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,13 +52,13 @@ public class MgCustActList implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 8)
-    @Column(name = "ACT_DATA_DT")
+    @Column(name = "ACT_DATA_DATE")
     private String actDataDt;
     @Size(max = 8)
-    @Column(name = "ACT_START_DT")
+    @Column(name = "ACT_START_DATE")
     private String actStartDt;
     @Size(max = 8)
-    @Column(name = "ACT_END_DT")
+    @Column(name = "ACT_END_DATE")
     private String actEndDt;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -81,11 +70,11 @@ public class MgCustActList implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 10)
-    @Column(name = "STATUS")
+    @Column(name = "ACT_STATUS_CODE")
     private String status;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "UPDATE_DTTM")
+    @Column(name = "ACT_UPDATE_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDttm;
 

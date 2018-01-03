@@ -116,8 +116,8 @@ public class MgSetMasterController implements Serializable {
         findByStatusNotInMaster();
         queryVO = new AumFundVO();
         masterVO = new MgMasterVO();
-        invCorp = invCorpFacade.findAll();
-        invCorpFundMapping = new HashMap<String, String>();
+//        invCorp = invCorpFacade.findAll();
+//        invCorpFundMapping = new HashMap<String, String>();
         fundId = new ArrayList<Fund>();
         mgSetDetail = new MgSetDetail();
 
@@ -197,7 +197,7 @@ public class MgSetMasterController implements Serializable {
         mgSetDetail = new MgSetDetail();
         selected.setMgActMType("1");
         selected.setMgActMRateSet("1");
-        selected.setMgActMSaleChnl("2");
+//        selected.setMgActMSaleChnl("2");
         selected.setMgActMChargeObj("C");
 //        mgSetDetail.setMgActDSecType("1");
         start_date = new Date();
@@ -279,6 +279,13 @@ public class MgSetMasterController implements Serializable {
         return false;
     }
 
+    public boolean showReadonly(){
+         if (selected.getStatus().compareTo(MgSetMasterStatus.CONFIRM) == 0 || userSession.getUser().getRole().equalsIgnoreCase("2")) {
+            return true;
+        }
+        return false;
+    }
+    
     public boolean showConfirm() {
 
         if (userSession.getUser().getRole().equalsIgnoreCase("2") && selected.getStatus().compareTo(MgSetMasterStatus.SEND) == 0) {
@@ -317,8 +324,8 @@ public class MgSetMasterController implements Serializable {
         this.selected = m;
         mgSetDetail = new MgSetDetail();
         mgSetDetail.setMgActDSecType("3");
-        mgSetDetail.setMgActSetType("F");
-        mgSetDetail.setMgActDSaleChnl("2");
+//        mgSetDetail.setMgActSetType("F");
+//        mgSetDetail.setMgActDSaleChnl("2");
 
         start_date = new Date();
         end_date = new Date();
@@ -339,6 +346,7 @@ public class MgSetMasterController implements Serializable {
         this.selected.setCrtDate(new Date());
         this.selected.setCrtEmpId(getUserSession().getUser().getEmpId());
         this.selected.setCrtEmpName(getUserSession().getUser().getEmpname());
+        this.selected.setUpdDate(new Date());
         this.selected.setStatus(MgSetMasterStatus.SEND);
         this.mgSetMasterFacade.save(selected);
         JsfUtil.addSuccessMessage("管理費主活動案設定完成");

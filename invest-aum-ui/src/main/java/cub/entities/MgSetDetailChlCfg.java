@@ -7,6 +7,7 @@ package cub.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,14 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author NT48810
  */
 @Entity
-@Table(name = "MG_SET_DETAIL_CHL_CFG")
+@Table(name = "MG_FEE_ACT_DETAIL_CHNL_CFG")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgSetDetailChlCfg.findAll", query = "SELECT m FROM MgSetDetailChlCfg m")
-    , @NamedQuery(name = "MgSetDetailChlCfg.findById", query = "SELECT m FROM MgSetDetailChlCfg m WHERE m.id = :id")
-    , @NamedQuery(name = "MgSetDetailChlCfg.findByMgActCode", query = "SELECT m FROM MgSetDetailChlCfg m WHERE m.mgActCode = :mgActCode")
-    , @NamedQuery(name = "MgSetDetailChlCfg.findByMgActSubCode", query = "SELECT m FROM MgSetDetailChlCfg m WHERE m.mgActSubCode = :mgActSubCode")
-    , @NamedQuery(name = "MgSetDetailChlCfg.findByMgActSaleChnlCode", query = "SELECT m FROM MgSetDetailChlCfg m WHERE m.mgActSaleChnlCode = :mgActSaleChnlCode")})
 public class MgSetDetailChlCfg implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,17 +39,20 @@ public class MgSetDetailChlCfg implements Serializable {
     @NotNull
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSDCC_SEQ")
-    @SequenceGenerator(name = "MSDCC_SEQ", sequenceName = "MG_SET_DETAIL_CHL_CFG_SEQ", initialValue = 1, allocationSize = 1) 
+    @SequenceGenerator(name = "MSDCC_SEQ", sequenceName = "MG_FEE_DETAIL_CHL_CFG_SEQ", initialValue = 1, allocationSize = 1) 
     private BigDecimal id;
     @Size(max = 20)
-    @Column(name = "MG_ACT_CODE")
+    @Column(name = "ACT_CODE")
     private String mgActCode;
     @Size(max = 5)
-    @Column(name = "MG_ACT_SUB_CODE")
+    @Column(name = "ACT_SUB_CODE")
     private String mgActSubCode;
     @Size(max = 1)
-    @Column(name = "MG_ACT_SALE_CHNL_CODE")
+    @Column(name = "ACT_SALE_CHNL_CODE")
     private String mgActSaleChnlCode;
+     @Column(name = "ACT_UPDATE_DTTM")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date changedate;
 
     public MgSetDetailChlCfg() {
     }
@@ -91,6 +91,14 @@ public class MgSetDetailChlCfg implements Serializable {
 
     public void setMgActSaleChnlCode(String mgActSaleChnlCode) {
         this.mgActSaleChnlCode = mgActSaleChnlCode;
+    }
+
+    public Date getChangedate() {
+        return changedate;
+    }
+
+    public void setChangedate(Date changedate) {
+        this.changedate = changedate;
     }
 
     @Override

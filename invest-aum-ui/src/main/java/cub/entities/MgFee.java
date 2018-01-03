@@ -31,29 +31,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "MG_FEE")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgFee.findAll", query = "SELECT m FROM MgFee m")
-    , @NamedQuery(name = "MgFee.findById", query = "SELECT m FROM MgFee m WHERE m.id = :id")
-    , @NamedQuery(name = "MgFee.findByMgFeeTstAcc", query = "SELECT m FROM MgFee m WHERE m.mgFeeTstAcc = :mgFeeTstAcc")
-    , @NamedQuery(name = "MgFee.findByMgFeeCustId", query = "SELECT m FROM MgFee m WHERE m.mgFeeCustId = :mgFeeCustId")
-    , @NamedQuery(name = "MgFee.findByMgFeeDate", query = "SELECT m FROM MgFee m WHERE m.mgFeeDate = :mgFeeDate")
-    , @NamedQuery(name = "MgFee.findByMgFeeFundNo", query = "SELECT m FROM MgFee m WHERE m.mgFeeFundNo = :mgFeeFundNo")
-    , @NamedQuery(name = "MgFee.findByMgPortfolioNo", query = "SELECT m FROM MgFee m WHERE m.mgPortfolioNo = :mgPortfolioNo")
-    , @NamedQuery(name = "MgFee.findByMgFeeActCode", query = "SELECT m FROM MgFee m WHERE m.mgFeeActCode = :mgFeeActCode")
-    , @NamedQuery(name = "MgFee.findByMgFeeAumTwFee", query = "SELECT m FROM MgFee m WHERE m.mgFeeAumTwFee = :mgFeeAumTwFee")
-    , @NamedQuery(name = "MgFee.findByMgFeeCostTwFee", query = "SELECT m FROM MgFee m WHERE m.mgFeeCostTwFee = :mgFeeCostTwFee")
-    , @NamedQuery(name = "MgFee.findByMgFeeAumFee", query = "SELECT m FROM MgFee m WHERE m.mgFeeAumFee = :mgFeeAumFee")
-    , @NamedQuery(name = "MgFee.findByMgFeeCostFee", query = "SELECT m FROM MgFee m WHERE m.mgFeeCostFee = :mgFeeCostFee")
-    , @NamedQuery(name = "MgFee.findByMgFeeCur", query = "SELECT m FROM MgFee m WHERE m.mgFeeCur = :mgFeeCur")
-    , @NamedQuery(name = "MgFee.findByMgFeeExrate", query = "SELECT m FROM MgFee m WHERE m.mgFeeExrate = :mgFeeExrate")
-    , @NamedQuery(name = "MgFee.findByMgFeeCanvasser", query = "SELECT m FROM MgFee m WHERE m.mgFeeCanvasser = :mgFeeCanvasser")
-    , @NamedQuery(name = "MgFee.findByMgFeeBranchId", query = "SELECT m FROM MgFee m WHERE m.mgFeeBranchId = :mgFeeBranchId")
-    , @NamedQuery(name = "MgFee.findByMgFeeDateTime", query = "SELECT m FROM MgFee m WHERE m.mgFeeDateTime = :mgFeeDateTime")})
 public class MgFee implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "TRUSTACCT")
+    @Column(name = "TST_ACCT_NO")
     private Character trustacct;
     @Basic(optional = false)
     @NotNull
@@ -65,7 +47,7 @@ public class MgFee implements Serializable {
     private Character custId;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "FUND_ID")
+    @Column(name = "FUND_CODE")
     private Character fundId;
     @Basic(optional = false)
     @NotNull
@@ -85,35 +67,49 @@ public class MgFee implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "AUM_TW_FEE")
+    @Column(name = "AUM_NTD_FEE_AMT")
     private BigDecimal aumTwFee;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "COST_TW_FEE")
+    @Column(name = "COST_NTD_FEE_AMT")
     private BigDecimal costTwFee;
+    
     @Basic(optional = false)
     @NotNull
-    @Column(name = "AUM_FEE")
+    @Column(name = "AUM_USD_FEE_AMT")
+    private BigDecimal aumUsdFee;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "COST_USD_FEE_AMT")
+    private BigDecimal costUsdFee;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "AUM_FEE_AMT")
     private BigDecimal aumFee;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "COST_FEE")
+    @Column(name = "COST_FEE_AMT")
     private BigDecimal costFee;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "CUR")
+    @Column(name = "CURRENCY")
     private Character cur;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "EXRATE")
+    @Column(name = "NTD_EXRATE")
     private BigDecimal exrate;
+    
+     @Column(name = "USD_EXRATE")
+    private BigDecimal usdExrate;
+     
     @Basic(optional = false)
     @NotNull
     @Column(name = "CANVASSER")
     private Character canvasser;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "BRANCH_ID")
+    @Column(name = "BRANCH_CODE")
     private Character branchId;
     @Basic(optional = false)
     @NotNull
@@ -129,46 +125,7 @@ public class MgFee implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MF_SEQ")
     @SequenceGenerator(name = "MF_SEQ", sequenceName = "MG_FEE_SEQ", initialValue = 1, allocationSize = 1)    
     private Long id;
-    @Size(max = 12)
-    @Column(name = "MG_FEE_TST_ACC")
-    private String mgFeeTstAcc;
-    @Size(max = 11)
-    @Column(name = "MG_FEE_CUST_ID")
-    private String mgFeeCustId;
-    @Size(max = 8)
-    @Column(name = "MG_FEE_DATE")
-    private String mgFeeDate;
-    @Size(max = 8)
-    @Column(name = "MG_FEE_FUND_NO")
-    private String mgFeeFundNo;
-    @Size(max = 20)
-    @Column(name = "MG_PORTFOLIO_NO")
-    private String mgPortfolioNo;
-    @Size(max = 10)
-    @Column(name = "MG_FEE_ACT_CODE")
-    private String mgFeeActCode;
-    @Column(name = "MG_FEE_AUM_TW_FEE")
-    private BigDecimal mgFeeAumTwFee;
-    @Column(name = "MG_FEE_COST_TW_FEE")
-    private BigDecimal mgFeeCostTwFee;
-    @Column(name = "MG_FEE_AUM_FEE")
-    private BigDecimal mgFeeAumFee;
-    @Column(name = "MG_FEE_COST_FEE")
-    private BigDecimal mgFeeCostFee;
-    @Size(max = 3)
-    @Column(name = "MG_FEE_CUR")
-    private String mgFeeCur;
-    @Column(name = "MG_FEE_EXRATE")
-    private BigDecimal mgFeeExrate;
-    @Size(max = 5)
-    @Column(name = "MG_FEE_CANVASSER")
-    private String mgFeeCanvasser;
-    @Size(max = 3)
-    @Column(name = "MG_FEE_BRANCH_ID")
-    private String mgFeeBranchId;
-    @Column(name = "MG_FEE_DATE_TIME")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date mgFeeDateTime;
+    
 
     public MgFee() {
     }
@@ -185,125 +142,31 @@ public class MgFee implements Serializable {
         this.id = id;
     }
 
-    public String getMgFeeTstAcc() {
-        return mgFeeTstAcc;
+    public BigDecimal getAumUsdFee() {
+        return aumUsdFee;
     }
 
-    public void setMgFeeTstAcc(String mgFeeTstAcc) {
-        this.mgFeeTstAcc = mgFeeTstAcc;
+    public void setAumUsdFee(BigDecimal aumUsdFee) {
+        this.aumUsdFee = aumUsdFee;
     }
 
-    public String getMgFeeCustId() {
-        return mgFeeCustId;
+    public BigDecimal getCostUsdFee() {
+        return costUsdFee;
     }
 
-    public void setMgFeeCustId(String mgFeeCustId) {
-        this.mgFeeCustId = mgFeeCustId;
+    public void setCostUsdFee(BigDecimal costUsdFee) {
+        this.costUsdFee = costUsdFee;
     }
 
-    public String getMgFeeDate() {
-        return mgFeeDate;
+    public BigDecimal getUsdExrate() {
+        return usdExrate;
     }
 
-    public void setMgFeeDate(String mgFeeDate) {
-        this.mgFeeDate = mgFeeDate;
+    public void setUsdExrate(BigDecimal usdExrate) {
+        this.usdExrate = usdExrate;
     }
 
-    public String getMgFeeFundNo() {
-        return mgFeeFundNo;
-    }
-
-    public void setMgFeeFundNo(String mgFeeFundNo) {
-        this.mgFeeFundNo = mgFeeFundNo;
-    }
-
-    public String getMgPortfolioNo() {
-        return mgPortfolioNo;
-    }
-
-    public void setMgPortfolioNo(String mgPortfolioNo) {
-        this.mgPortfolioNo = mgPortfolioNo;
-    }
-
-    public String getMgFeeActCode() {
-        return mgFeeActCode;
-    }
-
-    public void setMgFeeActCode(String mgFeeActCode) {
-        this.mgFeeActCode = mgFeeActCode;
-    }
-
-    public BigDecimal getMgFeeAumTwFee() {
-        return mgFeeAumTwFee;
-    }
-
-    public void setMgFeeAumTwFee(BigDecimal mgFeeAumTwFee) {
-        this.mgFeeAumTwFee = mgFeeAumTwFee;
-    }
-
-    public BigDecimal getMgFeeCostTwFee() {
-        return mgFeeCostTwFee;
-    }
-
-    public void setMgFeeCostTwFee(BigDecimal mgFeeCostTwFee) {
-        this.mgFeeCostTwFee = mgFeeCostTwFee;
-    }
-
-    public BigDecimal getMgFeeAumFee() {
-        return mgFeeAumFee;
-    }
-
-    public void setMgFeeAumFee(BigDecimal mgFeeAumFee) {
-        this.mgFeeAumFee = mgFeeAumFee;
-    }
-
-    public BigDecimal getMgFeeCostFee() {
-        return mgFeeCostFee;
-    }
-
-    public void setMgFeeCostFee(BigDecimal mgFeeCostFee) {
-        this.mgFeeCostFee = mgFeeCostFee;
-    }
-
-    public String getMgFeeCur() {
-        return mgFeeCur;
-    }
-
-    public void setMgFeeCur(String mgFeeCur) {
-        this.mgFeeCur = mgFeeCur;
-    }
-
-    public BigDecimal getMgFeeExrate() {
-        return mgFeeExrate;
-    }
-
-    public void setMgFeeExrate(BigDecimal mgFeeExrate) {
-        this.mgFeeExrate = mgFeeExrate;
-    }
-
-    public String getMgFeeCanvasser() {
-        return mgFeeCanvasser;
-    }
-
-    public void setMgFeeCanvasser(String mgFeeCanvasser) {
-        this.mgFeeCanvasser = mgFeeCanvasser;
-    }
-
-    public String getMgFeeBranchId() {
-        return mgFeeBranchId;
-    }
-
-    public void setMgFeeBranchId(String mgFeeBranchId) {
-        this.mgFeeBranchId = mgFeeBranchId;
-    }
-
-    public Date getMgFeeDateTime() {
-        return mgFeeDateTime;
-    }
-
-    public void setMgFeeDateTime(Date mgFeeDateTime) {
-        this.mgFeeDateTime = mgFeeDateTime;
-    }
+   
 
     @Override
     public int hashCode() {

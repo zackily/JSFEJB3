@@ -35,51 +35,29 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author NT48810
  */
 @Entity
-@Table(name = "MG_SET_DETAIL")
+@Table(name = "MG_FEE_ACT_DETAIL")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgSetDetail.findAll", query = "SELECT m FROM MgSetDetail m")
-    , @NamedQuery(name = "MgSetDetail.findById", query = "SELECT m FROM MgSetDetail m WHERE m.id = :id")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDCode", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDCode = :mgActDCode")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDSeq", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDSeq = :mgActDSeq")
-    , @NamedQuery(name = "MgSetDetail.findByMgActSetType", query = "SELECT m FROM MgSetDetail m WHERE m.mgActSetType = :mgActSetType")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDName", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDName = :mgActDName")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDPrdCode", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDPrdCode = :mgActDPrdCode")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDSecType", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDSecType = :mgActDSecType")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDSecCmp", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDSecCmp = :mgActDSecCmp")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDSecCode", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDSecCode = :mgActDSecCode")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDCostId", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDCostId = :mgActDCostId")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDSaleChnl", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDSaleChnl = :mgActDSaleChnl")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDStartDate", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDStartDate = :mgActDStartDate")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDEndDate", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDEndDate = :mgActDEndDate")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDSetNo", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDSetNo = :mgActDSetNo")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDBaseAmt", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDBaseAmt = :mgActDBaseAmt")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDLowAmt", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDLowAmt = :mgActDLowAmt")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDHighAmt", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDHighAmt = :mgActDHighAmt")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDRate", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDRate = :mgActDRate")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDFee", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDFee = :mgActDFee")
-    , @NamedQuery(name = "MgSetDetail.findByMgActDRemark", query = "SELECT m FROM MgSetDetail m WHERE m.mgActDRemark = :mgActDRemark")})
 public class MgSetDetail implements Serializable {
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS")
+    @Column(name = "ACT_STATUS_CODE")
     private MgSetMasterStatus status;
     @Size(max = 10)
-    @Column(name = "CRT_EMP_ID")
+    @Column(name = "ACT_CREATER_NO")
     private String crtEmpId;
     @Size(max = 20)
-    @Column(name = "CRT_EMP_NAME")
+    @Column(name = "ACT_CREATER_NAME")
     private String crtEmpName;
     @Size(max = 10)
-    @Column(name = "CFM_EMP_ID")
+    @Column(name = "ACT_CHECKER_NO")
     private String cfmEmpId;
     @Size(max = 20)
-    @Column(name = "CFM_EMP_NAME")
+    @Column(name = "ACT_CHECKER_NAME")
     private String cfmEmpName;
-    @Column(name = "CRT_DATE")
+    @Column(name = "ACT_CREATE_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date crtDate;
-    @Column(name = "CFM_DATE")
+    @Column(name = "ACT_CHECK_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date cfmDate;
 
@@ -89,60 +67,61 @@ public class MgSetDetail implements Serializable {
     @NotNull
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSD_SEQ")
-    @SequenceGenerator(name = "MSD_SEQ", sequenceName = "MG_SET_DETAIL_SEQ", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "MSD_SEQ", sequenceName = "MG_FEE_DETAIL_SEQ", initialValue = 1, allocationSize = 1)
     private Long id;
     @Size(max = 20)
-    @Column(name = "MG_ACT_D_CODE")
+    @Column(name = "ACT_CODE")
     private String mgActDCode;
     @Size(max = 5)
-    @Column(name = "MG_ACT_D_SEQ")
+    @Column(name = "ACT_SUB_CODE")
     private String mgActDSeq;
-    @Size(max = 1)
-    @Column(name = "MG_ACT_SET_TYPE")
-    private String mgActSetType;
+//    @Size(max = 1)
+//    @Column(name = "ACT_SEC_TYPE_CODE")
+//    private String mgActSetType;
     @Size(max = 100)
-    @Column(name = "MG_ACT_D_NAME")
+    @Column(name = "ACT_SUB_NAME")
     private String mgActDName;
     @Size(max = 20)
-    @Column(name = "MG_ACT_D_PRD_CODE")
+    @Column(name = "ACT_SEC_TYPE_CODE")
     private String mgActDPrdCode;
     @Size(max = 1)
-    @Column(name = "MG_ACT_D_SEC_TYPE")
+    @Column(name = "ACT_GROUP_TYPE_CODE")
     private String mgActDSecType;
-    @Size(max = 30)
-    @Column(name = "MG_ACT_D_SEC_CMP")
-    private String mgActDSecCmp;
-    @Size(max = 50)
-    @Column(name = "MG_ACT_D_SEC_CODE")
-    private String mgActDSecCode;
-    @Size(max = 11)
-    @Column(name = "MG_ACT_D_COST_ID")
+//    @Size(max = 30)
+//    @Column(name = "MG_ACT_D_SEC_CMP")
+//    private String mgActDSecCmp;
+//    @Size(max = 50)
+//    @Column(name = "MG_ACT_D_SEC_CODE")
+//    private String mgActDSecCode; 
+    @Column(name = "ACT_CUST_TYPE")
     private String mgActDCostId;
-    @Size(max = 1)
-    @Column(name = "MG_ACT_D_SALE_CHNL")
-    private String mgActDSaleChnl;
+//    @Size(max = 1)
+//    @Column(name = "MG_ACT_D_SALE_CHNL")
+//    private String mgActDSaleChnl;
     @Size(max = 8)
-    @Column(name = "MG_ACT_D_START_DATE")
+    @Column(name = "ACT_START_DATE")
     private String mgActDStartDate;
     @Size(max = 8)
-    @Column(name = "MG_ACT_D_END_DATE")
+    @Column(name = "ACT_END_DATE")
     private String mgActDEndDate;
-    @Column(name = "MG_ACT_D_SET_NO")
-    private BigInteger mgActDSetNo;
-    @Column(name = "MG_ACT_D_BASE_AMT")
-    private BigDecimal mgActDBaseAmt;
-    @Column(name = "MG_ACT_D_LOW_AMT")
-    private BigDecimal mgActDLowAmt;
-    @Column(name = "MG_ACT_D_HIGH_AMT")
-    private BigDecimal mgActDHighAmt;
-    @Column(name = "MG_ACT_D_RATE")
-    private BigDecimal mgActDRate;
-    @Column(name = "MG_ACT_D_FEE")
-    private BigDecimal mgActDFee;
+    
+//    @Column(name = "MG_ACT_D_SET_NO")
+//    private BigInteger mgActDSetNo;
+//    @Column(name = "MG_ACT_D_BASE_AMT")
+//    private BigDecimal mgActDBaseAmt;
+//    @Column(name = "MG_ACT_D_LOW_AMT")
+//    private BigDecimal mgActDLowAmt;
+//    @Column(name = "MG_ACT_D_HIGH_AMT")
+//    private BigDecimal mgActDHighAmt;
+//    @Column(name = "MG_ACT_D_RATE")
+//    private BigDecimal mgActDRate;
+//    @Column(name = "MG_ACT_D_FEE")
+//    private BigDecimal mgActDFee;
+    
     @Size(max = 100)
-    @Column(name = "MG_ACT_D_REMARK")
+    @Column(name = "ACT_ACCUM_LEVEL_FLAG")
     private String mgActDRemark;
-    @JoinColumn(name = "MG_SET_MASTER_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "MG_FEE_MASTER_ID", referencedColumnName = "ID")
     @ManyToOne
     private MgSetMaster mgSetMasterId;
 
@@ -177,13 +156,13 @@ public class MgSetDetail implements Serializable {
         this.mgActDSeq = mgActDSeq;
     }
 
-    public String getMgActSetType() {
-        return mgActSetType;
-    }
-
-    public void setMgActSetType(String mgActSetType) {
-        this.mgActSetType = mgActSetType;
-    }
+//    public String getMgActSetType() {
+//        return mgActSetType;
+//    }
+//
+//    public void setMgActSetType(String mgActSetType) {
+//        this.mgActSetType = mgActSetType;
+//    }
 
     public String getMgActDName() {
         return mgActDName;
@@ -209,22 +188,7 @@ public class MgSetDetail implements Serializable {
         this.mgActDSecType = mgActDSecType;
     }
 
-    public String getMgActDSecCmp() {
-        return mgActDSecCmp;
-    }
-
-    public void setMgActDSecCmp(String mgActDSecCmp) {
-        this.mgActDSecCmp = mgActDSecCmp;
-    }
-
-    public String getMgActDSecCode() {
-        return mgActDSecCode;
-    }
-
-    public void setMgActDSecCode(String mgActDSecCode) {
-        this.mgActDSecCode = mgActDSecCode;
-    }
-
+    
     public String getMgActDCostId() {
         return mgActDCostId;
     }
@@ -233,13 +197,7 @@ public class MgSetDetail implements Serializable {
         this.mgActDCostId = mgActDCostId;
     }
 
-    public String getMgActDSaleChnl() {
-        return mgActDSaleChnl;
-    }
-
-    public void setMgActDSaleChnl(String mgActDSaleChnl) {
-        this.mgActDSaleChnl = mgActDSaleChnl;
-    }
+   
 
     public String getMgActDStartDate() {
         return mgActDStartDate;
@@ -256,55 +214,7 @@ public class MgSetDetail implements Serializable {
     public void setMgActDEndDate(String mgActDEndDate) {
         this.mgActDEndDate = mgActDEndDate;
     }
-
-    public BigInteger getMgActDSetNo() {
-        return mgActDSetNo;
-    }
-
-    public void setMgActDSetNo(BigInteger mgActDSetNo) {
-        this.mgActDSetNo = mgActDSetNo;
-    }
-
-    public BigDecimal getMgActDBaseAmt() {
-        return mgActDBaseAmt;
-    }
-
-    public void setMgActDBaseAmt(BigDecimal mgActDBaseAmt) {
-        this.mgActDBaseAmt = mgActDBaseAmt;
-    }
-
-    public BigDecimal getMgActDLowAmt() {
-        return mgActDLowAmt;
-    }
-
-    public void setMgActDLowAmt(BigDecimal mgActDLowAmt) {
-        this.mgActDLowAmt = mgActDLowAmt;
-    }
-
-    public BigDecimal getMgActDHighAmt() {
-        return mgActDHighAmt;
-    }
-
-    public void setMgActDHighAmt(BigDecimal mgActDHighAmt) {
-        this.mgActDHighAmt = mgActDHighAmt;
-    }
-
-    public BigDecimal getMgActDRate() {
-        return mgActDRate;
-    }
-
-    public void setMgActDRate(BigDecimal mgActDRate) {
-        this.mgActDRate = mgActDRate;
-    }
-
-    public BigDecimal getMgActDFee() {
-        return mgActDFee;
-    }
-
-    public void setMgActDFee(BigDecimal mgActDFee) {
-        this.mgActDFee = mgActDFee;
-    }
-
+   
     public String getMgActDRemark() {
         return mgActDRemark;
     }

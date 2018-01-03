@@ -271,9 +271,8 @@ public class MgSetDetailController implements Serializable {
         this.selected = item;
         this.mgSetDetail = item;
         DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
-
-        mgSetActDetailStartDate = formatter.parseDateTime(mgSetDetail.getMgActDStartDate()).toDate();
-        mgSetActDetailEndDate = formatter.parseDateTime(mgSetDetail.getMgActDEndDate()).toDate();
+        mgSetActDetailStartDate = formatter.parseDateTime(mgSetDetail.getMgActDStartDate()).plusDays(1).toDate();
+        mgSetActDetailEndDate = formatter.parseDateTime(mgSetDetail.getMgActDEndDate()).plusDays(1).toDate();
         chlList = mgSetDetailChlCfgFacade.findBySelectChannel(item.getMgActDCode(), item.getMgActDSeq());
 
         if (selectedChannel != null) {
@@ -484,6 +483,7 @@ public class MgSetDetailController implements Serializable {
             JsfUtil.addErrorMessage(errMsg);
             return;
         } else {
+            mgSetDetailRngCfgFacade.removeByMgSetDetail(mgSetDetail);
             for (MgSetDetailRngCfg rng : rangeList) {
                 rng.setChangedate(new Date());
                 rng.setMgActCode(mgSetDetail.getMgActDCode());

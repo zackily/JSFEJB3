@@ -26,30 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author NT48810
  */
 @Entity
-@Table(name = "ERIC_MG_FEE")
+@Table(name = "MG_FEE")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "EricMgFee.findAll", query = "SELECT e FROM EricMgFee e")
-    , @NamedQuery(name = "EricMgFee.findByTrustacct", query = "SELECT e FROM EricMgFee e WHERE e.trustacct = :trustacct")
-    , @NamedQuery(name = "EricMgFee.findByBaseDate", query = "SELECT e FROM EricMgFee e WHERE e.baseDate = :baseDate")
-    , @NamedQuery(name = "EricMgFee.findByCustId", query = "SELECT e FROM EricMgFee e WHERE e.custId = :custId")
-    , @NamedQuery(name = "EricMgFee.findByFundId", query = "SELECT e FROM EricMgFee e WHERE e.fundId = :fundId")
-    , @NamedQuery(name = "EricMgFee.findByActCode", query = "SELECT e FROM EricMgFee e WHERE e.actCode = :actCode")
-    , @NamedQuery(name = "EricMgFee.findByActSubCode", query = "SELECT e FROM EricMgFee e WHERE e.actSubCode = :actSubCode")
-    , @NamedQuery(name = "EricMgFee.findByPortfolioNo", query = "SELECT e FROM EricMgFee e WHERE e.portfolioNo = :portfolioNo")
-    , @NamedQuery(name = "EricMgFee.findByAumTwdFee", query = "SELECT e FROM EricMgFee e WHERE e.aumTwdFee = :aumTwdFee")
-    , @NamedQuery(name = "EricMgFee.findByCostTwdFee", query = "SELECT e FROM EricMgFee e WHERE e.costTwdFee = :costTwdFee")
-    , @NamedQuery(name = "EricMgFee.findByAumUsdFee", query = "SELECT e FROM EricMgFee e WHERE e.aumUsdFee = :aumUsdFee")
-    , @NamedQuery(name = "EricMgFee.findByCostUsdFee", query = "SELECT e FROM EricMgFee e WHERE e.costUsdFee = :costUsdFee")
-    , @NamedQuery(name = "EricMgFee.findByAumFee", query = "SELECT e FROM EricMgFee e WHERE e.aumFee = :aumFee")
-    , @NamedQuery(name = "EricMgFee.findByCostFee", query = "SELECT e FROM EricMgFee e WHERE e.costFee = :costFee")
-    , @NamedQuery(name = "EricMgFee.findByCurrency", query = "SELECT e FROM EricMgFee e WHERE e.currency = :currency")
-    , @NamedQuery(name = "EricMgFee.findByTwdExrate", query = "SELECT e FROM EricMgFee e WHERE e.twdExrate = :twdExrate")
-    , @NamedQuery(name = "EricMgFee.findByUsdExrate", query = "SELECT e FROM EricMgFee e WHERE e.usdExrate = :usdExrate")
-    , @NamedQuery(name = "EricMgFee.findByCanvasser", query = "SELECT e FROM EricMgFee e WHERE e.canvasser = :canvasser")
-    , @NamedQuery(name = "EricMgFee.findByBranchId", query = "SELECT e FROM EricMgFee e WHERE e.branchId = :branchId")
-    , @NamedQuery(name = "EricMgFee.findByUpdateDttm", query = "SELECT e FROM EricMgFee e WHERE e.updateDttm = :updateDttm")
-    , @NamedQuery(name = "EricMgFee.findById", query = "SELECT e FROM EricMgFee e WHERE e.id = :id")})
 public class EricMgFee implements Serializable {
 
     private static final long serialVersionUID = 1L;

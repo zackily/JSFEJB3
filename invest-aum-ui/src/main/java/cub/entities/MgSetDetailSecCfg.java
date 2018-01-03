@@ -7,6 +7,7 @@ package cub.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +18,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,41 +29,48 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author NT48810
  */
 @Entity
-@Table(name = "MG_SET_DETAIL_SEC_CFG")
+@Table(name = "MG_FEE_ACT_DETAIL_SEC_CFG")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgSetDetailSecCfg.findAll", query = "SELECT m FROM MgSetDetailSecCfg m")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findById", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.id = :id")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActCode", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActCode = :mgActCode")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActSubCode", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActSubCode = :mgActSubCode")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActCounterparty", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActCounterparty = :mgActCounterparty")
-    , @NamedQuery(name = "MgSetDetailSecCfg.findByMgActFundNo", query = "SELECT m FROM MgSetDetailSecCfg m WHERE m.mgActFundNo = :mgActFundNo")})
 public class MgSetDetailSecCfg implements Serializable {
 
     @Size(max = 1)
-    @Column(name = "MG_ACT_FUND_TYPE")
+    @Column(name = "ACT_FUND_TYPE")
     private String mgActFundType;
+    
+    @Size(max = 1)
+    @Column(name = "ACT_FUND_KIND")
+    private String mgActFundKind;
+    
+    @Column(name = "ACT_OPTION_CODE")
+    private String actOptionCode;
+    
+    @Column(name = "ACT_ATTR_CODE")
+    private String actAttrCode;
 
+     @Column(name = "ACT_UPDATE_DTTM")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date changedate;
+    
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID")
-    @SequenceGenerator(name = "MSDSC_SEQ", sequenceName = "MG_SET_DETAIL_SEC_CFG_SEQ", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "MSDSC_SEQ", sequenceName = "MG_FEE_DETAIL_SEC_CFG_SEQ", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSDSC_SEQ")
     private BigDecimal id;
     @Size(max = 20)
-    @Column(name = "MG_ACT_CODE")
+    @Column(name = "ACT_CODE")
     private String mgActCode;
     @Size(max = 5)
-    @Column(name = "MG_ACT_SUB_CODE")
+    @Column(name = "ACT_SUB_CODE")
     private String mgActSubCode;
     @Size(max = 30)
-    @Column(name = "MG_ACT_COUNTERPARTY")
+    @Column(name = "ACT_COUNTERPARTY")
     private String mgActCounterparty;
     @Size(max = 8)
-    @Column(name = "MG_ACT_FUND_NO")
+    @Column(name = "ACT_FUND_CODE")
     private String mgActFundNo;
 
     public MgSetDetailSecCfg() {
@@ -141,6 +151,38 @@ public class MgSetDetailSecCfg implements Serializable {
 
     public void setMgActFundType(String mgActFundType) {
         this.mgActFundType = mgActFundType;
+    }
+
+    public String getMgActFundKind() {
+        return mgActFundKind;
+    }
+
+    public void setMgActFundKind(String mgActFundKind) {
+        this.mgActFundKind = mgActFundKind;
+    }
+
+    public String getActOptionCode() {
+        return actOptionCode;
+    }
+
+    public void setActOptionCode(String actOptionCode) {
+        this.actOptionCode = actOptionCode;
+    }
+
+    public String getActAttrCode() {
+        return actAttrCode;
+    }
+
+    public void setActAttrCode(String actAttrCode) {
+        this.actAttrCode = actAttrCode;
+    }
+
+    public Date getChangedate() {
+        return changedate;
+    }
+
+    public void setChangedate(Date changedate) {
+        this.changedate = changedate;
     }
 
 }

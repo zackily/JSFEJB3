@@ -25,26 +25,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "FUND_HOLDING_SEC_SUM")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "FundHoldingSecSum.findAll", query = "SELECT f FROM FundHoldingSecSum f")
-    , @NamedQuery(name = "FundHoldingSecSum.findByCorpId", query = "SELECT f FROM FundHoldingSecSum f WHERE f.corpId = :corpId")
-    , @NamedQuery(name = "FundHoldingSecSum.findByFundId", query = "SELECT f FROM FundHoldingSecSum f WHERE f.fundId = :fundId")
-    , @NamedQuery(name = "FundHoldingSecSum.findBySecType", query = "SELECT f FROM FundHoldingSecSum f WHERE f.secType = :secType")
-    , @NamedQuery(name = "FundHoldingSecSum.findByBaseDate", query = "SELECT f FROM FundHoldingSecSum f WHERE f.baseDate = :baseDate")
-    , @NamedQuery(name = "FundHoldingSecSum.findByAumTot", query = "SELECT f FROM FundHoldingSecSum f WHERE f.aumTot = :aumTot")
-    , @NamedQuery(name = "FundHoldingSecSum.findById", query = "SELECT f FROM FundHoldingSecSum f WHERE f.id = :id")})
 public class FundHoldingSecSum implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 4)
-    @Column(name = "CORP_ID")
+    @Column(name = "COUNTERPARTY")
     private String corpId;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 8)
-    @Column(name = "FUND_ID")
+    @Column(name = "FUND_CODE")
     private String fundId;
     @Basic(optional = false)
     @NotNull
@@ -58,8 +50,14 @@ public class FundHoldingSecSum implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "AUM_TOT")
-    private BigDecimal aumTot;
+    @Column(name = "AUM_TOTAL_NTD_AMT")
+    private BigDecimal aumNtdTot;
+    @Column(name = "AUM_TOTAL_USD_AMT")
+    private BigDecimal aumUsdTot;
+    @Column(name = "AUM_TOTAL_FX_AMT")
+    private BigDecimal aumFxTot;
+    
+    
     @Id
     @Basic(optional = false)
     @NotNull
@@ -73,14 +71,7 @@ public class FundHoldingSecSum implements Serializable {
         this.id = id;
     }
 
-    public FundHoldingSecSum(BigDecimal id, String corpId, String fundId, Character secType, String baseDate, BigDecimal aumTot) {
-        this.id = id;
-        this.corpId = corpId;
-        this.fundId = fundId;
-        this.secType = secType;
-        this.baseDate = baseDate;
-        this.aumTot = aumTot;
-    }
+   
 
     public String getCorpId() {
         return corpId;
@@ -114,13 +105,6 @@ public class FundHoldingSecSum implements Serializable {
         this.baseDate = baseDate;
     }
 
-    public BigDecimal getAumTot() {
-        return aumTot;
-    }
-
-    public void setAumTot(BigDecimal aumTot) {
-        this.aumTot = aumTot;
-    }
 
     public BigDecimal getId() {
         return id;
@@ -128,6 +112,30 @@ public class FundHoldingSecSum implements Serializable {
 
     public void setId(BigDecimal id) {
         this.id = id;
+    }
+
+    public BigDecimal getAumNtdTot() {
+        return aumNtdTot;
+    }
+
+    public void setAumNtdTot(BigDecimal aumNtdTot) {
+        this.aumNtdTot = aumNtdTot;
+    }
+
+    public BigDecimal getAumUsdTot() {
+        return aumUsdTot;
+    }
+
+    public void setAumUsdTot(BigDecimal aumUsdTot) {
+        this.aumUsdTot = aumUsdTot;
+    }
+
+    public BigDecimal getAumFxTot() {
+        return aumFxTot;
+    }
+
+    public void setAumFxTot(BigDecimal aumFxTot) {
+        this.aumFxTot = aumFxTot;
     }
 
     @Override

@@ -26,29 +26,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author NT48810
  */
 @Entity
-@Table(name = "ERIC_MG_FEE_MONTH_DETAIL")
+@Table(name = "MG_FEE_MONTH_DETAIL")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "EricMgFeeMonthDetail.findAll", query = "SELECT e FROM EricMgFeeMonthDetail e")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByTrustacct", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.trustacct = :trustacct")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByBaseDate", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.baseDate = :baseDate")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByCustId", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.custId = :custId")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByPortfolioNo", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.portfolioNo = :portfolioNo")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByActCode", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.actCode = :actCode")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByActSubCode", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.actSubCode = :actSubCode")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByFundId", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.fundId = :fundId")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByAumFee", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.aumFee = :aumFee")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByAumRemainFee", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.aumRemainFee = :aumRemainFee")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByCostFee", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.costFee = :costFee")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByCostRemainFee", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.costRemainFee = :costRemainFee")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByCurrency", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.currency = :currency")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findByUpdateDttm", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.updateDttm = :updateDttm")
-    , @NamedQuery(name = "EricMgFeeMonthDetail.findById", query = "SELECT e FROM EricMgFeeMonthDetail e WHERE e.id = :id")})
 public class EricMgFeeMonthDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Size(max = 12)
-    @Column(name = "TRUSTACCT")
+    @Column(name = "TST_ACCT_NO")
     private String trustacct;
     @Size(max = 6)
     @Column(name = "BASE_DATE")
@@ -69,13 +53,13 @@ public class EricMgFeeMonthDetail implements Serializable {
     @Column(name = "FUND_ID")
     private String fundId;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "AUM_FEE")
+    @Column(name = "AUM_FEE_AMT")
     private BigDecimal aumFee;
-    @Column(name = "AUM_REMAIN_FEE")
+    @Column(name = "AUM_FEE_BAL")
     private BigDecimal aumRemainFee;
-    @Column(name = "COST_FEE")
+    @Column(name = "COST_FEE_AMT")
     private BigDecimal costFee;
-    @Column(name = "COST_REMAIN_FEE")
+    @Column(name = "COST_FEE_BAL")
     private BigDecimal costRemainFee;
     @Size(max = 3)
     @Column(name = "CURRENCY")

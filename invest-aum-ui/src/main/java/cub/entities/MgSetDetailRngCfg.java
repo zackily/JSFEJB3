@@ -30,26 +30,17 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author NT48810
  */
 @Entity
-@Table(name = "MG_SET_DETAIL_RNG_CFG")
+@Table(name = "MG_FEE_ACT_DETAIL_RNG_CFG")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgSetDetailRngCfg.findAll", query = "SELECT m FROM MgSetDetailRngCfg m")
-    , @NamedQuery(name = "MgSetDetailRngCfg.findById", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.id = :id")
-    , @NamedQuery(name = "MgSetDetailRngCfg.findByMgActCode", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.mgActCode = :mgActCode")
-    , @NamedQuery(name = "MgSetDetailRngCfg.findByMgActSubCode", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.mgActSubCode = :mgActSubCode")
-    , @NamedQuery(name = "MgSetDetailRngCfg.findByMgActLowAmt", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.mgActLowAmt = :mgActLowAmt")
-    , @NamedQuery(name = "MgSetDetailRngCfg.findByMgActHightAmt", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.mgActHightAmt = :mgActHightAmt")
-    , @NamedQuery(name = "MgSetDetailRngCfg.findByMgActRate", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.mgActRate = :mgActRate")
-    , @NamedQuery(name = "MgSetDetailRngCfg.findByChangedate", query = "SELECT m FROM MgSetDetailRngCfg m WHERE m.changedate = :changedate")})
 public class MgSetDetailRngCfg implements Serializable {
 
-    @Column(name = "MG_ACT_CURRENCY")
+    @Column(name = "ACT_CURR")
     private String mgActCurrency;
-    @Column(name = "MG_ACT_BPS")
+    @Column(name = "ACT_RATE")
     private BigInteger mgActBps;
-    @Column(name = "MG_ACT_MG_RTN_RATE")
+    @Column(name = "ACT_MG_RTN_RATE")
     private BigInteger mgActMgRtnRate;
-    @Column(name = "MG_ACT_MG_MAP_RATE")
+    @Column(name = "ACT_MG_MAP_RATE")
     private BigInteger mgActMgMapRate;
 
     private static final long serialVersionUID = 1L;
@@ -58,21 +49,21 @@ public class MgSetDetailRngCfg implements Serializable {
     @NotNull
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSDR_SEQ")
-    @SequenceGenerator(name = "MSDR_SEQ", sequenceName = "MG_SET_DETAIL_RNG_CFG_SEQ", initialValue = 1, allocationSize = 1)    
+    @SequenceGenerator(name = "MSDR_SEQ", sequenceName = "MG_FEE_DETAIL_RNG_CFG_SEQ", initialValue = 1, allocationSize = 1)    
     private BigDecimal id;
     @Size(max = 20)
-    @Column(name = "MG_ACT_CODE")
+    @Column(name = "ACT_CODE")
     private String mgActCode;
     @Size(max = 5)
-    @Column(name = "MG_ACT_SUB_CODE")
+    @Column(name = "ACT_SUB_CODE")
     private String mgActSubCode;
-    @Column(name = "MG_ACT_LOW_AMT")
+    @Column(name = "ACT_LOW_AMT")
     private BigDecimal mgActLowAmt;
-    @Column(name = "MG_ACT_HIGHT_AMT")
+    @Column(name = "ACT_HIGHT_AMT")
     private BigDecimal mgActHightAmt;
-    @Column(name = "MG_ACT_RATE")
-    private BigDecimal mgActRate;
-    @Column(name = "CHANGEDATE")
+//    @Column(name = "ACT_RATE")
+//    private BigDecimal mgActRate;
+    @Column(name = "ACT_UPDATE_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date changedate;
 
@@ -123,13 +114,13 @@ public class MgSetDetailRngCfg implements Serializable {
         this.mgActHightAmt = mgActHightAmt;
     }
 
-    public BigDecimal getMgActRate() {
-        return mgActRate;
-    }
-
-    public void setMgActRate(BigDecimal mgActRate) {
-        this.mgActRate = mgActRate;
-    }
+//    public BigDecimal getMgActRate() {
+//        return mgActRate;
+//    }
+//
+//    public void setMgActRate(BigDecimal mgActRate) {
+//        this.mgActRate = mgActRate;
+//    }
 
     public Date getChangedate() {
         return changedate;
@@ -167,7 +158,7 @@ public class MgSetDetailRngCfg implements Serializable {
         sb.append("[mgActSubCode=" ).append(mgActSubCode).append(  "]");
         sb.append("[mgActLowAmt=" ).append(mgActLowAmt).append( "]");
         sb.append("[mgActHightAmt=" ).append(mgActHightAmt).append( "]");
-        sb.append("[mgActRate=" ).append(mgActRate).append( "]");
+//        sb.append("[mgActRate=" ).append(mgActRate).append( "]");
         sb.append("[changedate=" ).append(changedate).append( "]");
         sb.append("[mgActCurrency=" ).append(mgActCurrency).append( "]");
         sb.append("[mgActBps=" ).append(mgActBps).append( "]");

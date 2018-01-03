@@ -36,44 +36,35 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author NT48810
  */
 @Entity
-@Table(name = "MG_SET_MASTER")
+@Table(name = "MG_FEE_ACT_MASTER")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgSetMaster.findAll", query = "SELECT m FROM MgSetMaster m")
-    , @NamedQuery(name = "MgSetMaster.findById", query = "SELECT m FROM MgSetMaster m WHERE m.id = :id")
-    , @NamedQuery(name = "MgSetMaster.findByMgActMCode", query = "SELECT m FROM MgSetMaster m WHERE m.mgActMCode = :mgActMCode")
-    , @NamedQuery(name = "MgSetMaster.findByMgActMName", query = "SELECT m FROM MgSetMaster m WHERE m.mgActMName = :mgActMName")
-    , @NamedQuery(name = "MgSetMaster.findByMgActMType", query = "SELECT m FROM MgSetMaster m WHERE m.mgActMType = :mgActMType")
-    , @NamedQuery(name = "MgSetMaster.findByMgActMRateSet", query = "SELECT m FROM MgSetMaster m WHERE m.mgActMRateSet = :mgActMRateSet")
-    , @NamedQuery(name = "MgSetMaster.findByMgActMRemark", query = "SELECT m FROM MgSetMaster m WHERE m.mgActMRemark = :mgActMRemark")
-    , @NamedQuery(name = "MgSetMaster.findByMgActMSaleChnl", query = "SELECT m FROM MgSetMaster m WHERE m.mgActMSaleChnl = :mgActMSaleChnl")
-    , @NamedQuery(name = "MgSetMaster.findByMgActMChargeObj", query = "SELECT m FROM MgSetMaster m WHERE m.mgActMChargeObj = :mgActMChargeObj")
-    , @NamedQuery(name = "MgSetMaster.findByMgActLastSettleDate", query = "SELECT m FROM MgSetMaster m WHERE m.mgActLastSettleDate = :mgActLastSettleDate")})
 public class MgSetMaster implements Serializable {
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "STATUS")
+    @Column(name = "ACT_STATUS_CODE")
     private MgSetMasterStatus status;
-
     
-    @Column(name = "CRT_EMP_ID")
+    @Column(name = "ACT_CREATER_NO")
     private String crtEmpId;
     
-    @Column(name = "CRT_EMP_NAME")
+    @Column(name = "ACT_CREATER_NAME")
     private String crtEmpName;
     
-    @Column(name = "CFM_EMP_ID")
+    @Column(name = "ACT_CHECKER_NO")
     private String cfmEmpId;
     
-    @Column(name = "CFM_EMP_NAME")
+    @Column(name = "ACT_CHECKER_NAME")
     private String cfmEmpName;
-    @Column(name = "CRT_DATE")
+    
+    @Column(name = "ACT_CREATE_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date crtDate;
-    @Column(name = "UPD_DATE")
+    
+    @Column(name = "ACT_UPDATE_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updDate;
-    @Column(name = "CFM_DATE")
+    
+    @Column(name = "ACT_CHECK_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date cfmDate;
 
@@ -83,31 +74,31 @@ public class MgSetMaster implements Serializable {
     @NotNull
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MSM_SEQ")
-    @SequenceGenerator(name = "MSM_SEQ", sequenceName = "MG_SET_MASTER_SEQ", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "MSM_SEQ", sequenceName = "MG_FEE_MASTER_SEQ", initialValue = 1, allocationSize = 1)
     private Long id;
    
-    @Column(name = "MG_ACT_M_CODE")
+    @Column(name = "ACT_CODE")
     private String mgActMCode;
     
-    @Column(name = "MG_ACT_M_NAME")
+    @Column(name = "ACT_NAME")
     private String mgActMName;
     
-    @Column(name = "MG_ACT_M_TYPE")
+    @Column(name = "ACT_TYPE_CODE")
     private String mgActMType;
    
-    @Column(name = "MG_ACT_M_RATE_SET")
+    @Column(name = "ACT_RATE_SET")
     private String mgActMRateSet;
     
-    @Column(name = "MG_ACT_M_REMARK")
+    @Column(name = "ACT_REMARK")
     private String mgActMRemark;
    
-    @Column(name = "MG_ACT_M_SALE_CHNL")
-    private String mgActMSaleChnl;
+//    @Column(name = "MG_ACT_M_SALE_CHNL")
+//    private String mgActMSaleChnl;
     
-    @Column(name = "MG_ACT_M_CHARGE_OBJ")
+    @Column(name = "ACT_M_CHARGE_OBJ")
     private String mgActMChargeObj;
     
-    @Column(name = "MG_ACT_LAST_SETTLE_DATE")
+    @Column(name = "ACT_LAST_SETTLE_DATE")
     private String mgActLastSettleDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "mgSetMasterId")
     @OrderBy("mgActDSeq DESC")
@@ -168,13 +159,13 @@ public class MgSetMaster implements Serializable {
         this.mgActMRemark = mgActMRemark;
     }
 
-    public String getMgActMSaleChnl() {
-        return mgActMSaleChnl;
-    }
-
-    public void setMgActMSaleChnl(String mgActMSaleChnl) {
-        this.mgActMSaleChnl = mgActMSaleChnl;
-    }
+//    public String getMgActMSaleChnl() {
+//        return mgActMSaleChnl;
+//    }
+//
+//    public void setMgActMSaleChnl(String mgActMSaleChnl) {
+//        this.mgActMSaleChnl = mgActMSaleChnl;
+//    }
 
     public String getMgActMChargeObj() {
         return mgActMChargeObj;

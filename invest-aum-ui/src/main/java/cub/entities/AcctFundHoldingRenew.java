@@ -29,30 +29,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "ACCT_FUND_HOLDING_RENEW")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "AcctFundHoldingRenew.findAll", query = "SELECT a FROM AcctFundHoldingRenew a")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findById", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.id = :id")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByCustId", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.custId = :custId")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByBaseDt", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.baseDt = :baseDt")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByFundId", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.fundId = :fundId")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByNav", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.nav = :nav")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByNavDt", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.navDt = :navDt")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByUnit", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.unit = :unit")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByTwdValue", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.twdValue = :twdValue")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByUsdValue", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.usdValue = :usdValue")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByValue", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.value = :value")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByCost", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.cost = :cost")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByPortfolioNo", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.portfolioNo = :portfolioNo")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByCurrency", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.currency = :currency")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByTwdExrate", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.twdExrate = :twdExrate")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByUsdExrate", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.usdExrate = :usdExrate")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByExrateDt", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.exrateDt = :exrateDt")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByCanvasser", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.canvasser = :canvasser")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByBranchId", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.branchId = :branchId")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByChannel", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.channel = :channel")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByTflag", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.tflag = :tflag")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByUpdateDttm", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.updateDttm = :updateDttm")
-    , @NamedQuery(name = "AcctFundHoldingRenew.findByTstAcct", query = "SELECT a FROM AcctFundHoldingRenew a WHERE a.tstAcct = :tstAcct")})
 public class AcctFundHoldingRenew implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,56 +42,53 @@ public class AcctFundHoldingRenew implements Serializable {
     @Column(name = "CUST_ID")
     private String custId;
     @Size(max = 20)
-    @Column(name = "BASE_DT")
+    @Column(name = "BASE_DATE")
     private String baseDt;
     @Size(max = 20)
-    @Column(name = "FUND_ID")
+    @Column(name = "FUND_CODE")
     private String fundId;
     @Column(name = "NAV")
     private BigInteger nav;
     @Size(max = 20)
-    @Column(name = "NAV_DT")
+    @Column(name = "NAV_DATE")
     private String navDt;
     @Column(name = "UNIT")
     private BigInteger unit;
-    @Column(name = "TWD_VALUE")
+    @Column(name = "NTD_VALUE")
     private BigInteger twdValue;
     @Column(name = "USD_VALUE")
     private BigInteger usdValue;
     @Column(name = "VALUE")
     private BigInteger value;
     @Column(name = "COST")
-    private BigInteger cost;
-    @Size(max = 20)
+    private BigInteger cost;   
     @Column(name = "PORTFOLIO_NO")
-    private String portfolioNo;
-    @Size(max = 20)
+    private String portfolioNo;    
     @Column(name = "CURRENCY")
     private String currency;
-    @Column(name = "TWD_EXRATE")
+    @Column(name = "NTD_EXRATE")
     private BigInteger twdExrate;
     @Column(name = "USD_EXRATE")
-    private BigInteger usdExrate;
-    @Size(max = 20)
-    @Column(name = "EXRATE_DT")
+    private BigInteger usdExrate;   
+    @Column(name = "EXRATE_DATE")
     private String exrateDt;
-    @Size(max = 20)
+    
     @Column(name = "CANVASSER")
     private String canvasser;
-    @Size(max = 20)
-    @Column(name = "BRANCH_ID")
+    
+    @Column(name = "BRANCH_CODE")
     private String branchId;
-    @Size(max = 20)
-    @Column(name = "CHANNEL")
+    
+    @Column(name = "CHNL_CODE")
     private String channel;
-    @Size(max = 20)
+    
     @Column(name = "TFLAG")
     private String tflag;
     @Column(name = "UPDATE_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDttm;
-    @Size(max = 20)
-    @Column(name = "TST_ACCT")
+   
+    @Column(name = "TST_ACCT_NO")
     private String tstAcct;
 
     public AcctFundHoldingRenew() {

@@ -27,27 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author NT48810
  */
 @Entity
-@Table(name = "ERIC_MG_FEE_MONTH")
+@Table(name = "MG_FEE_MONTH")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "EricMgFeeMonth.findAll", query = "SELECT e FROM EricMgFeeMonth e")
-    , @NamedQuery(name = "EricMgFeeMonth.findByCustId", query = "SELECT e FROM EricMgFeeMonth e WHERE e.custId = :custId")
-    , @NamedQuery(name = "EricMgFeeMonth.findByBaseDate", query = "SELECT e FROM EricMgFeeMonth e WHERE e.baseDate = :baseDate")
-    , @NamedQuery(name = "EricMgFeeMonth.findByActCode", query = "SELECT e FROM EricMgFeeMonth e WHERE e.actCode = :actCode")
-    , @NamedQuery(name = "EricMgFeeMonth.findByActSubCode", query = "SELECT e FROM EricMgFeeMonth e WHERE e.actSubCode = :actSubCode")
-    , @NamedQuery(name = "EricMgFeeMonth.findByCurrency", query = "SELECT e FROM EricMgFeeMonth e WHERE e.currency = :currency")
-    , @NamedQuery(name = "EricMgFeeMonth.findByAumFee", query = "SELECT e FROM EricMgFeeMonth e WHERE e.aumFee = :aumFee")
-    , @NamedQuery(name = "EricMgFeeMonth.findByAumRemainFee", query = "SELECT e FROM EricMgFeeMonth e WHERE e.aumRemainFee = :aumRemainFee")
-    , @NamedQuery(name = "EricMgFeeMonth.findByCostFee", query = "SELECT e FROM EricMgFeeMonth e WHERE e.costFee = :costFee")
-    , @NamedQuery(name = "EricMgFeeMonth.findByCostRemainFee", query = "SELECT e FROM EricMgFeeMonth e WHERE e.costRemainFee = :costRemainFee")
-    , @NamedQuery(name = "EricMgFeeMonth.findBySettleUserId", query = "SELECT e FROM EricMgFeeMonth e WHERE e.settleUserId = :settleUserId")
-    , @NamedQuery(name = "EricMgFeeMonth.findBySettleDate", query = "SELECT e FROM EricMgFeeMonth e WHERE e.settleDate = :settleDate")
-    , @NamedQuery(name = "EricMgFeeMonth.findByUpdateDttm", query = "SELECT e FROM EricMgFeeMonth e WHERE e.updateDttm = :updateDttm")
-    , @NamedQuery(name = "EricMgFeeMonth.findByAumTwFee", query = "SELECT e FROM EricMgFeeMonth e WHERE e.aumTwFee = :aumTwFee")
-    , @NamedQuery(name = "EricMgFeeMonth.findByAumUsdFee", query = "SELECT e FROM EricMgFeeMonth e WHERE e.aumUsdFee = :aumUsdFee")
-    , @NamedQuery(name = "EricMgFeeMonth.findByCostTwFee", query = "SELECT e FROM EricMgFeeMonth e WHERE e.costTwFee = :costTwFee")
-    , @NamedQuery(name = "EricMgFeeMonth.findByCostUsdFee", query = "SELECT e FROM EricMgFeeMonth e WHERE e.costUsdFee = :costUsdFee")
-    , @NamedQuery(name = "EricMgFeeMonth.findById", query = "SELECT e FROM EricMgFeeMonth e WHERE e.id = :id")})
 public class EricMgFeeMonth implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,7 +40,7 @@ public class EricMgFeeMonth implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 6)
-    @Column(name = "BASE_DATE")
+    @Column(name = "BASE_MONTH")
     private String baseDate;
     @Basic(optional = false)
     @NotNull
@@ -77,31 +58,34 @@ public class EricMgFeeMonth implements Serializable {
     @Column(name = "CURRENCY")
     private String currency;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "AUM_FEE")
+    @Column(name = "AUM_FEE_AMT")
     private BigDecimal aumFee;
-    @Column(name = "AUM_REMAIN_FEE")
+    @Column(name = "AUM_FEE_BAL")
     private BigDecimal aumRemainFee;
-    @Column(name = "COST_FEE")
+    @Column(name = "COST_FEE_AMT")
     private BigDecimal costFee;
-    @Column(name = "COST_REMAIN_FEE")
+    @Column(name = "COST_FEE_BAL")
     private BigDecimal costRemainFee;
     @Size(max = 5)
-    @Column(name = "SETTLE_USER_ID")
+    @Column(name = "SETTLE_USER_NO")
     private String settleUserId;
+     @Column(name = "SETTLE_USER_NAME")
+    private String settleUserName;
+    
     @Size(max = 8)
     @Column(name = "SETTLE_DATE")
     private String settleDate;
     @Column(name = "UPDATE_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDttm;
-    @Column(name = "AUM_TW_FEE")
-    private BigInteger aumTwFee;
-    @Column(name = "AUM_USD_FEE")
-    private BigInteger aumUsdFee;
-    @Column(name = "COST_TW_FEE")
-    private BigInteger costTwFee;
-    @Column(name = "COST_USD_FEE")
-    private BigInteger costUsdFee;
+//    @Column(name = "AUM_TW_FEE")
+//    private BigInteger aumTwFee;
+//    @Column(name = "AUM_USD_FEE")
+//    private BigInteger aumUsdFee;
+//    @Column(name = "COST_TW_FEE")
+//    private BigInteger costTwFee;
+//    @Column(name = "COST_USD_FEE")
+//    private BigInteger costUsdFee;
     @Id
     @Basic(optional = false)
     @NotNull
@@ -218,38 +202,14 @@ public class EricMgFeeMonth implements Serializable {
 
     public void setUpdateDttm(Date updateDttm) {
         this.updateDttm = updateDttm;
+    }    
+
+    public String getSettleUserName() {
+        return settleUserName;
     }
 
-    public BigInteger getAumTwFee() {
-        return aumTwFee;
-    }
-
-    public void setAumTwFee(BigInteger aumTwFee) {
-        this.aumTwFee = aumTwFee;
-    }
-
-    public BigInteger getAumUsdFee() {
-        return aumUsdFee;
-    }
-
-    public void setAumUsdFee(BigInteger aumUsdFee) {
-        this.aumUsdFee = aumUsdFee;
-    }
-
-    public BigInteger getCostTwFee() {
-        return costTwFee;
-    }
-
-    public void setCostTwFee(BigInteger costTwFee) {
-        this.costTwFee = costTwFee;
-    }
-
-    public BigInteger getCostUsdFee() {
-        return costUsdFee;
-    }
-
-    public void setCostUsdFee(BigInteger costUsdFee) {
-        this.costUsdFee = costUsdFee;
+    public void setSettleUserName(String settleUserName) {
+        this.settleUserName = settleUserName;
     }
 
     public BigDecimal getId() {
