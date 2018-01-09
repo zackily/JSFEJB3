@@ -279,8 +279,11 @@ public class MgSetMasterController implements Serializable {
         return false;
     }
 
-    public boolean showReadonly(){
-         if (selected.getStatus().compareTo(MgSetMasterStatus.CONFIRM) == 0 || userSession.getUser().getRole().equalsIgnoreCase("2")) {
+    public boolean showReadonly() {
+        if (null == selected.getStatus()) {
+            return false;
+        }
+        if (selected.getStatus().compareTo(MgSetMasterStatus.CONFIRM) == 0 || userSession.getUser().getRole().equalsIgnoreCase("2")) {
             return true;
         }
         return false;
