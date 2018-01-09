@@ -65,17 +65,22 @@
                          rows="10"                         
                          rowsPerPageTemplate="10,20,30,40,50"
                          emptyMessage="查無資料"
-                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                          >             
 
-             <f:facet name="{Exporters}">
-            <h:commandLink>
-                <p:graphicImage name="images/excel.png" width="24"/>
-                <p:dataExporter type="xls" target="datalist" fileName="holdingList" />
-            </h:commandLink>
-             </f:facet>
-        
+                <f:facet name="{Exporters}">
+                    <h:commandLink>
+                        <p:graphicImage name="images/excel.png" width="24"/>
+                        <p:dataExporter type="xls" target="datalist" fileName="holdingList" />
+                    </h:commandLink>
+                </f:facet>
 
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="信託帳號"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tstAcct}"/>
+                </p:column>
                 <p:column>
                     <f:facet name="header">
                         <h:outputText value="客戶ID"/>
@@ -84,60 +89,104 @@
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="TST_ACCT"/>
+                        <h:outputText value="結存日期"/>
                     </f:facet>
-                    <h:outputText value="#{item.tstAcct}"/>
+                    <h:outputText value="#{item.baseDt}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="日期"/>
+                        <h:outputText value="基金代碼"/>
                     </f:facet>
-
+                    <h:outputText value="#{item.fundId}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="基金淨值"/>
+                    </f:facet>
+                    <h:outputText value="#{item.nav}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="淨值日期"/>
+                    </f:facet>
                     <h:outputText value="#{item.navDt}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="幣別"/>
+                        <h:outputText value="結存單位數"/>
                     </f:facet>
-                    <h:outputText value="#{item.currency}"/>
-
+                    <h:outputText value="#{item.unit}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="Value"/>
-                    </f:facet>
-                    <h:outputText value="#{item.value}"/>
-
-                </p:column>
-
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="Cost"/>
-                    </f:facet>
-                    <h:outputText value="#{item.cost}"/>
-
-                </p:column>
-
-                <p:column>
-                    <f:facet name="header">
-                        <h:outputText value="台幣"/>
+                        <h:outputText value="台幣市值"/>
                     </f:facet>
                     <h:outputText value="#{item.twdValue}"/>
-
                 </p:column>
-
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="美金"/>
+                        <h:outputText value="原幣市值"/>
                     </f:facet>
-                    <h:outputText value="#{item.usdValue}"/>
+                    <h:outputText value="#{item.value}"/>
                 </p:column>
-
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="成本"/>
+                    </f:facet>
+                    <h:outputText value="#{item.cost}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="投組序號"/>
+                    </f:facet>
+                    <h:outputText value="#{item.portfolioNo}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="投資幣別"/>
+                    </f:facet>
+                    <h:outputText value="#{item.currency}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="匯率"/>
+                    </f:facet>
+                    <h:outputText value="#{item.usdExrate}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="匯率日期"/>
+                    </f:facet>
+                    <h:outputText value="#{item.exrateDt}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="服務人員"/>
+                    </f:facet>
+                    <h:outputText value="#{item.canvasser}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="分行"/>
+                    </f:facet>
+                    <h:outputText value="#{item.branchId}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="申購通路別"/>
+                    </f:facet>
+                    <h:outputText value="#{item.channel}"/>
+                </p:column><p:column>
+                    <f:facet name="header">
+                        <h:outputText value="最後異動時間"/>
+                    </f:facet>
+                    <h:outputText value="#{item.updateDttm}"/>
+                </p:column>
             </p:dataTable>
 
         </h:form>
 
-                     
+
         <ui:include src="/jsff/ajaxStatusDlg.xhtml"/>  
     </ui:define>
 </ui:composition>
