@@ -41,7 +41,7 @@
                             </p:column>
                             <p:column>
                                 <p:inputText size="50" id="mgActDName" value="#{mgSetDetailController.mgSetDetail.mgActDName}" title="#{bundle.CreateMgSetDetailTitle_mgActDName}" disabled="#{mgSetDetailController.showReadonly()}">       
-                                    <f:validateLength maximum="100" />
+                                    <f:validateLength maximum="50" />
                                 <p:ajax update="dlgMsg" event="blur" />
                                 </p:inputText>
                             </p:column>                            
