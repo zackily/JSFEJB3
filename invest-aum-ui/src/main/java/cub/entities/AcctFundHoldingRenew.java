@@ -243,7 +243,34 @@ public class AcctFundHoldingRenew implements Serializable {
     }
 
     public String getChannel() {
-        return channel;
+        String result = "";
+        switch(channel){
+            case "1":
+                result="臨櫃";
+                break;
+            case "2":
+                result="網路";
+                break;
+            case "3":
+                result="語音";
+                break;
+            case "6":
+                result="理專敲單(空中理財)";
+                break;
+            case "7":
+                result="Phone Banking";
+                break;
+            case "8":
+                result="KOKO";
+                break;
+            case "R":
+                result="ROBO";
+                break;
+            case "M":
+                result="MMB";
+                break;
+        }
+        return result;
     }
 
     public void setChannel(String channel) {
