@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="自定義欄位範圍設定作業(RCMM04)" />
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form style="width: 60%">
+            <p:panel header="自定義欄位範圍設定作業(RCMM04)">
+                <p:layout>
+                    <p:layoutUnit position="west" size="20%">
+                        <p:panelGrid columns="1" style="width: 100%" layout="grid" >
+                            <p:commandButton value="新增" style="width: 80%" type="button" onclick="PF('create').show();"/>
+                            <p:commandButton value="修改" style="width: 80%"/>
+                            <p:commandButton value="刪除" style="width: 80%"/>
+                            <p:commandButton value="搜尋" style="width: 80%"/>
+                        </p:panelGrid>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="center">
+                        <p:carousel value="#{userDeDataScopeSetController.master}" var="item" numVisible="1" firstVisible="0">
+                            <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
+                                <p:outputLabel value="自定義欄位範圍代碼"/>
+                                <p:outputLabel value="#{item.udColumnCode}" />
+                                <p:outputLabel value="自定義欄位範圍名稱"/>
+                                <p:outputLabel value="#{item.udColumnName}" />
+                                <p:outputLabel value="欄位中文名稱"/>
+                                <p:selectOneMenu>
+                                    <f:selectItems/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </p:carousel>
+                        <p:panelGrid columns="1">
+                            <p:dataTable id="dataTable" var="items" value="" scrollable="true" scrollHeight="300">
+                                <p:column headerText="XXXX代碼">
+                                    <p:outputLabel value=""/>
+                                </p:column>
+                                <p:column headerText="XXXX名稱">
+                                    <p:outputLabel value=""/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panelGrid>
+                    </p:layoutUnit>
+                </p:layout>
+
+                <p:dialog header="Create" widgetVar="create" modal="true" height="200" appendTo="@(body)" >
+                    <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
+                        <p:outputLabel value="自定義欄位範圍代碼"/>
+                        <p:outputLabel value="#{userDeDataScopeSetController.item.udColumnCode}" />
+                        <p:outputLabel value="自定義欄位範圍名稱"/>
+                        <p:inputText value="#{userDeDataScopeSetController.item.udColumnName}" />
+                        <p:outputLabel value="欄位中文名稱"/>
+                        <p:selectOneMenu>
+                            <f:selectItems/>
+                        </p:selectOneMenu>
+                        <p:commandButton value="新增" actionListener="#{userDeDataScopeSetController.create()}" update="@(form)" oncomplete="create.hide();" />
+                        <p:commandButton value="取消" onclick="PF('create').hide()" />
+                    </p:panelGrid>
+                </p:dialog>
+            </p:panel> 
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,191 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="投資限制條文設定作業(RCMM03)" />
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form style="width: 60%">
+            <p:panel header="投資限制條文設定作業(RCMM03)">
+                <p:panelGrid columns="2" style="width: 100%">
+                    <p:panelGrid columns="1" style="width: 100%" layout="grid" >
+                        <p:commandButton value="新增" style="width: 80%"/>
+                        <p:commandButton value="修改" style="width: 80%"/>
+                        <p:commandButton value="刪除" style="width: 80%"/>
+                        <p:commandButton value="鎖定" style="width: 80%"/>
+                        <p:commandButton value="解鎖" style="width: 80%"/>
+                        <p:commandButton value="搜尋" style="width: 80%"/>
+                        <p:commandButton value="儲存" style="width: 80%"/>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" style="width: 100%">
+                        <p:panelGrid columns="4" style="width: 100%" layout="grid">
+                            <p:commandButton value="&lt;&lt;" style="width: 100%"/>
+                            <p:commandButton value="&lt;" style="width: 100%"/>
+                            <p:commandButton value="&gt;" style="width: 100%"/>
+                            <p:commandButton value="&gt;&gt;" style="width: 100%"/>
+                        </p:panelGrid>
+                        <p:panelGrid columns="1" layout="grid">
+                            <p:panelGrid columns="3" layout="grid">
+                                <p:panelGrid columns="2" layout="grid">
+                                    <h:outputLabel value="投資限制中文說明"/>
+                                    <h:outputText value="XXXX"/>
+                                </p:panelGrid>
+                                <p:commandButton value="查詢"/>
+                                <p:panelGrid columns="2" layout="grid">
+                                    <h:outputLabel value="代碼類別"/>
+                                    <p:selectOneRadio value="">
+                                        <f:selectItems value="" />
+                                    </p:selectOneRadio>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                            <p:panelGrid columns="2" layout="grid">
+                                <h:outputLabel value="投資限制中文說明"/>
+                                <h:outputText value="XXXX"/>
+                            </p:panelGrid>
+                            <p:panelGrid columns="2" layout="grid">
+                                <h:outputLabel value="投資限制英文說明"/>
+                                <h:outputText value="XXXX"/>
+                            </p:panelGrid>
+                            <p:panelGrid columns="2" layout="grid">
+                                <p:panelGrid columns="2">
+                                    <h:outputLabel value="違規代碼"/>
+                                    <h:outputText value="XXXX"/>
+                                </p:panelGrid>
+                                <p:panelGrid columns="2">
+                                    <h:outputLabel value="違規警示訊息"/>
+                                    <h:outputText value="XXXX"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                            <p:panelGrid columns="3" layout="grid">
+                                <p:panelGrid columns="2">
+                                    <h:outputLabel value="檢核商品"/>
+                                    <p:selectManyCheckbox layout="grid" columns="2">
+                                        <f:selectItems value=""/>
+                                    </p:selectManyCheckbox>
+                                </p:panelGrid>
+                                <p:panelGrid columns="2">
+                                    <h:outputLabel value="交易類別"/>
+                                    <p:selectManyCheckbox layout="grid" columns="2">
+                                        <f:selectItems value=""/>
+                                    </p:selectManyCheckbox>
+                                </p:panelGrid>
+                                <p:panelGrid columns="2">
+                                    <h:outputLabel value="檢核通路"/>
+                                    <p:selectManyCheckbox layout="grid" columns="2">
+                                        <f:selectItems value=""/>
+                                    </p:selectManyCheckbox>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                            <p:panelGrid columns="2" layout="grid">
+                                <h:outputLabel value="檢核時點"/>
+                                <p:selectOneMenu value="">
+                                    <f:selectItems value=""/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                        </p:panelGrid>
+
+                    </p:panelGrid>
+                </p:panelGrid>
+                <p:fieldset legend="檢核結果計算邏輯">
+                    <p:panelGrid columns="2" style="width: 100%">
+                        <p:panelGrid columns="1" style="width: 100%">
+                            <p:panelGrid columns="2" style="width: 100%">
+                                <h:outputLabel value="客戶統計條件(單選)"/>
+                                <p:selectOneMenu value="">
+                                    <f:selectItems value=""/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                            <f:facet name="header">
+                                <h:outputLabel value="分子條件設定區"/>
+                            </f:facet>
+                            <p:panelGrid columns="2" style="width: 100%">
+                                <h:outputLabel value="分子標的合計方式"/>
+                                <p:selectOneMenu value="">
+                                    <f:selectItems value=""/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                            <p:dataTable var="items" value="" scrollable="true" scrollHeight="100">
+                                <p:column>
+
+                                </p:column>
+                                <p:column headerText="運算子">
+
+                                </p:column>
+                                <p:column headerText="資料範圍">
+
+                                </p:column>
+                                <p:column headerText="範圍名稱">
+
+                                </p:column>
+                            </p:dataTable>
+                            <p:panelGrid columns="4" style="width: 100%">
+                                <h:outputLabel value="法規生效期間"/>
+                                <p:calendar value=""/>
+                                <h:outputLabel value="To"/>
+                                <p:calendar value=""/>
+                            </p:panelGrid>
+                            
+                        </p:panelGrid>
+                        <p:panelGrid columns="1" style="width: 100%">
+                            <p:panelGrid columns="2" style="width: 100%">
+                                <h:outputLabel value="檢核資料欄位"/>
+                                <p:selectOneMenu value="">
+                                    <f:selectItems value=""/>
+                                </p:selectOneMenu>
+                            </p:panelGrid>
+                            <f:facet name="header">
+                                <h:outputLabel value="分母條件設定區"/>
+                            </f:facet>
+                            <p:panelGrid columns="4" style="width: 100%">
+                                <h:outputLabel value="分母數值抓取方式"/>
+                                <p:selectOneMenu value="">
+                                    <f:selectItems value=""/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="分母固定值"/>
+                                <h:inputText value="1"/>
+                            </p:panelGrid>
+                            <p:dataTable var="items" value="" scrollable="true" scrollHeight="100">
+                                <p:column>
+
+                                </p:column>
+                                <p:column headerText="運算子">
+
+                                </p:column>
+                                <p:column headerText="資料範圍">
+
+                                </p:column>
+                                <p:column headerText="範圍名稱">
+
+                                </p:column>
+                            </p:dataTable>
+                            <p:panelGrid columns="4" style="width: 100%">
+                                <h:outputLabel value="超限條件"/>
+                                <p:selectOneMenu value="">
+                                    <f:selectItems value=""/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="超限值%"/>
+                                <h:inputText value="1"/>
+                            </p:panelGrid>
+                            
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </p:fieldset>
+                <p:fieldset>
+                    <p:panelGrid columns="4" style="width: 100%">
+                                <h:outputLabel value="超限處理"/>
+                                <p:selectOneMenu value="">
+                                    <f:selectItems value=""/>
+                                </p:selectOneMenu>
+                                <h:outputLabel value="鎖定註記"/>
+                                <p:selectBooleanCheckbox value="" />
+                            </p:panelGrid>
+                </p:fieldset>
+            </p:panel> 
+        </h:form>
+    </ui:define>
+</ui:composition>

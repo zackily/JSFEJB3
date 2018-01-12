@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    <p:menubar style="height:30px;vertical-align: top;border: 0px ;font-size: 14px"> 
+        <p:submenu icon="ui-icon-note" label="課程資訊" >
+            <p:menuitem icon="ui-icon-calendar" value="課程行事曆維護" url="/faces/eLearning/scheduleDemo.xhtml" rendered="#{userSession.isUserInRole('Administrators')}"/>
+            <p:menuitem icon="ui-icon-search" value="課程查詢" url="/faces/eLearning/echelonQuery.xhtml" />             
+            <!--<p:menuitem value="課程梯次查詢/報名" url="/faces/eLearning/online.xhtml" />-->            
+                      <p:menuitem value="講師管理查詢" url="/faces/eLearning/teacherMgr.xhtml" />  
+                       <p:menuitem value="外訓課程申請" url="/faces/eLearning/externalMgr.xhtml" />
+<!--                      <p:menuitem value="課程管理" url="/faces/eLearning/classMgr.xhtml" rendered="#{userSession.isUserInRole('Administrators')}"/>           
+                       <p:menuitem value="課程梯次發佈管理" url="/faces/eLearning/echelonMgr.xhtml" rendered="#{userSession.isUserInRole('Administrators')}"/> -->
+            
+        </p:submenu>
+
+               <p:submenu icon="ui-icon-pencil" label="證照資訊" >
+                  <p:menuitem value="個人證照進度查詢" url="/faces/eLearning/licenseQuery.xhtml" />  
+                  <p:menuitem value="夥伴證照進度查詢" url="/faces/eLearning/licenseQuery.xhtml" rendered="#{userSession.isUserInRole('Administrators,Manager')}"/> 
+                  <p:menuitem value="證照維護" url="/faces/eLearning/licenseMgr.xhtml" rendered="#{userSession.isUserInRole('Administrators')}"/>
+               </p:submenu>
+        
+        <p:submenu icon="ui-icon-document" label="教材資訊" >
+            <p:menuitem value="教材管理(一)" url="/faces/dm/contentMgr.xhtml" />
+            <p:menuitem value="教材管理(二)" url="/faces/eLearning/documentsMgr.xhtml" rendered="#{userSession.isUserInRole('Administrators')}"/>            
+            <p:menuitem value="文件查詢" url="/faces/eLearning/documentsMgr.xhtml" />  
+               <p:menuitem value="影音專區" url="/faces/eLearning/filmMgr.xhtml" /> 
+        </p:submenu>
+
+        <!--         <p:submenu icon="ui-icon-print" label="報表查詢列印" >
+                  <p:menuitem value="個人課程進度查詢" url="/faces/eLearning/index.xhtml" />  
+                  <p:menuitem value="課程梯次查詢/報名" url="/faces/eLearning/index.xhtml" />  
+                  <p:menuitem value="講師管理" url="/faces/eLearning/index.xhtml" rendered="#{userSession.isUserInRole('Administrators,Lecturer')}"/>  
+                  <p:menuitem value="課程管理" url="/faces/eLearning/index.xhtml" rendered="#{userSession.isUserInRole('Administrators')}"/> 
+               </p:submenu>-->
+
+<!--        <p:submenu icon="ui-icon-print" label="管理功能" rendered="#{userSession.isUserInRole('Administrators,Headquarter')}">
+  <p:menuitem value="公告事項發佈" url="/faces/eLearning/annMgr.xhtml" />        
+</p:submenu>-->
+<!--          <p:submenu label="系統管理" rendered="#{userSession.isUserInRole('Administrators')}">
+    <p:menuitem value="人員權限帳號管理" url="/faces/usermgmt/userManagement.xhtml" />
+</p:submenu>-->
+        <!--
+         <p:submenu label="問卷調查" rendered="#{userSession.isUserInRole('Administrators')}">
+                    <p:menuitem value="問卷項目管理" url="/faces/dm/questionnaire_plan.xhtml" />
+                    <p:menuitem value="問卷調查中心" url="/faces/dm/questionnaire.xhtml" />          
+                </p:submenu>-->
+        <!--
+                <p:submenu label="公告訊息">
+                    <p:menuitem value="公告訊息管理發佈" url="/faces/dm/announMgr.xhtml" />
+                    <p:menuitem value="公告訊息點選紀錄" url="/faces/usermgmt/userManagement.xhtml" />
+                </p:submenu>-->
+        <!--        <p:submenu label="問卷調查" rendered="#{userSession.isUserInRole('Administrators')}">
+                    <p:menuitem value="問卷項目管理" url="/faces/dm/questionnaire_plan.xhtml" />
+                    <p:menuitem value="問卷調查中心" url="/faces/dm/questionnaire.xhtml" />          
+                </p:submenu>-->
+        <!--        <p:submenu label="志工專區" rendered="#{userSession.isUserInRole('Administrators')}">
+                    <p:menuitem value="志工活動" url="/faces/dm/volunteerActivity.xhtml" />
+                    <p:menuitem value="志工工時登錄與修改" url="/faces/dm/volunteerWorkHour.xhtml" />
+                    <p:menuitem value="查詢記錄和審核" url="/faces/dm/volunteerAudit.xhtml" />
+                    <p:menuitem value="報表" url="/faces/dm/volunteerReport.xhtml" /> 
+                </p:submenu>-->
+        <!--        <p:submenu label="行事曆" rendered="#{userSession.isUserInRole('Administrators')}">
+                    <p:menuitem value="行事曆查詢" url="/faces/dm/scheduleDemo.xhtml" />
+                    <p:menuitem value="行事曆管理" url="/faces/dm/scheduleDemoMgr.xhtml" />           
+                </p:submenu>-->
+        <!--
+                 <p:submenu label="門市資訊" rendered="#{userSession.isUserInRole('Administrators')}">
+                    <p:menuitem value="代碼維護" url="/faces/dm/codeMgr.xhtml" />
+                    <p:submenu label="門市管理">
+                        <p:menuitem value="門市通訊錄" url="/faces/dm/deptMgr.xhtml" /> 
+                        <p:menuitem value="門市導覽" url="/faces/dm/deptView.xhtml" />              
+                    </p:submenu>         
+                    <p:submenu label="門市熟客">
+                        <p:menuitem value="門市熟客管理" url="/faces/dm/frequent_guest.xhtml" />
+                        <p:menuitem value="門市熟客" url="/faces/usermgmt/userManagement.xhtml" />
+                    </p:submenu>
+                </p:submenu>-->
+        <!--        <p:submenu label="電子表單" rendered="#{userSession.isUserInRole('Administrators')}">
+        
+                    <p:menuitem value="表單管理" url="/faces/dm/formMgr.xhtml" />               
+                    <p:menuitem value="門市查詢" url="/faces/dm/deptQuery.xhtml" />
+                    <p:menuitem value="表單申請" url="/faces/dm/FormInput.xhtml" />
+                    <p:menuitem value="門市表單管理" url="/faces/usermgmt/userManagement.xhtml" />
+                    <p:menuitem value="門市地圖" url="/faces/usermgmt/userManagement.xhtml" />
+        
+                </p:submenu>-->
+
+<!--        <p:submenu label="知識管理" rendered="#{userSession.isUserInRole('Administrators')}">
+            <p:menuitem value="文件管理" url="/faces/dm/contentMgr.xhtml" />
+                                    <p:menuitem value="文件上傳" url="/faces/usermgmt/userManagement.xhtml" />
+                                    <p:menuitem value="文件下載" url="/faces/usermgmt/userManagement.xhtml" />
+                                    <p:menuitem value="文件檢索" url="/faces/usermgmt/userManagement.xhtml" />
+
+        </p:submenu>-->
+
+
+        <p:submenu label="系統管理" rendered="#{userSession.isUserInRole('Administrators')}">
+            <p:menuitem value="員工資料維護" url="/faces/usermgmt/userEdit.xhtml" />
+            <p:menuitem value="群組權限設定維護" url="/faces/usermgmt/groupRoleEdit.xhtml" /> 
+            <p:menuitem value="公告訊息點選紀錄" url="/faces/dm/annClickRecord.xhtml" />
+        </p:submenu>
+        <!--
+                <p:submenu label="供應商稽核管理" rendered="#{userSession.isUserInRole('Administrators')}">
+            <p:menuitem value="稽核行程計畫" url="/faces/dm/auditSchedulePlan.xhtml" />
+            <p:menuitem value="稽核報告管理" url="/faces/dm/auditReport.xhtml" />
+            <p:menuitem value="稽核總結報告" url="/faces/dm/auditFinalReport.xhtml" />
+            <p:menuitem value="稽核行程規劃" url="/faces/dm/auditScheduleReport.xhtml" />
+        </p:submenu>-->
+
+        <f:facet name="options">           
+            <p:commandButton action="/eip/faces/eLearning/index.xhtml" type="button" value="首頁" icon="ui-icon-home" />  
+            <p:commandButton action="/eip/faces/logoff.xhtml" type="button" value="登出" icon="ui-icon-extlink" />  
+            <p:commandButton action="#{contentMgrController.show()}" value="打開影音" async="true" ajax="true"/>
+            <p:commandButton action="#{contentMgrController.showMessage()}" value="課程通知" async="true" ajax="true"/>
+            <!--<p:commandButton action="#{contentMgrController.openChrome()}" value="打開瀏覽器" async="true" ajax="true"/>-->
+        </f:facet>  
+    </p:menubar>
+</ui:composition>

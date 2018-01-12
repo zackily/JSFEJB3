@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="自定義資料範圍設定作業(RCMM02)" />
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form style="width: 60%">
+            <p:panel header="自定義資料範圍設定作業(RCMM02)">
+                <p:layout>
+                    <p:layoutUnit position="west" size="20%">
+                        <p:panelGrid columns="1" style="width: 100%" layout="grid" >
+                            <p:commandButton value="新增" style="width: 80%"/>
+                            <p:commandButton value="修改" style="width: 80%"/>
+                            <p:commandButton value="刪除" style="width: 80%"/>
+                            <p:commandButton value="搜尋" style="width: 80%"/>
+                        </p:panelGrid>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="center">
+                        <p:panelGrid columns="4" style="width: 100%" layout="grid">
+                            <p:commandButton value="&lt;&lt;" style="width: 80%"/>
+                            <p:commandButton value="&lt;" style="width: 80%"/>
+                            <p:commandButton value="&gt;" style="width: 80%"/>
+                            <p:commandButton value="&gt;&gt;" style="width: 80%"/>
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
+                            <h:outputLabel value="資料範圍代碼"/>
+                            <p:panelGrid columns="2" layout="grid">
+                                <h:outputText value="XXXXXX" />
+                                <p:commandButton value="查詢" />
+                            </p:panelGrid>
+
+                            <h:outputLabel value="資料類別"/>
+                            <p:selectOneMenu value="">
+                                <f:selectItems value=""/>
+                            </p:selectOneMenu>
+
+
+                            <h:outputLabel value="資料範圍說明"/>
+                            <h:outputText value="XXXXXXXX" />
+
+                            <h:outputLabel value="Procedure Name"/>
+                            <h:outputText value="XXXXXXXX" />
+
+                            <h:outputLabel value="回傳值說明"/>
+                            <h:outputText value="XXXXXXXX" />
+                        </p:panelGrid>
+                        <p:panelGrid columns="1">
+                            <p:panelGrid columns="3">
+                                <h:outputLabel value="資料條件設定區"/>
+                                <p:commandButton value="＋"/>
+                                <p:commandButton value="－"/>
+                            </p:panelGrid>
+                            <p:dataTable id="dataTable" var="items" value="" scrollable="true" scrollHeight="300">
+                                <p:column headerText="">
+                                    <h:outputText value=""/>
+                                </p:column>
+                                <p:column headerText="參數名稱">
+                                    <h:outputText value=""/>
+                                </p:column>
+                                <p:column headerText="參數說明">
+                                    <h:outputText value=""/>
+                                </p:column>
+                                <p:column headerText="對應值">
+                                    <h:outputText value=""/>
+                                </p:column>
+                                <p:column headerText="對應值說明">
+                                    <h:outputText value=""/>
+                                </p:column>
+                                <p:column headerText="自定義範圍">
+                                    <h:outputText value=""/>
+                                </p:column>
+                                <p:column headerText="範圍名稱">
+                                    <h:outputText value=""/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panelGrid>
+                    </p:layoutUnit>
+                </p:layout>
+            </p:panel> 
+        </h:form>
+    </ui:define>
+</ui:composition>
