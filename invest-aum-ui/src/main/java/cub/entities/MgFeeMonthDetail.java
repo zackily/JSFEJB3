@@ -8,12 +8,16 @@ package cub.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,33 +32,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "MG_FEE_MONTH_DETAIL")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgFeeMonthDetail.findAll", query = "SELECT m FROM MgFeeMonthDetail m")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByTrustacct", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.trustacct = :trustacct")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByBaseDate", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.baseDate = :baseDate")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByCustId", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.custId = :custId")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByPortfolioNo", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.portfolioNo = :portfolioNo")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByActCode", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.actCode = :actCode")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByActSubCode", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.actSubCode = :actSubCode")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByFundId", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.fundId = :fundId")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByAumFee", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.aumFee = :aumFee")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByAumRemainFee", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.aumRemainFee = :aumRemainFee")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByCostFee", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.costFee = :costFee")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByCostRemainFee", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.costRemainFee = :costRemainFee")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByCur", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.cur = :cur")
-    , @NamedQuery(name = "MgFeeMonthDetail.findByUpdateDttm", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.updateDttm = :updateDttm")
-    , @NamedQuery(name = "MgFeeMonthDetail.findById", query = "SELECT m FROM MgFeeMonthDetail m WHERE m.id = :id")})
 public class MgFeeMonthDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 12)
-    @Column(name = "TRUSTACCT")
-    private String trustacct;
+    @Column(name = "TST_ACC_NO")
+    private String tstAccNo;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 6)
+    @Size(min = 1, max = 8)
     @Column(name = "BASE_DATE")
     private String baseDate;
     @Basic(optional = false)
@@ -83,25 +71,25 @@ public class MgFeeMonthDetail implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "AUM_FEE")
-    private BigDecimal aumFee;
+    @Column(name = "AUM_FEE_AMT")
+    private BigDecimal aumFeeAmt;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "AUM_REMAIN_FEE")
-    private BigDecimal aumRemainFee;
+    @Column(name = "AUM_FEE_BAL")
+    private BigDecimal aumFeeBal;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "COST_FEE")
-    private BigDecimal costFee;
+    @Column(name = "COST_FEE_AMT")
+    private BigDecimal costFeeAmt;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "COST_REMAIN_FEE")
-    private BigDecimal costRemainFee;
+    @Column(name = "COST_FEE_BAL")
+    private BigDecimal costFeeBal;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "CUR")
-    private String cur;
+    @Size(min = 1, max = 3)
+    @Column(name = "CURRENCY")
+    private String currency;
     @Basic(optional = false)
     @NotNull
     @Column(name = "UPDATE_DTTM")
@@ -111,6 +99,8 @@ public class MgFeeMonthDetail implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MFD_SEQ")
+    @SequenceGenerator(name = "MFD_SEQ", sequenceName = "MG_FEE_DETAIL_SEQ", initialValue = 1, allocationSize = 1)
     private BigDecimal id;
 
     public MgFeeMonthDetail() {
@@ -120,28 +110,12 @@ public class MgFeeMonthDetail implements Serializable {
         this.id = id;
     }
 
-    public MgFeeMonthDetail(BigDecimal id, String trustacct, String baseDate, String custId, String actCode, String actSubCode, String fundId, BigDecimal aumFee, BigDecimal aumRemainFee, BigDecimal costFee, BigDecimal costRemainFee, String cur, Date updateDttm) {
-        this.id = id;
-        this.trustacct = trustacct;
-        this.baseDate = baseDate;
-        this.custId = custId;
-        this.actCode = actCode;
-        this.actSubCode = actSubCode;
-        this.fundId = fundId;
-        this.aumFee = aumFee;
-        this.aumRemainFee = aumRemainFee;
-        this.costFee = costFee;
-        this.costRemainFee = costRemainFee;
-        this.cur = cur;
-        this.updateDttm = updateDttm;
+    public String getTstAccNo() {
+        return tstAccNo;
     }
 
-    public String getTrustacct() {
-        return trustacct;
-    }
-
-    public void setTrustacct(String trustacct) {
-        this.trustacct = trustacct;
+    public void setTstAccNo(String tstAccNo) {
+        this.tstAccNo = tstAccNo;
     }
 
     public String getBaseDate() {
@@ -192,44 +166,44 @@ public class MgFeeMonthDetail implements Serializable {
         this.fundId = fundId;
     }
 
-    public BigDecimal getAumFee() {
-        return aumFee;
+    public BigDecimal getAumFeeAmt() {
+        return aumFeeAmt;
     }
 
-    public void setAumFee(BigDecimal aumFee) {
-        this.aumFee = aumFee;
+    public void setAumFeeAmt(BigDecimal aumFeeAmt) {
+        this.aumFeeAmt = aumFeeAmt;
     }
 
-    public BigDecimal getAumRemainFee() {
-        return aumRemainFee;
+    public BigDecimal getAumFeeBal() {
+        return aumFeeBal;
     }
 
-    public void setAumRemainFee(BigDecimal aumRemainFee) {
-        this.aumRemainFee = aumRemainFee;
+    public void setAumFeeBal(BigDecimal aumFeeBal) {
+        this.aumFeeBal = aumFeeBal;
     }
 
-    public BigDecimal getCostFee() {
-        return costFee;
+    public BigDecimal getCostFeeAmt() {
+        return costFeeAmt;
     }
 
-    public void setCostFee(BigDecimal costFee) {
-        this.costFee = costFee;
+    public void setCostFeeAmt(BigDecimal costFeeAmt) {
+        this.costFeeAmt = costFeeAmt;
     }
 
-    public BigDecimal getCostRemainFee() {
-        return costRemainFee;
+    public BigDecimal getCostFeeBal() {
+        return costFeeBal;
     }
 
-    public void setCostRemainFee(BigDecimal costRemainFee) {
-        this.costRemainFee = costRemainFee;
+    public void setCostFeeBal(BigDecimal costFeeBal) {
+        this.costFeeBal = costFeeBal;
     }
 
-    public String getCur() {
-        return cur;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setCur(String cur) {
-        this.cur = cur;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public Date getUpdateDttm() {
@@ -250,23 +224,29 @@ public class MgFeeMonthDetail implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MgFeeMonthDetail)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        MgFeeMonthDetail other = (MgFeeMonthDetail) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MgFeeMonthDetail other = (MgFeeMonthDetail) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
+
 
     @Override
     public String toString() {

@@ -8,6 +8,7 @@ package cub.entities;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +21,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -31,18 +33,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "MG_FEE_MONTH")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MgFeeMonth.findAll", query = "SELECT m FROM MgFeeMonth m")
-    , @NamedQuery(name = "MgFeeMonth.findById", query = "SELECT m FROM MgFeeMonth m WHERE m.id = :id")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeMonthCustId", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeMonthCustId = :mgFeeMonthCustId")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeMonthDate", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeMonthDate = :mgFeeMonthDate")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeMonthActCode", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeMonthActCode = :mgFeeMonthActCode")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeAumTwFee", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeAumTwFee = :mgFeeAumTwFee")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeCostTwFee", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeCostTwFee = :mgFeeCostTwFee")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeMonthcostTwFee", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeMonthcostTwFee = :mgFeeMonthcostTwFee")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeMonthDateTime", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeMonthDateTime = :mgFeeMonthDateTime")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeMonthMthsettleUserId", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeMonthMthsettleUserId = :mgFeeMonthMthsettleUserId")
-    , @NamedQuery(name = "MgFeeMonth.findByMgFeeMonthMthsettleDate", query = "SELECT m FROM MgFeeMonth m WHERE m.mgFeeMonthMthsettleDate = :mgFeeMonthMthsettleDate")})
 public class MgFeeMonth implements Serializable {
 
     @Basic(optional = false)
@@ -53,8 +43,8 @@ public class MgFeeMonth implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 6)
-    @Column(name = "BASE_DATE")
-    private String baseDate;
+    @Column(name = "BASE_MONTH")
+    private String baseMonth;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
@@ -68,30 +58,32 @@ public class MgFeeMonth implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 3)
-    @Column(name = "CUR")
-    private String cur;
+    @Column(name = "CURRENCY")
+    private String currency;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "AUM_FEE")
-    private BigDecimal aumFee;
+    @Column(name = "AUM_FEE_AMT")
+    private BigDecimal aumFeeAmt;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "AUM_REMAIN_FEE")
-    private BigDecimal aumRemainFee;
+    @Column(name = "AUM_FEE_BAL")
+    private BigDecimal aumFeeBal;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "COST_FEE")
-    private BigDecimal costFee;
+    @Column(name = "COST_FEE_AMT")
+    private BigDecimal costFeeAmt;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "COST_REMAIN_FEE")
-    private BigDecimal costRemainFee;
+    @Column(name = "COST_FEE_BAL")
+    private BigDecimal costFeeBal;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 5)
-    @Column(name = "SETTLE_USER_ID")
-    private String settleUserId;
+    @Size(min = 1, max = 20)
+    @Column(name = "SETTLE_USER_NO")
+    private String settleUserNo;
+    @Column(name = "SETTLE_USER_NAME")
+    private String settleUserName;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 8)
@@ -102,7 +94,9 @@ public class MgFeeMonth implements Serializable {
     @Column(name = "UPDATE_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updateDttm;
-
+    @Transient
+    private BigDecimal aumFeePaid;
+    
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
@@ -110,39 +104,8 @@ public class MgFeeMonth implements Serializable {
     @NotNull
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MFM_SEQ")
-    @SequenceGenerator(name = "MFM_SEQ", sequenceName = "MG_FEE_MONTH_SEQ" , initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "MFM_SEQ", sequenceName = "MG_FEE_MONTH_SEQ", initialValue = 1, allocationSize = 1)
     private Long id;
-    @Size(max = 11)
-    @Column(name = "MG_FEE_MONTH_CUST_ID")
-    private String mgFeeMonthCustId;
-    @Size(max = 8)
-    @Column(name = "MG_FEE_MONTH_DATE")
-    private String mgFeeMonthDate;
-    @Size(max = 10)
-    @Column(name = "MG_FEE_MONTH_ACT_CODE")
-    private String mgFeeMonthActCode;
-    @Column(name = "MG_FEE_AUM_TW_FEE")
-    private BigDecimal mgFeeAumTwFee;
-    @Column(name = "MG_FEE_COST_TW_FEE")
-    private BigDecimal mgFeeCostTwFee;
-    @Column(name = "MG_FEE_MONTHCOST_TW_FEE")
-    private BigDecimal mgFeeMonthcostTwFee;
-    @Column(name = "MG_FEE_MONTH_DATE_TIME")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date mgFeeMonthDateTime;
-    @Size(max = 5)
-    @Column(name = "MG_FEE_MONTH_MTHSETTLE_USER_ID")
-    private String mgFeeMonthMthsettleUserId;
-    @Column(name = "MG_FEE_MONTH_MTHSETTLE_DATE")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date mgFeeMonthMthsettleDate;
-
-    public MgFeeMonth() {
-    }
-
-    public MgFeeMonth(Long id) {
-        this.id = id;
-    }
 
     public Long getId() {
         return id;
@@ -152,97 +115,31 @@ public class MgFeeMonth implements Serializable {
         this.id = id;
     }
 
-    public String getMgFeeMonthCustId() {
-        return mgFeeMonthCustId;
-    }
-
-    public void setMgFeeMonthCustId(String mgFeeMonthCustId) {
-        this.mgFeeMonthCustId = mgFeeMonthCustId;
-    }
-
-    public String getMgFeeMonthDate() {
-        return mgFeeMonthDate;
-    }
-
-    public void setMgFeeMonthDate(String mgFeeMonthDate) {
-        this.mgFeeMonthDate = mgFeeMonthDate;
-    }
-
-    public String getMgFeeMonthActCode() {
-        return mgFeeMonthActCode;
-    }
-
-    public void setMgFeeMonthActCode(String mgFeeMonthActCode) {
-        this.mgFeeMonthActCode = mgFeeMonthActCode;
-    }
-
-    public BigDecimal getMgFeeAumTwFee() {
-        return mgFeeAumTwFee;
-    }
-
-    public void setMgFeeAumTwFee(BigDecimal mgFeeAumTwFee) {
-        this.mgFeeAumTwFee = mgFeeAumTwFee;
-    }
-
-    public BigDecimal getMgFeeCostTwFee() {
-        return mgFeeCostTwFee;
-    }
-
-    public void setMgFeeCostTwFee(BigDecimal mgFeeCostTwFee) {
-        this.mgFeeCostTwFee = mgFeeCostTwFee;
-    }
-
-    public BigDecimal getMgFeeMonthcostTwFee() {
-        return mgFeeMonthcostTwFee;
-    }
-
-    public void setMgFeeMonthcostTwFee(BigDecimal mgFeeMonthcostTwFee) {
-        this.mgFeeMonthcostTwFee = mgFeeMonthcostTwFee;
-    }
-
-    public Date getMgFeeMonthDateTime() {
-        return mgFeeMonthDateTime;
-    }
-
-    public void setMgFeeMonthDateTime(Date mgFeeMonthDateTime) {
-        this.mgFeeMonthDateTime = mgFeeMonthDateTime;
-    }
-
-    public String getMgFeeMonthMthsettleUserId() {
-        return mgFeeMonthMthsettleUserId;
-    }
-
-    public void setMgFeeMonthMthsettleUserId(String mgFeeMonthMthsettleUserId) {
-        this.mgFeeMonthMthsettleUserId = mgFeeMonthMthsettleUserId;
-    }
-
-    public Date getMgFeeMonthMthsettleDate() {
-        return mgFeeMonthMthsettleDate;
-    }
-
-    public void setMgFeeMonthMthsettleDate(Date mgFeeMonthMthsettleDate) {
-        this.mgFeeMonthMthsettleDate = mgFeeMonthMthsettleDate;
-    }
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MgFeeMonth)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        MgFeeMonth other = (MgFeeMonth) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MgFeeMonth other = (MgFeeMonth) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
     }
+
 
     @Override
     public String toString() {
@@ -257,13 +154,14 @@ public class MgFeeMonth implements Serializable {
         this.custId = custId;
     }
 
-    public String getBaseDate() {
-        return baseDate;
+    public String getBaseMonth() {
+        return baseMonth;
     }
 
-    public void setBaseDate(String baseDate) {
-        this.baseDate = baseDate;
+    public void setBaseMonth(String baseMonth) {
+        this.baseMonth = baseMonth;
     }
+
 
     public String getActCode() {
         return actCode;
@@ -281,52 +179,60 @@ public class MgFeeMonth implements Serializable {
         this.actSubCode = actSubCode;
     }
 
-    public String getCur() {
-        return cur;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setCur(String cur) {
-        this.cur = cur;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public BigDecimal getAumFee() {
-        return aumFee;
+    public BigDecimal getAumFeeAmt() {
+        return aumFeeAmt;
     }
 
-    public void setAumFee(BigDecimal aumFee) {
-        this.aumFee = aumFee;
+    public void setAumFeeAmt(BigDecimal aumFeeAmt) {
+        this.aumFeeAmt = aumFeeAmt;
     }
 
-    public BigDecimal getAumRemainFee() {
-        return aumRemainFee;
+    public BigDecimal getAumFeeBal() {
+        return aumFeeBal;
     }
 
-    public void setAumRemainFee(BigDecimal aumRemainFee) {
-        this.aumRemainFee = aumRemainFee;
+    public void setAumFeeBal(BigDecimal aumFeeBal) {
+        this.aumFeeBal = aumFeeBal;
     }
 
-    public BigDecimal getCostFee() {
-        return costFee;
+    public BigDecimal getCostFeeAmt() {
+        return costFeeAmt;
     }
 
-    public void setCostFee(BigDecimal costFee) {
-        this.costFee = costFee;
+    public void setCostFeeAmt(BigDecimal costFeeAmt) {
+        this.costFeeAmt = costFeeAmt;
     }
 
-    public BigDecimal getCostRemainFee() {
-        return costRemainFee;
+    public BigDecimal getCostFeeBal() {
+        return costFeeBal;
     }
 
-    public void setCostRemainFee(BigDecimal costRemainFee) {
-        this.costRemainFee = costRemainFee;
+    public void setCostFeeBal(BigDecimal costFeeBal) {
+        this.costFeeBal = costFeeBal;
     }
 
-    public String getSettleUserId() {
-        return settleUserId;
+    public String getSettleUserNo() {
+        return settleUserNo;
     }
 
-    public void setSettleUserId(String settleUserId) {
-        this.settleUserId = settleUserId;
+    public void setSettleUserNo(String settleUserNo) {
+        this.settleUserNo = settleUserNo;
+    }
+
+    public String getSettleUserName() {
+        return settleUserName;
+    }
+
+    public void setSettleUserName(String settleUserName) {
+        this.settleUserName = settleUserName;
     }
 
     public String getSettleDate() {
@@ -344,5 +250,13 @@ public class MgFeeMonth implements Serializable {
     public void setUpdateDttm(Date updateDttm) {
         this.updateDttm = updateDttm;
     }
-    
+
+    public BigDecimal getAumFeePaid() {
+        return aumFeeAmt.subtract(aumFeeBal);
+    }
+
+    public void setAumFeePaid(BigDecimal aumFeePaid) {
+        this.aumFeePaid = aumFeePaid;
+    }
+
 }

@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/generalPageTemplateHome.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="交易紀錄頁-第三層(申購交易)"/>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form>
+            <p:panel id="" header="交易紀錄頁-第三層(申購交易)">
+                <p:panelGrid id="" columns="2">
+                    <f:facet name="header">
+                        <h:outputLabel value="安心退休"/>
+                    </f:facet>
+                    <h:outputLabel value="建立日期:#{bean.date}"/>
+                    <p:row>
+                        <p:column colspan="2"/>
+                    </p:row>
+                    <p:outputLabel value="交易類別:"/>
+                    <h:outputText value="申購"/>
+                    <p:outputLabel value="扣款日期:"/>
+                    <h:outputText value="#{bean.date}"/>
+                </p:panelGrid>
+
+                <p:dataTable id="dataScroller" value="#{bean.dataScroller}" var="bill">
+                    <p:column headerText="基金標的">
+                        <h:outputText value="#{bill.date}"/>
+                    </p:column>
+                    <p:column headerText="單位數">
+                        <h:outputText value="#{bill.netValue}"/>
+                    </p:column>
+                    <p:column headerText="單位淨值">
+                        <h:outputText value="#{bill.dateRate}"/>
+                    </p:column>
+                    <p:column headerText="折台匯率">
+                        <h:outputText value="#{bill.dateFee}"/>
+                    </p:column>
+                    <p:column headerText="申購金額">
+                        <h:outputText value="#{bill.sum}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <p:panelGrid columns="1" style="width:100%">
+                <h:commandButton value="回交易紀錄" actionListener="#{bean.prevPage}"/>
+            </p:panelGrid>
+        </h:form>
+    </ui:define>

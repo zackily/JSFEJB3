@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/generalPageTemplateHome.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="平台服務管理費"/>
+
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form style="width: 50%">
+            <p:panel header="平台服務管理費" style="align-content: flex-start">
+                <p:panelGrid columns="3" layout="grid">
+                    <h:outputLabel value="1.本期累積應繳金額:"/>
+                    <h:outputText value=""/>
+                    <p:commandButton value="立即繳款" update="dataScroller"/>
+
+                    <h:outputLabel value=""/>
+                    <h:outputText value=""/>
+                    <h:outputLabel value=""/>
+
+                    <h:outputLabel for="" value="2.上期未繳金額:"/>
+                    <h:outputText value=""/>
+                    <h:outputLabel value=""/>
+
+                    <h:outputLabel value=""/>
+                    <h:outputText value=""/>
+                    <h:outputLabel value=""/>
+
+                    <h:outputLabel value="3.下次繳款日:"/>
+                    <h:outputText value=""/>
+                    <h:outputLabel value="(遇假日順延至次一營業日)"/>
+
+                    <h:outputLabel value="4.費用明細:"/>
+                    <h:outputLabel value=""/>
+                    <h:outputLabel value=""/>
+
+                    <p:row>
+                        <p:column colspan="3"><br/></p:column>
+                    </p:row>
+                </p:panelGrid>
+                <p:panelGrid columns="5" layout="grid">
+                    <h:outputLabel value="查詢起日"/>
+                    <h:outputLabel value=""/>
+                    <h:outputLabel value="查詢訖日"/>
+                    <h:outputLabel value=""/>
+                    <h:outputLabel value=""/>
+
+                    <h:inputText value="#{mgFeeMonthController.startMonth}" required="true" />
+                    <h:outputLabel value="-"/>
+                    <h:inputText value="#{mgFeeMonthController.endMonth}" required="true" />
+                    <p:commandButton value="搜尋" update="dataScroller" actionListener="#{mgFeeMonthController.query}"/>
+                    <h:outputLabel value="(僅提供三年內交易紀錄查詢)"/>
+                </p:panelGrid>
+                <p:dataTable id="dataScroller" value="#{mgFeeMonthController.items}" var="bill" scrollable="true" scrollHeight="300">
+                    <p:column headerText="帳單月份" groupRow="true">
+                        <p:link outcome="mgFeeMonthDetailSearch" value="#{bill.baseMonth}">
+                            <f:param name="custId" value="#{bill.custId}" />
+                            <f:param name="baseMonth" value="#{bill.baseMonth}" />
+                        </p:link>
+                    </p:column>
+                    <p:column headerText="幣別">
+                        <h:outputText value="#{bill.currency}"/>
+                    </p:column>
+                    <p:column headerText="應繳金額">
+                        <h:outputText value="#{bill.aumFeeAmt}"/>
+                    </p:column>
+                    <p:column headerText="已繳金額">
+                        <h:outputText value="#{bill.aumFeePaid}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:outputLabel value="*完成付款前恕不提供調整配置服務"/>
+            </p:panel>
+
+            <p:panelGrid columns="1" style="width:100%">
+                <h:commandButton value="回前頁" />
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

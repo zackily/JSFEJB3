@@ -1,23 +1,23 @@
 package cub.controller;
 
 import cub.entities.MgFeeMonth;
-import cub.controller.util.JsfUtil;
-import cub.controller.util.JsfUtil.PersistAction;
 import cub.facade.MgFeeMonthFacade;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
+import org.apache.commons.lang.StringUtils;
 
 @Named("mgFeeMonthController")
 @SessionScoped
@@ -27,8 +27,25 @@ public class MgFeeMonthController implements Serializable {
     private cub.facade.MgFeeMonthFacade ejbFacade;
     private List<MgFeeMonth> items = null;
     private MgFeeMonth selected;
+    private String startMonth;
+    private String endMonth;
+    private String custId = "A200267857";
 
     public MgFeeMonthController() {
+    }
+
+    @PostConstruct
+    public void init() {
+        Calendar cal = Calendar.getInstance();
+        int endY = cal.get(Calendar.YEAR);
+        int endM = cal.get(Calendar.MONTH);
+        String m = String.valueOf(endM + 1);
+        endMonth = endY + "" + StringUtils.leftPad(m, 2, "0");
+        cal.add(Calendar.MONTH, -4);
+        int startY = cal.get(Calendar.YEAR);
+        String startM = String.valueOf(cal.get(Calendar.MONTH));
+        startMonth = startY + "" + StringUtils.leftPad(startM, 2, "0");
+        items = getFacade().fineByBaseMonth(this.startMonth, this.endMonth, this.custId);
     }
 
     public MgFeeMonth getSelected() {
@@ -39,86 +56,16 @@ public class MgFeeMonthController implements Serializable {
         this.selected = selected;
     }
 
-    protected void setEmbeddableKeys() {
-    }
-
-    protected void initializeEmbeddableKey() {
+    public void query(ActionEvent actionEvent) {
+        items = getFacade().fineByBaseMonth(this.startMonth, this.endMonth, this.custId);
     }
 
     private MgFeeMonthFacade getFacade() {
         return ejbFacade;
     }
 
-    public MgFeeMonth prepareCreate() {
-        selected = new MgFeeMonth();
-        initializeEmbeddableKey();
-        return selected;
-    }
-
-    public void create() {
-        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("MgFeeMonthCreated"));
-        if (!JsfUtil.isValidationFailed()) {
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("MgFeeMonthUpdated"));
-    }
-
-    public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("MgFeeMonthDeleted"));
-        if (!JsfUtil.isValidationFailed()) {
-            selected = null; // Remove selection
-            items = null;    // Invalidate list of items to trigger re-query.
-        }
-    }
-
-    public List<MgFeeMonth> getItems() {
-        if (items == null) {
-            items = getFacade().findAll();
-        }
-        return items;
-    }
-
-    private void persist(PersistAction persistAction, String successMessage) {
-        if (selected != null) {
-            setEmbeddableKeys();
-            try {
-                if (persistAction != PersistAction.DELETE) {
-                    getFacade().edit(selected);
-                } else {
-                    getFacade().remove(selected);
-                }
-                JsfUtil.addSuccessMessage(successMessage);
-            } catch (EJBException ex) {
-                String msg = "";
-                Throwable cause = ex.getCause();
-                if (cause != null) {
-                    msg = cause.getLocalizedMessage();
-                }
-                if (msg.length() > 0) {
-                    JsfUtil.addErrorMessage(msg);
-                } else {
-                    JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-                JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            }
-        }
-    }
-
     public MgFeeMonth getMgFeeMonth(Long id) {
         return getFacade().find(id);
-    }
-
-    public List<MgFeeMonth> getItemsAvailableSelectMany() {
-        return getFacade().findAll();
-    }
-
-    public List<MgFeeMonth> getItemsAvailableSelectOne() {
-        return getFacade().findAll();
     }
 
     @FacesConverter(forClass = MgFeeMonth.class)
@@ -160,6 +107,46 @@ public class MgFeeMonthController implements Serializable {
             }
         }
 
+    }
+
+    public MgFeeMonthFacade getEjbFacade() {
+        return ejbFacade;
+    }
+
+    public void setEjbFacade(MgFeeMonthFacade ejbFacade) {
+        this.ejbFacade = ejbFacade;
+    }
+
+    public List<MgFeeMonth> getItems() {
+        return items;
+    }
+
+    public void setItems(List<MgFeeMonth> items) {
+        this.items = items;
+    }
+
+    public String getStartMonth() {
+        return startMonth;
+    }
+
+    public void setStartMonth(String startMonth) {
+        this.startMonth = startMonth;
+    }
+
+    public String getEndMonth() {
+        return endMonth;
+    }
+
+    public void setEndMonth(String endMonth) {
+        this.endMonth = endMonth;
+    }
+
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
     }
 
 }
