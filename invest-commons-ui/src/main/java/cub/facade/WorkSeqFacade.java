@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -33,7 +32,7 @@ public class WorkSeqFacade extends AbstractFacade<WorkSeq> {
         super(WorkSeq.class);
     }
 
-    public String getWorkSeq(String code) {
+    public Short getWorkSeqNo(String code) {
         //getSeqType
         String seqType = SeqTypeEnum.valueOf(code).getCode();
         //checkSeqTypeExist?return SeqType+leftpad(SeqNo+1):return SeqType+leftpad(SeqNo=1)
@@ -46,22 +45,24 @@ public class WorkSeqFacade extends AbstractFacade<WorkSeq> {
             obj = query.getSingleResult();
         } catch (NoResultException e) {
         }
-        String no = null == obj ? "1" : (String) obj;
-        return seqType + StringUtils.leftPad(no, 5, "0");
+        Short no = null == obj ? 0 : (Short) obj;
+        return no;
     }
 
-    public void addWorkSeq(String code) {
+    public void updateWorkSeq(String code) {
         String seqType = SeqTypeEnum.valueOf(code).getCode();
-        StringBuilder jpql = new StringBuilder(100);
-        jpql.append("update WorkSeq w set w.seqNo=(select w.seqNo from WorkSeq w where w.seqType=:seqType)+1");
-        Query query = em.createQuery(jpql.toString());
-        query.setParameter("seqType", seqType);
-        Object obj = null;
-        try {
-            obj = query.getSingleResult();
-        } catch (NoResultException e) {
+        Short no = getWorkSeqNo(code);
+        if (no.intValue() == 0) {
+            WorkSeq wSeq = new WorkSeq();
+            wSeq.setSeqNo(Short.valueOf("1"));
+            wSeq.setSeqType(seqType);
+            em.persist(wSeq);
+        } else {
+            StringBuilder jpql = new StringBuilder(100);
+            jpql.append("update WorkSeq w set w.seqNo = w.seqNo+1 where w.seqType=:seqType");
+            Query query = em.createQuery(jpql.toString());
+            query.setParameter("seqType", seqType);
+            query.executeUpdate();
         }
-        String newSeq = null == obj ? "1" : (String) obj;
-        
     }
 }

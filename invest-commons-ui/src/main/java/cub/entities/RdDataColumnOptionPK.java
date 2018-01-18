@@ -36,12 +36,12 @@ public class RdDataColumnOptionPK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "OPTION_CODE")
-    private short optionCode;
+    private String optionCode;
 
     public RdDataColumnOptionPK() {
     }
 
-    public RdDataColumnOptionPK(short classCode, String tableName, String columnName, short optionCode) {
+    public RdDataColumnOptionPK(short classCode, String tableName, String columnName, String optionCode) {
         this.classCode = classCode;
         this.tableName = tableName;
         this.columnName = columnName;
@@ -72,11 +72,11 @@ public class RdDataColumnOptionPK implements Serializable {
         this.columnName = columnName;
     }
 
-    public short getOptionCode() {
+    public String getOptionCode() {
         return optionCode;
     }
 
-    public void setOptionCode(short optionCode) {
+    public void setOptionCode(String optionCode) {
         this.optionCode = optionCode;
     }
 
@@ -86,7 +86,7 @@ public class RdDataColumnOptionPK implements Serializable {
         hash += (int) classCode;
         hash += (tableName != null ? tableName.hashCode() : 0);
         hash += (columnName != null ? columnName.hashCode() : 0);
-        hash += (int) optionCode;
+        hash += (optionCode != null ? optionCode.hashCode() : 0);
         return hash;
     }
 
@@ -116,5 +116,5 @@ public class RdDataColumnOptionPK implements Serializable {
     public String toString() {
         return "cub.entities.RdDataColumnOptionPK[ classCode=" + classCode + ", tableName=" + tableName + ", columnName=" + columnName + ", optionCode=" + optionCode + " ]";
     }
-    
+
 }

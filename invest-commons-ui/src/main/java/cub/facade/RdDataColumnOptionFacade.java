@@ -5,7 +5,8 @@
  */
 package cub.facade;
 
-import cub.entities.UdColumnScopeMaster;
+import cub.entities.RdDataColumnOption;
+import cub.vo.QueryUdColumnScopeDetailVO;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +18,7 @@ import javax.persistence.Query;
  * @author NT48810
  */
 @Stateless
-public class UdColumnScopeMasterFacade extends AbstractFacade<UdColumnScopeMaster> {
+public class RdDataColumnOptionFacade extends AbstractFacade<RdDataColumnOption> {
 
     @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -27,22 +28,18 @@ public class UdColumnScopeMasterFacade extends AbstractFacade<UdColumnScopeMaste
         return em;
     }
 
-    public UdColumnScopeMasterFacade() {
-        super(UdColumnScopeMaster.class);
+    public RdDataColumnOptionFacade() {
+        super(RdDataColumnOption.class);
     }
 
-    public List<String> findByCode(String code) {
+    public List<RdDataColumnOption> findByMasterCode(String udColumnCode) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("select u.udColumnCode from UdColumnScopeMaster u where u.udColumnCode like :code");
+        jpql.append("from RdDataColumnOption rdo where rdo.rdDataColumnOptionPK.optionCode in (")
+                .append("select udd.udColumnScopeDetailPK.dataCode from UdColumnScopeDetail udd")
+                .append(" where udd.udColumnScopeDetailPK.udColumnCode =:udColumnCode)")
+                .append(" order by rdo.rdDataColumnOptionPK.optionCode asc");
         Query query = em.createQuery(jpql.toString());
-        query.setParameter("code", code + "%");
-        return query.getResultList();
-    }
-    
-    public List<UdColumnScopeMaster> findAllSort(){
-        StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from UdColumnScopeMaster u order by u.udColumnCode asc");
-        Query query = em.createQuery(jpql.toString());
+        query.setParameter("udColumnCode", udColumnCode);
         return query.getResultList();
     }
 }

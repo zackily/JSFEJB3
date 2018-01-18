@@ -56,7 +56,7 @@ public class RdDataColumnOption implements Serializable {
         this.rdDataColumnOptionPK = rdDataColumnOptionPK;
     }
 
-    public RdDataColumnOption(short classCode, String tableName, String columnName, short optionCode) {
+    public RdDataColumnOption(short classCode, String tableName, String columnName, String optionCode) {
         this.rdDataColumnOptionPK = new RdDataColumnOptionPK(classCode, tableName, columnName, optionCode);
     }
 

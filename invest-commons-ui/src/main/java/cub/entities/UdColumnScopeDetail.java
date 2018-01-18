@@ -6,15 +6,11 @@
 package cub.entities;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -26,65 +22,37 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "UdColumnScopeDetail.findAll", query = "SELECT u FROM UdColumnScopeDetail u")
-    , @NamedQuery(name = "UdColumnScopeDetail.findByUdColumnCode", query = "SELECT u FROM UdColumnScopeDetail u WHERE u.udColumnCode = :udColumnCode")
-    , @NamedQuery(name = "UdColumnScopeDetail.findBySeqNo", query = "SELECT u FROM UdColumnScopeDetail u WHERE u.seqNo = :seqNo")
-    , @NamedQuery(name = "UdColumnScopeDetail.findByDataCode", query = "SELECT u FROM UdColumnScopeDetail u WHERE u.dataCode = :dataCode")})
+    , @NamedQuery(name = "UdColumnScopeDetail.findByUdColumnCode", query = "SELECT u FROM UdColumnScopeDetail u WHERE u.udColumnScopeDetailPK.udColumnCode = :udColumnCode")
+    , @NamedQuery(name = "UdColumnScopeDetail.findByDataCode", query = "SELECT u FROM UdColumnScopeDetail u WHERE u.udColumnScopeDetailPK.dataCode = :dataCode")})
 public class UdColumnScopeDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 6)
-    @Column(name = "UD_COLUMN_CODE")
-    private String udColumnCode;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "SEQ_NO")
-    private short seqNo;
-    @Column(name = "DATA_CODE")
-    private Short dataCode;
+    @EmbeddedId
+    protected UdColumnScopeDetailPK udColumnScopeDetailPK;
 
     public UdColumnScopeDetail() {
     }
 
-    public UdColumnScopeDetail(String udColumnCode) {
-        this.udColumnCode = udColumnCode;
+    public UdColumnScopeDetail(UdColumnScopeDetailPK udColumnScopeDetailPK) {
+        this.udColumnScopeDetailPK = udColumnScopeDetailPK;
     }
 
-    public UdColumnScopeDetail(String udColumnCode, short seqNo) {
-        this.udColumnCode = udColumnCode;
-        this.seqNo = seqNo;
+    public UdColumnScopeDetail(String udColumnCode, String dataCode) {
+        this.udColumnScopeDetailPK = new UdColumnScopeDetailPK(udColumnCode, dataCode);
     }
 
-    public String getUdColumnCode() {
-        return udColumnCode;
+    public UdColumnScopeDetailPK getUdColumnScopeDetailPK() {
+        return udColumnScopeDetailPK;
     }
 
-    public void setUdColumnCode(String udColumnCode) {
-        this.udColumnCode = udColumnCode;
-    }
-
-    public short getSeqNo() {
-        return seqNo;
-    }
-
-    public void setSeqNo(short seqNo) {
-        this.seqNo = seqNo;
-    }
-
-    public Short getDataCode() {
-        return dataCode;
-    }
-
-    public void setDataCode(Short dataCode) {
-        this.dataCode = dataCode;
+    public void setUdColumnScopeDetailPK(UdColumnScopeDetailPK udColumnScopeDetailPK) {
+        this.udColumnScopeDetailPK = udColumnScopeDetailPK;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (udColumnCode != null ? udColumnCode.hashCode() : 0);
+        hash += (udColumnScopeDetailPK != null ? udColumnScopeDetailPK.hashCode() : 0);
         return hash;
     }
 
@@ -95,7 +63,7 @@ public class UdColumnScopeDetail implements Serializable {
             return false;
         }
         UdColumnScopeDetail other = (UdColumnScopeDetail) object;
-        if ((this.udColumnCode == null && other.udColumnCode != null) || (this.udColumnCode != null && !this.udColumnCode.equals(other.udColumnCode))) {
+        if ((this.udColumnScopeDetailPK == null && other.udColumnScopeDetailPK != null) || (this.udColumnScopeDetailPK != null && !this.udColumnScopeDetailPK.equals(other.udColumnScopeDetailPK))) {
             return false;
         }
         return true;
@@ -103,7 +71,7 @@ public class UdColumnScopeDetail implements Serializable {
 
     @Override
     public String toString() {
-        return "cub.entities.UdColumnScopeDetail[ udColumnCode=" + udColumnCode + " ]";
+        return "cub.entities.UdColumnScopeDetail[ udColumnScopeDetailPK=" + udColumnScopeDetailPK + " ]";
     }
     
 }

@@ -6,6 +6,7 @@
 package cub.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -39,29 +42,28 @@ public class UdColumnScopeMaster implements Serializable {
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
+    @Size(min = 1, max = 6)
     @Column(name = "UD_COLUMN_CODE")
     private String udColumnCode;
     @Basic(optional = false)
     @NotNull
-    @Size(max = 50)
+    @Size(min = 1, max = 50)
     @Column(name = "UD_COLUMN_NAME")
     private String udColumnName;
-    @Size(max = 20)
     @Column(name = "CLASS_CODE")
-    private String classCode;
+    private Short classCode;
     @Size(max = 50)
     @Column(name = "TABLE_NAME")
     private String tableName;
     @Size(max = 50)
     @Column(name = "COLUMN_NAME")
     private String columnName;
-    @Size(max = 50)
+    @Size(max = 20)
     @Column(name = "LOG_USER_ID")
     private String logUserId;
-    @Size(max = 6)
     @Column(name = "LOG_DTTM")
-    private String logDttm;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date logDttm;
 
     public UdColumnScopeMaster() {
     }
@@ -91,11 +93,11 @@ public class UdColumnScopeMaster implements Serializable {
         this.udColumnName = udColumnName;
     }
 
-    public String getClassCode() {
+    public Short getClassCode() {
         return classCode;
     }
 
-    public void setClassCode(String classCode) {
+    public void setClassCode(Short classCode) {
         this.classCode = classCode;
     }
 
@@ -123,11 +125,11 @@ public class UdColumnScopeMaster implements Serializable {
         this.logUserId = logUserId;
     }
 
-    public String getLogDttm() {
+    public Date getLogDttm() {
         return logDttm;
     }
 
-    public void setLogDttm(String logDttm) {
+    public void setLogDttm(Date logDttm) {
         this.logDttm = logDttm;
     }
 
