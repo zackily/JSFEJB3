@@ -10,8 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -19,8 +19,8 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
 import org.apache.commons.lang.StringUtils;
 
-@Named("mgFeeMonthController")
-@SessionScoped
+@ManagedBean(name = "mgFeeMonthController")
+@ViewScoped
 public class MgFeeMonthController implements Serializable {
 
     @EJB

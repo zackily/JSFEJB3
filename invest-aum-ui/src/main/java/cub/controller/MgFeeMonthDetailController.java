@@ -1,8 +1,6 @@
 package cub.controller;
 
 import cub.entities.MgFeeMonthDetail;
-import static cub.entities.MgFeeMonthDetail_.custId;
-import static cub.entities.MgFeeMonth_.baseMonth;
 import cub.facade.MgFeeMonthDetailFacade;
 
 import java.io.Serializable;
@@ -12,12 +10,12 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-@Named("mgFeeMonthController")
-@SessionScoped
+@ManagedBean(name = "mgFeeMonthController")
+@ViewScoped
 public class MgFeeMonthDetailController implements Serializable {
 
     @EJB
