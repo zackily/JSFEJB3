@@ -5,6 +5,7 @@ import cub.entities.RdDataColumnOption;
 import cub.entities.RdDataColumnOptionPK;
 import cub.entities.RdDataColumnPK;
 import cub.entities.UdColumnScopeDetail;
+import cub.entities.UdColumnScopeDetailPK;
 import cub.entities.UdColumnScopeMaster;
 import cub.enums.SeqTypeEnum;
 import cub.vo.QueryUdColumnScopeDetailVO;
@@ -55,7 +56,11 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     private RdDataColumnOptionPK itemColumnOption;
     /*
-    新增/編輯資料範圍列表
+    新增/編輯資料範圍列表,內容組成(RdDataColumnOptionPK.getOptionCode())
+     */
+    private List<String> tempList = new ArrayList<String>();
+    /*
+    新增/編輯資料範圍列表,內容組成(RdDataColumnOptionPK.getOptionCode())
      */
     private List<String> itemColumnOptionList = new ArrayList<String>();
     /*
@@ -63,7 +68,7 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     private List<SelectItem> itemFieldCNNameMenu;
     /*
-    新增/編輯欄位中文名稱
+    新增/編輯欄位中文名稱,內容組成(RdDataColumnPK.getClassCode() + "+" + RdDataColumnPK.getTableName() + "+" + RdDataColumnPK.getColumnName())
      */
     private String itemDataColumn;
     /*
@@ -82,7 +87,6 @@ public class UserDeDataScopeSetController implements Serializable {
     自定義欄位範圍索引
      */
     private int masterIndex;
-
     /*
     欄位中文名稱
      */
@@ -96,31 +100,37 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     private List<RdDataColumnOption> allOptions;
 
+    private String tempOptionCode;
+
     @PostConstruct
     public void init() {
         this.master = new ArrayList<UdColumnScopeMaster>();
         this.master = ejbUdColumnScopeMasterFacade.findAllSort();
         this.item = new UdColumnScopeMaster();
-        this.item.setUdColumnCode(getWorkSeq(SeqTypeEnum.UDFIELD_CODE.toString()));
+//        this.item.setUdColumnCode(getWorkSeq(SeqTypeEnum.UDFIELD_CODE.toString()));
         this.currentItem = new UdColumnScopeMaster();
         if (this.master.isEmpty()) {
             this.master.add(this.item);
         } else {
             this.currentItem = this.master.get(0);
         }
+        //頁面載入自定義欄位this.master的index
         masterIndex = 0;
+        //intial新增/編輯時欄位中文名稱下拉選單
         this.itemFieldCNNameMenu = new ArrayList<SelectItem>();
         List<RdDataColumn> allRdDataColumn = ejbRdDataColumnFacade.findAll();
         for (RdDataColumn rd : allRdDataColumn) {
             RdDataColumnPK pk = rd.getRdDataColumnPK();
-            itemFieldCNNameMenu.add(new SelectItem(pk.getClassCode() + "_" + pk.getTableName() + "_" + pk.getColumnName(), rd.getColumnChnName()));
+            itemFieldCNNameMenu.add(new SelectItem(pk.getClassCode() + "+" + pk.getTableName() + "+" + pk.getColumnName(), rd.getColumnChnName()));
         }
+        //intial新增/編輯時資料範圍下拉選單
         this.rdDataColumnOptionMenu = new ArrayList<SelectItem>();
         this.allOptions = ejbRdDataColumnOptionFacade.findAll();
         for (RdDataColumnOption op : allOptions) {
             RdDataColumnOptionPK pk = op.getRdDataColumnOptionPK();
-            rdDataColumnOptionMenu.add(new SelectItem(pk.getClassCode() + "_" + pk.getTableName() + "_" + pk.getColumnName() + "_" + pk.getOptionCode(), op.getOptionName()));
+            rdDataColumnOptionMenu.add(new SelectItem(pk.getOptionCode(), op.getOptionName()));
         }
+        //載入this.currentItem內容
         setItemDetail();
     }
 
@@ -147,18 +157,29 @@ public class UserDeDataScopeSetController implements Serializable {
         this.detailHeaderTextName = this.fieldCNName;
     }
 
+    public void columnOptionChange(int i) {
+        this.tempList.add(this.tempOptionCode);
+    }
+
     public void fieldCNNameMenuOnChange() {
         this.detailHeaderTextCode = this.fieldCNName;
         this.detailHeaderTextName = this.fieldCNName;
     }
 
+    /*
+    新增資料範圍(＋)
+     */
     public void addColumnOptionList(ActionEvent event) {
         RdDataColumnOptionPK pk = this.allOptions.get(0).getRdDataColumnOptionPK();
-        this.itemColumnOptionList.add(pk.getClassCode() + "_" + pk.getTableName() + "_" + pk.getColumnName() + "_" + pk.getOptionCode());
+        this.itemColumnOptionList.add("");
     }
 
+    /*
+    移除資料範圍(－)
+     */
     public void removeColumnOptionList(ActionEvent event) {
         this.itemColumnOptionList.remove(this.itemColumnOptionList.size() - 1);
+        this.tempList.remove(this.tempList.size() - 1);
     }
 
     /*
@@ -176,8 +197,8 @@ public class UserDeDataScopeSetController implements Serializable {
                     this.currentItem = this.master.get(0);
                     masterIndex = 0;
                 } else {
-                    this.currentItem = this.master.get(i);
-                    masterIndex = i;
+                    this.currentItem = this.master.get(i - 1);
+                    masterIndex = i - 1;
                 }
                 break;
             case 1:
@@ -185,8 +206,8 @@ public class UserDeDataScopeSetController implements Serializable {
                     this.currentItem = this.master.get(this.master.size() - 1);
                     masterIndex = this.master.size() - 1;
                 } else {
-                    this.currentItem = this.master.get(i);
-                    masterIndex = i;
+                    this.currentItem = this.master.get(i - 1);
+                    masterIndex = i - 1;
                 }
                 break;
             default:
@@ -210,7 +231,21 @@ public class UserDeDataScopeSetController implements Serializable {
     確認新增
      */
     public void save(ActionEvent event) {
-        ejbUdColumnScopeMasterFacade.create(item);
+        String[] strArray = StringUtils.split(this.itemDataColumn, "+");
+        this.item.setClassCode(Short.valueOf(strArray[0]));
+        this.item.setTableName(strArray[1]);
+        this.item.setColumnName(strArray[2]);
+        String udColumnCode = getWorkSeq(SeqTypeEnum.UDFIELD_CODE.toString());
+        this.item.setUdColumnCode(udColumnCode);
+        ejbUdColumnScopeMasterFacade.create(this.item);
+        if (null != tempList) {
+            for (String s : tempList) {
+                UdColumnScopeDetail d = new UdColumnScopeDetail();
+                UdColumnScopeDetailPK pk = new UdColumnScopeDetailPK(udColumnCode, s);
+                d.setUdColumnScopeDetailPK(pk);
+                ejbUdColumnScopeDetailFacade.create(d);
+            }
+        }
         ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.UDFIELD_CODE.toString());
         this.init();
     }
@@ -376,6 +411,22 @@ public class UserDeDataScopeSetController implements Serializable {
         this.fieldCNName = ejbRdDataColumnFacade.getFieldCNNameMenu(vo);
         this.detailHeaderTextCode = this.fieldCNName;
         this.detailHeaderTextName = this.fieldCNName;
+    }
+
+    public String getTempOptionCode() {
+        return tempOptionCode;
+    }
+
+    public void setTempOptionCode(String tempOptionCode) {
+        this.tempOptionCode = tempOptionCode;
+    }
+
+    public List<String> getTempList() {
+        return tempList;
+    }
+
+    public void setTempList(List<String> tempList) {
+        this.tempList = tempList;
     }
 
     /*
