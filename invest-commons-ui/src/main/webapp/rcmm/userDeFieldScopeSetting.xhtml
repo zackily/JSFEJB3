@@ -16,9 +16,9 @@
                 <p:layout>
                     <p:layoutUnit position="west" size="20%">
                         <p:panelGrid columns="1" style="width: 100%" layout="grid" >
-                            <p:commandButton value="新增" style="width: 80%" actionListener="#{userDeDataScopeSetController.create}" oncomplete="PF('createDialog').show();" process=":dialogForm" update=":dialogForm" />
-                            <p:commandButton value="修改" style="width: 80%" actionListener="#{userDeDataScopeSetController.update}"/>
-                            <p:commandButton value="刪除" style="width: 80%" actionListener="#{userDeDataScopeSetController.delete}"/>
+                            <p:commandButton value="新增" style="width: 80%" actionListener="#{userDeDataScopeSetController.create}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this"  />
+                            <p:commandButton value="編輯" style="width: 80%" actionListener="#{userDeDataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this" />
+                            <p:commandButton value="刪除" style="width: 80%" actionListener="#{userDeDataScopeSetController.delete}" disabled="#{userDeDataScopeSetController.master.size() == 0}"/>
                             <p:commandButton value="搜尋" style="width: 80%"/>
                         </p:panelGrid>
                     </p:layoutUnit>
@@ -55,7 +55,7 @@
                 </p:layout>
             </p:panel> 
         </h:form>
-        <p:dialog id="createDialog" header="Create" widgetVar="createDialog" modal="true" height="600" width="600" appendTo="@(body)" >
+        <p:dialog id="createDialog" header="#{userDeDataScopeSetController.editDialogLabel}" widgetVar="createDialog" modal="true" height="600" width="600" appendTo="@(body)" >
             <h:form id="dialogForm">
                 <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
                     <p:outputLabel value="自定義欄位範圍代碼"/>
@@ -75,13 +75,14 @@
                     <p:dataTable id="columnOptionDataTable" value="#{userDeDataScopeSetController.itemColumnOptionList}" var="op" rowIndexVar="i" rows="10">
                         <p:column headerText="資料範圍">
                             <p:selectOneMenu value="#{userDeDataScopeSetController.tempOptionCode}">
-                                <p:ajax listener="#{userDeDataScopeSetController.columnOptionChange(i)}" event="change"/>
+                                <p:ajax listener="#{userDeDataScopeSetController.columnOptionChange(i, op)}" event="change"/>
                                 <f:selectItems value="#{userDeDataScopeSetController.rdDataColumnOptionMenu}"/>
                             </p:selectOneMenu>
                         </p:column>
                     </p:dataTable>
+                    
                     <p:panel>
-                        <p:commandButton value="新增" actionListener="#{userDeDataScopeSetController.save}" update=":mainForm :dialogForm" oncomplete="PF('createDialog').hide()"  />
+                        <p:commandButton value="#{userDeDataScopeSetController.editDialogLabel}" actionListener="#{userDeDataScopeSetController.save}" update=":mainForm :dialogForm" oncomplete="PF('createDialog').hide()"  />
                         <p:commandButton value="取消" onclick="PF('createDialog').hide()" />
                     </p:panel>
                 </p:panelGrid>
