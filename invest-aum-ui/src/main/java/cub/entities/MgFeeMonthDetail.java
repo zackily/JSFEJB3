@@ -56,11 +56,6 @@ public class MgFeeMonthDetail implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "ACT_CODE")
     private String actCode;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 8)
-    @Column(name = "FUND_ID")
-    private String fundId;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
@@ -141,14 +136,6 @@ public class MgFeeMonthDetail implements Serializable {
 
     public void setActCode(String actCode) {
         this.actCode = actCode;
-    }
-
-    public String getFundId() {
-        return fundId;
-    }
-
-    public void setFundId(String fundId) {
-        this.fundId = fundId;
     }
 
     public BigDecimal getAumFeeAmt() {

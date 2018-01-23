@@ -12,8 +12,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -46,9 +44,6 @@ public class EricMgFee implements Serializable {
     @Size(max = 20)
     @Column(name = "ACT_CODE")
     private String actCode;
-    @Size(max = 5)
-    @Column(name = "ACT_SUB_CODE")
-    private String actSubCode;
     @Size(max = 20)
     @Column(name = "PORTFOLIO_NO")
     private String portfolioNo;
@@ -132,14 +127,6 @@ public class EricMgFee implements Serializable {
 
     public void setActCode(String actCode) {
         this.actCode = actCode;
-    }
-
-    public String getActSubCode() {
-        return actSubCode;
-    }
-
-    public void setActSubCode(String actSubCode) {
-        this.actSubCode = actSubCode;
     }
 
     public String getPortfolioNo() {
