@@ -17,8 +17,10 @@ import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -39,6 +41,8 @@ public class UserDeDataScopeSetController implements Serializable {
     private cub.facade.RdDataColumnFacade ejbRdDataColumnFacade;
     @EJB
     private cub.facade.RdDataColumnOptionFacade ejbRdDataColumnOptionFacade;
+    @EJB
+    private cub.facade.UdDataScopeDetailFacade ejbUdDataScoptDetailFacade;
     /*
     自定義欄位範圍列表
      */
@@ -298,9 +302,13 @@ public class UserDeDataScopeSetController implements Serializable {
     /*
     點擊刪除
      */
-    public void delete(String udColumnCode) {
-        UdColumnScopeMaster m = ejbUdColumnScopeMasterFacade.find(udColumnCode);
-        ejbUdColumnScopeMasterFacade.remove(m);
+    public void delete() {
+        if (ejbUdDataScoptDetailFacade.checkExistByUdColumnCode(this.currentItem.getUdColumnCode())) {
+            addMessage("System Error", "此欄位範圍已經被引用,請移除該引用才可進行刪除!");
+        } else {
+            ejbUdColumnScopeMasterFacade.remove(this.currentItem);
+        }
+        this.init();
     }
 
     /*
@@ -430,20 +438,6 @@ public class UserDeDataScopeSetController implements Serializable {
         this.allOptions = allOptions;
     }
 
-    /*
-    載入detail
-     */
-    private void setItemDetail() {
-        QueryUdColumnScopeDetailVO vo = new QueryUdColumnScopeDetailVO();
-        vo.setClassCode(this.currentItem.getClassCode());
-        vo.setTableName(this.currentItem.getTableName());
-        vo.setColumnName(this.currentItem.getColumnName());
-        this.detail = ejbRdDataColumnOptionFacade.findByMasterCode(this.currentItem.getUdColumnCode());
-        this.fieldCNName = ejbRdDataColumnFacade.getFieldCNNameMenu(vo);
-        this.detailHeaderTextCode = this.fieldCNName;
-        this.detailHeaderTextName = this.fieldCNName;
-    }
-
     public String getTempOptionCode() {
         return tempOptionCode;
     }
@@ -469,11 +463,30 @@ public class UserDeDataScopeSetController implements Serializable {
     }
 
     /*
+    載入detail
+     */
+    private void setItemDetail() {
+        QueryUdColumnScopeDetailVO vo = new QueryUdColumnScopeDetailVO();
+        vo.setClassCode(this.currentItem.getClassCode());
+        vo.setTableName(this.currentItem.getTableName());
+        vo.setColumnName(this.currentItem.getColumnName());
+        this.detail = ejbRdDataColumnOptionFacade.findByMasterCode(this.currentItem.getUdColumnCode());
+        this.fieldCNName = ejbRdDataColumnFacade.getFieldCNNameMenu(vo);
+        this.detailHeaderTextCode = this.fieldCNName;
+        this.detailHeaderTextName = this.fieldCNName;
+    }
+
+    /*
     取得自定義欄位範圍代碼
      */
     private String getWorkSeq(String code) {
         String seqType = SeqTypeEnum.valueOf(code).getCode();
         Short no = ejbWorkSeqFacade.getWorkSeqNo(code);
         return seqType + StringUtils.leftPad(String.valueOf(no + 1), 4, "0");
+    }
+
+    private void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }
