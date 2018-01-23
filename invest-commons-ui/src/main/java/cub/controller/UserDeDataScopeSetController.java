@@ -22,7 +22,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-import oracle.net.aso.i;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
 
@@ -190,9 +189,7 @@ public class UserDeDataScopeSetController implements Serializable {
     新增資料範圍(＋)
      */
     public void addColumnOptionList(ActionEvent event) {
-        RdDataColumnOptionPK pk = this.allOptions.get(0).getRdDataColumnOptionPK();
-        this.itemColumnOptionList.add("");
-
+        this.itemColumnOptionList.add("0");
     }
 
     /*
@@ -302,8 +299,8 @@ public class UserDeDataScopeSetController implements Serializable {
     點擊刪除
      */
     public void delete(String udColumnCode) {
-        UdColumnScopeMaster master = ejbUdColumnScopeMasterFacade.find(udColumnCode);
-        ejbUdColumnScopeMasterFacade.remove(master);
+        UdColumnScopeMaster m = ejbUdColumnScopeMasterFacade.find(udColumnCode);
+        ejbUdColumnScopeMasterFacade.remove(m);
     }
 
     /*

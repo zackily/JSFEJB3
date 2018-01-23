@@ -69,8 +69,8 @@
                 </p:panelGrid>
                 <p:panelGrid columns="1">
                     <p:panelGrid columns="2">
-                        <p:commandButton value="＋" actionListener="#{userDeDataScopeSetController.addColumnOptionList}" update=":dialogForm:columnOptionDataTable" process="@this"/>
-                        <p:commandButton value="－" actionListener="#{userDeDataScopeSetController.removeColumnOptionList}" update=":dialogForm:columnOptionDataTable" process="@this"/>
+                        <p:commandButton value="＋" actionListener="#{userDeDataScopeSetController.addColumnOptionList}" update=":dialogForm:columnOptionDataTable :dialogForm:columnOptionDataTable2" process="@this"/>
+                        <p:commandButton value="－" actionListener="#{userDeDataScopeSetController.removeColumnOptionList}" update=":dialogForm:columnOptionDataTable :dialogForm:columnOptionDataTable2" process="@this"/>
                     </p:panelGrid>
                     <p:dataTable id="columnOptionDataTable" value="#{userDeDataScopeSetController.itemColumnOptionList}" var="op" rowIndexVar="i" rows="10" rendered="#{userDeDataScopeSetController.editDialogLabel=='新增'}">
                         <p:column headerText="資料範圍">
