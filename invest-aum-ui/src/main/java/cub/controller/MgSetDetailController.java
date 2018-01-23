@@ -464,7 +464,7 @@ public class MgSetDetailController implements Serializable {
                 errMsg = "級距設定異常，請確認級距設定。";
                 break;
             }
-            if (rng.getMgActBps() != null && BigInteger.ZERO.compareTo(rng.getMgActBps()) == 1) {
+            if (rng.getMgActBps() != null && BigDecimal.ZERO.compareTo(rng.getMgActBps()) == 1) {
                 rangeError = true;
                 errMsg = "費率(bps)設定異常，請確認費率(bps)設定。";
                 break;
