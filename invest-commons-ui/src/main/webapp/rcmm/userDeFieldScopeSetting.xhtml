@@ -17,7 +17,7 @@
                     <p:layoutUnit position="west" size="20%">
                         <p:panelGrid columns="1" style="width: 100%" layout="grid" >
                             <p:commandButton value="新增" style="width: 80%" actionListener="#{userDeDataScopeSetController.create}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this"  />
-                            <p:commandButton value="編輯" style="width: 80%" actionListener="#{userDeDataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this" />
+                            <p:commandButton value="編輯" style="width: 80%" actionListener="#{userDeDataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":createDialog :dialogForm" process="@this" />
                             <p:commandButton value="刪除" style="width: 80%" actionListener="#{userDeDataScopeSetController.delete}" disabled="#{userDeDataScopeSetController.master.size() == 0}"/>
                             <p:commandButton value="搜尋" style="width: 80%"/>
                         </p:panelGrid>
@@ -69,18 +69,26 @@
                 </p:panelGrid>
                 <p:panelGrid columns="1">
                     <p:panelGrid columns="2">
-                        <p:commandButton value="＋" actionListener="#{userDeDataScopeSetController.addColumnOptionList}" update=":dialogForm:columnOptionDataTable"/>
-                        <p:commandButton value="－" actionListener="#{userDeDataScopeSetController.removeColumnOptionList}" update=":dialogForm:columnOptionDataTable"/>
+                        <p:commandButton value="＋" actionListener="#{userDeDataScopeSetController.addColumnOptionList}" update=":dialogForm:columnOptionDataTable" process="@this"/>
+                        <p:commandButton value="－" actionListener="#{userDeDataScopeSetController.removeColumnOptionList}" update=":dialogForm:columnOptionDataTable" process="@this"/>
                     </p:panelGrid>
-                    <p:dataTable id="columnOptionDataTable" value="#{userDeDataScopeSetController.itemColumnOptionList}" var="op" rowIndexVar="i" rows="10">
+                    <p:dataTable id="columnOptionDataTable" value="#{userDeDataScopeSetController.itemColumnOptionList}" var="op" rowIndexVar="i" rows="10" rendered="#{userDeDataScopeSetController.editDialogLabel=='新增'}">
                         <p:column headerText="資料範圍">
                             <p:selectOneMenu value="#{userDeDataScopeSetController.tempOptionCode}">
-                                <p:ajax listener="#{userDeDataScopeSetController.columnOptionChange(i, op)}" event="change"/>
+                                <p:ajax listener="#{userDeDataScopeSetController.columnOptionChange(i)}" event="change"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
                                 <f:selectItems value="#{userDeDataScopeSetController.rdDataColumnOptionMenu}"/>
                             </p:selectOneMenu>
                         </p:column>
                     </p:dataTable>
-                    
+                    <p:dataTable id="columnOptionDataTable2" value="#{userDeDataScopeSetController.itemColumnOptionList}" var="op" rowIndexVar="i" rows="10" rendered="#{userDeDataScopeSetController.editDialogLabel=='編輯'}">
+                        <p:column headerText="資料範圍">
+                            <p:selectOneMenu value="#{op}" valueChangeListener="#{userDeDataScopeSetController.columnOptionChangeForEdit}">
+                                <p:ajax event="change" immediate="true" process="@this"/>
+                                <f:selectItems value="#{userDeDataScopeSetController.rdDataColumnOptionMenu}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:dataTable>
                     <p:panel>
                         <p:commandButton value="#{userDeDataScopeSetController.editDialogLabel}" actionListener="#{userDeDataScopeSetController.save}" update=":mainForm :dialogForm" oncomplete="PF('createDialog').hide()"  />
                         <p:commandButton value="取消" onclick="PF('createDialog').hide()" />

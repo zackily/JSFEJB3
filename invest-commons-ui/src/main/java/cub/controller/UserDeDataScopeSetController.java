@@ -11,13 +11,18 @@ import cub.enums.SeqTypeEnum;
 import cub.vo.QueryUdColumnScopeDetailVO;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import oracle.net.aso.i;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
 
@@ -58,7 +63,7 @@ public class UserDeDataScopeSetController implements Serializable {
     /*
     新增/編輯資料範圍列表,內容組成(RdDataColumnOptionPK.getOptionCode())
      */
-    private List<String> tempList = new ArrayList<String>();
+    private Map<Integer, String> tempList = new HashMap<Integer, String>();
     /*
     新增/編輯資料範圍列表,內容組成(RdDataColumnOptionPK.getOptionCode())
      */
@@ -163,9 +168,17 @@ public class UserDeDataScopeSetController implements Serializable {
         this.detailHeaderTextName = this.fieldCNName;
     }
 
-    public void columnOptionChange(int i, String op) {
-        this.tempList.set(i, op);
-        //this.tempList.add(op);
+    public void columnOptionChange(int i) {
+        if (this.tempList.size() > 0) {
+            this.tempList.remove(i);
+        }
+        this.tempList.put(i, this.tempOptionCode);
+
+    }
+
+    public void columnOptionChangeForEdit(ValueChangeEvent e) {
+        this.itemColumnOptionList.remove(e.getOldValue().toString());
+        this.itemColumnOptionList.add(e.getNewValue().toString());
     }
 
     public void fieldCNNameMenuOnChange() {
@@ -179,7 +192,7 @@ public class UserDeDataScopeSetController implements Serializable {
     public void addColumnOptionList(ActionEvent event) {
         RdDataColumnOptionPK pk = this.allOptions.get(0).getRdDataColumnOptionPK();
         this.itemColumnOptionList.add("");
-        this.tempList.add("");
+
     }
 
     /*
@@ -247,24 +260,26 @@ public class UserDeDataScopeSetController implements Serializable {
             this.item.setUdColumnCode(udColumnCode);
             ejbUdColumnScopeMasterFacade.create(this.item);
             if (null != tempList) {
-                for (String s : tempList) {
+                Set<Integer> set = tempList.keySet();
+                for (Integer s : set) {
                     UdColumnScopeDetail d = new UdColumnScopeDetail();
-                    UdColumnScopeDetailPK pk = new UdColumnScopeDetailPK(udColumnCode, s);
+                    UdColumnScopeDetailPK pk = new UdColumnScopeDetailPK(udColumnCode, tempList.get(s));
                     d.setUdColumnScopeDetailPK(pk);
                     ejbUdColumnScopeDetailFacade.create(d);
                 }
             }
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.UDFIELD_CODE.toString());
         } else {//編輯
-            if (null != tempList) {
+            if (null != itemColumnOptionList) {
                 ejbUdColumnScopeDetailFacade.removeByColumnCode(this.item.getUdColumnCode());
-                for (String s : tempList) {
+                for (String s : itemColumnOptionList) {
                     UdColumnScopeDetail d = new UdColumnScopeDetail();
                     UdColumnScopeDetailPK pk = new UdColumnScopeDetailPK(this.item.getUdColumnCode(), s);
                     d.setUdColumnScopeDetailPK(pk);
                     ejbUdColumnScopeDetailFacade.create(d);
                 }
             }
+            ejbUdColumnScopeMasterFacade.edit(item);
         }
         this.itemColumnOptionList.clear();
         this.tempList.clear();
@@ -281,13 +296,6 @@ public class UserDeDataScopeSetController implements Serializable {
         for (RdDataColumnOption op : this.detail) {
             this.itemColumnOptionList.add(op.getRdDataColumnOptionPK().getOptionCode());
         }
-    }
-
-    /*
-    取得資料範圍設定區
-     */
-    public void selectUdColumnScopeDetail(String masterCode) {
-
     }
 
     /*
@@ -447,11 +455,11 @@ public class UserDeDataScopeSetController implements Serializable {
         this.tempOptionCode = tempOptionCode;
     }
 
-    public List<String> getTempList() {
+    public Map<Integer, String> getTempList() {
         return tempList;
     }
 
-    public void setTempList(List<String> tempList) {
+    public void setTempList(Map<Integer, String> tempList) {
         this.tempList = tempList;
     }
 

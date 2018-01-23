@@ -6,8 +6,6 @@
 package cub.facade;
 
 import cub.entities.UdColumnScopeDetail;
-import cub.vo.QueryUdColumnScopeDetailVO;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -36,6 +34,7 @@ public class UdColumnScopeDetailFacade extends AbstractFacade<UdColumnScopeDetai
         StringBuilder jpql = new StringBuilder(100);
         jpql.append("delete from UdColumnScopeDetail d where d.udColumnScopeDetailPK.udColumnCode =:columnCode");
         Query query = em.createQuery(jpql.toString());
+        query.setParameter("columnCode", columnCode);
         query.executeUpdate();
     }
 }
