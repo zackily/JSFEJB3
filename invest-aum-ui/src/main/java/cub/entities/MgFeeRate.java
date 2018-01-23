@@ -53,11 +53,6 @@ public class MgFeeRate implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 5)
-    @Column(name = "ACT_SUB_CODE")
-    private String actSubCode;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 8)
     @Column(name = "RATE_DATE")
     private String rateDate;
@@ -261,14 +256,6 @@ public class MgFeeRate implements Serializable {
     @Override
     public String toString() {
         return "cub.entities.MgFeeRate[ id=" + id + " ]";
-    }
-
-    public String getActSubCode() {
-        return actSubCode;
-    }
-
-    public void setActSubCode(String actSubCode) {
-        this.actSubCode = actSubCode;
     }
 
     public String getRateDate() {

@@ -15,8 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -58,11 +56,6 @@ public class MgFeeMonthDetail implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "ACT_CODE")
     private String actCode;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 5)
-    @Column(name = "ACT_SUB_CODE")
-    private String actSubCode;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 8)
@@ -148,14 +141,6 @@ public class MgFeeMonthDetail implements Serializable {
 
     public void setActCode(String actCode) {
         this.actCode = actCode;
-    }
-
-    public String getActSubCode() {
-        return actSubCode;
-    }
-
-    public void setActSubCode(String actSubCode) {
-        this.actSubCode = actSubCode;
     }
 
     public String getFundId() {

@@ -33,7 +33,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "MgFeeMonthWithdrawLog.findByProcessDate", query = "SELECT m FROM MgFeeMonthWithdrawLog m WHERE m.processDate = :processDate")
     , @NamedQuery(name = "MgFeeMonthWithdrawLog.findByCustId", query = "SELECT m FROM MgFeeMonthWithdrawLog m WHERE m.custId = :custId")
     , @NamedQuery(name = "MgFeeMonthWithdrawLog.findByActCode", query = "SELECT m FROM MgFeeMonthWithdrawLog m WHERE m.actCode = :actCode")
-    , @NamedQuery(name = "MgFeeMonthWithdrawLog.findByActSubCode", query = "SELECT m FROM MgFeeMonthWithdrawLog m WHERE m.actSubCode = :actSubCode")
     , @NamedQuery(name = "MgFeeMonthWithdrawLog.findByAumFee", query = "SELECT m FROM MgFeeMonthWithdrawLog m WHERE m.aumFee = :aumFee")
     , @NamedQuery(name = "MgFeeMonthWithdrawLog.findByCostFee", query = "SELECT m FROM MgFeeMonthWithdrawLog m WHERE m.costFee = :costFee")
     , @NamedQuery(name = "MgFeeMonthWithdrawLog.findByCur", query = "SELECT m FROM MgFeeMonthWithdrawLog m WHERE m.cur = :cur")
@@ -73,11 +72,6 @@ public class MgFeeMonthWithdrawLog implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "ACT_CODE")
     private String actCode;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 5)
-    @Column(name = "ACT_SUB_CODE")
-    private String actSubCode;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
@@ -122,7 +116,6 @@ public class MgFeeMonthWithdrawLog implements Serializable {
         this.processDate = processDate;
         this.custId = custId;
         this.actCode = actCode;
-        this.actSubCode = actSubCode;
         this.aumFee = aumFee;
         this.costFee = costFee;
         this.cur = cur;
@@ -176,14 +169,6 @@ public class MgFeeMonthWithdrawLog implements Serializable {
 
     public void setActCode(String actCode) {
         this.actCode = actCode;
-    }
-
-    public String getActSubCode() {
-        return actSubCode;
-    }
-
-    public void setActSubCode(String actSubCode) {
-        this.actSubCode = actSubCode;
     }
 
     public BigDecimal getAumFee() {

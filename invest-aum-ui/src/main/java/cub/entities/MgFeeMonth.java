@@ -52,11 +52,6 @@ public class MgFeeMonth implements Serializable {
     private String actCode;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 5)
-    @Column(name = "ACT_SUB_CODE")
-    private String actSubCode;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 3)
     @Column(name = "CURRENCY")
     private String currency;
@@ -169,14 +164,6 @@ public class MgFeeMonth implements Serializable {
 
     public void setActCode(String actCode) {
         this.actCode = actCode;
-    }
-
-    public String getActSubCode() {
-        return actSubCode;
-    }
-
-    public void setActSubCode(String actSubCode) {
-        this.actSubCode = actSubCode;
     }
 
     public String getCurrency() {
