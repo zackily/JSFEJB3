@@ -270,7 +270,7 @@ public class UserDeDataScopeSetController implements Serializable {
             }
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.UDFIELD_CODE.toString());
         } else {//編輯
-            if (null != itemColumnOptionList) {
+            if (itemColumnOptionList.size() > 0) {
                 ejbUdColumnScopeDetailFacade.removeByColumnCode(this.item.getUdColumnCode());
                 for (String s : itemColumnOptionList) {
                     UdColumnScopeDetail d = new UdColumnScopeDetail();

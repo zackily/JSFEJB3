@@ -35,7 +35,7 @@
                                 <p:ajax event="itemSelect" listener="#{userDeDataScopeSetController.onItemSelect}" update=":mainForm"/>
                             </p:autoComplete>
                             <p:outputLabel value="自定義欄位範圍名稱"/>
-                            <p:inputText value="#{userDeDataScopeSetController.currentItem.udColumnName}" />
+                            <p:outputLabel value="#{userDeDataScopeSetController.currentItem.udColumnName}" />
                             <p:outputLabel value="欄位中文名稱"/>
                             <p:outputLabel value="#{userDeDataScopeSetController.fieldCNName}"/>
                         </p:panelGrid>
