@@ -16,6 +16,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -58,6 +59,8 @@ public class DataScopeMaster implements Serializable {
     @Column(name = "LOG_DTTM")
     @Temporal(TemporalType.TIMESTAMP)
     private Date logDttm;
+    @Transient
+    private String className;
 
     public DataScopeMaster() {
     }
@@ -112,6 +115,15 @@ public class DataScopeMaster implements Serializable {
         this.logDttm = logDttm;
     }
 
+    @Transient
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -136,5 +148,5 @@ public class DataScopeMaster implements Serializable {
     public String toString() {
         return "cub.entities.DataScopeMaster[ scopeCode=" + scopeCode + " ]";
     }
-    
+
 }

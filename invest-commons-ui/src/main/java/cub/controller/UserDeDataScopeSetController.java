@@ -30,7 +30,7 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean(name = "userDeDataScopeSetController")
 @ViewScoped
 public class UserDeDataScopeSetController implements Serializable {
-    
+
     @EJB
     private cub.facade.WorkSeqFacade ejbWorkSeqFacade;
     @EJB
@@ -115,7 +115,7 @@ public class UserDeDataScopeSetController implements Serializable {
     新增/編輯Dialog CommandButton value
      */
     private String editDialogLabel = "新增";
-    
+
     @PostConstruct
     public void init() {
         this.master = new ArrayList<UdColumnScopeMaster>();
@@ -130,14 +130,14 @@ public class UserDeDataScopeSetController implements Serializable {
         }
         //頁面載入自定義欄位this.master的index
         currentIndex = 0;
-        //intial新增/編輯時欄位中文名稱下拉選單
+        //initial新增/編輯時欄位中文名稱下拉選單
         this.itemFieldCNNameMenu = new ArrayList<SelectItem>();
         List<RdDataColumn> allRdDataColumn = ejbRdDataColumnFacade.findAll();
         for (RdDataColumn rd : allRdDataColumn) {
             RdDataColumnPK pk = rd.getRdDataColumnPK();
             itemFieldCNNameMenu.add(new SelectItem(pk.getClassCode() + "+" + pk.getTableName() + "+" + pk.getColumnName(), rd.getColumnChnName()));
         }
-        //intial新增/編輯時資料範圍下拉選單
+        //initial新增/編輯時資料範圍下拉選單
         this.rdDataColumnOptionMenu = new ArrayList<SelectItem>();
         this.allOptions = ejbRdDataColumnOptionFacade.findAll();
         for (RdDataColumnOption op : allOptions) {
@@ -170,20 +170,20 @@ public class UserDeDataScopeSetController implements Serializable {
         this.detailHeaderTextCode = this.fieldCNName;
         this.detailHeaderTextName = this.fieldCNName;
     }
-    
+
     public void columnOptionChange(int i) {
         if (this.tempList.size() > 0) {
             this.tempList.remove(i);
         }
         this.tempList.put(i, this.tempOptionCode);
-        
+
     }
-    
+
     public void columnOptionChangeForEdit(ValueChangeEvent e) {
-        this.itemColumnOptionList.remove(e.getOldValue().toString());
-        this.itemColumnOptionList.add(e.getNewValue().toString());
+        int idx = this.itemColumnOptionList.indexOf(e.getOldValue().toString());
+        this.itemColumnOptionList.set(idx, e.getNewValue().toString());
     }
-    
+
     public void fieldCNNameMenuOnChange() {
         this.detailHeaderTextCode = this.fieldCNName;
         this.detailHeaderTextName = this.fieldCNName;
@@ -252,7 +252,7 @@ public class UserDeDataScopeSetController implements Serializable {
     確認新增
      */
     public void save(ActionEvent event) {
-        String[] strArray = StringUtils.split(this.itemDataColumn, "+");
+        String[] strArray = this.itemDataColumn.split("+");
         this.item.setClassCode(Short.valueOf(strArray[0]));
         this.item.setTableName(strArray[1]);
         this.item.setColumnName(strArray[2]);
@@ -286,6 +286,7 @@ public class UserDeDataScopeSetController implements Serializable {
         this.tempList.clear();
         this.init();
         this.currentItem = this.master.get(this.master.size() - 1);
+        setItemDetail();
     }
 
     /*
@@ -308,6 +309,7 @@ public class UserDeDataScopeSetController implements Serializable {
             addMessage("System Error", "此欄位範圍已經被引用,請移除該引用才可進行刪除!");
         } else {
             ejbUdColumnScopeMasterFacade.remove(this.currentItem);
+            ejbUdColumnScopeDetailFacade.removeByColumnCode(this.currentItem.getUdColumnCode());
         }
         this.init();
     }
@@ -316,149 +318,149 @@ public class UserDeDataScopeSetController implements Serializable {
     點擊搜尋
      */
     public void search(ActionEvent event) {
-        
+
     }
-    
+
     public List<UdColumnScopeMaster> getMaster() {
         return master;
     }
-    
+
     public void setMaster(List<UdColumnScopeMaster> master) {
         this.master = master;
     }
-    
+
     public UdColumnScopeMaster getItem() {
         return item;
     }
-    
+
     public void setItem(UdColumnScopeMaster item) {
         this.item = item;
     }
-    
+
     public UdColumnScopeMaster getCurrentItem() {
         return currentItem;
     }
-    
+
     public void setCurrentItem(UdColumnScopeMaster currentItem) {
         this.currentItem = currentItem;
     }
-    
+
     public List<RdDataColumnOption> getDetail() {
         return detail;
     }
-    
+
     public void setDetail(List<RdDataColumnOption> detail) {
         this.detail = detail;
     }
-    
+
     public String getDetailHeaderTextCode() {
         return detailHeaderTextCode;
     }
-    
+
     public void setDetailHeaderTextCode(String detailHeaderTextCode) {
         this.detailHeaderTextCode = detailHeaderTextCode;
     }
-    
+
     public String getDetailHeaderTextName() {
         return detailHeaderTextName;
     }
-    
+
     public void setDetailHeaderTextName(String detailHeaderTextName) {
         this.detailHeaderTextName = detailHeaderTextName;
     }
-    
+
     public int getCurrentIndex() {
         return currentIndex;
     }
-    
+
     public void setCurrentIndex(int currentIndex) {
         this.currentIndex = currentIndex;
     }
-    
+
     public String getFieldCNName() {
         return fieldCNName;
     }
-    
+
     public void setFieldCNName(String fieldCNName) {
         this.fieldCNName = fieldCNName;
     }
-    
+
     public UdColumnScopeDetail getItemDetail() {
         return itemDetail;
     }
-    
+
     public void setItemDetail(UdColumnScopeDetail itemDetail) {
         this.itemDetail = itemDetail;
     }
-    
+
     public List<SelectItem> getRdDataColumnOptionMenu() {
         return rdDataColumnOptionMenu;
     }
-    
+
     public void setRdDataColumnOptionMenu(List<SelectItem> rdDataColumnOptionMenu) {
         this.rdDataColumnOptionMenu = rdDataColumnOptionMenu;
     }
-    
+
     public RdDataColumnOptionPK getItemColumnOption() {
         return itemColumnOption;
     }
-    
+
     public void setItemColumnOption(RdDataColumnOptionPK itemColumnOption) {
         this.itemColumnOption = itemColumnOption;
     }
-    
+
     public List<SelectItem> getItemFieldCNNameMenu() {
         return itemFieldCNNameMenu;
     }
-    
+
     public void setItemFieldCNNameMenu(List<SelectItem> itemFieldCNNameMenu) {
         this.itemFieldCNNameMenu = itemFieldCNNameMenu;
     }
-    
+
     public String getItemDataColumn() {
         return itemDataColumn;
     }
-    
+
     public void setItemDataColumn(String itemDataColumn) {
         this.itemDataColumn = itemDataColumn;
     }
-    
+
     public List<String> getItemColumnOptionList() {
         return itemColumnOptionList;
     }
-    
+
     public void setItemColumnOptionList(List<String> itemColumnOptionList) {
         this.itemColumnOptionList = itemColumnOptionList;
     }
-    
+
     public List<RdDataColumnOption> getAllOptions() {
         return allOptions;
     }
-    
+
     public void setAllOptions(List<RdDataColumnOption> allOptions) {
         this.allOptions = allOptions;
     }
-    
+
     public String getTempOptionCode() {
         return tempOptionCode;
     }
-    
+
     public void setTempOptionCode(String tempOptionCode) {
         this.tempOptionCode = tempOptionCode;
     }
-    
+
     public Map<Integer, String> getTempList() {
         return tempList;
     }
-    
+
     public void setTempList(Map<Integer, String> tempList) {
         this.tempList = tempList;
     }
-    
+
     public String getEditDialogLabel() {
         return editDialogLabel;
     }
-    
+
     public void setEditDialogLabel(String editDialogLabel) {
         this.editDialogLabel = editDialogLabel;
     }
@@ -485,7 +487,7 @@ public class UserDeDataScopeSetController implements Serializable {
         Short no = ejbWorkSeqFacade.getWorkSeqNo(code);
         return seqType + StringUtils.leftPad(String.valueOf(no + 1), 4, "0");
     }
-    
+
     private void addMessage(String summary, String detail) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);

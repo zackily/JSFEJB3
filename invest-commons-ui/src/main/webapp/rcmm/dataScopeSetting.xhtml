@@ -10,74 +10,195 @@
     </ui:define>
 
     <ui:define name="body">
-        <h:form style="width: 60%">
+        <h:form id="mainForm" style="width: 60%">
+            <p:growl id="growl" life="2000" />
             <p:panel header="資料範圍設定作業(RCMM01)">
                 <p:layout>
                     <p:layoutUnit position="west" size="20%">
                         <p:panelGrid columns="1" style="width: 100%" layout="grid" >
-                            <p:commandButton value="新增" style="width: 80%"/>
-                            <p:commandButton value="修改" style="width: 80%"/>
-                            <p:commandButton value="刪除" style="width: 80%"/>
-                            <p:commandButton value="搜尋" style="width: 80%"/>
-                            <p:commandButton value="儲存" style="width: 80%"/>
+                            <p:commandButton value="新增" style="width: 80%" actionListener="#{dataScopeSetController.create}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this" />
+                            <p:commandButton value="修改" style="width: 80%" actionListener="#{dataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this" />
+                            <p:commandButton value="刪除" style="width: 80%" onclick="PF('deleteConfirm').show()"/>
                         </p:panelGrid>
                     </p:layoutUnit>
                     <p:layoutUnit position="center">
                         <p:panelGrid columns="4" style="width: 100%" layout="grid">
-                            <p:commandButton value="&lt;&lt;" style="width: 80%"/>
-                            <p:commandButton value="&lt;" style="width: 80%"/>
-                            <p:commandButton value="&gt;" style="width: 80%"/>
-                            <p:commandButton value="&gt;&gt;" style="width: 80%"/>
+                            <p:commandButton value="&lt;&lt;" actionListener="#{dataScopeSetController.lookupMaster(0)}" style="width: 80%" update=":mainForm"/>
+                            <p:commandButton value="&lt;" actionListener="#{dataScopeSetController.lookupMaster(-1)}" style="width: 80%" update=":mainForm"/>
+                            <p:commandButton value="&gt;" actionListener="#{dataScopeSetController.lookupMaster(1)}" style="width: 80%" update=":mainForm"/>
+                            <p:commandButton value="&gt;&gt;" actionListener="#{dataScopeSetController.lookupMaster(dataScopeSetController.master.size())}" style="width: 80%" update=":mainForm"/>
                         </p:panelGrid>
                         <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
-                            <h:outputLabel value="資料範圍代碼"/>
-                            <p:panelGrid columns="2" layout="grid">
-                                <h:outputText value="XXXXXX" />
-                                <p:commandButton value="查詢" />
-                            </p:panelGrid>
-
-                            <h:outputLabel value="資料類別"/>
-                            <p:selectOneMenu value="">
-                                <f:selectItems value=""/>
-                            </p:selectOneMenu>
-
-                            <h:outputLabel value="資料範圍名稱"/>
-                            <h:outputText value="XXXXXXXX" />
+                            <p:outputLabel value="資料範圍代碼"/>
+                            <p:autoComplete value="#{dataScopeSetController.currentItem.scopeCode}" completeMethod="#{dataScopeSetController.searchDataScopeMaster}" >
+                                <p:ajax event="itemSelect" listener="#{dataScopeSetController.onItemSelect}" update=":mainForm"/>
+                            </p:autoComplete>
+                            <p:outputLabel value="資料類別"/>
+                            <p:outputLabel value="#{dataScopeSetController.currentItem.className}"/>
+                            <p:outputLabel value="資料範圍名稱"/>
+                            <p:outputLabel value="#{dataScopeSetController.currentItem.scopeName}" />
 
                         </p:panelGrid>
                         <p:panelGrid columns="1">
-                            <p:panelGrid columns="3">
-                                <h:outputLabel value="資料條件設定區"/>
-                                <p:commandButton value="＋"/>
-                                <p:commandButton value="－"/>
-                            </p:panelGrid>
-                            <p:dataTable id="dataTable" var="items" value="" scrollable="true" scrollHeight="300">
+                            <p:dataTable id="dataTable" var="items" value="#{dataScopeSetController.details}" scrollable="true" scrollHeight="300">
                                 <p:column headerText="">
                                     <h:outputText value=""/>
                                 </p:column>
                                 <p:column headerText="邏輯">
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{items.logic}"/>
                                 </p:column>
                                 <p:column headerText="（">
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{items.leftBracket}"/>
                                 </p:column>
                                 <p:column headerText="資料欄位">
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{items.column}"/>
                                 </p:column>
                                 <p:column headerText="關係">
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{items.opCode}"/>
                                 </p:column>
                                 <p:column headerText="資料">
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{items.opValue}"/>
                                 </p:column>
                                 <p:column headerText="）">
-                                    <h:outputText value=""/>
+                                    <h:outputText value="#{items.rightBracket}"/>
                                 </p:column>
                             </p:dataTable>
                         </p:panelGrid>
                     </p:layoutUnit>
                 </p:layout>
             </p:panel> 
+            <p:confirmDialog header="刪除自定義欄位" widgetVar="deleteConfirm" appendTo="@(body)">
+                <f:facet name="message">
+                    <h:outputText value="是否確定要刪除?" />
+                </f:facet>
+                <p:commandButton title="GDelYesButton" 
+                                 value="Yes" 
+                                 actionListener="#{dataScopeSetController.delete}" 
+                                 oncomplete="PF('deleteConfirm').hide()" 
+                                 process="@this"
+                                 update=":mainForm :mainForm:growl"/>
+                <p:commandButton title="GDelNoButton"
+                                 value="No"
+                                 oncomplete="PF('deleteConfirm').hide()"/>
+            </p:confirmDialog>
         </h:form>
+        <p:dialog id="createDialog" header="#{dataScopeSetController.editDialogLabel}" widgetVar="createDialog" modal="true" height="600" width="600" appendTo="@(body)" >
+            <h:form id="dialogForm">
+                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
+                    <p:outputLabel value="欄位範圍代碼"/>
+                    <p:outputLabel value="#{dataScopeSetController.item.scopeCode}" />
+                    <p:outputLabel value="資料類別"/>
+                    <p:selectOneMenu value="#{dataScopeSetController.tempClassCode}">
+                        <f:selectItems value="#{dataScopeSetController.dataTypeMenu}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="資料範圍名稱"/>
+                    <p:inputTextarea maxlength="100" rows="5" value="#{dataScopeSetController.item.scopeName}"/>
+                </p:panelGrid>
+                <p:panelGrid columns="1">
+                    <p:panelGrid columns="2">
+                        <p:commandButton value="＋" actionListener="#{dataScopeSetController.addDataScopeDetailList}" update=":dialogForm:dataScopeDetailTable :dialogForm:dataScopeDetailTable2" process="@this"/>
+                        <p:commandButton value="－" actionListener="#{dataScopeSetController.removeDataScopeDetailList}" update=":dialogForm:dataScopeDetailTable :dialogForm:dataScopeDetailTable2" process="@this"/>
+                    </p:panelGrid>
+                    <p:dataTable id="dataScopeDetailTable" value="#{dataScopeSetController.tempItemDetails}" var="op" rowIndexVar="i" rows="10" rendered="#{dataScopeSetController.editDialogLabel=='新增'}">
+                        <p:column headerText="">
+                            <h:outputText value=""/>
+                        </p:column>
+                        <p:column headerText="邏輯">
+                            <p:selectOneMenu value="#{dataScopeSetController.tempLogic}">
+                                <p:ajax listener="#{dataScopeSetController.logicChange(i)}" event="change"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItem itemValue="Empty" itemLabel="Empty"/>
+                                <f:selectItem itemValue="&rdquo;OR&rdquo;" itemLabel="&rdquo;OR&rdquo;"/>
+                                <f:selectItem itemValue="&rdquo;AND&rdquo;" itemLabel="&rdquo;AND&rdquo;"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="（">
+                            <p:selectOneMenu value="#{dataScopeSetController.tempLeftBracket}">
+                                <p:ajax listener="#{dataScopeSetController.leftBracketChange(i)}" event="change"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItem itemValue="Empty" itemLabel="Empty"/>
+                                <f:selectItem itemValue="&lpar;" itemLabel="&lpar;"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="資料欄位">
+                            <p:selectOneMenu value="#{dataScopeSetController.tempColumn}">
+                                <p:ajax listener="#{dataScopeSetController.columnChange(i)}" event="change"/>
+                                <f:selectItems value="#{dataScopeSetController.columnMenu}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="關係">
+                            <p:selectOneMenu value="#{dataScopeSetController.tempOpCode}">
+                                <p:ajax listener="#{dataScopeSetController.opCodeChange(i)}" event="change"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItems value="#{dataScopeSetController.operatorMenu}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="資料">
+                            <p:ajax listener="#{dataScopeSetController.opValueChange(i)}" event="change"/>
+                            <p:inputText value="#{dataScopeSetController.tempOpValue}"/>
+                        </p:column>
+                        <p:column headerText="）">
+                            <p:selectOneMenu value="#{dataScopeSetController.tempRightBracket}">
+                                <p:ajax listener="#{dataScopeSetController.rightBracketChange(i)}" event="change"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItem itemValue="Empty" itemLabel="Empty"/>
+                                <f:selectItem itemValue="&rpar;" itemLabel="&rpar;"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dataTable id="dataScopeDetailTable2" value="#{dataScopeSetController.tempItemDetails}" var="op" rowIndexVar="i" rows="10" rendered="#{dataScopeSetController.editDialogLabel=='編輯'}">
+                        <p:column headerText="">
+                            <h:outputText value=""/>
+                        </p:column>
+                        <p:column headerText="邏輯">
+                            <p:selectOneMenu value="#{op.logic}" valueChangeListener="#{dataScopeSetController.logicChangeForEdit}">
+                                <p:ajax event="change" immediate="true" process="@this"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItem itemValue="Empty" itemLabel="Empty"/>
+                                <f:selectItem itemValue="&rdquo;OR&rdquo;" itemLabel="&rdquo;OR&rdquo;"/>
+                                <f:selectItem itemValue="&rdquo;AND&rdquo;" itemLabel="&rdquo;AND&rdquo;"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="（">
+                            <p:selectOneMenu value="#{op.leftBracket}" valueChangeListener="#{dataScopeSetController.leftBracketChangeForEdit}">
+                                <p:ajax event="change" immediate="true" process="@this"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItem itemValue="Empty" itemLabel="Empty"/>
+                                <f:selectItem itemValue="&lpar;" itemLabel="&lpar;"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="資料欄位">
+                            <p:selectOneMenu value="#{op.column}" valueChangeListener="#{dataScopeSetController.columnChangeForEdit}">
+                                <p:ajax event="change" immediate="true" process="@this"/>
+                                <f:selectItems value="#{dataScopeSetController.columnMenu}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="關係">
+                            <p:selectOneMenu value="#{op.opCode}" valueChangeListener="#{dataScopeSetController.opCodeChangeForEdit}">
+                                <p:ajax event="change" immediate="true" process="@this"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItems value="#{dataScopeSetController.operatorMenu}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                        <p:column headerText="資料">
+                            <p:ajax event="change" immediate="true" process="@this"/>
+                            <p:inputText value="#{op.opValue}" valueChangeListener="#{dataScopeSetController.opValueChangeForEdit}"/>
+                        </p:column>
+                        <p:column headerText="）">
+                            <p:selectOneMenu value="#{op.rightBracket}" valueChangeListener="#{dataScopeSetController.rightBracketChangeForEdit}">
+                                <p:ajax event="change" immediate="true" process="@this"/>
+                                <f:selectItem itemValue="" itemLabel=""/>
+                                <f:selectItem itemValue="Empty" itemLabel="Empty"/>
+                                <f:selectItem itemValue="&rpar;" itemLabel="&rpar;"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:dataTable>
+                    <p:panel>
+                        <p:commandButton value="#{dataScopeSetController.editDialogLabel}" actionListener="#{dataScopeSetController.save}" update=":mainForm :dialogForm" oncomplete="PF('createDialog').hide()"  />
+                        <p:commandButton value="取消" onclick="PF('createDialog').hide()" />
+                    </p:panel>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>

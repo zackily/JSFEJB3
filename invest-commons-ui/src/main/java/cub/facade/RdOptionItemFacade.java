@@ -5,7 +5,7 @@
  */
 package cub.facade;
 
-import cub.entities.RdDataColumnOption;
+import cub.entities.RdOptionItem;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author NT48810
  */
 @Stateless
-public class RdDataColumnOptionFacade extends AbstractFacade<RdDataColumnOption> {
+public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
 
     @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -27,18 +27,22 @@ public class RdDataColumnOptionFacade extends AbstractFacade<RdDataColumnOption>
         return em;
     }
 
-    public RdDataColumnOptionFacade() {
-        super(RdDataColumnOption.class);
+    public RdOptionItemFacade() {
+        super(RdOptionItem.class);
     }
 
-    public List<RdDataColumnOption> findByMasterCode(String udColumnCode) {
+    public List<RdOptionItem> findAllSort() {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from RdDataColumnOption rdo where rdo.rdDataColumnOptionPK.optionCode in (")
-                .append("select udd.udColumnScopeDetailPK.dataCode from UdColumnScopeDetail udd")
-                .append(" where udd.udColumnScopeDetailPK.udColumnCode =:udColumnCode)")
-                .append(" order by rdo.rdDataColumnOptionPK.optionCode asc");
+        jpql.append("from RdOptionItem r order by r.rdOptionItemPK.classCode asc");
         Query query = em.createQuery(jpql.toString());
-        query.setParameter("udColumnCode", udColumnCode);
+        return query.getResultList();
+    }
+    
+    public List<RdOptionItem> findByClassCode(Short classCode) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("from RdOptionItem r where r.rdOptionItemPK.classCode =:classCode order by r.rdOptionItemPK.classCode asc");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("classCode", classCode);
         return query.getResultList();
     }
 }

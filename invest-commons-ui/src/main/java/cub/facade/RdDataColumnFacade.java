@@ -7,6 +7,7 @@ package cub.facade;
 
 import cub.entities.RdDataColumn;
 import cub.vo.QueryUdColumnScopeDetailVO;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -45,5 +46,14 @@ public class RdDataColumnFacade extends AbstractFacade<RdDataColumn> {
         } catch (NoResultException e) {
             return "";
         }
+    }
+
+    public List<RdDataColumn> getColumnByClassCode(String classCode) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("from RdDataColumn r where r.rdDataColumnPK.classCode =:classCode ")
+                .append("order by r.rdDataColumnPK.tableName, r.rdDataColumnPK.columnName");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("classCode", classCode);
+        return query.getResultList();
     }
 }

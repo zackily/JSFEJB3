@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -73,6 +74,10 @@ public class DataScopeDetail implements Serializable {
     @Size(min = 1, max = 1)
     @Column(name = "RIGHT_BRACKET")
     private String rightBracket;
+    @Transient
+    private String classCode;
+    @Transient
+    private String column;
 
     public DataScopeDetail() {
     }
@@ -159,6 +164,24 @@ public class DataScopeDetail implements Serializable {
         this.rightBracket = rightBracket;
     }
 
+    @Transient
+    public String getClassCode() {
+        return classCode;
+    }
+
+    public void setClassCode(String classCode) {
+        this.classCode = classCode;
+    }
+
+    @Transient
+    public String getColumn() {
+        return column;
+    }
+
+    public void setColumn(String column) {
+        this.column = column;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -183,5 +206,5 @@ public class DataScopeDetail implements Serializable {
     public String toString() {
         return "cub.entities.DataScopeDetail[ dataScopeDetailPK=" + dataScopeDetailPK + " ]";
     }
-    
+
 }

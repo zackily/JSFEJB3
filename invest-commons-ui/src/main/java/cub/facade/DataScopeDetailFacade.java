@@ -5,7 +5,7 @@
  */
 package cub.facade;
 
-import cub.entities.RdDataColumnOption;
+import cub.entities.DataScopeDetail;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author NT48810
  */
 @Stateless
-public class RdDataColumnOptionFacade extends AbstractFacade<RdDataColumnOption> {
+public class DataScopeDetailFacade extends AbstractFacade<DataScopeDetail> {
 
     @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -27,18 +27,24 @@ public class RdDataColumnOptionFacade extends AbstractFacade<RdDataColumnOption>
         return em;
     }
 
-    public RdDataColumnOptionFacade() {
-        super(RdDataColumnOption.class);
+    public DataScopeDetailFacade() {
+        super(DataScopeDetail.class);
     }
 
-    public List<RdDataColumnOption> findByMasterCode(String udColumnCode) {
+    public List<DataScopeDetail> findByMasterCode(String code) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from RdDataColumnOption rdo where rdo.rdDataColumnOptionPK.optionCode in (")
-                .append("select udd.udColumnScopeDetailPK.dataCode from UdColumnScopeDetail udd")
-                .append(" where udd.udColumnScopeDetailPK.udColumnCode =:udColumnCode)")
-                .append(" order by rdo.rdDataColumnOptionPK.optionCode asc");
+        jpql.append("from DataScopeDetail d where d.dataScopeDetailPK.scopeCode =:code");
         Query query = em.createQuery(jpql.toString());
-        query.setParameter("udColumnCode", udColumnCode);
+        query.setParameter("code", code);
         return query.getResultList();
     }
+
+    public void removeByMaster(String scopeCode) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from DataScopeDetail d where d.dataScopeDetailPK.scopeCode =:scopeCode");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("scopeCode", scopeCode);
+        query.executeUpdate();
+    }
+
 }

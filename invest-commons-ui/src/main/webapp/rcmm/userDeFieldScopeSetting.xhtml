@@ -3,7 +3,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:fn="http://java.sun.com/jsp/jstl/functions" template="/template.xhtml">
+                template="/template.xhtml">
 
 
     <ui:define name="title">
@@ -56,7 +56,7 @@
             </p:panel> 
             <p:confirmDialog header="刪除自定義欄位" widgetVar="deleteConfirm" appendTo="@(body)">
                 <f:facet name="message">
-                    <h:outputText value="確認刪除?" />
+                    <h:outputText value="是否確定要刪除?" />
                 </f:facet>
                 <p:commandButton title="GDelYesButton" 
                                  value="Yes" 
