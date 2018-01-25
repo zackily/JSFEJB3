@@ -53,7 +53,7 @@ public class RdDataColumnFacade extends AbstractFacade<RdDataColumn> {
         jpql.append("from RdDataColumn r where r.rdDataColumnPK.classCode =:classCode ")
                 .append("order by r.rdDataColumnPK.tableName, r.rdDataColumnPK.columnName");
         Query query = em.createQuery(jpql.toString());
-        query.setParameter("classCode", classCode);
+        query.setParameter("classCode", Short.valueOf(classCode));
         return query.getResultList();
     }
 }

@@ -265,6 +265,7 @@ public class DataScopeSetController implements Serializable {
             this.item.setScopeCode(scopeCode);
             this.item.setLogUserId("Gilbert");
             this.item.setLogDttm(new Date());
+            this.item.setClassCode(Short.valueOf(this.tempClassCode));
             ejbDataScopeMasterFacade.create(this.item);
             if (null != tempItemDetails) {
                 for (int i = 0; i < tempItemDetails.size(); i++) {
@@ -288,6 +289,7 @@ public class DataScopeSetController implements Serializable {
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.DATA_CODE.toString());
         } else {//編輯
             ejbDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
+            this.item.setClassCode(Short.valueOf(this.tempClassCode));
             for (int i = 0; i < this.tempItemDetails.size(); i++) {
                 DataScopeDetail dd = new DataScopeDetail();
                 DataScopeDetailPK pk = new DataScopeDetailPK();

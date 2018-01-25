@@ -17,7 +17,7 @@
                     <p:layoutUnit position="west" size="20%">
                         <p:panelGrid columns="1" style="width: 100%" layout="grid" >
                             <p:commandButton value="新增" style="width: 80%" actionListener="#{dataScopeSetController.create}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this" />
-                            <p:commandButton value="修改" style="width: 80%" actionListener="#{dataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this" />
+                            <p:commandButton value="修改" style="width: 80%" actionListener="#{dataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":createDialog :dialogForm" process="@this" />
                             <p:commandButton value="刪除" style="width: 80%" onclick="PF('deleteConfirm').show()"/>
                         </p:panelGrid>
                     </p:layoutUnit>
@@ -108,8 +108,8 @@
                                 <p:ajax listener="#{dataScopeSetController.logicChange(i)}" event="change"/>
                                 <f:selectItem itemValue="" itemLabel=""/>
                                 <f:selectItem itemValue="Empty" itemLabel="Empty"/>
-                                <f:selectItem itemValue="&rdquo;OR&rdquo;" itemLabel="&rdquo;OR&rdquo;"/>
-                                <f:selectItem itemValue="&rdquo;AND&rdquo;" itemLabel="&rdquo;AND&rdquo;"/>
+                                <f:selectItem itemValue="&quot;OR&quot;" itemLabel="&quot;OR&quot;"/>
+                                <f:selectItem itemValue="&quot;AND&quot;" itemLabel="&quot;AND&quot;"/>
                             </p:selectOneMenu>
                         </p:column>
                         <p:column headerText="（">
@@ -117,7 +117,7 @@
                                 <p:ajax listener="#{dataScopeSetController.leftBracketChange(i)}" event="change"/>
                                 <f:selectItem itemValue="" itemLabel=""/>
                                 <f:selectItem itemValue="Empty" itemLabel="Empty"/>
-                                <f:selectItem itemValue="&lpar;" itemLabel="&lpar;"/>
+                                <f:selectItem itemValue="&#40;" itemLabel="&#40;"/>
                             </p:selectOneMenu>
                         </p:column>
                         <p:column headerText="資料欄位">
@@ -134,15 +134,16 @@
                             </p:selectOneMenu>
                         </p:column>
                         <p:column headerText="資料">
-                            <p:ajax listener="#{dataScopeSetController.opValueChange(i)}" event="change"/>
-                            <p:inputText value="#{dataScopeSetController.tempOpValue}"/>
+                            <p:inputText value="#{dataScopeSetController.tempOpValue}">
+                                <p:ajax listener="#{dataScopeSetController.opValueChange(i)}" event="change"/>
+                            </p:inputText>
                         </p:column>
                         <p:column headerText="）">
                             <p:selectOneMenu value="#{dataScopeSetController.tempRightBracket}">
                                 <p:ajax listener="#{dataScopeSetController.rightBracketChange(i)}" event="change"/>
                                 <f:selectItem itemValue="" itemLabel=""/>
                                 <f:selectItem itemValue="Empty" itemLabel="Empty"/>
-                                <f:selectItem itemValue="&rpar;" itemLabel="&rpar;"/>
+                                <f:selectItem itemValue="&#41;" itemLabel="&#41;"/>
                             </p:selectOneMenu>
                         </p:column>
                     </p:dataTable>
@@ -155,8 +156,8 @@
                                 <p:ajax event="change" immediate="true" process="@this"/>
                                 <f:selectItem itemValue="" itemLabel=""/>
                                 <f:selectItem itemValue="Empty" itemLabel="Empty"/>
-                                <f:selectItem itemValue="&rdquo;OR&rdquo;" itemLabel="&rdquo;OR&rdquo;"/>
-                                <f:selectItem itemValue="&rdquo;AND&rdquo;" itemLabel="&rdquo;AND&rdquo;"/>
+                                <f:selectItem itemValue="&quot;OR&quot;" itemLabel="&quot;OR&quot;"/>
+                                <f:selectItem itemValue="&quot;AND&quot;" itemLabel="&quot;AND&quot;"/>
                             </p:selectOneMenu>
                         </p:column>
                         <p:column headerText="（">
@@ -164,7 +165,7 @@
                                 <p:ajax event="change" immediate="true" process="@this"/>
                                 <f:selectItem itemValue="" itemLabel=""/>
                                 <f:selectItem itemValue="Empty" itemLabel="Empty"/>
-                                <f:selectItem itemValue="&lpar;" itemLabel="&lpar;"/>
+                                <f:selectItem itemValue="&#40;" itemLabel="&#40;"/>
                             </p:selectOneMenu>
                         </p:column>
                         <p:column headerText="資料欄位">
@@ -181,15 +182,16 @@
                             </p:selectOneMenu>
                         </p:column>
                         <p:column headerText="資料">
-                            <p:ajax event="change" immediate="true" process="@this"/>
-                            <p:inputText value="#{op.opValue}" valueChangeListener="#{dataScopeSetController.opValueChangeForEdit}"/>
+                            <p:inputText value="#{op.opValue}" valueChangeListener="#{dataScopeSetController.opValueChangeForEdit}">
+                                <p:ajax event="change" immediate="true" process="@this"/>
+                            </p:inputText>
                         </p:column>
                         <p:column headerText="）">
                             <p:selectOneMenu value="#{op.rightBracket}" valueChangeListener="#{dataScopeSetController.rightBracketChangeForEdit}">
                                 <p:ajax event="change" immediate="true" process="@this"/>
                                 <f:selectItem itemValue="" itemLabel=""/>
                                 <f:selectItem itemValue="Empty" itemLabel="Empty"/>
-                                <f:selectItem itemValue="&rpar;" itemLabel="&rpar;"/>
+                                <f:selectItem itemValue="&#41;" itemLabel="&#41;"/>
                             </p:selectOneMenu>
                         </p:column>
                     </p:dataTable>
