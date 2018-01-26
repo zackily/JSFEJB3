@@ -41,7 +41,7 @@
                     </p:panelGrid>
                 </p:panelGrid>
                 <h3 style="margin-top:0">資料範圍設定區</h3>
-                <p:dataTable id="dataTable" var="detail" value="#{userDeDataScopeSetController.detail}" scrollable="true" scrollHeight="300" rows="10">
+                <p:dataTable id="dataTable" var="detail" value="#{userDeDataScopeSetController.detail}" scrollable="true" scrollHeight="300" rows="10" rowHover="true">
                     <p:column headerText="#{userDeDataScopeSetController.detailHeaderTextCode}代碼">
                         <h:outputText value="#{detail.rdDataColumnOptionPK.optionCode}"/>
                     </p:column>
