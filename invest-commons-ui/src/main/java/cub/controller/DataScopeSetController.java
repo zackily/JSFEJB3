@@ -636,7 +636,8 @@ public class DataScopeSetController implements Serializable {
             vo.setTableName(d.getTableName());
             vo.setColumnName(d.getColumnName());
             dd.setColumnCHNName(d.getTableName() + "/" + d.getColumnName() + ejbRdDataColumnFacade.getFieldCNNameMenu(vo));
-            dd.setColumnValue(ejbRdOptionItemFacade.findItemNameByItemCode(d.getOpCode()));
+            dd.setColumnValue(d.getTableName() + "+" + d.getColumnName());
+            dd.setOpName(ejbRdOptionItemFacade.findItemNameByItemCode(d.getOpCode()));
             this.details.add(dd);
         }
     }

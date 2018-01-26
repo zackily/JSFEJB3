@@ -78,6 +78,8 @@ public class DataScopeDetail implements Serializable {
     private String columnCHNName;
     @Transient
     private String columnValue;
+    @Transient
+    private String opName;
 
     public DataScopeDetail() {
     }
@@ -168,6 +170,14 @@ public class DataScopeDetail implements Serializable {
 
     public void setColumnValue(String columnValue) {
         this.columnValue = columnValue;
+    }
+
+    public String getOpName() {
+        return opName;
+    }
+
+    public void setOpName(String opName) {
+        this.opName = opName;
     }
 
     @Override
