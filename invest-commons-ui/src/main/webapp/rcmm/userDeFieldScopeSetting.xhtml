@@ -14,21 +14,20 @@
         <h:form id="mainForm" style="width: 60%">
             <p:growl id="growl" life="2000" />
             <p:panel header="自定義欄位範圍設定作業(RCMM04)">
-                <p:layout>
-                    <p:layoutUnit position="west" size="20%">
-                        <p:panelGrid columns="1" style="width: 100%" layout="grid" >
-                            <p:commandButton value="新增" style="width: 80%" actionListener="#{userDeDataScopeSetController.create}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this"  />
-                            <p:commandButton value="編輯" style="width: 80%" disabled="#{empty userDeDataScopeSetController.currentItem.udColumnCode}" actionListener="#{userDeDataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":createDialog :dialogForm" process="@this" />
-                            <p:commandButton value="刪除" style="width: 80%" disabled="#{empty userDeDataScopeSetController.currentItem.udColumnCode}" onclick="PF('deleteConfirm').show()"/>
-                        </p:panelGrid>
-                    </p:layoutUnit>
-                    <p:layoutUnit position="center">
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-8" style="width:100%" layout="grid">
+                    <p:panelGrid columns="1" style="width: 100%" layout="grid" >
+                        <p:commandButton value="新增" style="width: 100%" actionListener="#{userDeDataScopeSetController.create}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this"  />
+                        <p:commandButton value="編輯" style="width: 100%" disabled="#{empty userDeDataScopeSetController.currentItem.udColumnCode}" actionListener="#{userDeDataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":createDialog :dialogForm" process="@this" />
+                        <p:commandButton value="刪除" style="width: 100%" disabled="#{empty userDeDataScopeSetController.currentItem.udColumnCode}" onclick="PF('deleteConfirm').show()"/>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" style="width:100%" layout="grid">
                         <p:panelGrid columns="4" style="width: 100%" layout="grid">
-                            <p:commandButton value="&lt;&lt;" actionListener="#{userDeDataScopeSetController.lookupMaster(0)}" style="width: 80%" update=":mainForm"/>
-                            <p:commandButton value="&lt;" actionListener="#{userDeDataScopeSetController.lookupMaster(-1)}" style="width: 80%" update=":mainForm"/>
-                            <p:commandButton value="&gt;" actionListener="#{userDeDataScopeSetController.lookupMaster(1)}" style="width: 80%" update=":mainForm"/>
+                            <p:commandButton value="&lt;&lt;" actionListener="#{userDeDataScopeSetController.lookupMaster(0)}" style="width: 100%" update=":mainForm"/>
+                            <p:commandButton value="&lt;" actionListener="#{userDeDataScopeSetController.lookupMaster(-1)}" style="width: 100%" update=":mainForm"/>
+                            <p:commandButton value="&gt;" actionListener="#{userDeDataScopeSetController.lookupMaster(1)}" style="width: 100%" update=":mainForm"/>
                             <p:commandButton value="&gt;&gt;" actionListener="#{userDeDataScopeSetController.lookupMaster(userDeDataScopeSetController.master.size())}" style="width: 80%" update=":mainForm"/>
                         </p:panelGrid>
+
                         <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
                             <p:outputLabel value="自定義欄位範圍代碼"/>
                             <p:autoComplete value="#{userDeDataScopeSetController.currentItem.udColumnCode}" completeMethod="#{userDeDataScopeSetController.searchColumnScopeMaster}" >
@@ -39,20 +38,17 @@
                             <p:outputLabel value="欄位中文名稱"/>
                             <p:outputLabel value="#{userDeDataScopeSetController.fieldCNName}"/>
                         </p:panelGrid>
-
-                        <p:panelGrid columns="1">
-                            <p:dataTable id="dataTable" var="detail" value="#{userDeDataScopeSetController.detail}" scrollable="true" scrollHeight="300" rows="10">
-                                <p:column headerText="#{userDeDataScopeSetController.detailHeaderTextCode}代碼">
-                                    <h:outputText value="#{detail.rdDataColumnOptionPK.optionCode}"/>
-                                </p:column>
-                                <p:column headerText="#{userDeDataScopeSetController.detailHeaderTextCode}名稱">
-                                    <h:outputText value="#{detail.optionName}"/>
-                                </p:column>
-                            </p:dataTable>
-                        </p:panelGrid>
-
-                    </p:layoutUnit>
-                </p:layout>
+                    </p:panelGrid>
+                </p:panelGrid>
+                <h3 style="margin-top:0">資料範圍設定區</h3>
+                <p:dataTable id="dataTable" var="detail" value="#{userDeDataScopeSetController.detail}" scrollable="true" scrollHeight="300" rows="10">
+                    <p:column headerText="#{userDeDataScopeSetController.detailHeaderTextCode}代碼">
+                        <h:outputText value="#{detail.rdDataColumnOptionPK.optionCode}"/>
+                    </p:column>
+                    <p:column headerText="#{userDeDataScopeSetController.detailHeaderTextCode}名稱">
+                        <h:outputText value="#{detail.optionName}"/>
+                    </p:column>
+                </p:dataTable>
             </p:panel> 
             <p:confirmDialog header="刪除自定義欄位" widgetVar="deleteConfirm" appendTo="@(body)">
                 <f:facet name="message">

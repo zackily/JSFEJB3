@@ -10,6 +10,7 @@ import cub.enums.SeqTypeEnum;
 import cub.vo.QueryUdColumnScopeDetailVO;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -194,7 +195,7 @@ public class DataScopeSetController implements Serializable {
         }
         this.tempLogicList.add("");
         this.tempLeftBracketList.add("");
-        this.tempColumnList.add(this.columnMenu.get(0).getValue().toString());
+        this.tempColumnList.add(null == this.columnMenu ? "" : this.columnMenu.get(0).getValue().toString());
         this.tempOpCodeList.add("");
         this.tempOpValueList.add("");
         this.tempRightBracketList.add("");
@@ -259,6 +260,7 @@ public class DataScopeSetController implements Serializable {
             String scopeCode = getWorkSeq(SeqTypeEnum.DATA_CODE.toString());
             this.item.setScopeCode(scopeCode);
             this.item.setLogUserId("Gilbert");
+            this.item.setLogDttm(new Date());
             if (null != tempItemDetails) {
                 for (int i = 0; i < tempItemDetails.size(); i++) {
                     DataScopeDetail dd = new DataScopeDetail();
@@ -278,7 +280,7 @@ public class DataScopeSetController implements Serializable {
                     ejbDataScopeDetailFacade.create(dd);
                 }
             }
-            ejbDataScopeMasterFacade.create(this.item);            
+            ejbDataScopeMasterFacade.create(this.item);
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.DATA_CODE.toString());
         } else {//編輯
             ejbDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
@@ -299,6 +301,7 @@ public class DataScopeSetController implements Serializable {
                 dd.setRightBracket(tempRightBracketList.get(i));
                 ejbDataScopeDetailFacade.create(dd);
             }
+            this.item.setLogDttm(new Date());
             ejbDataScopeMasterFacade.edit(this.item);
         }
         this.tempItemDetails.clear();
@@ -633,7 +636,7 @@ public class DataScopeSetController implements Serializable {
             vo.setTableName(d.getTableName());
             vo.setColumnName(d.getColumnName());
             dd.setColumnCHNName(d.getTableName() + "/" + d.getColumnName() + ejbRdDataColumnFacade.getFieldCNNameMenu(vo));
-            dd.setColumnValue(d.getTableName() + "+" + d.getColumnName());
+            dd.setColumnValue(ejbRdOptionItemFacade.findItemNameByItemCode(d.getOpCode()));
             this.details.add(dd);
         }
     }

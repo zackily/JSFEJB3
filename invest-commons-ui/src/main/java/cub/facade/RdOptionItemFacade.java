@@ -45,4 +45,13 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
         query.setParameter("classCode", classCode);
         return query.getResultList();
     }
+
+    public String findItemNameByItemCode(String itemCode) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select r.itemName from RdOptionItem r")
+                .append(" where r.rdOptionItemPK.itemCode =:itemCode and r.rdOptionItemPK.classCode = 9");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("itemCode", Short.valueOf(itemCode));
+        return null == query.getSingleResult() ? "" : query.getSingleResult().toString();
+    }
 }
