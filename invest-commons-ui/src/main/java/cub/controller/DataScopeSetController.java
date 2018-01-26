@@ -7,9 +7,9 @@ import cub.entities.RdDataClass;
 import cub.entities.RdDataColumn;
 import cub.entities.RdOptionItem;
 import cub.enums.SeqTypeEnum;
+import cub.vo.QueryUdColumnScopeDetailVO;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -88,10 +88,6 @@ public class DataScopeSetController implements Serializable {
      */
     private String tempOpValue;
     /*
-    新增/編輯暫存資料類別
-     */
-    private String tempClassCode;
-    /*
     新增/編輯暫存邏輯
      */
     private List<String> tempLogicList = new ArrayList<String>();
@@ -131,7 +127,6 @@ public class DataScopeSetController implements Serializable {
     自定義欄位範圍索引
      */
     private int currentIndex;
-
     /*
     新增/編輯Dialog CommandButton value
      */
@@ -147,10 +142,7 @@ public class DataScopeSetController implements Serializable {
             this.master.add(this.item);
         } else {
             this.currentItem = this.master.get(0);
-            String className = ejbRdDataClassFacade.getClassNameByClassCode(this.currentItem.getClassCode());
-            this.currentItem.setClassName(className);
-            this.details = ejbDataScopeDetailFacade.findByMasterCode(this.currentItem.getScopeCode());
-
+            setItemDetail();
         }
         //頁面載入資料範圍欄位this.master的index
         currentIndex = 0;
@@ -162,13 +154,11 @@ public class DataScopeSetController implements Serializable {
         }
         //initial關係下拉選單
         this.operatorMenu = new ArrayList<SelectItem>();
-        //List<RdOptionItem> rdiList = ejbRdOptionItemFacade.findByClassCode(this.currentItem.getClassCode());
         List<RdOptionItem> rdiList = ejbRdOptionItemFacade.findAllSort();
         for (RdOptionItem r : rdiList) {
             this.operatorMenu.add(new SelectItem(r.getRdOptionItemPK().getItemCode(), r.getItemName()));
         }
-        //載入this.currentItem內容
-        setItemDetail();
+        this.tempItemDetails = new ArrayList<DataScopeDetail>();
     }
 
     /*
@@ -191,17 +181,23 @@ public class DataScopeSetController implements Serializable {
     新增資料條件(＋)
      */
     public void addDataScopeDetailList(ActionEvent event) {
-        DataScopeDetailPK pk = new DataScopeDetailPK();
-        DataScopeDetail de = new DataScopeDetail();
-        de.setDataScopeDetailPK(pk);
-        this.tempItemDetails.add(de);
-        this.columnMenu = new ArrayList<SelectItem>();
-        if (StringUtils.isNotBlank(this.tempClassCode)) {
-            List<RdDataColumn> rdcList = ejbRdDataColumnFacade.getColumnByClassCode(this.tempClassCode);
-            for (RdDataColumn rdc : rdcList) {
-                this.columnMenu.add(new SelectItem(rdc.getRdDataColumnPK().getTableName() + "+" + rdc.getRdDataColumnPK().getColumnName(), rdc.getColumnChnName()));
+        if (StringUtils.isBlank(this.item.getScopeCode())) {//新增
+            this.tempItemDetails.add(new DataScopeDetail());
+            if (this.item.getClassCode() != 0) {
+                changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
             }
+        } else if (null != this.item) {//編輯
+            this.tempItemDetails.add(new DataScopeDetail());
+            changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
+        } else {
+            addMessage("System Error", "請先選定資料類別!");
         }
+        this.tempLogicList.add("");
+        this.tempLeftBracketList.add("");
+        this.tempColumnList.add(this.columnMenu.get(0).getValue().toString());
+        this.tempOpCodeList.add("");
+        this.tempOpValueList.add("");
+        this.tempRightBracketList.add("");
     }
 
     /*
@@ -209,7 +205,6 @@ public class DataScopeSetController implements Serializable {
      */
     public void removeDataScopeDetailList(ActionEvent event) {
         this.tempItemDetails.remove(this.tempItemDetails.size() - 1);
-
     }
 
     /*
@@ -264,9 +259,6 @@ public class DataScopeSetController implements Serializable {
             String scopeCode = getWorkSeq(SeqTypeEnum.DATA_CODE.toString());
             this.item.setScopeCode(scopeCode);
             this.item.setLogUserId("Gilbert");
-            this.item.setLogDttm(new Date());
-            this.item.setClassCode(Short.valueOf(this.tempClassCode));
-            ejbDataScopeMasterFacade.create(this.item);
             if (null != tempItemDetails) {
                 for (int i = 0; i < tempItemDetails.size(); i++) {
                     DataScopeDetail dd = new DataScopeDetail();
@@ -275,21 +267,21 @@ public class DataScopeSetController implements Serializable {
                     int no = i + 1;//Seq_No  start from 1;
                     pk.setSeqNo((short) no);
                     dd.setDataScopeDetailPK(pk);
-                    dd.setLogic(tempItemDetails.get(i).getLogic());
-                    dd.setLeftBracket(tempItemDetails.get(i).getLeftBracket());
-                    String[] s = this.tempColumnList.get(i).split("+");
+                    dd.setLogic(tempLogicList.get(i));
+                    dd.setLeftBracket(tempLeftBracketList.get(i));
+                    String[] s = StringUtils.split(this.tempColumnList.get(i), "+");
                     dd.setTableName(s[0]);
                     dd.setColumnName(s[1]);
-                    dd.setOpCode(tempItemDetails.get(i).getOpCode());
-                    dd.setOpValue(tempItemDetails.get(i).getOpValue());
-                    dd.setRightBracket(tempItemDetails.get(i).getRightBracket());
+                    dd.setOpCode(tempOpCodeList.get(i));
+                    dd.setOpValue(tempOpValueList.get(i));
+                    dd.setRightBracket(tempRightBracketList.get(i));
                     ejbDataScopeDetailFacade.create(dd);
                 }
             }
+            ejbDataScopeMasterFacade.create(this.item);            
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.DATA_CODE.toString());
         } else {//編輯
             ejbDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
-            this.item.setClassCode(Short.valueOf(this.tempClassCode));
             for (int i = 0; i < this.tempItemDetails.size(); i++) {
                 DataScopeDetail dd = new DataScopeDetail();
                 DataScopeDetailPK pk = new DataScopeDetailPK();
@@ -299,7 +291,7 @@ public class DataScopeSetController implements Serializable {
                 dd.setDataScopeDetailPK(pk);
                 dd.setLogic(tempLogicList.get(i));
                 dd.setLeftBracket(tempLeftBracketList.get(i));
-                String[] s = this.tempColumnList.get(i).split("+");
+                String[] s = StringUtils.split(this.tempColumnList.get(i), "+");
                 dd.setTableName(s[0]);
                 dd.setColumnName(s[1]);
                 dd.setOpCode(tempOpCodeList.get(i));
@@ -310,8 +302,8 @@ public class DataScopeSetController implements Serializable {
             ejbDataScopeMasterFacade.edit(this.item);
         }
         this.tempItemDetails.clear();
-        this.itemDetails.clear();
         this.init();
+        clearTempList();
         this.currentItem = this.master.get(this.master.size() - 1);
         setItemDetail();
     }
@@ -322,7 +314,6 @@ public class DataScopeSetController implements Serializable {
     public void edit() {
         this.editDialogLabel = "編輯";
         this.item = this.currentItem;
-        this.itemDetails = this.details;
         this.tempItemDetails = this.details;
         for (DataScopeDetail ds : this.details) {
             this.tempLogicList.add(ds.getLogic());
@@ -332,12 +323,7 @@ public class DataScopeSetController implements Serializable {
             this.tempOpValueList.add(ds.getOpValue());
             this.tempRightBracketList.add(ds.getRightBracket());
         }
-        this.columnMenu = new ArrayList<SelectItem>();
-        List<RdDataColumn> rdcList = ejbRdDataColumnFacade.getColumnByClassCode(String.valueOf(this.item.getClassCode()));
-        for (RdDataColumn rdc : rdcList) {
-            this.columnMenu.add(new SelectItem(rdc.getRdDataColumnPK().getTableName() + "+" + rdc.getRdDataColumnPK().getColumnName(), rdc.getColumnChnName()));
-        }
-
+        changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
     }
 
     /*
@@ -353,102 +339,98 @@ public class DataScopeSetController implements Serializable {
         this.init();
     }
 
+    public void classCodeChange() {
+        changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
+    }
+
     public void logicChange(int i) {
-        this.tempItemDetails.remove(i);
-        DataScopeDetailPK pk = new DataScopeDetailPK();
-        pk.setScopeCode(this.item.getScopeCode());
-        pk.setSeqNo((short) i);
-        DataScopeDetail m = new DataScopeDetail();
-        m.setDataScopeDetailPK(pk);
-        m.setLogic(this.tempLogic);
-        this.tempItemDetails.set(i, m);
+        this.tempLogicList.set(i, this.tempLogic);
     }
 
     public void logicChangeForEdit(ValueChangeEvent e) {
-        int idx = this.tempLogicList.indexOf(e.getOldValue().toString());
-        this.tempLogicList.set(idx, e.getNewValue().toString());
+        if (null == e.getOldValue()) {
+            this.tempLogicList.add(0, e.getNewValue().toString());
+        } else {
+            int idx = this.tempLogicList.indexOf(e.getOldValue().toString());
+            this.tempLogicList.set(idx, e.getNewValue().toString());
+        }
     }
 
     public void columnChange(int i) {
-        this.tempItemDetails.remove(i);
-        DataScopeDetailPK pk = new DataScopeDetailPK();
-        pk.setScopeCode(this.item.getScopeCode());
-        pk.setSeqNo((short) i);
-        DataScopeDetail m = new DataScopeDetail();
-        m.setDataScopeDetailPK(pk);
-        String[] c = this.tempColumn.split("+");
-        m.setTableName(c[0]);
-        m.setColumnName(c[1]);
-        this.tempItemDetails.set(i, m);
+        this.tempColumnList.set(i, this.tempColumn);
     }
 
     public void columnChangeForEdit(ValueChangeEvent e) {
-        int idx = this.tempColumnList.indexOf(e.getOldValue().toString());
-        this.tempColumnList.set(idx, e.getNewValue().toString());
+        if (null == e.getOldValue()) {
+            this.tempColumnList.add(0, e.getNewValue().toString());
+        } else {
+            int idx = this.tempColumnList.indexOf(e.getOldValue().toString());
+            this.tempColumnList.set(idx, e.getNewValue().toString());
+        }
     }
 
     public void opCodeChange(int i) {
-        this.tempItemDetails.remove(i);
-        DataScopeDetailPK pk = new DataScopeDetailPK();
-        pk.setScopeCode(this.item.getScopeCode());
-        pk.setSeqNo((short) i);
-        DataScopeDetail m = new DataScopeDetail();
-        m.setDataScopeDetailPK(pk);
-        m.setOpCode(this.tempOpCode);
-        this.tempItemDetails.set(i, m);
+        this.tempOpCodeList.set(i, this.tempOpCode);
     }
 
     public void opCodeChangeForEdit(ValueChangeEvent e) {
-        int idx = this.tempOpCodeList.indexOf(e.getOldValue().toString());
-        this.tempOpCodeList.set(idx, e.getNewValue().toString());
+        if (null == e.getOldValue()) {
+            this.tempOpCodeList.add(0, e.getNewValue().toString());
+        } else {
+            int idx = this.tempOpCodeList.indexOf(e.getOldValue().toString());
+            this.tempOpCodeList.set(idx, e.getNewValue().toString());
+        }
     }
 
     public void opValueChange(int i) {
-        this.tempItemDetails.remove(i);
-        DataScopeDetailPK pk = new DataScopeDetailPK();
-        pk.setScopeCode(this.item.getScopeCode());
-        pk.setSeqNo((short) i);
-        DataScopeDetail m = new DataScopeDetail();
-        m.setDataScopeDetailPK(pk);
-        m.setOpValue(this.tempOpValue);
-        this.tempItemDetails.set(i, m);
+        this.tempOpValueList.set(i, this.tempOpValue);
     }
 
     public void opValueChangeForEdit(ValueChangeEvent e) {
-        int idx = this.tempOpValueList.indexOf(e.getOldValue().toString());
-        this.tempOpValueList.set(idx, e.getNewValue().toString());
+        if (null == e.getOldValue()) {
+            this.tempOpValueList.add(0, e.getNewValue().toString());
+        } else {
+            int idx = this.tempOpValueList.indexOf(e.getOldValue().toString());
+            this.tempOpValueList.set(idx, e.getNewValue().toString());
+        }
     }
 
     public void leftBracketChange(int i) {
-        this.tempItemDetails.remove(i);
-        DataScopeDetailPK pk = new DataScopeDetailPK();
-        pk.setScopeCode(this.item.getScopeCode());
-        pk.setSeqNo((short) i);
-        DataScopeDetail m = new DataScopeDetail();
-        m.setDataScopeDetailPK(pk);
-        m.setLeftBracket(this.tempLeftBracket);
-        this.tempItemDetails.set(i, m);
+        this.tempLeftBracketList.set(i, this.tempLeftBracket);
     }
 
     public void leftBracketChangeForEdit(ValueChangeEvent e) {
-        int idx = this.tempLeftBracketList.indexOf(e.getOldValue().toString());
-        this.tempLeftBracketList.set(idx, e.getNewValue().toString());
+        if (null == e.getOldValue()) {
+            this.tempLeftBracketList.add(0, e.getNewValue().toString());
+        } else {
+            int idx = this.tempLeftBracketList.indexOf(e.getOldValue().toString());
+            this.tempLeftBracketList.set(idx, e.getNewValue().toString());
+        }
     }
 
     public void rightBracketChange(int i) {
-        this.tempItemDetails.remove(i);
-        DataScopeDetailPK pk = new DataScopeDetailPK();
-        pk.setScopeCode(this.item.getScopeCode());
-        pk.setSeqNo((short) i);
-        DataScopeDetail m = new DataScopeDetail();
-        m.setDataScopeDetailPK(pk);
-        m.setRightBracket(this.tempRightBracket);
-        this.tempItemDetails.set(i, m);
+        this.tempRightBracketList.set(i, this.tempRightBracket);
     }
 
     public void rightBracketChangeForEdit(ValueChangeEvent e) {
-        int idx = this.tempRightBracketList.indexOf(e.getOldValue().toString());
-        this.tempRightBracketList.set(idx, e.getNewValue().toString());
+        if (null == e.getOldValue()) {
+            this.tempRightBracketList.add(0, e.getNewValue().toString());
+        } else {
+            int idx = this.tempRightBracketList.indexOf(e.getOldValue().toString());
+            this.tempRightBracketList.set(idx, e.getNewValue().toString());
+        }
+    }
+
+    /*
+    清空暫存List
+     */
+    public void clearTempList() {
+        this.tempLogicList.clear();
+        this.tempLeftBracketList.clear();
+        this.tempColumnList.clear();
+        this.tempOpCodeList.clear();
+        this.tempOpValueList.clear();
+        this.tempRightBracketList.clear();
     }
 
     public int getCurrentIndex() {
@@ -635,20 +617,25 @@ public class DataScopeSetController implements Serializable {
         this.columnMenu = columnMenu;
     }
 
-    public String getTempClassCode() {
-        return tempClassCode;
-    }
-
-    public void setTempClassCode(String tempClassCode) {
-        this.tempClassCode = tempClassCode;
-    }
-
-
     /*
     載入detail
      */
     private void setItemDetail() {
-        this.details = ejbDataScopeDetailFacade.findByMasterCode(this.item.getScopeCode());
+        String className = ejbRdDataClassFacade.getClassNameByClassCode(this.currentItem.getClassCode());
+        this.currentItem.setClassName(className);
+        this.itemDetails = ejbDataScopeDetailFacade.findByMasterCode(this.currentItem.getScopeCode());
+        this.details = new ArrayList<DataScopeDetail>();
+        for (DataScopeDetail d : itemDetails) {
+            DataScopeDetail dd = new DataScopeDetail();
+            dd = d;
+            QueryUdColumnScopeDetailVO vo = new QueryUdColumnScopeDetailVO();
+            vo.setClassCode(this.currentItem.getClassCode());
+            vo.setTableName(d.getTableName());
+            vo.setColumnName(d.getColumnName());
+            dd.setColumnCHNName(d.getTableName() + "/" + d.getColumnName() + ejbRdDataColumnFacade.getFieldCNNameMenu(vo));
+            dd.setColumnValue(d.getTableName() + "+" + d.getColumnName());
+            this.details.add(dd);
+        }
     }
 
     /*
@@ -664,4 +651,16 @@ public class DataScopeSetController implements Serializable {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+
+    /*
+    資料類別下拉選單改變時重新載資料欄位下拉選單
+     */
+    private void changeColumnMenuByClassCode(String classCode) {
+        this.columnMenu = new ArrayList<SelectItem>();
+        List<RdDataColumn> rdcList = ejbRdDataColumnFacade.getColumnByClassCode(classCode);
+        for (RdDataColumn rdc : rdcList) {
+            this.columnMenu.add(new SelectItem(rdc.getRdDataColumnPK().getTableName() + "+" + rdc.getRdDataColumnPK().getColumnName(), rdc.getColumnChnName()));
+        }
+    }
+
 }

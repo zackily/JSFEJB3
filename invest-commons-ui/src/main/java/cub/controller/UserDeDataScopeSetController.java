@@ -252,7 +252,7 @@ public class UserDeDataScopeSetController implements Serializable {
     確認新增
      */
     public void save(ActionEvent event) {
-        String[] strArray = this.itemDataColumn.split("+");
+        String[] strArray = StringUtils.split(this.itemDataColumn, "+");
         this.item.setClassCode(Short.valueOf(strArray[0]));
         this.item.setTableName(strArray[1]);
         this.item.setColumnName(strArray[2]);

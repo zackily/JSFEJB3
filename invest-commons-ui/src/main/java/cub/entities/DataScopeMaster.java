@@ -115,7 +115,7 @@ public class DataScopeMaster implements Serializable {
         this.logDttm = logDttm;
     }
 
-    @Transient
+    
     public String getClassName() {
         return className;
     }

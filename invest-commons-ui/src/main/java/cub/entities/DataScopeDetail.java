@@ -75,25 +75,15 @@ public class DataScopeDetail implements Serializable {
     @Column(name = "RIGHT_BRACKET")
     private String rightBracket;
     @Transient
-    private String classCode;
+    private String columnCHNName;
     @Transient
-    private String column;
+    private String columnValue;
 
     public DataScopeDetail() {
     }
 
     public DataScopeDetail(DataScopeDetailPK dataScopeDetailPK) {
         this.dataScopeDetailPK = dataScopeDetailPK;
-    }
-
-    public DataScopeDetail(DataScopeDetailPK dataScopeDetailPK, String logic, String leftBracket, String tableName, String columnName, String opCode, String rightBracket) {
-        this.dataScopeDetailPK = dataScopeDetailPK;
-        this.logic = logic;
-        this.leftBracket = leftBracket;
-        this.tableName = tableName;
-        this.columnName = columnName;
-        this.opCode = opCode;
-        this.rightBracket = rightBracket;
     }
 
     public DataScopeDetail(String scopeCode, short seqNo) {
@@ -164,22 +154,20 @@ public class DataScopeDetail implements Serializable {
         this.rightBracket = rightBracket;
     }
 
-    @Transient
-    public String getClassCode() {
-        return classCode;
+    public String getColumnCHNName() {
+        return columnCHNName;
     }
 
-    public void setClassCode(String classCode) {
-        this.classCode = classCode;
+    public void setColumnCHNName(String columnCHNName) {
+        this.columnCHNName = columnCHNName;
     }
 
-    @Transient
-    public String getColumn() {
-        return column;
+    public String getColumnValue() {
+        return columnValue;
     }
 
-    public void setColumn(String column) {
-        this.column = column;
+    public void setColumnValue(String columnValue) {
+        this.columnValue = columnValue;
     }
 
     @Override
