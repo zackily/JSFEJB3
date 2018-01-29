@@ -31,10 +31,11 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
         super(RdOptionItem.class);
     }
 
-    public List<RdOptionItem> findAllSort() {
+    public List<RdOptionItem> findAllSort(short classCode) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from RdOptionItem r where r.rdOptionItemPK.classCode = 9 order by r.rdOptionItemPK.classCode asc");
+        jpql.append("from RdOptionItem r where r.rdOptionItemPK.classCode =:classCode order by r.rdOptionItemPK.classCode asc");
         Query query = em.createQuery(jpql.toString());
+        query.setParameter("classCode", classCode);
         return query.getResultList();
     }
 

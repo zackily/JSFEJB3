@@ -245,6 +245,7 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     public void create() {
         this.item = new UdColumnScopeMaster();
+        this.itemColumnOptionList.clear();
         this.editDialogLabel = "新增";
     }
 
@@ -296,6 +297,7 @@ public class UserDeDataScopeSetController implements Serializable {
         this.itemColumnOptionList.clear();
         this.editDialogLabel = "編輯";
         this.item = this.currentItem;
+        this.detail = ejbRdDataColumnOptionFacade.findByMasterCode(this.currentItem.getUdColumnCode());
         for (RdDataColumnOption op : this.detail) {
             this.itemColumnOptionList.add(op.getRdDataColumnOptionPK().getOptionCode());
         }

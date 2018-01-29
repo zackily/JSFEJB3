@@ -5,7 +5,8 @@
  */
 package cub.facade;
 
-import cub.entities.UdDataScopeDetail;
+import cub.entities.UdDataScopeMaster;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +17,7 @@ import javax.persistence.Query;
  * @author NT48810
  */
 @Stateless
-public class UdDataScopeDetailFacade extends AbstractFacade<UdDataScopeDetail> {
+public class UdDataScopeMasterFacade extends AbstractFacade<UdDataScopeMaster> {
 
     @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -26,18 +27,14 @@ public class UdDataScopeDetailFacade extends AbstractFacade<UdDataScopeDetail> {
         return em;
     }
 
-    public UdDataScopeDetailFacade() {
-        super(UdDataScopeDetail.class);
+    public UdDataScopeMasterFacade() {
+        super(UdDataScopeMaster.class);
     }
 
-    /*
-    exist?true:false
-     */
-    public Boolean checkExistByUdColumnCode(String code) {
+    public List<UdDataScopeMaster> findAllSort() {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from UdDataScopeDetail d where d.udColumnCode=:code");
+        jpql.append("from UdDataScopeMaster m order by m.scopeCode asc");
         Query query = em.createQuery(jpql.toString());
-        query.setParameter("code", code);
-        return query.getResultList().size() > 0 ? true : false;
+        return query.getResultList();
     }
 }
