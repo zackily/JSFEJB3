@@ -188,11 +188,11 @@ public class MgSetDetailRngCfg implements Serializable {
     }
     
     public BigDecimal getMgActBps() {
-        return mgActBps.multiply(BigDecimal.valueOf(10000));
+        return mgActBps;
     }
     
     public void setMgActBps(BigDecimal mgActBps) {
-        this.mgActBps = mgActBps.divide(BigDecimal.valueOf(10000));
+        this.mgActBps = mgActBps;
     }
     
 }

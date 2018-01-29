@@ -90,6 +90,7 @@ public class MgSetDetailController implements Serializable {
     private List<String> productSeriesList;
 
     private List<MgSetDetailRngCfg> rangeList;
+    private List<MgSetDetailRngCfg> rangeTempList;
     private List<MgSetDetailChlCfg> chlList;
 
     private MgSetDetailRngCfg selectedRange;
@@ -281,7 +282,14 @@ public class MgSetDetailController implements Serializable {
         for (MgSetDetailChlCfg m : chlList) {
             selectedChannel.add(m.getMgActSaleChnlCode());
         }
-        rangeList = mgSetDetailRngCfgFacade.findByRng(item.getMgActDCode(), item.getMgActDSeq());
+        rangeTempList = mgSetDetailRngCfgFacade.findByRng(item.getMgActDCode(), item.getMgActDSeq());
+        for (MgSetDetailRngCfg rc : rangeTempList) {
+            MgSetDetailRngCfg cfg = new MgSetDetailRngCfg();
+            cfg = rc;
+            cfg.setMgActBps(rc.getMgActBps().multiply(BigDecimal.valueOf(10000)));
+            rangeList = new ArrayList<MgSetDetailRngCfg>();
+            rangeList.add(cfg);
+        }
     }
 
     public void cancel() {
@@ -392,14 +400,13 @@ public class MgSetDetailController implements Serializable {
 //        idnList = new ArrayList<MgCustActList>();
     }
 
-    public boolean showReadonly(){
+    public boolean showReadonly() {
         if (userSession.getUser().getRole().equalsIgnoreCase("2") || (mgSetDetail.getStatus() != null && !(mgSetDetail.getStatus().compareTo(MgSetMasterStatus.SEND) == 0))) {
             return true;
         }
         return false;
     }
-    
-    
+
     public MgSetDetail prepareCreate() {
         RequestContext.getCurrentInstance().reset(":MgSetDetailCreateForm");
         selectedChannel = new ArrayList<String>();
@@ -483,10 +490,13 @@ public class MgSetDetailController implements Serializable {
         } else {
             mgSetDetailRngCfgFacade.removeByMgSetDetail(mgSetDetail);
             for (MgSetDetailRngCfg rng : rangeList) {
+                MgSetDetailRngCfg cfg = new MgSetDetailRngCfg();
                 rng.setChangedate(new Date());
                 rng.setMgActCode(mgSetDetail.getMgActDCode());
                 rng.setMgActSubCode(mgSetDetail.getMgActDSeq());
-                mgSetDetailRngCfgFacade.save(rng);
+                cfg = rng;
+                cfg.setMgActBps(rng.getMgActBps().divide(BigDecimal.valueOf(10000)));
+                mgSetDetailRngCfgFacade.save(cfg);
             }
         }
 
