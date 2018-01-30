@@ -36,7 +36,8 @@ public class MgSetDetailRngCfgFacade extends AbstractFacade<MgSetDetailRngCfg> {
     }
 
       public List<MgSetDetailRngCfg> findByRng(String act_code, String act_sub_code) {
-        StringBuffer sql = new StringBuffer("SELECT msdrc FROM MgSetDetailRngCfg msdrc WHERE msdrc.mgActCode =:mgActCode and msdrc.mgActSubCode =:mgActSubCode ");
+        StringBuffer sql = new StringBuffer("SELECT msdrc FROM MgSetDetailRngCfg msdrc WHERE "
+                + "msdrc.mgActCode =:mgActCode and msdrc.mgActSubCode =:mgActSubCode order by msdrc.seq ");
 
         Query q = em.createQuery(sql.toString());
 

@@ -283,11 +283,12 @@ public class MgSetDetailController implements Serializable {
             selectedChannel.add(m.getMgActSaleChnlCode());
         }
         rangeTempList = mgSetDetailRngCfgFacade.findByRng(item.getMgActDCode(), item.getMgActDSeq());
+        System.out.println(rangeTempList.size()+"===>"+item.getMgActDCode()+"====>"+item.getMgActDSeq());
+        rangeList = new ArrayList<MgSetDetailRngCfg>();
         for (MgSetDetailRngCfg rc : rangeTempList) {
             MgSetDetailRngCfg cfg = new MgSetDetailRngCfg();
             cfg = rc;
-            cfg.setMgActBps(rc.getMgActBps().multiply(BigDecimal.valueOf(10000)));
-            rangeList = new ArrayList<MgSetDetailRngCfg>();
+            cfg.setMgActBps(rc.getMgActBps().multiply(BigDecimal.valueOf(10000)));           
             rangeList.add(cfg);
         }
     }
@@ -489,11 +490,13 @@ public class MgSetDetailController implements Serializable {
             return;
         } else {
             mgSetDetailRngCfgFacade.removeByMgSetDetail(mgSetDetail);
+            int seq = 1;
             for (MgSetDetailRngCfg rng : rangeList) {
                 MgSetDetailRngCfg cfg = new MgSetDetailRngCfg();
                 rng.setChangedate(new Date());
                 rng.setMgActCode(mgSetDetail.getMgActDCode());
                 rng.setMgActSubCode(mgSetDetail.getMgActDSeq());
+                rng.setSeq(seq++);
                 cfg = rng;
                 cfg.setMgActBps(rng.getMgActBps().divide(BigDecimal.valueOf(10000)));
                 mgSetDetailRngCfgFacade.save(cfg);

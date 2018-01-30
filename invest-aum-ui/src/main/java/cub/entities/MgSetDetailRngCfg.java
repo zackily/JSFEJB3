@@ -64,6 +64,9 @@ public class MgSetDetailRngCfg implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date changedate;
     
+    @Column(name = "SEQ")
+    private Integer seq;
+    
     public MgSetDetailRngCfg() {
     }
     
@@ -193,6 +196,14 @@ public class MgSetDetailRngCfg implements Serializable {
     
     public void setMgActBps(BigDecimal mgActBps) {
         this.mgActBps = mgActBps;
+    }
+
+    public Integer getSeq() {
+        return seq;
+    }
+
+    public void setSeq(Integer seq) {
+        this.seq = seq;
     }
     
 }
