@@ -27,9 +27,9 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean(name = "userDeDataScopeSetController")
+@ManagedBean(name = "userDeFieldScopeSetController")
 @ViewScoped
-public class UserDeDataScopeSetController implements Serializable {
+public class UserDeFieldScopeSetController implements Serializable {
 
     @EJB
     private cub.facade.WorkSeqFacade ejbWorkSeqFacade;

@@ -91,15 +91,19 @@
 
                     </p:panelGrid>
                 </p:panelGrid>
-                <p:fieldset legend="檢核結果計算邏輯">
-                    <p:panelGrid columns="2" style="width: 100%">
+                <p:panelGrid columns="2" style="width: 100%">
+                    <p:fieldset>
+                        <p:panelGrid columns="5" style="width: 100%">
+                            <h:outputLabel value="檢核結果計算邏輯"/>
+                            <p:commandButton value="＋" update="" process="@this"/>
+                            <p:commandButton value="－" update="" process="@this"/>
+                            <h:outputLabel value="客戶統計條件(單選)"/>
+                            <p:selectOneMenu value="">
+                                <f:selectItems value=""/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
                         <p:panelGrid columns="1" style="width: 100%">
-                            <p:panelGrid columns="2" style="width: 100%">
-                                <h:outputLabel value="客戶統計條件(單選)"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItems value=""/>
-                                </p:selectOneMenu>
-                            </p:panelGrid>
+
                             <f:facet name="header">
                                 <h:outputLabel value="分子條件設定區"/>
                             </f:facet>
@@ -129,15 +133,20 @@
                                 <h:outputLabel value="To"/>
                                 <p:calendar value=""/>
                             </p:panelGrid>
-                            
+
+                        </p:panelGrid>
+                    </p:fieldset>
+                    <p:fieldset>
+                        <p:panelGrid columns="4" style="width: 100%">
+                            <h:outputLabel value="檢核資料欄位"/>
+                            <p:commandButton value="＋" update="" process="@this"/>
+                            <p:commandButton value="－" update="" process="@this"/>
+                            <p:selectOneMenu value="">
+                                <f:selectItems value=""/>
+                            </p:selectOneMenu>
                         </p:panelGrid>
                         <p:panelGrid columns="1" style="width: 100%">
-                            <p:panelGrid columns="2" style="width: 100%">
-                                <h:outputLabel value="檢核資料欄位"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItems value=""/>
-                                </p:selectOneMenu>
-                            </p:panelGrid>
+
                             <f:facet name="header">
                                 <h:outputLabel value="分母條件設定區"/>
                             </f:facet>
@@ -171,20 +180,22 @@
                                 <h:outputLabel value="超限值%"/>
                                 <h:inputText value="1"/>
                             </p:panelGrid>
-                            
+
                         </p:panelGrid>
-                    </p:panelGrid>
-                </p:fieldset>
-                <p:fieldset>
+
+                    </p:fieldset>
+
+
                     <p:panelGrid columns="4" style="width: 100%">
-                                <h:outputLabel value="超限處理"/>
-                                <p:selectOneMenu value="">
-                                    <f:selectItems value=""/>
-                                </p:selectOneMenu>
-                                <h:outputLabel value="鎖定註記"/>
-                                <p:selectBooleanCheckbox value="" />
-                            </p:panelGrid>
-                </p:fieldset>
+                        <h:outputLabel value="超限處理"/>
+                        <p:selectOneMenu value="">
+                            <f:selectItems value=""/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="鎖定註記"/>
+                        <p:selectBooleanCheckbox value="" />
+                    </p:panelGrid>
+
+                </p:panelGrid>
             </p:panel> 
         </h:form>
     </ui:define>

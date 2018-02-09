@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="cub_invest-commons-ui_war_1.0-SNAPSHOTPU" transaction-type="JTA">
-    <jta-data-source>java:app/rcmm</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
-  </persistence-unit>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<!-- CUB DB -->
+<!-- 	<persistence-unit name="cub_invest-commons-ui_war_1.0-SNAPSHOTPU" -->
+<!-- 		transaction-type="JTA"> -->
+<!-- 		<jta-data-source>java:app/rcmm</jta-data-source> -->
+<!-- 		<exclude-unlisted-classes>false</exclude-unlisted-classes> -->
+<!-- 		<properties /> -->
+<!-- 	</persistence-unit> -->
+
+
+	<!-- h2 -->
+	<!-- <persistence-unit name="cub_invest-commons-ui_war_1.0-SNAPSHOTPU" -->
+	<!-- transaction-type="JTA"> -->
+	<!-- <properties> -->
+	<!-- <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" 
+		/> -->
+	<!-- <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:testdb" 
+		/> -->
+	<!-- </properties> -->
+	<!-- </persistence-unit> -->
+
+	<!-- postgres -->
+	<persistence-unit name="cub_invest-commons-ui_war_1.0-SNAPSHOTPU"
+		transaction-type="JTA">
+		<jta-data-source>java:app/postgres</jta-data-source>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<properties />
+	</persistence-unit>
 </persistence>
