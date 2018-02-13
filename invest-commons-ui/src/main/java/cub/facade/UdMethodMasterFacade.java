@@ -5,7 +5,7 @@
  */
 package cub.facade;
 
-import cub.entities.UdDataScopeMaster;
+import cub.entities.UdMethodMaster;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +17,7 @@ import javax.persistence.Query;
  * @author NT48810
  */
 @Stateless
-public class UdDataScopeMasterFacade extends AbstractFacade<UdDataScopeMaster> {
+public class UdMethodMasterFacade extends AbstractFacade<UdMethodMaster> {
 
     @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-SNAPSHOTPU")
     private EntityManager em;
@@ -27,22 +27,14 @@ public class UdDataScopeMasterFacade extends AbstractFacade<UdDataScopeMaster> {
         return em;
     }
 
-    public UdDataScopeMasterFacade() {
-        super(UdDataScopeMaster.class);
+    public UdMethodMasterFacade() {
+        super(UdMethodMaster.class);
     }
 
-    public List<UdDataScopeMaster> findAllSort() {
+    public List<UdMethodMaster> findAllSort() {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from UdDataScopeMaster m order by m.scopeCode asc");
+        jpql.append("from UdMethodMaster m order by m.methodName asc");
         Query query = em.createQuery(jpql.toString());
-        return query.getResultList();
-    }
-
-    public List<String> findByCode(String code) {
-        StringBuilder jpql = new StringBuilder(100);
-        jpql.append("select u.scopeCode from UdDataScopeMaster u where u.scopeCode like :code");
-        Query query = em.createQuery(jpql.toString());
-        query.setParameter("code", code + "%");
         return query.getResultList();
     }
 }

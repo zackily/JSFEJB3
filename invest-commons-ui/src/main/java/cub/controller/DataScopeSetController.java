@@ -1,17 +1,10 @@
 package cub.controller;
 
-import cub.entities.DataScopeDetail;
-import cub.entities.DataScopeDetailPK;
-import cub.entities.DataScopeMaster;
-import cub.entities.RdDataClass;
-import cub.entities.RdDataColumn;
-import cub.entities.RdOptionItem;
-import cub.enums.SeqTypeEnum;
-import cub.vo.QueryUdColumnScopeDetailVO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -21,25 +14,41 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
+
+import cub.entities.DataScopeDetail;
+import cub.entities.DataScopeDetailPK;
+import cub.entities.DataScopeMaster;
+import cub.entities.RdDataClass;
+import cub.entities.RdDataColumn;
+import cub.entities.RdOptionItem;
+import cub.enums.SeqTypeEnum;
+import cub.facade.DataScopeDetailFacade;
+import cub.facade.DataScopeMasterFacade;
+import cub.facade.RdDataClassFacade;
+import cub.facade.RdDataColumnFacade;
+import cub.facade.RdOptionItemFacade;
+import cub.facade.WorkSeqFacade;
+import cub.vo.QueryUdColumnScopeDetailVO;
 
 @ManagedBean(name = "dataScopeSetController")
 @ViewScoped
 public class DataScopeSetController implements Serializable {
 
     @EJB
-    private cub.facade.WorkSeqFacade ejbWorkSeqFacade;
+    private WorkSeqFacade ejbWorkSeqFacade;
     @EJB
-    private cub.facade.DataScopeMasterFacade ejbDataScopeMasterFacade;
+    private DataScopeMasterFacade ejbDataScopeMasterFacade;
     @EJB
-    private cub.facade.DataScopeDetailFacade ejbDataScopeDetailFacade;
+    private DataScopeDetailFacade ejbDataScopeDetailFacade;
     @EJB
-    private cub.facade.RdDataClassFacade ejbRdDataClassFacade;
+    private RdDataClassFacade ejbRdDataClassFacade;
     @EJB
-    private cub.facade.RdDataColumnFacade ejbRdDataColumnFacade;
+    private RdDataColumnFacade ejbRdDataColumnFacade;
     @EJB
-    private cub.facade.RdOptionItemFacade ejbRdOptionItemFacade;
+    private RdOptionItemFacade ejbRdOptionItemFacade;
     /*
      * 自定義欄位範圍列表
      */
@@ -166,8 +175,7 @@ public class DataScopeSetController implements Serializable {
      * 自定義欄位範圍代碼autocomplete
      */
     public List<String> searchDataScopeMaster(String code) {
-        List<String> result = ejbDataScopeMasterFacade.findByCode(StringUtils.upperCase(code));
-        return result;
+        return ejbDataScopeMasterFacade.findByCode(StringUtils.upperCase(code));
     }
 
     /*

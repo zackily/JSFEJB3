@@ -1,11 +1,14 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.facade;
 
 import cub.entities.UdDataScopeDetail;
+
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -31,7 +34,7 @@ public class UdDataScopeDetailFacade extends AbstractFacade<UdDataScopeDetail> {
     }
 
     /*
-    exist?true:false
+     * exist?true:false
      */
     public Boolean checkExistByUdColumnCode(String code) {
         StringBuilder jpql = new StringBuilder(100);
@@ -39,5 +42,21 @@ public class UdDataScopeDetailFacade extends AbstractFacade<UdDataScopeDetail> {
         Query query = em.createQuery(jpql.toString());
         query.setParameter("code", code);
         return query.getResultList().size() > 0 ? true : false;
+    }
+
+    public List<UdDataScopeDetail> findByScopeCode(String code) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("from UdDataScopeDetail d where d.udDataScopeDetailPK.scopeCode=:code");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("code", code);
+        return query.getResultList();
+    }
+
+    public void removeByMaster(String scopeCode) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from UdDataScopeDetail d where d.udDataScopeDetailPK.scopeCode =:scopeCode");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("scopeCode", scopeCode);
+        query.executeUpdate();
     }
 }

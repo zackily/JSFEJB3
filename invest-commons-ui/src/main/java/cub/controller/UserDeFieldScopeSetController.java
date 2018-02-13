@@ -1,20 +1,12 @@
 package cub.controller;
 
-import cub.entities.RdDataColumn;
-import cub.entities.RdDataColumnOption;
-import cub.entities.RdDataColumnOptionPK;
-import cub.entities.RdDataColumnPK;
-import cub.entities.UdColumnScopeDetail;
-import cub.entities.UdColumnScopeDetailPK;
-import cub.entities.UdColumnScopeMaster;
-import cub.enums.SeqTypeEnum;
-import cub.vo.QueryUdColumnScopeDetailVO;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -24,25 +16,42 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
+
+import cub.entities.RdDataColumn;
+import cub.entities.RdDataColumnOption;
+import cub.entities.RdDataColumnOptionPK;
+import cub.entities.RdDataColumnPK;
+import cub.entities.UdColumnScopeDetail;
+import cub.entities.UdColumnScopeDetailPK;
+import cub.entities.UdColumnScopeMaster;
+import cub.enums.SeqTypeEnum;
+import cub.facade.RdDataColumnFacade;
+import cub.facade.RdDataColumnOptionFacade;
+import cub.facade.UdColumnScopeDetailFacade;
+import cub.facade.UdColumnScopeMasterFacade;
+import cub.facade.UdDataScopeDetailFacade;
+import cub.facade.WorkSeqFacade;
+import cub.vo.QueryUdColumnScopeDetailVO;
 
 @ManagedBean(name = "userDeFieldScopeSetController")
 @ViewScoped
 public class UserDeFieldScopeSetController implements Serializable {
 
     @EJB
-    private cub.facade.WorkSeqFacade ejbWorkSeqFacade;
+    private WorkSeqFacade ejbWorkSeqFacade;
     @EJB
-    private cub.facade.UdColumnScopeMasterFacade ejbUdColumnScopeMasterFacade;
+    private UdColumnScopeMasterFacade ejbUdColumnScopeMasterFacade;
     @EJB
-    private cub.facade.UdColumnScopeDetailFacade ejbUdColumnScopeDetailFacade;
+    private UdColumnScopeDetailFacade ejbUdColumnScopeDetailFacade;
     @EJB
-    private cub.facade.RdDataColumnFacade ejbRdDataColumnFacade;
+    private RdDataColumnFacade ejbRdDataColumnFacade;
     @EJB
-    private cub.facade.RdDataColumnOptionFacade ejbRdDataColumnOptionFacade;
+    private RdDataColumnOptionFacade ejbRdDataColumnOptionFacade;
     @EJB
-    private cub.facade.UdDataScopeDetailFacade ejbUdDataScoptDetailFacade;
+    private UdDataScopeDetailFacade ejbUdDataScoptDetailFacade;
     /*
     自定義欄位範圍列表
      */
@@ -152,8 +161,7 @@ public class UserDeFieldScopeSetController implements Serializable {
     自定義欄位範圍代碼autocomplete
      */
     public List<String> searchColumnScopeMaster(String code) {
-        List<String> result = ejbUdColumnScopeMasterFacade.findByCode(StringUtils.upperCase(code));
-        return result;
+        return ejbUdColumnScopeMasterFacade.findByCode(StringUtils.upperCase(code));
     }
 
     /*

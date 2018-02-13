@@ -7,7 +7,7 @@
         
          <locale-config>
             <default-time-zone-id>Asia/Taipei</default-time-zone-id>
-            <!--<default-locale>en</default-locale>-->
+            <default-locale>en</default-locale>
             <default-locale>zh_TW</default-locale>           
             <supported-locale>zh_TW</supported-locale>
         </locale-config>       

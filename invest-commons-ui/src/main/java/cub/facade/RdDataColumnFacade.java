@@ -56,4 +56,5 @@ public class RdDataColumnFacade extends AbstractFacade<RdDataColumn> {
         query.setParameter("classCode", Short.valueOf(classCode));
         return query.getResultList();
     }
+
 }
