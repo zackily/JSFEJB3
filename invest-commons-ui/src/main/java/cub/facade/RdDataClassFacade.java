@@ -1,16 +1,19 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.facade;
 
-import cub.entities.RdDataClass;
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import cub.entities.RdDataClass;
 
 /**
  *
@@ -43,7 +46,11 @@ public class RdDataClassFacade extends AbstractFacade<RdDataClass> {
         jpql.append("select r.className from RdDataClass r where r.classCode=:classCode");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("classCode", classCode);
-        return null == query.getSingleResult() ? "" : query.getSingleResult().toString();
+        try {
+            return query.getSingleResult().toString();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
 }

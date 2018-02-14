@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.facade;
 
@@ -36,5 +36,13 @@ public class UdMethodMasterFacade extends AbstractFacade<UdMethodMaster> {
         jpql.append("from UdMethodMaster m order by m.methodName asc");
         Query query = em.createQuery(jpql.toString());
         return query.getResultList();
+    }
+
+    public String findDescByName(String name) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select m.methodDesc from UdMethodMaster m where m.methodName =:name");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("name", name);
+        return null != query.getSingleResult() ? query.getSingleResult().toString() : "";
     }
 }

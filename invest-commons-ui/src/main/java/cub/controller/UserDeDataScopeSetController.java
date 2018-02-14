@@ -11,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang.StringUtils;
@@ -21,6 +22,7 @@ import cub.entities.RdDataColumn;
 import cub.entities.RdDataColumnPK;
 import cub.entities.UdColumnScopeMaster;
 import cub.entities.UdDataScopeDetail;
+import cub.entities.UdDataScopeDetailPK;
 import cub.entities.UdDataScopeMaster;
 import cub.entities.UdMethodDetail;
 import cub.entities.UdMethodMaster;
@@ -34,6 +36,7 @@ import cub.facade.UdDataScopeMasterFacade;
 import cub.facade.UdMethodDetailFacade;
 import cub.facade.UdMethodMasterFacade;
 import cub.facade.WorkSeqFacade;
+import cub.vo.QueryUdColumnScopeDetailVO;
 
 @ManagedBean(name = "userDeDataScopeSetController")
 @ViewScoped
@@ -116,18 +119,23 @@ public class UserDeDataScopeSetController implements Serializable {
     /*
      * 自定義欄位範圍暫存
      */
-    private String userDeFieldTemp;
+    private String tempUserDeField;
+    /*
+     * 回傳欄位暫存
+     */
+    private String tempRTNField;
 
     @PostConstruct
     public void init() {
         this.master = new ArrayList<UdDataScopeMaster>();
         this.master = ejbUdDataScopeMasterFacade.findAllSort();
         this.currentItem = new UdDataScopeMaster();
+        this.item = new UdDataScopeMaster();
         if (this.master.isEmpty()) {
             this.master.add(this.item);
         } else {
             this.currentItem = this.master.get(0);
-            loadReturnFieldMenu(String.valueOf(this.currentItem.getClassCode()));
+            // genReturnFieldMenu(String.valueOf(this.currentItem.getClassCode()));
         }
         // 頁面載入自定義欄位this.master的index
         currentIndex = 0;
@@ -144,19 +152,29 @@ public class UserDeDataScopeSetController implements Serializable {
     /*
      * Method名稱改變時連動資料條件設定區
      */
-    public void onMethodMenuChange() {
-        this.detail.clear();
-        List<UdMethodDetail> methodDetail = ejbUdMethodDetailFacade.findByMethodName(this.tempMethodName);
+    public void onMethodMenuChange(ValueChangeEvent e) {
+        this.itemDetail.clear();
+        String name = e.getNewValue().toString();
+        List<UdMethodDetail> methodDetail = ejbUdMethodDetailFacade.findByMethodName(name);
         for (UdMethodDetail dt : methodDetail) {
             UdDataScopeDetail de = new UdDataScopeDetail();
-            de.setParameterName(dt.getParameterName());//參數名稱
-            de.setParameterDesc(dt.getParameterDesc());//參數說明
-//            de.setValue("");//對應值
-//            de.setValueDesc("");//對應值說明
-//            de.setUdColumnCode("");//自定義範圍
-//            de.setUdColumnName("");//範圍名稱
-            this.detail.add(de);
+            de.setParameterName(dt.getParameterName());// 參數名稱
+            de.setParameterDesc(dt.getParameterDesc());// 參數說明
+            boolean isClientId = dt.getParameterName().equalsIgnoreCase("CLIENT_ID");
+            de.setValue(isClientId ? "0" : "");// 對應值
+            de.setValueDesc(isClientId ? "下單客戶統編" : "");// 對應值說明
+            // de.setUdColumnCode("");//自定義範圍
+            // de.setUdColumnName("");//範圍名稱
+            this.itemDetail.add(de);
         }
+        this.item.setMethodNameDesc(ejbUdMethodMasterFacade.findDescByName(name));
+    }
+
+    /*
+     * 資料類別改變時連動回傳欄位
+     */
+    public void onDataTypeMenuChange() {
+
     }
 
     /*
@@ -217,6 +235,7 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     public void create() {
         this.item = new UdDataScopeMaster();
+        this.itemDetail = new ArrayList<UdDataScopeDetail>();
         this.editDialogLabel = "新增";
     }
 
@@ -229,12 +248,22 @@ public class UserDeDataScopeSetController implements Serializable {
             this.item.setScopeCode(scopeCode);
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.UDDATA_CODE.toString());
         }
+        if (StringUtils.isNotBlank(this.tempRTNField)) {
+            String[] split = this.tempRTNField.split("-");
+            this.item.setTableName(split[1]);
+            this.item.setColumnName(split[2]);
+        }
         ejbUdDataScopeMasterFacade.save(this.item);
         ejbUdDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
+        short i = 1;
         for (UdDataScopeDetail d : this.itemDetail) {
+            UdDataScopeDetailPK pk = new UdDataScopeDetailPK(this.item.getScopeCode(), i);
+            d.setUdDataScopeDetailPK(pk);
             ejbUdDataScopeDetailFacade.create(d);
+            i++;
         }
         this.init();
+        this.currentItem = this.master.get(this.master.size() - 1);
         setItemDetail();
     }
 
@@ -258,6 +287,16 @@ public class UserDeDataScopeSetController implements Serializable {
             ejbUdDataScopeDetailFacade.removeByMaster(this.currentItem.getScopeCode());
         }
         this.init();
+    }
+
+    public void tempUserDeFieldChange(int i) {
+        UdDataScopeDetail de = this.itemDetail.get(i);
+        String[] split = this.tempUserDeField.split("-");
+        de.setUdColumnCode(split[0]);
+        // String name =
+        // ejbUdColumnScopeMasterFacade.findByColumnCode(this.tempUserDeField);
+        de.setUdColumnName(split[1]);
+        this.itemDetail.set(i, de);
     }
 
     /*
@@ -379,19 +418,40 @@ public class UserDeDataScopeSetController implements Serializable {
         this.tempUserDeFieldList = tempUserDeFieldList;
     }
 
-    public String getUserDeFieldTemp() {
-        return userDeFieldTemp;
+    public String getTempUserDeField() {
+        return tempUserDeField;
     }
 
-    public void setUserDeFieldTemp(String userDeFieldTemp) {
-        this.userDeFieldTemp = userDeFieldTemp;
+    public void setTempUserDeField(String tempUserDeField) {
+        this.tempUserDeField = tempUserDeField;
+    }
+
+    public String getTempRTNField() {
+        return tempRTNField;
+    }
+
+    public void setTempRTNField(String tempRTNField) {
+        this.tempRTNField = tempRTNField;
+    }
+
+    public void genReturnFieldMenu(ValueChangeEvent e) {
+        // initial新增/編輯時回傳欄位下拉選單
+        this.itemReturnFieldMenu = new ArrayList<SelectItem>();
+        List<RdDataColumn> list = ejbRdDataColumnFacade.getColumnByClassCode(e.getNewValue().toString());
+        for (RdDataColumn rd : list) {
+            RdDataColumnPK pk = rd.getRdDataColumnPK();
+            this.itemReturnFieldMenu
+                .add(new SelectItem(pk.getClassCode() + "-" + pk.getTableName()
+                        + "-" + pk.getColumnName(), rd.getColumnChnName()));
+        }
     }
 
     private void genUdFieldScopeMasterMenu() {
         this.userDeFieldScopeMenu = new ArrayList<SelectItem>();
         List<UdColumnScopeMaster> allUdColumnMaster = ejbUdColumnScopeMasterFacade.findAllSort();
         for (UdColumnScopeMaster m : allUdColumnMaster) {
-            this.userDeFieldScopeMenu.add(new SelectItem(m.getUdColumnCode() + "-" + m.getUdColumnName(), m.getUdColumnCode()));
+            this.userDeFieldScopeMenu
+                .add(new SelectItem(m.getUdColumnCode() + "-" + m.getUdColumnName(), m.getUdColumnCode()));
         }
     }
 
@@ -399,7 +459,7 @@ public class UserDeDataScopeSetController implements Serializable {
         this.itemMethodNameMenu = new ArrayList<SelectItem>();
         List<UdMethodMaster> allMethodMaster = ejbUdMethodMasterFacade.findAllSort();
         for (UdMethodMaster m : allMethodMaster) {
-            this.itemMethodNameMenu.add(new SelectItem(m.getMethodName(), m.getMethodDesc()));
+            this.itemMethodNameMenu.add(new SelectItem(m.getMethodName(), m.getMethodName()));
         }
     }
 
@@ -411,22 +471,18 @@ public class UserDeDataScopeSetController implements Serializable {
         }
     }
 
-    private void loadReturnFieldMenu(String classCode) {
-        // initial新增/編輯時回傳欄位下拉選單
-        this.itemReturnFieldMenu = new ArrayList<SelectItem>();
-        List<RdDataColumn> list = ejbRdDataColumnFacade.getColumnByClassCode(classCode);
-        for (RdDataColumn rd : list) {
-            RdDataColumnPK pk = rd.getRdDataColumnPK();
-            this.itemReturnFieldMenu
-                .add(new SelectItem(pk.getClassCode() + "+" + pk.getTableName()
-                        + "+" + pk.getColumnName(), rd.getColumnChnName()));
-        }
-    }
-
     /*
      * 載入detail
      */
     private void setItemDetail() {
+        String className = ejbRdDataClassFacade.getClassNameByClassCode(this.currentItem.getClassCode());
+        this.currentItem.setClassName(className);
+        QueryUdColumnScopeDetailVO vo = new QueryUdColumnScopeDetailVO();
+        vo.setClassCode(this.currentItem.getClassCode());
+        vo.setTableName(this.currentItem.getTableName());
+        vo.setColumnName(this.currentItem.getColumnName());
+        String columnCHNName = ejbRdDataColumnFacade.getFieldCNNameMenu(vo);
+        this.currentItem.setColumnCHNName(columnCHNName);
         String code = this.currentItem.getScopeCode();
         this.detail = ejbUdDataScopeDetailFacade.findByScopeCode(code);
     }

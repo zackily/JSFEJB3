@@ -41,7 +41,10 @@ public class UdMethodDetailFacade extends AbstractFacade<UdMethodDetail> {
     }
 
     public List<UdMethodDetail> findByMethodName(String tempMethodName) {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("from UdMethodDetail m where m.udMethodDetailPK.methodName =:tempMethodName");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("tempMethodName", tempMethodName);
+        return query.getResultList();
     }
 }

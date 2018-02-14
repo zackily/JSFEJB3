@@ -9,6 +9,7 @@ import cub.entities.RdOptionItem;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -53,6 +54,10 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
                 .append(" where r.rdOptionItemPK.itemCode =:itemCode and r.rdOptionItemPK.classCode = 9");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("itemCode", Short.valueOf(itemCode));
-        return null == query.getSingleResult() ? "" : query.getSingleResult().toString();
+        try {
+            return query.getSingleResult().toString();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

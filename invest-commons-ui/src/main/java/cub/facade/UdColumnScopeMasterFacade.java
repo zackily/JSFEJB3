@@ -39,6 +39,14 @@ public class UdColumnScopeMasterFacade extends AbstractFacade<UdColumnScopeMaste
         return query.getResultList();
     }
     
+    public String findByColumnCode(String code) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select u.udColumnName from UdColumnScopeMaster u where u.udColumnCode =:code");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("code", code);
+        return null != query.getSingleResult() ? query.getSingleResult().toString() : "";
+    }
+    
     public List<UdColumnScopeMaster> findAllSort(){
         StringBuilder jpql = new StringBuilder(100);
         jpql.append("from UdColumnScopeMaster u order by u.udColumnCode asc");
