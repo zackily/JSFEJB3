@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                >
+    <f:view contentType="text/html" >
+        <h:head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <h:outputStylesheet library="css" name="stylesheet.css"/>
+            <h:outputStylesheet library="css" name="jsfcrud.css"/>
+            <h:outputScript library="js" name="jsfcrud.js"/>
+            <title><ui:insert name="title"/></title>
+            <ui:insert name="head"></ui:insert>            
+        </h:head>
+        <!--        <h:body style="background-image: url('/Prototype_EE/resources/images/BK.jpg')">-->
+        <h:body>
+            <p:growl id="growl" life="3000" />
+            <!--<div class="page">-->
+                <!--<center>-->
+                
+                <table border="0" style="width: 100%;height: 100%">
+                        
+                    <tr style="height: 86px">
+                            <td colspan="2">                              
+                                 <div class="header">
+                                <ui:include src="../jsff/pageHeader.xhtml"/>
+                            </div>
+                             
+                             </td>       
+                                    
+                               
+                            </tr>
+                            <tr>
+                                <td style="width: 170px;vertical-align: top"> 
+                                    <ui:include src="../jsff/menu.xhtml"/>
+                                </td>       
+                                    
+                                 <td> 
+                                 
+                                 <ui:insert name="body"/>
+                                 
+                                 </td>     
+                                <!--<div class="header">-->
+                                    <!--<ui:include src="../jsff/pageHeader.xhtml"/>-->
+                                   
+                                <!--</div>-->
+                            </tr>
+                           
+                   
+                      
+                    </table>
+                <!--</center>-->
+                <!--                <div class="footer">
+                                    <ui:include src="../jsff/pageFooter.xhtml"/>
+                                </div>-->
+            <!--</div>-->
+        </h:body>
+    </f:view>
+</ui:composition>

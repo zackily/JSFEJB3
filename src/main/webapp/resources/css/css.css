@@ -1,0 +1,34 @@
+@charset "UTF-8";
+/* CSS Document */
+
+body {
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    /*    background:url(//resources/images/BK.jpg) repeat; height:505px; padding-top:70px; width:100%;*/
+
+}
+
+.title_01{
+    font-family:微軟正黑體, Microsoft JhengHei, Arial;
+    font-size:18px;
+    color:#00841f;
+    line-height:22px;
+}
+
+.input{
+    font-family:微軟正黑體, Microsoft JhengHei, Arial;
+    font-size:18px;
+    color:#999;
+    line-height:22px;
+}
+img{
+    border: 0px;
+}
+.btn_green{ 
+  width:102px; height:31px; background:url(/Prototype_EE/resources/images/btn_login.gif) no-repeat 0 0; display:block; margin:6px 7px 0 0; float:left;
+}
+
+/*
+.index_main{ background:url(/starbucks_elearning/resources//images/login_2.png) repeat; height:505px; padding-top:70px; width:100%;}*/

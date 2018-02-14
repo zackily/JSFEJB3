@@ -1,0 +1,81 @@
+
+#top {
+    position: relative;
+    background-color: #eff5fa;
+    color: white;
+    padding: 0px;
+    margin: 0px 0px 0px 0px;
+}
+
+#bottom {
+    /*position: relative;*/
+    background-color: #a8a8dd;
+    padding: 0px;
+    margin-bottom: 0px;
+    position:fixed;
+    left:0px;
+    bottom:0px;
+    height:60px;
+    width:100%;
+}
+
+#left {
+
+    padding:0px;
+    /*color: #045491;*/
+   background:#eff5fa;
+    position:fixed;
+    left:0px;   
+    height:100%;
+    width:100%;
+}
+
+#right {
+    float: right;
+    background-color: #eff5fa;
+    padding: 0px;
+    width: 150px;
+}
+
+.center_content {
+    position: relative;
+    background-color: #eff5fa;
+    padding: 0px;
+}
+
+.left_content {
+    background-color: #eff5fa;
+    padding: 0px;
+    margin-left: 170px;
+}
+
+.right_content {
+    background-color: #eff5fa;
+    padding: 0px;
+    margin: 0px 170px 0px 170px;
+}
+
+#top a:link, #top a:visited {
+    color: white;
+    font-weight : bold;
+    text-decoration: none;
+}
+
+#top a:link:hover, #top a:visited:hover  {
+    color: black;
+    font-weight : bold;
+    text-decoration : underline;
+}
+.header
+{
+    background:url(/eip/faces/javax.faces.resource/images/header-bg.jpg) repeat-x left top;
+    height:100px;
+    position:relative;
+}
+
+.footer{
+    margin:0px;
+    padding:0px;
+    color: #FFF;
+    background-color:#a8a8dd;
+}
