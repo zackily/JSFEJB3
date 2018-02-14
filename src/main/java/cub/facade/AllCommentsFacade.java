@@ -15,14 +15,14 @@ import javax.persistence.Query;
  * @author NT48810
  */
 @Stateless
-public class AllTabCommentsFacade {
+public class AllCommentsFacade {
 
     @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-FUND")
     private EntityManager emFund;
     @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-GOLD")
     private EntityManager emGold;
-    private final static String IVTLXIVP01FUND = "IVTLXIVP01FUND";
-    private final static String IVTLXIVP01GOLD = "IVTLXIVP01GOLD";
+    private static final  String IVTLXIVP01FUND = "IVTLXIVP01FUND";
+    private static final  String IVTLXIVP01GOLD = "IVTLXIVP01GOLD";
 
     public String[] getAllTabComments(String owner) {
         StringBuilder sql = new StringBuilder(100);
