@@ -1,0 +1,125 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+
+	<ui:define name="title">
+		<h:outputText value="欄位定義作業(RCMM99)" />
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="mainForm" style="width: 60%">
+			<p:growl id="growl" life="2000" />
+			<p:panel header="欄位定義作業(RCMM99)">
+				<p:panelGrid columns="2"
+					columnClasses="ui-grid-col-2, ui-grid-col-8" style="width:100%"
+					layout="grid">
+					<p:panelGrid columns="1" style="width: 100%" layout="grid">
+						<p:commandButton value="新增" style="width: 100%"
+							actionListener="#{columnDefinitionController.create}"
+							oncomplete="PF('createDialog').show();" update=":dialogForm"
+							process="@this" />
+						<p:commandButton value="編輯" style="width: 100%"
+							actionListener="#{columnDefinitionController.edit}"
+							oncomplete="PF('createDialog').show();"
+							update=":createDialog :dialogForm" process="@this" />
+						<p:commandButton value="刪除" style="width: 100%"
+							onclick="PF('deleteConfirm').show()" />
+					</p:panelGrid>
+					<p:panelGrid columns="1" style="width:100%" layout="grid">
+						<p:panelGrid columns="4" style="width: 100%" layout="grid">
+							<p:commandButton value="&lt;&lt;"
+								actionListener="#{columnDefinitionController.lookupMaster(0)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&lt;"
+								actionListener="#{columnDefinitionController.lookupMaster(-1)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&gt;"
+								actionListener="#{columnDefinitionController.lookupMaster(1)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&gt;&gt;"
+								actionListener="#{columnDefinitionController.lookupMaster(columnDefinitionController.master.size())}"
+								style="width: 80%" update=":mainForm" />
+						</p:panelGrid>
+
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-4, ui-grid-col-6">
+							<p:outputLabel value="資料類別代碼" />
+							<p:outputLabel
+								value="#{columnDefinitionController.currentItem.rdDataColumnPK.classCode}" />
+							<p:outputLabel value="Table名稱" />
+							<p:outputLabel
+								value="#{columnDefinitionController.currentItem.rdDataColumnPK.tableName}" />
+							<p:outputLabel value="Column名稱" />
+							<p:outputLabel
+								value="#{columnDefinitionController.currentItem.rdDataColumnPK.columnName}" />
+							<p:outputLabel value="Column說明" />
+							<p:outputLabel
+								value="#{columnDefinitionController.currentItem.columnChnName}" />
+						</p:panelGrid>
+					</p:panelGrid>
+				</p:panelGrid>
+			</p:panel>
+			<p:confirmDialog header="刪除自定義欄位" widgetVar="deleteConfirm"
+				appendTo="@(body)">
+				<f:facet name="message">
+					<h:outputText value="是否確定要刪除?" />
+				</f:facet>
+				<p:commandButton title="GDelYesButton" value="Yes"
+					actionListener="#{columnDefinitionController.delete}"
+					oncomplete="PF('deleteConfirm').hide()" process="@this"
+					update=":mainForm :mainForm:growl" />
+				<p:commandButton title="GDelNoButton" value="No"
+					oncomplete="PF('deleteConfirm').hide()" />
+			</p:confirmDialog>
+
+		</h:form>
+		<p:dialog id="createDialog"
+			header="#{columnDefinitionController.editDialogLabel}"
+			widgetVar="createDialog" modal="true" height="600" width="600"
+			appendTo="@(body)">
+			<h:form id="dialogForm">
+				<p:panelGrid columns="2" layout="grid"
+					columnClasses="ui-grid-col-4, ui-grid-col-6">
+					<p:outputLabel value="資料類別代碼" />
+					<p:selectOneMenu
+						value="#{columnDefinitionController.item.rdDataColumnPK.classCode}"
+						valueChangeListener="#{columnDefinitionController.genTableMenu}">
+						<p:ajax event="change" immediate="true" process="@this" />
+						<f:selectItems value="#{columnDefinitionController.classNameMenu}" />
+					</p:selectOneMenu>
+					<p:outputLabel value="Table名稱" />
+					<p:selectOneMenu
+						value="#{columnDefinitionController.item.rdDataColumnPK.tableName}"
+						valueChangeListener="#{columnDefinitionController.genColumnMenu}">
+						<p:ajax event="change" immediate="true" process="@this" />
+						<f:selectItems value="#{columnDefinitionController.tableNameMenu}" />
+					</p:selectOneMenu>
+					<p:outputLabel value="Column名稱" />
+					<p:selectOneMenu
+						value="#{columnDefinitionController.item.rdDataColumnPK.columnName}"
+						valueChangeListener="#{columnDefinitionController.genColumnDesc}">
+						<p:ajax event="change" immediate="true" process="@this" />
+						<f:selectItems
+							value="#{columnDefinitionController.columnNameMenu}" />
+					</p:selectOneMenu>
+					<p:outputLabel value="Column說明" />
+					<p:outputLabel
+						value="#{columnDefinitionController.item.columnChnName}" />
+				</p:panelGrid>
+				<p:panelGrid columns="1">
+					<p:panel>
+						<p:commandButton
+							value="#{columnDefinitionController.editDialogLabel}"
+							actionListener="#{columnDefinitionController.save}"
+							update=":mainForm :dialogForm"
+							oncomplete="PF('createDialog').hide()" />
+						<p:commandButton value="取消" onclick="PF('createDialog').hide()" />
+					</p:panel>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

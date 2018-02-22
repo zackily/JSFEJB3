@@ -5,6 +5,8 @@
  */
 package cub.facade;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,49 +19,26 @@ import javax.persistence.Query;
 @Stateless
 public class AllCommentsFacade {
 
-    @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-FUND")
-    private EntityManager emFund;
-    @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-GOLD")
-    private EntityManager emGold;
-    private static final  String IVTLXIVP01FUND = "IVTLXIVP01FUND";
-    private static final  String IVTLXIVP01GOLD = "IVTLXIVP01GOLD";
+    @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-SNAPSHOTPU")
+    private EntityManager em;
 
-    public String[] getAllTabComments(String owner) {
+    public List<String[]> getAllTabComments(String owner) {
         StringBuilder sql = new StringBuilder(100);
-        sql.append("select TABLE_NAME, COMMENTS from ALL_TAB_COMMENTS ")
-            .append("where OWNER='")
-            .append(owner)
-            .append("' and TABLE_NAME not like 'BIN$%'");
-        Query query = getCurrentEntityManager(owner).createQuery(sql.toString());
-        try {
-            return (String[]) query.getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
+        sql.append("select at.TABLE_NAME, at.COMMENTS from ALL_TAB_COMMENTS at ")
+            .append("where at.TABLE_NAME not like 'BIN$%' and at.OWNER ='")
+            .append(owner).append("'");
+        Query query = em.createNativeQuery(sql.toString());
+        return query.getResultList();
     }
 
-    public String[] getAllColComments(String owner) {
+    public List<String[]> getAllColComments(String owner, String tableName) {
         StringBuilder sql = new StringBuilder(100);
-        sql.append("select TABLE_NAME, COMMENTS from ALL_COL_COMMENTS ")
-            .append("where OWNER='")
-            .append(owner)
-            .append("' and TABLE_NAME not like 'BIN$%'");
-        Query query = getCurrentEntityManager(owner).createQuery(sql.toString());
-        try {
-            return (String[]) query.getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
+        sql.append("select ac.COLUMN_NAME, ac.COMMENTS from ALL_COL_COMMENTS ac ")
+            .append("where ac.TABLE_NAME ='")
+            .append(tableName).append("' and ac.OWNER ='")
+            .append(owner).append("'");
+        Query query = em.createNativeQuery(sql.toString());
+        return query.getResultList();
     }
 
-    private EntityManager getCurrentEntityManager(String owner) {
-        switch (owner) {
-            case IVTLXIVP01FUND:
-                return emFund;
-            case IVTLXIVP01GOLD:
-                return emGold;
-            default:
-                return emFund;
-        }
-    }
 }
