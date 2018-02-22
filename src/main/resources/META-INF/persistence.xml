@@ -29,14 +29,14 @@
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties/>
   </persistence-unit>
-  <persistence-unit name="cub_invest-commons-ui_war_1.0-FUND" transaction-type="JTA">
-    <jta-data-source>java:app/rcmm_fund</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
-  </persistence-unit>
-  <persistence-unit name="cub_invest-commons-ui_war_1.0-GOLD" transaction-type="JTA">
-    <jta-data-source>java:app/rcmm_gold</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
-  </persistence-unit>
+<!--   <persistence-unit name="cub_invest-commons-ui_war_1.0-FUND" transaction-type="JTA"> -->
+<!--     <jta-data-source>java:app/rcmm_fund</jta-data-source> -->
+<!--     <exclude-unlisted-classes>false</exclude-unlisted-classes> -->
+<!--     <properties/> -->
+<!--   </persistence-unit> -->
+<!--   <persistence-unit name="cub_invest-commons-ui_war_1.0-GOLD" transaction-type="JTA"> -->
+<!--     <jta-data-source>java:app/rcmm_gold</jta-data-source> -->
+<!--     <exclude-unlisted-classes>false</exclude-unlisted-classes> -->
+<!--     <properties/> -->
+<!--   </persistence-unit> -->
 </persistence>

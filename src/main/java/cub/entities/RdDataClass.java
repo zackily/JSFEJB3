@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.entities;
 
@@ -26,13 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "RD_DATA_CLASS")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "RdDataClass.findAll", query = "SELECT r FROM RdDataClass r")
-    , @NamedQuery(name = "RdDataClass.findByClassCode", query = "SELECT r FROM RdDataClass r WHERE r.classCode = :classCode")
-    , @NamedQuery(name = "RdDataClass.findByClassName", query = "SELECT r FROM RdDataClass r WHERE r.className = :className")
-    , @NamedQuery(name = "RdDataClass.findByLogUserId", query = "SELECT r FROM RdDataClass r WHERE r.logUserId = :logUserId")
-    , @NamedQuery(name = "RdDataClass.findByLogDttm", query = "SELECT r FROM RdDataClass r WHERE r.logDttm = :logDttm")})
 public class RdDataClass implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +37,9 @@ public class RdDataClass implements Serializable {
     @Size(max = 20)
     @Column(name = "CLASS_NAME")
     private String className;
+    @Size(max = 20)
+    @Column(name = "DB_NAME")
+    private String dbName;
     @Size(max = 20)
     @Column(name = "LOG_USER_ID")
     private String logUserId;
@@ -72,6 +68,14 @@ public class RdDataClass implements Serializable {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
     }
 
     public String getLogUserId() {
@@ -104,7 +108,8 @@ public class RdDataClass implements Serializable {
             return false;
         }
         RdDataClass other = (RdDataClass) object;
-        if ((this.classCode == null && other.classCode != null) || (this.classCode != null && !this.classCode.equals(other.classCode))) {
+        if ((this.classCode == null && other.classCode != null)
+                || (this.classCode != null && !this.classCode.equals(other.classCode))) {
             return false;
         }
         return true;
@@ -114,5 +119,5 @@ public class RdDataClass implements Serializable {
     public String toString() {
         return "cub.entities.RdDataClass[ classCode=" + classCode + " ]";
     }
-    
+
 }

@@ -16,6 +16,7 @@ import javax.faces.model.SelectItem;
 
 import cub.entities.RdDataClass;
 import cub.entities.RdDataColumn;
+import cub.entities.RdDataColumnPK;
 import cub.facade.AllCommentsFacade;
 import cub.facade.RdDataClassFacade;
 import cub.facade.RdDataColumnFacade;
@@ -67,6 +68,12 @@ public class ColumnDefinitionController implements Serializable {
      */
     private String dbName;
 
+    private short tempClassCode;
+
+    private String tempTableName;
+
+    private String tempColumnName;
+
     @PostConstruct
     public void init() {
         this.master = new ArrayList<RdDataColumn>();
@@ -91,21 +98,31 @@ public class ColumnDefinitionController implements Serializable {
     // initial Table名稱下拉選單, call by classMenu change
     public void genTableMenu(ValueChangeEvent event) {
         this.dbName = ejbRdDataClassFacade.getDBNameByClassCode(Short.valueOf(event.getNewValue().toString()));
-        List<String[]> allTabComments = ejbAllCommentsfacade.getAllTabComments(this.dbName);
+        List<Object[]> allTabComments = ejbAllCommentsfacade.getAllTabComments(this.dbName);
         this.tableNameMenu = new ArrayList<SelectItem>();
-        for (String[] a : allTabComments) {
-            this.tableNameMenu.add(new SelectItem(a[0], a[1]));
+        for (Object[] a : allTabComments) {
+            Object[] ob = new Object[] { "", "" };
+            ob = a;
+            if (null != ob[0] && null != ob[1]) {
+                this.tableNameMenu.add(new SelectItem(a[0].toString(), a[1].toString()));
+            }
         }
     }
 
     // initial Column名稱下拉選單, call by tableNameMenu change
     public void genColumnMenu(ValueChangeEvent event) {
-        List<String[]> allColComments = ejbAllCommentsfacade.getAllColComments(this.dbName, event.getNewValue().toString());
+        List<Object[]> allColComments = ejbAllCommentsfacade.getAllColComments(this.dbName,
+            event.getNewValue().toString());
         this.columnNameMenu = new ArrayList<SelectItem>();
-        for (String[] a : allColComments) {
-            this.columnNameMenu.add(new SelectItem(a[0], a[1]));
+        for (Object[] a : allColComments) {
+            Object[] ob = new Object[] { "", "" };
+            ob = a;
+            if (null != ob[0] && null != ob[1]) {
+                this.columnNameMenu.add(new SelectItem(a[0].toString(), a[1].toString()));
+            }
         }
     }
+
     // call by ColumnMenu change
     public void genColumnDesc(ValueChangeEvent event) {
         this.item.setColumnChnName(event.getNewValue().toString());
@@ -158,8 +175,9 @@ public class ColumnDefinitionController implements Serializable {
      * 確認新增
      */
     public void save(ActionEvent event) {
-        
-        if (null != ejbRdDataColumnFacade.find(this.currentItem.getRdDataColumnPK())) {// 新增
+        RdDataColumnPK pk = new RdDataColumnPK(this.tempClassCode, this.tempTableName, this.tempColumnName);
+        this.currentItem.setRdDataColumnPK(pk);
+        if (null != ejbRdDataColumnFacade.find(pk)) {// 新增
             ejbRdDataColumnFacade.save(this.currentItem);
         } else {// 編輯
             ejbRdDataColumnFacade.edit(this.currentItem);
@@ -258,6 +276,30 @@ public class ColumnDefinitionController implements Serializable {
 
     public void setDbName(String dbName) {
         this.dbName = dbName;
+    }
+
+    public short getTempClassCode() {
+        return tempClassCode;
+    }
+
+    public void setTempClassCode(short tempClassCode) {
+        this.tempClassCode = tempClassCode;
+    }
+
+    public String getTempTableName() {
+        return tempTableName;
+    }
+
+    public void setTempTableName(String tempTableName) {
+        this.tempTableName = tempTableName;
+    }
+
+    public String getTempColumnName() {
+        return tempColumnName;
+    }
+
+    public void setTempColumnName(String tempColumnName) {
+        this.tempColumnName = tempColumnName;
     }
 
     private void addMessage(String summary, String detail) {
