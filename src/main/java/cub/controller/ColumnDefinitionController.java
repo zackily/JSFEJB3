@@ -1,0 +1,268 @@
+package cub.controller;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+
+import cub.entities.RdDataClass;
+import cub.entities.RdDataColumn;
+import cub.facade.AllCommentsFacade;
+import cub.facade.RdDataClassFacade;
+import cub.facade.RdDataColumnFacade;
+
+@ManagedBean(name = "columnDefinitionController")
+@ViewScoped
+public class ColumnDefinitionController implements Serializable {
+
+    @EJB
+    private RdDataColumnFacade ejbRdDataColumnFacade;
+    @EJB
+    private RdDataClassFacade ejbRdDataClassFacade;
+    @EJB
+    private AllCommentsFacade ejbAllCommentsfacade;
+    /*
+     * 欄位定義作業列表
+     */
+    private List<RdDataColumn> master;
+    /*
+     * 新增/編輯
+     */
+    private RdDataColumn item;
+    /*
+     * 待編輯欄位定義設定
+     */
+    private RdDataColumn currentItem;
+    /*
+     * 新增/編輯Dialog CommandButton value
+     */
+    private String editDialogLabel = "新增";
+    /*
+     * 欄位定義作業索引
+     */
+    private int currentIndex;
+    /*
+     * 資料類別代碼下拉選單
+     */
+    private List<SelectItem> classNameMenu;
+    /*
+     * Table名稱下拉選單
+     */
+    private List<SelectItem> tableNameMenu;
+    /*
+     * Column名稱下拉選單
+     */
+    private List<SelectItem> columnNameMenu;
+    /*
+     * Db Name
+     */
+    private String dbName;
+
+    @PostConstruct
+    public void init() {
+        this.master = new ArrayList<RdDataColumn>();
+        this.master = ejbRdDataColumnFacade.findAllSort();
+        this.item = new RdDataColumn();
+        this.currentItem = new RdDataColumn();
+        if (this.master.isEmpty()) {
+            this.master.add(this.item);
+        } else {
+            this.currentItem = this.master.get(0);
+        }
+        // 頁面載入欄位定義作業this.master的index
+        currentIndex = 0;
+        // initial Class資料類別代碼
+        List<RdDataClass> allClass = ejbRdDataClassFacade.findAllSort();
+        this.classNameMenu = new ArrayList<SelectItem>();
+        for (RdDataClass c : allClass) {
+            this.classNameMenu.add(new SelectItem(c.getClassCode(), c.getClassName()));
+        }
+    }
+
+    // initial Table名稱下拉選單, call by classMenu change
+    public void genTableMenu(ValueChangeEvent event) {
+        this.dbName = ejbRdDataClassFacade.getDBNameByClassCode(Short.valueOf(event.getNewValue().toString()));
+        List<String[]> allTabComments = ejbAllCommentsfacade.getAllTabComments(this.dbName);
+        this.tableNameMenu = new ArrayList<SelectItem>();
+        for (String[] a : allTabComments) {
+            this.tableNameMenu.add(new SelectItem(a[0], a[1]));
+        }
+    }
+
+    // initial Column名稱下拉選單, call by tableNameMenu change
+    public void genColumnMenu(ValueChangeEvent event) {
+        List<String[]> allColComments = ejbAllCommentsfacade.getAllColComments(this.dbName, event.getNewValue().toString());
+        this.columnNameMenu = new ArrayList<SelectItem>();
+        for (String[] a : allColComments) {
+            this.columnNameMenu.add(new SelectItem(a[0], a[1]));
+        }
+    }
+    // call by ColumnMenu change
+    public void genColumnDesc(ValueChangeEvent event) {
+        this.item.setColumnChnName(event.getNewValue().toString());
+    }
+
+    /*
+     * 遍歷Master
+     */
+    public void lookupMaster(int target) {
+        int nextIndex = currentIndex + target;
+        switch (target) {
+            case 0:
+                this.currentItem = this.master.get(0);
+                currentIndex = 0;
+                break;
+            case -1:
+                if (nextIndex <= 0) {
+                    this.currentItem = this.master.get(0);
+                    currentIndex = 0;
+                } else {
+                    this.currentItem = this.master.get(nextIndex);
+                    currentIndex = nextIndex;
+                }
+                break;
+            case 1:
+                if (nextIndex >= this.master.size()) {
+                    this.currentItem = this.master.get(this.master.size() - 1);
+                    currentIndex = this.master.size() - 1;
+                } else {
+                    this.currentItem = this.master.get(nextIndex);
+                    currentIndex = nextIndex;
+                }
+                break;
+            default:
+                nextIndex = this.master.size() - 1;
+                this.currentItem = this.master.get(nextIndex);
+                currentIndex = nextIndex;
+        }
+    }
+
+    /*
+     * 點擊新增
+     */
+    public void create() {
+        this.item = new RdDataColumn();
+        this.editDialogLabel = "新增";
+    }
+
+    /*
+     * 確認新增
+     */
+    public void save(ActionEvent event) {
+        
+        if (null != ejbRdDataColumnFacade.find(this.currentItem.getRdDataColumnPK())) {// 新增
+            ejbRdDataColumnFacade.save(this.currentItem);
+        } else {// 編輯
+            ejbRdDataColumnFacade.edit(this.currentItem);
+        }
+        this.init();
+        this.currentItem = this.master.get(this.master.size() - 1);
+    }
+
+    /*
+     * 點擊修改
+     */
+    public void edit() {
+        this.editDialogLabel = "編輯";
+        this.item = this.currentItem;
+    }
+
+    /*
+     * 點擊刪除
+     */
+    public void delete() {
+        if (ejbRdDataColumnFacade.checkRuleNoExistByPK(this.currentItem.getRdDataColumnPK())) {
+            addMessage("System Error", "此欄位範圍已經被引用,請移除該引用才可進行刪除!");
+        } else {
+            ejbRdDataColumnFacade.remove(this.currentItem);
+        }
+        this.init();
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
+    }
+
+    public String getEditDialogLabel() {
+        return editDialogLabel;
+    }
+
+    public void setEditDialogLabel(String editDialogLabel) {
+        this.editDialogLabel = editDialogLabel;
+    }
+
+    public List<RdDataColumn> getMaster() {
+        return master;
+    }
+
+    public void setMaster(List<RdDataColumn> master) {
+        this.master = master;
+    }
+
+    public RdDataColumn getItem() {
+        return item;
+    }
+
+    public void setItem(RdDataColumn item) {
+        this.item = item;
+    }
+
+    public RdDataColumn getCurrentItem() {
+        return currentItem;
+    }
+
+    public void setCurrentItem(RdDataColumn currentItem) {
+        this.currentItem = currentItem;
+    }
+
+    public List<SelectItem> getClassNameMenu() {
+        return classNameMenu;
+    }
+
+    public void setClassNameMenu(List<SelectItem> classNameMenu) {
+        this.classNameMenu = classNameMenu;
+    }
+
+    public List<SelectItem> getTableNameMenu() {
+        return tableNameMenu;
+    }
+
+    public void setTableNameMenu(List<SelectItem> tableNameMenu) {
+        this.tableNameMenu = tableNameMenu;
+    }
+
+    public List<SelectItem> getColumnNameMenu() {
+        return columnNameMenu;
+    }
+
+    public void setColumnNameMenu(List<SelectItem> columnNameMenu) {
+        this.columnNameMenu = columnNameMenu;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    private void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+}

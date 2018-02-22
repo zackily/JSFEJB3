@@ -52,5 +52,17 @@ public class RdDataClassFacade extends AbstractFacade<RdDataClass> {
             return null;
         }
     }
+    
+    public String getDBNameByClassCode(short classCode) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select r.dbName from RdDataClass r where r.classCode=:classCode");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("classCode", classCode);
+        try {
+            return query.getSingleResult().toString();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
 }
