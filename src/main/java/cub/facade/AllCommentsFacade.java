@@ -25,20 +25,19 @@ public class AllCommentsFacade {
     public List<Object[]> getAllTabComments(String owner) {
         StringBuilder sql = new StringBuilder(100);
         sql.append("select at.TABLE_NAME, at.COMMENTS from ALL_TAB_COMMENTS at ")
-            .append("where at.TABLE_NAME not like 'BIN$%' and at.OWNER ='")
-            .append(owner).append("'");
+            .append("where at.TABLE_NAME not like 'BIN$%' and at.OWNER =?");
         Query query = em.createNativeQuery(sql.toString());
+        query.setParameter(1, owner);
         return query.getResultList();
     }
 
     public List<Object[]> getAllColComments(String owner, String tableName) {
         StringBuilder sql = new StringBuilder(100);
         sql.append("select ac.COLUMN_NAME, ac.COMMENTS from ALL_COL_COMMENTS ac ")
-            .append("where ac.TABLE_NAME ='")
-            .append(tableName).append("' and ac.OWNER ='")
-            .append(owner).append("'");
+            .append("where ac.TABLE_NAME =? and ac.OWNER =?");
         Query query = em.createNativeQuery(sql.toString());
+        query.setParameter(1, tableName);
+        query.setParameter(2, owner);
         return query.getResultList();
     }
-
 }

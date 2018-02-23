@@ -2,7 +2,10 @@ package cub.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -64,6 +67,10 @@ public class ColumnDefinitionController implements Serializable {
      */
     private List<SelectItem> columnNameMenu;
     /*
+     * Column名稱下拉選單
+     */
+    private Map<String, String> columnDescMap;
+    /*
      * Db Name
      */
     private String dbName;
@@ -104,13 +111,14 @@ public class ColumnDefinitionController implements Serializable {
             Object[] ob = new Object[] { "", "" };
             ob = a;
             if (null != ob[0] && null != ob[1]) {
-                this.tableNameMenu.add(new SelectItem(a[0].toString(), a[1].toString()));
+                this.tableNameMenu.add(new SelectItem(a[0].toString(), a[0].toString()));
             }
         }
     }
 
     // initial Column名稱下拉選單, call by tableNameMenu change
     public void genColumnMenu(ValueChangeEvent event) {
+        this.columnDescMap = new HashMap<String, String>();
         List<Object[]> allColComments = ejbAllCommentsfacade.getAllColComments(this.dbName,
             event.getNewValue().toString());
         this.columnNameMenu = new ArrayList<SelectItem>();
@@ -118,14 +126,16 @@ public class ColumnDefinitionController implements Serializable {
             Object[] ob = new Object[] { "", "" };
             ob = a;
             if (null != ob[0] && null != ob[1]) {
-                this.columnNameMenu.add(new SelectItem(a[0].toString(), a[1].toString()));
+                this.columnNameMenu.add(new SelectItem(a[0].toString(), a[0].toString()));
+                this.columnDescMap.put(a[0].toString(), a[1].toString());
             }
         }
     }
 
     // call by ColumnMenu change
     public void genColumnDesc(ValueChangeEvent event) {
-        this.item.setColumnChnName(event.getNewValue().toString());
+        String cname = this.columnDescMap.get(event.getNewValue().toString());
+        this.item.setColumnChnName(cname);
     }
 
     /*
@@ -176,23 +186,29 @@ public class ColumnDefinitionController implements Serializable {
      */
     public void save(ActionEvent event) {
         RdDataColumnPK pk = new RdDataColumnPK(this.tempClassCode, this.tempTableName, this.tempColumnName);
-        this.currentItem.setRdDataColumnPK(pk);
-        if (null != ejbRdDataColumnFacade.find(pk)) {// 新增
-            ejbRdDataColumnFacade.save(this.currentItem);
+        if (null == ejbRdDataColumnFacade.find(pk)) {// 新增
+            this.item.setRdDataColumnPK(pk);
+            this.item.setLogUserId("Gilbert");
+            this.item.setLogDttm(new Date());
+            ejbRdDataColumnFacade.create(this.item);
         } else {// 編輯
-            ejbRdDataColumnFacade.edit(this.currentItem);
+//            ejbRdDataColumnFacade.edit(this.currentItem);
+            addMessage("System Error", "此欄位範圍已存在");
         }
         this.init();
         this.currentItem = this.master.get(this.master.size() - 1);
     }
-
-    /*
-     * 點擊修改
-     */
-    public void edit() {
-        this.editDialogLabel = "編輯";
-        this.item = this.currentItem;
-    }
+//
+//    /*
+//     * 點擊修改
+//     */
+//    public void edit() {
+//        this.editDialogLabel = "編輯";
+//        this.item = this.currentItem;
+//        this.tempClassCode = this.item.getRdDataColumnPK().getClassCode();
+//        this.tempTableName = this.item.getRdDataColumnPK().getTableName();
+//        this.tempColumnName = this.item.getRdDataColumnPK().getColumnName();
+//    }
 
     /*
      * 點擊刪除
@@ -268,6 +284,14 @@ public class ColumnDefinitionController implements Serializable {
 
     public void setColumnNameMenu(List<SelectItem> columnNameMenu) {
         this.columnNameMenu = columnNameMenu;
+    }
+
+    public Map<String, String> getColumnDescMap() {
+        return columnDescMap;
+    }
+
+    public void setColumnDescMap(Map<String, String> columnDescMap) {
+        this.columnDescMap = columnDescMap;
     }
 
     public String getDbName() {

@@ -5,15 +5,17 @@
  */
 package cub.facade;
 
-import cub.entities.RdDataColumn;
-import cub.entities.RdDataColumnPK;
-import cub.vo.QueryUdColumnScopeDetailVO;
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import cub.entities.RdDataColumn;
+import cub.entities.RdDataColumnPK;
+import cub.vo.QueryUdColumnScopeDetailVO;
 
 /**
  *
@@ -76,15 +78,15 @@ public class RdDataColumnFacade extends AbstractFacade<RdDataColumn> {
 
     public boolean checkRuleNoExistByPK(RdDataColumnPK pk) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("select * from UdColumnScopeMaster mm left join")
-            .append(" (select m.classCode, d.tableName, d.columnName from DataScopeMaster m")
-            .append(" left join DataScopeDetail d ON m.scopeCode=d.dataScopeDetailPK.scopeCode) n")
-            .append(" on mm.classCode = n.classCode and mm.tableName = n.tableName and mm.columnName = n.columnName")
-            .append(" where mm.classCode=:code and mm.tableName=:tableName and mm.columnName=:columnName");
-        Query query = em.createQuery(jpql.toString());
-        query.setParameter("code", pk.getClassCode());
-        query.setParameter("tableName", pk.getTableName());
-        query.setParameter("columnName", pk.getColumnName());
+        jpql.append("select * from UD_COLUMN_SCOPE_MASTER mm left join")
+            .append(" (select m.CLASS_CODE, d.TABLE_NAME, d.COLUMN_NAME from DATA_SCOPE_MASTER m")
+            .append(" left join DATA_SCOPE_DETAIL d ON m.SCOPE_CODE=d.SCOPE_CODE) n")
+            .append(" on mm.CLASS_CODE = n.CLASS_CODE and mm.TABLE_NAME = n.TABLE_NAME and mm.COLUMN_NAME = n.COLUMN_NAME")
+            .append(" where mm.CLASS_CODE=? and mm.TABLE_NAME=? and mm.COLUMN_NAME=?");
+        Query query = em.createNativeQuery(jpql.toString());
+        query.setParameter(1, pk.getClassCode());
+        query.setParameter(2, pk.getTableName());
+        query.setParameter(3, pk.getColumnName());
         return query.getResultList().size() > 0 ? true : false;
     }
 
