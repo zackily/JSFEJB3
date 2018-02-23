@@ -21,10 +21,6 @@
 							actionListener="#{columnDefinitionController.create}"
 							oncomplete="PF('createDialog').show();" update=":dialogForm"
 							process="@this" />
-						<p:commandButton value="編輯" style="width: 100%"
-							actionListener="#{columnDefinitionController.edit}"
-							oncomplete="PF('createDialog').show();"
-							update=":createDialog :dialogForm" process="@this" />
 						<p:commandButton value="刪除" style="width: 100%"
 							onclick="PF('deleteConfirm').show()" />
 					</p:panelGrid>
@@ -48,7 +44,7 @@
 							columnClasses="ui-grid-col-4, ui-grid-col-6">
 							<p:outputLabel value="資料類別代碼" />
 							<p:outputLabel
-								value="#{columnDefinitionController.currentItem.rdDataColumnPK.classCode}" />
+								value="#{columnDefinitionController.currentItem.rdDataColumnPK.classCode}" converter="#{classCodeConverter}" />
 							<p:outputLabel value="Table名稱" />
 							<p:outputLabel
 								value="#{columnDefinitionController.currentItem.rdDataColumnPK.tableName}" />
@@ -86,22 +82,31 @@
 					<p:outputLabel value="資料類別代碼" />
 					<p:selectOneMenu
 						value="#{columnDefinitionController.tempClassCode}"
-						valueChangeListener="#{columnDefinitionController.genTableMenu}">
-						<p:ajax event="change" immediate="true" process="@this" update=":dialogForm:tempTableName" />
+						valueChangeListener="#{columnDefinitionController.genTableMenu}"
+						required="true">
+						<p:ajax event="change" immediate="true" process="@this"
+							update=":dialogForm:tempTableName" />
+						<f:selectItem noSelectionOption="true" />
 						<f:selectItems value="#{columnDefinitionController.classNameMenu}" />
 					</p:selectOneMenu>
 					<p:outputLabel value="Table名稱" />
 					<p:selectOneMenu id="tempTableName"
 						value="#{columnDefinitionController.tempTableName}"
-						valueChangeListener="#{columnDefinitionController.genColumnMenu}">
-						<p:ajax event="change" immediate="true" process="@this" update=":dialogForm:tempColumnName" />
+						valueChangeListener="#{columnDefinitionController.genColumnMenu}"
+						required="true">
+						<p:ajax event="change" immediate="true" process="@this"
+							update=":dialogForm:tempColumnName" />
+						<f:selectItem noSelectionOption="true" />
 						<f:selectItems value="#{columnDefinitionController.tableNameMenu}" />
 					</p:selectOneMenu>
 					<p:outputLabel value="Column名稱" />
 					<p:selectOneMenu id="tempColumnName"
 						value="#{columnDefinitionController.tempColumnName}"
-						valueChangeListener="#{columnDefinitionController.genColumnDesc}">
-						<p:ajax event="change" immediate="true" process="@this" update=":dialogForm:outputColumnChnName" />
+						valueChangeListener="#{columnDefinitionController.genColumnDesc}"
+						required="true">
+						<p:ajax event="change" immediate="true" process="@this"
+							update=":dialogForm:outputColumnChnName" />
+						<f:selectItem noSelectionOption="true" />
 						<f:selectItems
 							value="#{columnDefinitionController.columnNameMenu}" />
 					</p:selectOneMenu>
