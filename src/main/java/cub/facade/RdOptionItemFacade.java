@@ -60,4 +60,15 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
             return null;
         }
     }
+
+    public List<Object[]> findAllItemCodes(String columnName) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select distinct roi.ITEM_CODE, roi.ITEM_NAME")
+            .append(" from RD_OPTION_ITEM roi right join UD_METHOD_DETAIL umd")
+            .append(" on roi.COLUMN_NAME = umd.PARAMETER_NAME")
+            .append(" where roi.COLUMN_NAME = ? order by roi.ITEM_CODE");
+        Query query = em.createNativeQuery(jpql.toString());
+        query.setParameter(1, columnName);
+        return query.getResultList();
+    }
 }

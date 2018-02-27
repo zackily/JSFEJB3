@@ -1,17 +1,22 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -23,15 +28,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "UD_DATA_SCOPE_DETAIL")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "UdDataScopeDetail.findAll", query = "SELECT u FROM UdDataScopeDetail u")
-    , @NamedQuery(name = "UdDataScopeDetail.findByScopeCode", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udDataScopeDetailPK.scopeCode = :scopeCode")
-    , @NamedQuery(name = "UdDataScopeDetail.findBySeqNo", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udDataScopeDetailPK.seqNo = :seqNo")
-    , @NamedQuery(name = "UdDataScopeDetail.findByParameterName", query = "SELECT u FROM UdDataScopeDetail u WHERE u.parameterName = :parameterName")
-    , @NamedQuery(name = "UdDataScopeDetail.findByParameterDesc", query = "SELECT u FROM UdDataScopeDetail u WHERE u.parameterDesc = :parameterDesc")
-    , @NamedQuery(name = "UdDataScopeDetail.findByValue", query = "SELECT u FROM UdDataScopeDetail u WHERE u.value = :value")
-    , @NamedQuery(name = "UdDataScopeDetail.findByValueDesc", query = "SELECT u FROM UdDataScopeDetail u WHERE u.valueDesc = :valueDesc")
-    , @NamedQuery(name = "UdDataScopeDetail.findByUdColumnCode", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udColumnCode = :udColumnCode")
-    , @NamedQuery(name = "UdDataScopeDetail.findByUdColumnName", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udColumnName = :udColumnName")})
+        @NamedQuery(name = "UdDataScopeDetail.findAll", query = "SELECT u FROM UdDataScopeDetail u"),
+        @NamedQuery(name = "UdDataScopeDetail.findByScopeCode", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udDataScopeDetailPK.scopeCode = :scopeCode"),
+        @NamedQuery(name = "UdDataScopeDetail.findBySeqNo", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udDataScopeDetailPK.seqNo = :seqNo"),
+        @NamedQuery(name = "UdDataScopeDetail.findByParameterName", query = "SELECT u FROM UdDataScopeDetail u WHERE u.parameterName = :parameterName"),
+        @NamedQuery(name = "UdDataScopeDetail.findByParameterDesc", query = "SELECT u FROM UdDataScopeDetail u WHERE u.parameterDesc = :parameterDesc"),
+        @NamedQuery(name = "UdDataScopeDetail.findByValue", query = "SELECT u FROM UdDataScopeDetail u WHERE u.value = :value"),
+        @NamedQuery(name = "UdDataScopeDetail.findByValueDesc", query = "SELECT u FROM UdDataScopeDetail u WHERE u.valueDesc = :valueDesc"),
+        @NamedQuery(name = "UdDataScopeDetail.findByUdColumnCode", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udColumnCode = :udColumnCode"),
+        @NamedQuery(name = "UdDataScopeDetail.findByUdColumnName", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udColumnName = :udColumnName") })
 public class UdDataScopeDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,6 +60,8 @@ public class UdDataScopeDetail implements Serializable {
     @Size(max = 50)
     @Column(name = "UD_COLUMN_NAME")
     private String udColumnName;
+    @Transient
+    private List<SelectItem> itemRdOptionItemMenu;
 
     public UdDataScopeDetail() {
     }
@@ -123,6 +130,14 @@ public class UdDataScopeDetail implements Serializable {
         this.udColumnName = udColumnName;
     }
 
+    public List<SelectItem> getItemRdOptionItemMenu() {
+        return itemRdOptionItemMenu;
+    }
+
+    public void setItemRdOptionItemMenu(List<SelectItem> itemRdOptionItemMenu) {
+        this.itemRdOptionItemMenu = itemRdOptionItemMenu;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -137,7 +152,8 @@ public class UdDataScopeDetail implements Serializable {
             return false;
         }
         UdDataScopeDetail other = (UdDataScopeDetail) object;
-        if ((this.udDataScopeDetailPK == null && other.udDataScopeDetailPK != null) || (this.udDataScopeDetailPK != null && !this.udDataScopeDetailPK.equals(other.udDataScopeDetailPK))) {
+        if ((this.udDataScopeDetailPK == null && other.udDataScopeDetailPK != null)
+                || (this.udDataScopeDetailPK != null && !this.udDataScopeDetailPK.equals(other.udDataScopeDetailPK))) {
             return false;
         }
         return true;
@@ -147,5 +163,5 @@ public class UdDataScopeDetail implements Serializable {
     public String toString() {
         return "cub.entities.UdDataScopeDetail[ udDataScopeDetailPK=" + udDataScopeDetailPK + " ]";
     }
-    
+
 }
