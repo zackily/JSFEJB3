@@ -1,111 +1,179 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="/template.xhtml">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
 
 
-    <ui:define name="title">
-        <h:outputText value="自定義欄位範圍設定作業(RCMM04)" />
-    </ui:define>
+	<ui:define name="title">
+		<h:outputText value="自定義欄位範圍設定作業(RCMM04)" />
+	</ui:define>
 
-    <ui:define name="body">
-        <h:form id="mainForm" style="width: 60%">
-            <p:growl id="growl" life="2000" />
-            <p:panel header="自定義欄位範圍設定作業(RCMM04)">
-                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-8" style="width:100%" layout="grid">
-                    <p:panelGrid columns="1" style="width: 100%" layout="grid" >
-                        <p:commandButton value="新增" style="width: 100%" actionListener="#{userDeFieldScopeSetController.create}" oncomplete="PF('createDialog').show();" update=":dialogForm" process="@this"  />
-                        <p:commandButton value="編輯" style="width: 100%" disabled="#{empty userDeFieldScopeSetController.currentItem.udColumnCode}" actionListener="#{userDeFieldScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":createDialog :dialogForm" process="@this" />
-                        <p:commandButton value="刪除" style="width: 100%" disabled="#{empty userDeFieldScopeSetController.currentItem.udColumnCode}" onclick="PF('deleteConfirm').show()"/>
-                    </p:panelGrid>
-                    <p:panelGrid columns="1" style="width:100%" layout="grid">
-                        <p:panelGrid columns="4" style="width: 100%" layout="grid">
-                            <p:commandButton value="&lt;&lt;" actionListener="#{userDeFieldScopeSetController.lookupMaster(0)}" style="width: 100%" update=":mainForm"/>
-                            <p:commandButton value="&lt;" actionListener="#{userDeFieldScopeSetController.lookupMaster(-1)}" style="width: 100%" update=":mainForm"/>
-                            <p:commandButton value="&gt;" actionListener="#{userDeFieldScopeSetController.lookupMaster(1)}" style="width: 100%" update=":mainForm"/>
-                            <p:commandButton value="&gt;&gt;" actionListener="#{userDeFieldScopeSetController.lookupMaster(userDeFieldScopeSetController.master.size())}" style="width: 80%" update=":mainForm"/>
-                        </p:panelGrid>
+	<ui:define name="body">
+		<h:form id="mainForm" style="width: 60%">
+			<p:growl id="growl" life="2000" />
+			<p:panel header="自定義欄位範圍設定作業(RCMM04)">
+				<p:panelGrid columns="2"
+					columnClasses="ui-grid-col-2, ui-grid-col-8" style="width:100%"
+					layout="grid">
+					<p:panelGrid columns="1" style="width: 100%" layout="grid">
+						<p:commandButton value="新增" style="width: 100%"
+							actionListener="#{userDeFieldScopeSetController.create}"
+							oncomplete="PF('createDialog').show();" update=":dialogForm"
+							process="@this" />
+						<p:commandButton value="編輯" style="width: 100%"
+							disabled="#{empty userDeFieldScopeSetController.currentItem.udColumnCode}"
+							actionListener="#{userDeFieldScopeSetController.edit}"
+							oncomplete="PF('createDialog').show();"
+							update=":createDialog :dialogForm" process="@this" />
+						<p:commandButton value="刪除" style="width: 100%"
+							disabled="#{empty userDeFieldScopeSetController.currentItem.udColumnCode}"
+							onclick="PF('deleteConfirm').show()" />
+					</p:panelGrid>
+					<p:panelGrid columns="1" style="width:100%" layout="grid">
+						<p:panelGrid columns="4" style="width: 100%" layout="grid">
+							<p:commandButton value="&lt;&lt;"
+								actionListener="#{userDeFieldScopeSetController.lookupMaster(0)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&lt;"
+								actionListener="#{userDeFieldScopeSetController.lookupMaster(-1)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&gt;"
+								actionListener="#{userDeFieldScopeSetController.lookupMaster(1)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&gt;&gt;"
+								actionListener="#{userDeFieldScopeSetController.lookupMaster(userDeFieldScopeSetController.master.size())}"
+								style="width: 80%" update=":mainForm" />
+						</p:panelGrid>
 
-                        <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
-                            <p:outputLabel value="自定義欄位範圍代碼"/>
-                            <p:autoComplete value="#{userDeFieldScopeSetController.currentItem.udColumnCode}" completeMethod="#{userDeFieldScopeSetController.searchColumnScopeMaster}" >
-                                <p:ajax event="itemSelect" listener="#{userDeFieldScopeSetController.onItemSelect}" update=":mainForm"/>
-                            </p:autoComplete>
-                            <p:outputLabel value="自定義欄位範圍名稱"/>
-                            <p:outputLabel value="#{userDeFieldScopeSetController.currentItem.udColumnName}" />
-                            <p:outputLabel value="欄位中文名稱"/>
-                            <p:outputLabel value="#{userDeFieldScopeSetController.fieldCNName}"/>
-                        </p:panelGrid>
-                    </p:panelGrid>
-                </p:panelGrid>
-                <h3 style="margin-top:0">資料範圍設定區</h3>
-                <p:dataTable id="dataTable" var="detail" value="#{userDeFieldScopeSetController.detail}" scrollable="true" scrollHeight="300" rows="10" rowHover="true">
-                    <p:column headerText="#{userDeFieldScopeSetController.detailHeaderTextCode}代碼">
-                        <h:outputText value="#{detail.rdDataColumnOptionPK.optionCode}"/>
-                    </p:column>
-                    <p:column headerText="#{userDeFieldScopeSetController.detailHeaderTextCode}名稱">
-                        <h:outputText value="#{detail.optionName}"/>
-                    </p:column>
-                </p:dataTable>
-            </p:panel> 
-            <p:confirmDialog header="刪除自定義欄位" widgetVar="deleteConfirm" appendTo="@(body)">
-                <f:facet name="message">
-                    <h:outputText value="是否確定要刪除?" />
-                </f:facet>
-                <p:commandButton title="GDelYesButton" 
-                                 value="Yes" 
-                                 actionListener="#{userDeFieldScopeSetController.delete}" 
-                                 oncomplete="PF('deleteConfirm').hide()" 
-                                 process="@this"
-                                 update=":mainForm :mainForm:growl"/>
-                <p:commandButton title="GDelNoButton"
-                                 value="No"
-                                 oncomplete="PF('deleteConfirm').hide()"/>
-            </p:confirmDialog>
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-4, ui-grid-col-6">
+							<p:outputLabel value="自定義欄位範圍代碼" />
+							<p:autoComplete
+								value="#{userDeFieldScopeSetController.currentItem.udColumnCode}"
+								completeMethod="#{userDeFieldScopeSetController.searchColumnScopeMaster}">
+								<p:ajax event="itemSelect"
+									listener="#{userDeFieldScopeSetController.onItemSelect}"
+									update=":mainForm" />
+							</p:autoComplete>
+							<p:outputLabel value="自定義欄位範圍名稱" />
+							<p:outputLabel
+								value="#{userDeFieldScopeSetController.currentItem.udColumnName}" />
+							<p:outputLabel value="欄位中文名稱" />
+							<p:outputLabel
+								value="#{userDeFieldScopeSetController.fieldCNName}" />
+						</p:panelGrid>
+					</p:panelGrid>
+				</p:panelGrid>
+				<h3 style="margin-top: 0">資料範圍設定區</h3>
+				<p:dataTable id="dataTable" var="detail"
+					value="#{userDeFieldScopeSetController.detail}" scrollable="true"
+					scrollHeight="300" rows="10" rowHover="true">
+					<p:column
+						headerText="#{userDeFieldScopeSetController.detailHeaderTextCode}代碼">
+						<h:outputText value="#{detail.rdDataColumnOptionPK.optionCode}" />
+					</p:column>
+					<p:column
+						headerText="#{userDeFieldScopeSetController.detailHeaderTextCode}名稱">
+						<h:outputText value="#{detail.optionName}" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+			<p:confirmDialog header="刪除自定義欄位" widgetVar="deleteConfirm"
+				appendTo="@(body)">
+				<f:facet name="message">
+					<h:outputText value="是否確定要刪除?" />
+				</f:facet>
+				<p:commandButton title="GDelYesButton" value="Yes"
+					actionListener="#{userDeFieldScopeSetController.delete}"
+					oncomplete="PF('deleteConfirm').hide()" process="@this"
+					update=":mainForm :mainForm:growl" />
+				<p:commandButton title="GDelNoButton" value="No"
+					oncomplete="PF('deleteConfirm').hide()" />
+			</p:confirmDialog>
 
-        </h:form>
-        <p:dialog id="createDialog" header="#{userDeFieldScopeSetController.editDialogLabel}" widgetVar="createDialog" modal="true" height="600" width="600" appendTo="@(body)" >
-            <h:form id="dialogForm">
-                <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6">
-                    <p:outputLabel value="自定義欄位範圍代碼"/>
-                    <p:outputLabel value="#{userDeFieldScopeSetController.item.udColumnCode}" />
-                    <p:outputLabel value="自定義欄位範圍名稱"/>
-                    <p:inputText value="#{userDeFieldScopeSetController.item.udColumnName}" />
-                    <p:outputLabel value="欄位中文名稱"/>
-                    <p:selectOneMenu value="#{userDeFieldScopeSetController.itemDataColumn}">
-                        <f:selectItems value="#{userDeFieldScopeSetController.itemFieldCNNameMenu}" var="item" />
-                    </p:selectOneMenu>
-                </p:panelGrid>
-                <p:panelGrid columns="1">
-                    <p:panelGrid columns="2">
-                        <p:commandButton value="＋" actionListener="#{userDeFieldScopeSetController.addColumnOptionList}" update=":dialogForm:columnOptionDataTable :dialogForm:columnOptionDataTable2" process="@this"/>
-                        <p:commandButton value="－" actionListener="#{userDeFieldScopeSetController.removeColumnOptionList}" update=":dialogForm:columnOptionDataTable :dialogForm:columnOptionDataTable2" process="@this"/>
-                    </p:panelGrid>
-                    <p:dataTable id="columnOptionDataTable" value="#{userDeFieldScopeSetController.itemColumnOptionList}" var="op" rowIndexVar="i" rows="10" rendered="#{userDeFieldScopeSetController.editDialogLabel=='新增'}">
-                        <p:column headerText="資料範圍">
-                            <p:selectOneMenu value="#{userDeFieldScopeSetController.tempOptionCode}">
-                                <p:ajax listener="#{userDeFieldScopeSetController.columnOptionChange(i)}" event="change"/>
-                                <f:selectItem itemValue="" itemLabel=""/>
-                                <f:selectItems value="#{userDeFieldScopeSetController.rdDataColumnOptionMenu}"/>
-                            </p:selectOneMenu>
-                        </p:column>
-                    </p:dataTable>
-                    <p:dataTable id="columnOptionDataTable2" value="#{userDeFieldScopeSetController.itemColumnOptionList}" var="op" rowIndexVar="i" rows="10" rendered="#{userDeFieldScopeSetController.editDialogLabel=='編輯'}">
-                        <p:column headerText="資料範圍">
-                            <p:selectOneMenu value="#{op}" valueChangeListener="#{userDeFieldScopeSetController.columnOptionChangeForEdit}">
-                                <p:ajax event="change" immediate="true" process="@this"/>
-                                <f:selectItems value="#{userDeFieldScopeSetController.rdDataColumnOptionMenu}"/>
-                            </p:selectOneMenu>
-                        </p:column>
-                    </p:dataTable>
-                    <p:panel>
-                        <p:commandButton value="#{userDeFieldScopeSetController.editDialogLabel}" actionListener="#{userDeFieldScopeSetController.save}" update=":mainForm :dialogForm" oncomplete="PF('createDialog').hide()"  />
-                        <p:commandButton value="取消" onclick="PF('createDialog').hide()" />
-                    </p:panel>
-                </p:panelGrid>
-            </h:form>
-        </p:dialog>
-    </ui:define>
+		</h:form>
+		<p:dialog id="createDialog"
+			header="#{userDeFieldScopeSetController.editDialogLabel}"
+			widgetVar="createDialog" modal="true" height="600" width="600"
+			appendTo="@(body)">
+			<h:form id="dialogForm">
+				<p:panelGrid columns="2" layout="grid"
+					columnClasses="ui-grid-col-4, ui-grid-col-6">
+					<p:outputLabel value="自定義欄位範圍代碼" />
+					<p:outputLabel
+						value="#{userDeFieldScopeSetController.item.udColumnCode}" />
+					<p:outputLabel value="自定義欄位範圍名稱" />
+					<p:inputText
+						value="#{userDeFieldScopeSetController.item.udColumnName}" />
+					<p:outputLabel value="欄位中文名稱" />
+					<p:outputLabel value="#{userDeFieldScopeSetController.fieldCNName}"
+						rendered="#{userDeFieldScopeSetController.editDialogLabel=='編輯'}" />
+					<p:selectOneMenu
+						value="#{userDeFieldScopeSetController.itemDataColumn}"
+						rendered="#{userDeFieldScopeSetController.editDialogLabel!='編輯'}">
+						<f:selectItems
+							value="#{userDeFieldScopeSetController.itemFieldCNNameMenu}"
+							var="item" />
+					</p:selectOneMenu>
+				</p:panelGrid>
+				<p:inputText type="hidden"
+					value="#{userDeFieldScopeSetController.itemDataColumn}" />
+				<p:panelGrid columns="1">
+					<p:panelGrid columns="2">
+						<p:commandButton value="＋"
+							actionListener="#{userDeFieldScopeSetController.addColumnOptionList}"
+							update=":dialogForm:columnOptionDataTable :dialogForm:columnOptionDataTable2"
+							process="@this" />
+					</p:panelGrid>
+					<p:dataTable id="columnOptionDataTable"
+						value="#{userDeFieldScopeSetController.itemColumnOptionList}"
+						var="op" rowIndexVar="i" rows="10"
+						rendered="#{userDeFieldScopeSetController.editDialogLabel=='新增'}">
+						<p:column headerText="" width="10%">
+							<p:commandButton value="－"
+								actionListener="#{userDeFieldScopeSetController.removeColumnOptionList(op)}"
+								update=":dialogForm:columnOptionDataTable" process="@this" />
+						</p:column>
+						<p:column headerText="資料範圍">
+							<p:selectOneMenu
+								value="#{userDeFieldScopeSetController.tempOptionCode}">
+								<p:ajax
+									listener="#{userDeFieldScopeSetController.columnOptionChange(i)}"
+									event="change" />
+								<f:selectItem itemValue="" itemLabel="" />
+								<f:selectItems
+									value="#{userDeFieldScopeSetController.rdDataColumnOptionMenu}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+					<p:dataTable id="columnOptionDataTable2"
+						value="#{userDeFieldScopeSetController.itemColumnOptionList}"
+						var="op" rowIndexVar="i" rows="10"
+						rendered="#{userDeFieldScopeSetController.editDialogLabel=='編輯'}">
+						<p:column headerText="" width="10%">
+							<p:commandButton value="－"
+								actionListener="#{userDeFieldScopeSetController.removeColumnOptionList(op)}"
+								update=":dialogForm:columnOptionDataTable2" process="@this" />
+						</p:column>
+						<p:column headerText="資料範圍">
+							<p:selectOneMenu value="#{op}"
+								valueChangeListener="#{userDeFieldScopeSetController.columnOptionChangeForEdit}">
+								<p:ajax event="change" immediate="true" process="@this" />
+								<f:selectItems
+									value="#{userDeFieldScopeSetController.rdDataColumnOptionMenu}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+					<p:panel>
+						<p:commandButton value="儲存"
+							actionListener="#{userDeFieldScopeSetController.save}"
+							update=":mainForm :dialogForm"
+							oncomplete="PF('createDialog').hide()" />
+						<p:commandButton value="取消" onclick="PF('createDialog').hide()" />
+					</p:panel>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
 </ui:composition>

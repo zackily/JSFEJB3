@@ -24,6 +24,9 @@ import cub.facade.AllCommentsFacade;
 import cub.facade.RdDataClassFacade;
 import cub.facade.RdDataColumnFacade;
 
+/**
+ * @author F123669 欄位定義作業(RCMM99)
+ */
 @ManagedBean(name = "columnDefinitionController")
 @ViewScoped
 public class ColumnDefinitionController implements Serializable {
@@ -191,33 +194,38 @@ public class ColumnDefinitionController implements Serializable {
             this.item.setLogUserId("Gilbert");
             this.item.setLogDttm(new Date());
             ejbRdDataColumnFacade.create(this.item);
+            addMessage("新增成功", "新增成功");
         } else {// 編輯
-//            ejbRdDataColumnFacade.edit(this.currentItem);
-            addMessage("System Error", "此欄位範圍已存在");
+            // ejbRdDataColumnFacade.edit(this.currentItem);
+            addMessage("此欄位範圍已存在", "此欄位範圍已存在");
         }
-        this.init();
-        this.currentItem = this.master.get(this.master.size() - 1);
+//        this.init();
+        this.currentItem = this.master.get(this.currentIndex);
+        create();
     }
-//
-//    /*
-//     * 點擊修改
-//     */
-//    public void edit() {
-//        this.editDialogLabel = "編輯";
-//        this.item = this.currentItem;
-//        this.tempClassCode = this.item.getRdDataColumnPK().getClassCode();
-//        this.tempTableName = this.item.getRdDataColumnPK().getTableName();
-//        this.tempColumnName = this.item.getRdDataColumnPK().getColumnName();
-//    }
+    //
+    // /*
+    // * 點擊修改
+    // */
+    // public void edit() {
+    // this.editDialogLabel = "編輯";
+    // this.item = this.currentItem;
+    // this.tempClassCode = this.item.getRdDataColumnPK().getClassCode();
+    // this.tempTableName = this.item.getRdDataColumnPK().getTableName();
+    // this.tempColumnName = this.item.getRdDataColumnPK().getColumnName();
+    // }
 
     /*
      * 點擊刪除
      */
     public void delete() {
         if (ejbRdDataColumnFacade.checkRuleNoExistByPK(this.currentItem.getRdDataColumnPK())) {
-            addMessage("System Error", "此欄位範圍已經被引用,請移除該引用才可進行刪除!");
+            addMessage("此欄位範圍已經被引用,請移除該引用才可進行刪除!", "此欄位範圍已經被引用,請移除該引用才可進行刪除!");
+        } else if (this.master.size() == 1) {
+            addMessage("已是最後一筆無法刪除!", "已是最後一筆無法刪除!");
         } else {
             ejbRdDataColumnFacade.remove(this.currentItem);
+            addMessage("刪除成功", "刪除成功");
         }
         this.init();
     }

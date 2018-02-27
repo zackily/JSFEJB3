@@ -38,6 +38,10 @@ import cub.facade.UdMethodMasterFacade;
 import cub.facade.WorkSeqFacade;
 import cub.vo.QueryUdColumnScopeDetailVO;
 
+/**
+ * @author F123669 自定義資料範圍設定作業(RCMM02)
+ *
+ */
 @ManagedBean(name = "userDeDataScopeSetController")
 @ViewScoped
 public class UserDeDataScopeSetController implements Serializable {
@@ -262,9 +266,11 @@ public class UserDeDataScopeSetController implements Serializable {
             ejbUdDataScopeDetailFacade.create(d);
             i++;
         }
-        this.init();
-        this.currentItem = this.master.get(this.master.size() - 1);
+        addMessage("新增成功", "新增成功");
+//        this.init();
+        this.currentItem = this.master.get(this.currentIndex);
         setItemDetail();
+        create();
     }
 
     /*
@@ -274,6 +280,8 @@ public class UserDeDataScopeSetController implements Serializable {
         this.editDialogLabel = "編輯";
         this.item = this.currentItem;
         this.itemDetail = ejbUdDataScopeDetailFacade.findByScopeCode(this.item.getScopeCode());
+        genReturnFieldMenu(String.valueOf(this.item.getClassCode()));
+        setItemDetail();
     }
 
     /*
@@ -281,10 +289,13 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     public void delete() {
         if (ejbDataScopeMasterFacade.checkRuleNoExistByScopeCode(this.currentItem.getScopeCode())) {
-            addMessage("System Error", "此欄位範圍已經被引用,請移除該引用才可進行刪除!");
+            addMessage("此欄位範圍已經被引用,請移除該引用才可進行刪除!", "此欄位範圍已經被引用,請移除該引用才可進行刪除!");
+        } else if (this.master.size() == 1) {
+            addMessage("已是最後一筆無法刪除!", "已是最後一筆無法刪除!");
         } else {
             ejbUdDataScopeMasterFacade.remove(this.currentItem);
             ejbUdDataScopeDetailFacade.removeByMaster(this.currentItem.getScopeCode());
+            addMessage("刪除成功", "刪除成功");
         }
         this.init();
     }
@@ -436,13 +447,17 @@ public class UserDeDataScopeSetController implements Serializable {
 
     public void genReturnFieldMenu(ValueChangeEvent e) {
         // initial新增/編輯時回傳欄位下拉選單
+        genReturnFieldMenu(e.getNewValue().toString());
+    }
+    
+    private void genReturnFieldMenu(String classCode) {
         this.itemReturnFieldMenu = new ArrayList<SelectItem>();
-        List<RdDataColumn> list = ejbRdDataColumnFacade.getColumnByClassCode(e.getNewValue().toString());
+        List<RdDataColumn> list = ejbRdDataColumnFacade.getColumnByClassCode(classCode);
         for (RdDataColumn rd : list) {
             RdDataColumnPK pk = rd.getRdDataColumnPK();
             this.itemReturnFieldMenu
-                .add(new SelectItem(pk.getClassCode() + "-" + pk.getTableName()
-                        + "-" + pk.getColumnName(), rd.getColumnChnName()));
+            .add(new SelectItem(pk.getClassCode() + "-" + pk.getTableName()
+            + "-" + pk.getColumnName(), rd.getColumnChnName()));
         }
     }
 

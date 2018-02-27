@@ -82,7 +82,8 @@
 						<h:outputText value="#{detail.parameterDesc}" />
 					</p:column>
 					<p:column headerText="對應值" width="20%">
-						<h:outputText value="#{detail.value}" />
+						<h:outputText value="#{detail.value}"
+							converter="#{udDataScopeDetailValueConverter}" />
 					</p:column>
 					<p:column headerText="對應值說明" width="20%">
 						<h:outputText value="#{detail.valueDesc}" />
@@ -126,9 +127,9 @@
 							value="#{userDeDataScopeSetController.itemDataTypeMenu}" />
 					</p:selectOneMenu>
 					<p:outputLabel value="" />
-                                        <p:outputLabel value="資料範圍說明" />
+					<p:outputLabel value="資料範圍說明" />
 					<p:inputText value="#{userDeDataScopeSetController.item.scopeName}" />
-                                        <p:outputLabel value="" />
+					<p:outputLabel value="" />
 					<p:outputLabel value="Method名稱" />
 					<p:selectOneMenu
 						value="#{userDeDataScopeSetController.item.methodName}"
@@ -139,49 +140,51 @@
 						<f:selectItems
 							value="#{userDeDataScopeSetController.itemMethodNameMenu}" />
 					</p:selectOneMenu>
-                                        <p:outputLabel id="textMethodNameDesc" value="#{userDeDataScopeSetController.item.methodNameDesc}" />
+					<p:outputLabel id="textMethodNameDesc"
+						value="#{userDeDataScopeSetController.item.methodNameDesc}" />
 					<p:outputLabel value="回傳欄位" />
 					<p:selectOneMenu id="returnFieldMenu"
 						value="#{userDeDataScopeSetController.tempRTNField}">
 						<f:selectItems
 							value="#{userDeDataScopeSetController.itemReturnFieldMenu}" />
 					</p:selectOneMenu>
-                                        <p:outputLabel value="" />
+					<p:outputLabel value="" />
 				</p:panelGrid>
 				<p:panelGrid columns="1">
 					<p:dataTable id="dataTable" var="detail" rowIndexVar="i"
 						value="#{userDeDataScopeSetController.itemDetail}"
 						scrollable="true" scrollHeight="300" rows="10" rowHover="true">
-                                            <p:column headerText="參數名稱" width="10%">
+						<p:column headerText="參數名稱" width="10%">
 							<h:outputText value="#{detail.parameterName}" />
 						</p:column>
 						<p:column headerText="參數說明" width="20%">
 							<h:outputText value="#{detail.parameterDesc}" />
 						</p:column>
 						<p:column headerText="對應值" width="20%">
-                                                    <h:inputText value="#{detail.value}" disabled="#{detail.value==0}" />
+							<h:inputText value="#{detail.value}"
+								disabled="#{detail.value==0}" />
 						</p:column>
 						<p:column headerText="對應值說明" width="20%">
 							<h:inputText value="#{detail.valueDesc}" />
 						</p:column>
 						<p:column headerText="自定義範圍" width="10%">
 							<p:selectOneMenu
-								value="#{userDeDataScopeSetController.tempUserDeField}">
+								value="#{userDeDataScopeSetController.tempUserDeField}" rendered="#{detail.parameterName!='CLIENT_ID'}">
 								<p:ajax
 									listener="#{userDeDataScopeSetController.tempUserDeFieldChange(i)}"
-									update=":dialogForm:dataTable" event="change" />
+									update=":dialogForm:dataTable:textUdColumnName" event="change" />
 								<f:selectItem itemValue="" itemLabel="" />
 								<f:selectItems
 									value="#{userDeDataScopeSetController.userDeFieldScopeMenu}" />
 							</p:selectOneMenu>
+							<p:outputLabel value="#{detail.udColumnCode}" rendered="#{detail.parameterName=='CLIENT_ID'}"/>
 						</p:column>
 						<p:column headerText="範圍名稱" width="20%">
-							<h:outputText value="#{detail.udColumnName}" />
+							<h:outputText value="#{detail.udColumnName}" id="textUdColumnName" />
 						</p:column>
 					</p:dataTable>
 					<p:panel>
-						<p:commandButton
-							value="#{userDeDataScopeSetController.editDialogLabel}"
+						<p:commandButton value="儲存"
 							actionListener="#{userDeDataScopeSetController.save}"
 							update=":mainForm :dialogForm"
 							oncomplete="PF('createDialog').hide()" />

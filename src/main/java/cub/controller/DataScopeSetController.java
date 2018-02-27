@@ -23,16 +23,21 @@ import cub.entities.DataScopeDetailPK;
 import cub.entities.DataScopeMaster;
 import cub.entities.RdDataClass;
 import cub.entities.RdDataColumn;
-import cub.entities.RdOptionItem;
+import cub.entities.RdDataColumnOption;
+import cub.entities.RdDataColumnOptionPK;
 import cub.enums.SeqTypeEnum;
 import cub.facade.DataScopeDetailFacade;
 import cub.facade.DataScopeMasterFacade;
 import cub.facade.RdDataClassFacade;
 import cub.facade.RdDataColumnFacade;
-import cub.facade.RdOptionItemFacade;
+import cub.facade.RdDataColumnOptionFacade;
 import cub.facade.WorkSeqFacade;
 import cub.vo.QueryUdColumnScopeDetailVO;
 
+/**
+ * @author F123669 資料範圍設定作業(RCMM01)
+ *
+ */
 @ManagedBean(name = "dataScopeSetController")
 @ViewScoped
 public class DataScopeSetController implements Serializable {
@@ -47,8 +52,10 @@ public class DataScopeSetController implements Serializable {
     private RdDataClassFacade ejbRdDataClassFacade;
     @EJB
     private RdDataColumnFacade ejbRdDataColumnFacade;
+//    @EJB
+//    private RdOptionItemFacade ejbRdOptionItemFacade;
     @EJB
-    private RdOptionItemFacade ejbRdOptionItemFacade;
+    private RdDataColumnOptionFacade ejbRdDataColumnOptionFacade;
     /*
      * 自定義欄位範圍列表
      */
@@ -134,6 +141,14 @@ public class DataScopeSetController implements Serializable {
      */
     private List<SelectItem> columnMenu;
     /*
+     * 新增/編輯資料範圍下拉選單
+     */
+    private List<SelectItem> rdDataColumnOptionMenu;
+    /*
+     * all RD_DATA_COLUMN_OPTION list
+     */
+    private List<RdDataColumnOption> allOptions;
+    /*
      * 自定義欄位範圍索引
      */
     private int currentIndex;
@@ -163,11 +178,19 @@ public class DataScopeSetController implements Serializable {
             this.dataTypeMenu.add(new SelectItem(rdc.getClassCode(), rdc.getClassName()));
         }
         // initial關係下拉選單
-        this.operatorMenu = new ArrayList<SelectItem>();
-        List<RdOptionItem> rdiList = ejbRdOptionItemFacade.findAllSort((short) 9);
-        for (RdOptionItem r : rdiList) {
-            this.operatorMenu.add(new SelectItem(r.getRdOptionItemPK().getItemCode(), r.getItemName()));
+//        this.operatorMenu = new ArrayList<SelectItem>();
+//        List<RdOptionItem> rdiList = ejbRdOptionItemFacade.findAllSort((short) 9);
+//        for (RdOptionItem r : rdiList) {
+//            this.operatorMenu.add(new SelectItem(r.getRdOptionItemPK().getItemCode(), r.getItemName()));
+//        }
+        // initial新增/編輯時資料範圍下拉選單
+        this.rdDataColumnOptionMenu = new ArrayList<SelectItem>();
+        this.allOptions = ejbRdDataColumnOptionFacade.findAll();
+        for (RdDataColumnOption op : allOptions) {
+            RdDataColumnOptionPK pk = op.getRdDataColumnOptionPK();
+            rdDataColumnOptionMenu.add(new SelectItem(pk.getOptionCode(), op.getOptionName()));
         }
+
         this.tempItemDetails = new ArrayList<DataScopeDetail>();
     }
 
@@ -199,7 +222,7 @@ public class DataScopeSetController implements Serializable {
             this.tempItemDetails.add(new DataScopeDetail());
             changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
         } else {
-            addMessage("System Error", "請先選定資料類別!");
+            addMessage("請先選定資料類別!", "請先選定資料類別!");
         }
         this.tempLogicList.add("");
         this.tempLeftBracketList.add("");
@@ -212,8 +235,8 @@ public class DataScopeSetController implements Serializable {
     /*
      * 移除資料條件(－)
      */
-    public void removeDataScopeDetailList(ActionEvent event) {
-        this.tempItemDetails.remove(this.tempItemDetails.size() - 1);
+    public void removeDataScopeDetailList(DataScopeDetail d) {
+        this.tempItemDetails.remove(d);
     }
 
     /*
@@ -290,6 +313,7 @@ public class DataScopeSetController implements Serializable {
             }
             ejbDataScopeMasterFacade.create(this.item);
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.DATA_CODE.toString());
+            addMessage("新增成功", "新增成功");
         } else {// 編輯
             ejbDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
             for (int i = 0; i < this.tempItemDetails.size(); i++) {
@@ -311,12 +335,14 @@ public class DataScopeSetController implements Serializable {
             }
             this.item.setLogDttm(new Date());
             ejbDataScopeMasterFacade.edit(this.item);
+            addMessage("更新成功", "更新成功");
         }
         this.tempItemDetails.clear();
-        this.init();
+//        this.init();
         clearTempList();
-        this.currentItem = this.master.get(this.master.size() - 1);
+        this.currentItem = this.master.get(currentIndex);
         setItemDetail();
+        create();
     }
 
     /*
@@ -335,6 +361,7 @@ public class DataScopeSetController implements Serializable {
             this.tempRightBracketList.add(ds.getRightBracket());
         }
         changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
+        setItemDetail();
     }
 
     /*
@@ -342,10 +369,13 @@ public class DataScopeSetController implements Serializable {
      */
     public void delete() {
         if (ejbDataScopeMasterFacade.checkRuleNoExistByScopeCode(this.currentItem.getScopeCode())) {
-            addMessage("System Error", "此資料範圍已經被引用,請移除該引用才可進行刪除!");
+            addMessage("此資料範圍已經被引用,請移除該引用才可進行刪除!", "此資料範圍已經被引用,請移除該引用才可進行刪除!");
+        } else if (this.master.size() == 1) {
+            addMessage("已是最後一筆無法刪除!", "已是最後一筆無法刪除!");
         } else {
             ejbDataScopeMasterFacade.remove(this.currentItem);
             ejbDataScopeDetailFacade.removeByMaster(tempOpCode);
+            addMessage("刪除成功", "刪除成功");
         }
         this.init();
     }
@@ -628,6 +658,22 @@ public class DataScopeSetController implements Serializable {
         this.columnMenu = columnMenu;
     }
 
+    public List<SelectItem> getRdDataColumnOptionMenu() {
+        return rdDataColumnOptionMenu;
+    }
+
+    public void setRdDataColumnOptionMenu(List<SelectItem> rdDataColumnOptionMenu) {
+        this.rdDataColumnOptionMenu = rdDataColumnOptionMenu;
+    }
+
+    public List<RdDataColumnOption> getAllOptions() {
+        return allOptions;
+    }
+
+    public void setAllOptions(List<RdDataColumnOption> allOptions) {
+        this.allOptions = allOptions;
+    }
+
     /*
      * 載入detail
      */
@@ -646,7 +692,7 @@ public class DataScopeSetController implements Serializable {
             dd.setColumnCHNName(
                 d.getTableName() + "/" + d.getColumnName() + ejbRdDataColumnFacade.getFieldCNNameMenu(vo));
             dd.setColumnValue(d.getTableName() + "+" + d.getColumnName());
-            dd.setOpName(ejbRdOptionItemFacade.findItemNameByItemCode(d.getOpCode()));
+//            dd.setOpName(ejbRdOptionItemFacade.findItemNameByItemCode(d.getOpCode()));
             this.details.add(dd);
         }
     }

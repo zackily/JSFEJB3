@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.entities;
 
@@ -23,11 +23,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "RD_OPTION_ITEM")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "RdOptionItem.findAll", query = "SELECT r FROM RdOptionItem r")
-    , @NamedQuery(name = "RdOptionItem.findByClassCode", query = "SELECT r FROM RdOptionItem r WHERE r.rdOptionItemPK.classCode = :classCode")
-    , @NamedQuery(name = "RdOptionItem.findByClassName", query = "SELECT r FROM RdOptionItem r WHERE r.className = :className")
-    , @NamedQuery(name = "RdOptionItem.findByItemCode", query = "SELECT r FROM RdOptionItem r WHERE r.rdOptionItemPK.itemCode = :itemCode")
-    , @NamedQuery(name = "RdOptionItem.findByItemName", query = "SELECT r FROM RdOptionItem r WHERE r.itemName = :itemName")})
+        @NamedQuery(name = "RdOptionItem.findAll", query = "SELECT r FROM RdOptionItem r"),
+        @NamedQuery(name = "RdOptionItem.findByClassCode", query = "SELECT r FROM RdOptionItem r WHERE r.rdOptionItemPK.classCode = :classCode"),
+        @NamedQuery(name = "RdOptionItem.findByClassName", query = "SELECT r FROM RdOptionItem r WHERE r.className = :className"),
+        @NamedQuery(name = "RdOptionItem.findByItemCode", query = "SELECT r FROM RdOptionItem r WHERE r.rdOptionItemPK.itemCode = :itemCode"),
+        @NamedQuery(name = "RdOptionItem.findByItemName", query = "SELECT r FROM RdOptionItem r WHERE r.itemName = :itemName") })
 public class RdOptionItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,9 +36,12 @@ public class RdOptionItem implements Serializable {
     @Size(max = 20)
     @Column(name = "CLASS_NAME")
     private String className;
-    @Size(max = 20)
+    @Size(max = 50)
     @Column(name = "ITEM_NAME")
     private String itemName;
+    @Size(max = 20)
+    @Column(name = "COLUMN_NAME")
+    private String columnName;
 
     public RdOptionItem() {
     }
@@ -75,6 +78,14 @@ public class RdOptionItem implements Serializable {
         this.itemName = itemName;
     }
 
+    public String getColumnName() {
+        return columnName;
+    }
+
+    public void setColumnName(String columnName) {
+        this.columnName = columnName;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -89,7 +100,8 @@ public class RdOptionItem implements Serializable {
             return false;
         }
         RdOptionItem other = (RdOptionItem) object;
-        if ((this.rdOptionItemPK == null && other.rdOptionItemPK != null) || (this.rdOptionItemPK != null && !this.rdOptionItemPK.equals(other.rdOptionItemPK))) {
+        if ((this.rdOptionItemPK == null && other.rdOptionItemPK != null)
+                || (this.rdOptionItemPK != null && !this.rdOptionItemPK.equals(other.rdOptionItemPK))) {
             return false;
         }
         return true;
@@ -99,5 +111,5 @@ public class RdOptionItem implements Serializable {
     public String toString() {
         return "cub.entities.RdOptionItem[ rdOptionItemPK=" + rdOptionItemPK + " ]";
     }
-    
+
 }
