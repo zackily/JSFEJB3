@@ -1,12 +1,15 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,12 +32,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "DATA_SCOPE_MASTER")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "DataScopeMaster.findAll", query = "SELECT d FROM DataScopeMaster d")
-    , @NamedQuery(name = "DataScopeMaster.findByScopeCode", query = "SELECT d FROM DataScopeMaster d WHERE d.scopeCode = :scopeCode")
-    , @NamedQuery(name = "DataScopeMaster.findByClassCode", query = "SELECT d FROM DataScopeMaster d WHERE d.classCode = :classCode")
-    , @NamedQuery(name = "DataScopeMaster.findByScopeName", query = "SELECT d FROM DataScopeMaster d WHERE d.scopeName = :scopeName")
-    , @NamedQuery(name = "DataScopeMaster.findByLogUserId", query = "SELECT d FROM DataScopeMaster d WHERE d.logUserId = :logUserId")
-    , @NamedQuery(name = "DataScopeMaster.findByLogDttm", query = "SELECT d FROM DataScopeMaster d WHERE d.logDttm = :logDttm")})
+        @NamedQuery(name = "DataScopeMaster.findAll", query = "SELECT d FROM DataScopeMaster d"),
+        @NamedQuery(name = "DataScopeMaster.findByScopeCode", query = "SELECT d FROM DataScopeMaster d WHERE d.scopeCode = :scopeCode"),
+        @NamedQuery(name = "DataScopeMaster.findByClassCode", query = "SELECT d FROM DataScopeMaster d WHERE d.classCode = :classCode"),
+        @NamedQuery(name = "DataScopeMaster.findByScopeName", query = "SELECT d FROM DataScopeMaster d WHERE d.scopeName = :scopeName"),
+        @NamedQuery(name = "DataScopeMaster.findByLogUserId", query = "SELECT d FROM DataScopeMaster d WHERE d.logUserId = :logUserId"),
+        @NamedQuery(name = "DataScopeMaster.findByLogDttm", query = "SELECT d FROM DataScopeMaster d WHERE d.logDttm = :logDttm") })
 public class DataScopeMaster implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,6 +64,8 @@ public class DataScopeMaster implements Serializable {
     private Date logDttm;
     @Transient
     private String className;
+    @Transient
+    private List<SelectItem> dataTypeMenu;
 
     public DataScopeMaster() {
     }
@@ -115,13 +120,20 @@ public class DataScopeMaster implements Serializable {
         this.logDttm = logDttm;
     }
 
-    
     public String getClassName() {
         return className;
     }
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public List<SelectItem> getDataTypeMenu() {
+        return dataTypeMenu;
+    }
+
+    public void setDataTypeMenu(List<SelectItem> dataTypeMenu) {
+        this.dataTypeMenu = dataTypeMenu;
     }
 
     @Override
@@ -138,7 +150,8 @@ public class DataScopeMaster implements Serializable {
             return false;
         }
         DataScopeMaster other = (DataScopeMaster) object;
-        if ((this.scopeCode == null && other.scopeCode != null) || (this.scopeCode != null && !this.scopeCode.equals(other.scopeCode))) {
+        if ((this.scopeCode == null && other.scopeCode != null)
+                || (this.scopeCode != null && !this.scopeCode.equals(other.scopeCode))) {
             return false;
         }
         return true;

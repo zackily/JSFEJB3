@@ -505,7 +505,6 @@ public class UserDeDataScopeSetController implements Serializable {
 
     private void genRdOptionItemMenu(UdDataScopeDetail de) {
         List<SelectItem> itemRdOptionItemMenu = new ArrayList<SelectItem>();
-//        this.allItemCodeMap = new HashMap<String, String>();
         List<Object[]> allItemCodes = ejbRdOptionItemFacade.findAllItemCodes(de.getParameterName());
         for (Object[] o : allItemCodes) {
             itemRdOptionItemMenu.add(new SelectItem(o[0].toString(), o[0].toString() + ". " + o[1].toString()));

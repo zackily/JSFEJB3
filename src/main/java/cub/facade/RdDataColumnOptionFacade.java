@@ -55,4 +55,18 @@ public class RdDataColumnOptionFacade extends AbstractFacade<RdDataColumnOption>
             return null;
         }
     }
+
+    public List<Object[]> findByColumn(short classCode, String tableName, String columnName) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select rdo.rdDataColumnOptionPK.optionCode, rdo.optionName")
+            .append(" from RdDataColumnOption rdo where rdo.rdDataColumnOptionPK.classCode =:classCode")
+            .append(" and rdo.rdDataColumnOptionPK.tableName =:tableName")
+            .append(" and rdo.rdDataColumnOptionPK.columnName =:columnName ")
+            .append(" order by rdo.rdDataColumnOptionPK.optionCode asc");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("classCode", classCode);
+        query.setParameter("tableName", tableName);
+        query.setParameter("columnName", columnName);
+        return query.getResultList();
+    }
 }

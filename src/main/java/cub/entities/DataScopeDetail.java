@@ -1,11 +1,14 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.entities;
 
 import java.io.Serializable;
+import java.util.List;
+
+import javax.faces.model.SelectItem;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -26,16 +29,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "DATA_SCOPE_DETAIL")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "DataScopeDetail.findAll", query = "SELECT d FROM DataScopeDetail d")
-    , @NamedQuery(name = "DataScopeDetail.findByScopeCode", query = "SELECT d FROM DataScopeDetail d WHERE d.dataScopeDetailPK.scopeCode = :scopeCode")
-    , @NamedQuery(name = "DataScopeDetail.findBySeqNo", query = "SELECT d FROM DataScopeDetail d WHERE d.dataScopeDetailPK.seqNo = :seqNo")
-    , @NamedQuery(name = "DataScopeDetail.findByLogic", query = "SELECT d FROM DataScopeDetail d WHERE d.logic = :logic")
-    , @NamedQuery(name = "DataScopeDetail.findByLeftBracket", query = "SELECT d FROM DataScopeDetail d WHERE d.leftBracket = :leftBracket")
-    , @NamedQuery(name = "DataScopeDetail.findByTableName", query = "SELECT d FROM DataScopeDetail d WHERE d.tableName = :tableName")
-    , @NamedQuery(name = "DataScopeDetail.findByColumnName", query = "SELECT d FROM DataScopeDetail d WHERE d.columnName = :columnName")
-    , @NamedQuery(name = "DataScopeDetail.findByOpCode", query = "SELECT d FROM DataScopeDetail d WHERE d.opCode = :opCode")
-    , @NamedQuery(name = "DataScopeDetail.findByOpValue", query = "SELECT d FROM DataScopeDetail d WHERE d.opValue = :opValue")
-    , @NamedQuery(name = "DataScopeDetail.findByRightBracket", query = "SELECT d FROM DataScopeDetail d WHERE d.rightBracket = :rightBracket")})
+        @NamedQuery(name = "DataScopeDetail.findAll", query = "SELECT d FROM DataScopeDetail d"),
+        @NamedQuery(name = "DataScopeDetail.findByScopeCode", query = "SELECT d FROM DataScopeDetail d WHERE d.dataScopeDetailPK.scopeCode = :scopeCode"),
+        @NamedQuery(name = "DataScopeDetail.findBySeqNo", query = "SELECT d FROM DataScopeDetail d WHERE d.dataScopeDetailPK.seqNo = :seqNo"),
+        @NamedQuery(name = "DataScopeDetail.findByLogic", query = "SELECT d FROM DataScopeDetail d WHERE d.logic = :logic"),
+        @NamedQuery(name = "DataScopeDetail.findByLeftBracket", query = "SELECT d FROM DataScopeDetail d WHERE d.leftBracket = :leftBracket"),
+        @NamedQuery(name = "DataScopeDetail.findByTableName", query = "SELECT d FROM DataScopeDetail d WHERE d.tableName = :tableName"),
+        @NamedQuery(name = "DataScopeDetail.findByColumnName", query = "SELECT d FROM DataScopeDetail d WHERE d.columnName = :columnName"),
+        @NamedQuery(name = "DataScopeDetail.findByOpCode", query = "SELECT d FROM DataScopeDetail d WHERE d.opCode = :opCode"),
+        @NamedQuery(name = "DataScopeDetail.findByOpValue", query = "SELECT d FROM DataScopeDetail d WHERE d.opValue = :opValue"),
+        @NamedQuery(name = "DataScopeDetail.findByRightBracket", query = "SELECT d FROM DataScopeDetail d WHERE d.rightBracket = :rightBracket") })
 public class DataScopeDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -80,6 +83,16 @@ public class DataScopeDetail implements Serializable {
     private String columnValue;
     @Transient
     private String opName;
+    /*
+     * 資料欄位下拉式選單
+     */
+    @Transient
+    private List<SelectItem> columnMenu;
+    /*
+     * 新增/編輯資料範圍下拉選單
+     */
+    @Transient
+    private List<SelectItem> rdDataColumnOptionMenu;
 
     public DataScopeDetail() {
     }
@@ -180,6 +193,22 @@ public class DataScopeDetail implements Serializable {
         this.opName = opName;
     }
 
+    public List<SelectItem> getColumnMenu() {
+        return columnMenu;
+    }
+
+    public void setColumnMenu(List<SelectItem> columnMenu) {
+        this.columnMenu = columnMenu;
+    }
+
+    public List<SelectItem> getRdDataColumnOptionMenu() {
+        return rdDataColumnOptionMenu;
+    }
+
+    public void setRdDataColumnOptionMenu(List<SelectItem> rdDataColumnOptionMenu) {
+        this.rdDataColumnOptionMenu = rdDataColumnOptionMenu;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -194,7 +223,8 @@ public class DataScopeDetail implements Serializable {
             return false;
         }
         DataScopeDetail other = (DataScopeDetail) object;
-        if ((this.dataScopeDetailPK == null && other.dataScopeDetailPK != null) || (this.dataScopeDetailPK != null && !this.dataScopeDetailPK.equals(other.dataScopeDetailPK))) {
+        if ((this.dataScopeDetailPK == null && other.dataScopeDetailPK != null)
+                || (this.dataScopeDetailPK != null && !this.dataScopeDetailPK.equals(other.dataScopeDetailPK))) {
             return false;
         }
         return true;

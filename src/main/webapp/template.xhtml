@@ -1,46 +1,54 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
 
-    <h:head>
-        <title><ui:insert name="title">Default Title</ui:insert></title>
-        <h:outputStylesheet library="css" name="jsfcrud.css"/>
-        <h:outputScript library="js" name="jsfcrud.js"/>
-    </h:head>
+<h:head>
+	<title><ui:insert name="title">Default Title</ui:insert></title>
+	<h:outputStylesheet library="css" name="jsfcrud.css" />
+	<h:outputScript library="js" name="jsfcrud.js" />
+</h:head>
 
-    <h:body>
+<h:body>
 
-        <p:growl id="growl" life="3000" />
+	<p:growl id="growl" life="3000" />
 
-        <p:layout fullPage="true">
-            <p:layoutUnit position="north" size="65" header="#{bundle.AppName}">
-                <h:form id="menuForm">
-                    <p:menubar>
-                        <p:menuitem value="#{bundle.Home}" outcome="/index" icon="ui-icon-home"/>
-                        <p:submenu label="投資平台_中台檢核模組">
-                            <p:menuitem value="資料範圍設定作業(RCMM01)" outcome="/rcmm/dataScopeSetting.xhtml" />
-                            <p:menuitem value="自定義資料範圍設定作業(RCMM02)" outcome="/rcmm/userDeDataScopeSetting.xhtml" />
-                            <p:menuitem value="投資限制條文設定作業(RCMM03)" outcome="/rcmm/investRuleSetting.xhtml" />
-                            <p:menuitem value="自定義欄位範圍設定作業(RCMM04)" outcome="/rcmm/userDeFieldScopeSetting.xhtml" />
-                            <p:menuitem value="欄位定義作業(RCMM99)" outcome="/rcmm/columnDefinitionSetting.xhtml" />
-                        </p:submenu>
-                    </p:menubar>
-                </h:form>
-            </p:layoutUnit>
+	<p:layout fullPage="true">
+		<p:layoutUnit position="north" size="65" header="#{bundle.AppName}">
+			<h:form id="menuForm">
+				<p:menubar>
+					<p:menuitem value="#{bundle.Home}" outcome="/index"
+						icon="ui-icon-home" />
+					<p:submenu label="投資平台_中台檢核模組">
+						<p:menuitem value="資料範圍設定作業(RCMM01)"
+							outcome="/rcmm/dataScopeSetting.xhtml" />
+						<p:menuitem value="自定義資料範圍設定作業(RCMM02)"
+							outcome="/rcmm/userDeDataScopeSetting.xhtml" />
+						<p:menuitem value="投資限制條文設定作業(RCMM03)"
+							outcome="/rcmm/investRuleSetting.xhtml" />
+						<p:menuitem value="自定義欄位範圍設定作業(RCMM04)"
+							outcome="/rcmm/userDeFieldScopeSetting.xhtml" />
+						<p:menuitem value="欄位定義作業(RCMM99)"
+							outcome="/rcmm/columnDefinitionSetting.xhtml" />
+					</p:submenu>
+				</p:menubar>
+			</h:form>
+		</p:layoutUnit>
 
-            <p:layoutUnit position="south" size="60">
-                <ui:insert name="footer"/>
-            </p:layoutUnit>
+		<p:layoutUnit position="south" size="60">
+			<p:panelGrid columns="1" style="width: 100%" layout="grid">
+				<h:outputLabel value="version: 2018_0305+1800" />
+			</p:panelGrid>
+		</p:layoutUnit>
 
-            <p:layoutUnit position="center">
-                <ui:insert name="body"/>
-            </p:layoutUnit>
+		<p:layoutUnit position="center">
+			<ui:insert name="body" />
+		</p:layoutUnit>
 
-        </p:layout>
+	</p:layout>
 
-    </h:body>
+</h:body>
 
 </html>

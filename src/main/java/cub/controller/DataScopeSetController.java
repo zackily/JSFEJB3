@@ -23,8 +23,6 @@ import cub.entities.DataScopeDetailPK;
 import cub.entities.DataScopeMaster;
 import cub.entities.RdDataClass;
 import cub.entities.RdDataColumn;
-import cub.entities.RdDataColumnOption;
-import cub.entities.RdDataColumnOptionPK;
 import cub.enums.SeqTypeEnum;
 import cub.facade.DataScopeDetailFacade;
 import cub.facade.DataScopeMasterFacade;
@@ -52,8 +50,6 @@ public class DataScopeSetController implements Serializable {
     private RdDataClassFacade ejbRdDataClassFacade;
     @EJB
     private RdDataColumnFacade ejbRdDataColumnFacade;
-//    @EJB
-//    private RdOptionItemFacade ejbRdOptionItemFacade;
     @EJB
     private RdDataColumnOptionFacade ejbRdDataColumnOptionFacade;
     /*
@@ -81,73 +77,9 @@ public class DataScopeSetController implements Serializable {
      */
     private List<DataScopeDetail> tempItemDetails;
     /*
-     * 新增/編輯暫存邏輯
-     */
-    private String tempLogic;
-    /*
-     * 新增/編輯暫存關係
-     */
-    private String tempOpCode;
-    /*
-     * 新增/編輯暫存資料欄位
-     */
-    private String tempColumn;
-    /*
-     * 新增/編輯暫存左括弧
-     */
-    private String tempLeftBracket;
-    /*
-     * 新增/編輯暫存右括弧
-     */
-    private String tempRightBracket;
-    /*
-     * 新增/編輯暫存資料值
-     */
-    private String tempOpValue;
-    /*
-     * 新增/編輯暫存邏輯
-     */
-    private List<String> tempLogicList = new ArrayList<String>();
-    /*
-     * 新增/編輯暫存關係
-     */
-    private List<String> tempOpCodeList = new ArrayList<String>();
-    /*
-     * 新增/編輯暫存資料
-     */
-    private List<String> tempOpValueList = new ArrayList<String>();
-    /*
-     * 新增/編輯暫存左括弧
-     */
-    private List<String> tempLeftBracketList = new ArrayList<String>();
-    /*
-     * 新增/編輯暫存右括弧
-     */
-    private List<String> tempRightBracketList = new ArrayList<String>();
-    /*
-     * 新增/編輯資料欄位
-     */
-    private List<String> tempColumnList = new ArrayList<String>();
-    /*
-     * 資料類別下拉選單
-     */
-    private List<SelectItem> dataTypeMenu;
-    /*
-     * 關係下拉式選單
-     */
-    private List<SelectItem> operatorMenu;
-    /*
-     * 資料欄位下拉式選單
-     */
-    private List<SelectItem> columnMenu;
-    /*
      * 新增/編輯資料範圍下拉選單
      */
     private List<SelectItem> rdDataColumnOptionMenu;
-    /*
-     * all RD_DATA_COLUMN_OPTION list
-     */
-    private List<RdDataColumnOption> allOptions;
     /*
      * 自定義欄位範圍索引
      */
@@ -160,7 +92,7 @@ public class DataScopeSetController implements Serializable {
     @PostConstruct
     public void init() {
         this.master = new ArrayList<DataScopeMaster>();
-        this.master = ejbDataScopeMasterFacade.findAllSort();
+        getRenewMaster();
         this.item = new DataScopeMaster();
         this.currentItem = new DataScopeMaster();
         if (this.master.isEmpty()) {
@@ -171,26 +103,6 @@ public class DataScopeSetController implements Serializable {
         }
         // 頁面載入資料範圍欄位this.master的index
         currentIndex = 0;
-        // initial資料類別下拉選單
-        this.dataTypeMenu = new ArrayList<SelectItem>();
-        List<RdDataClass> rdcList = ejbRdDataClassFacade.findAllSort();
-        for (RdDataClass rdc : rdcList) {
-            this.dataTypeMenu.add(new SelectItem(rdc.getClassCode(), rdc.getClassName()));
-        }
-        // initial關係下拉選單
-//        this.operatorMenu = new ArrayList<SelectItem>();
-//        List<RdOptionItem> rdiList = ejbRdOptionItemFacade.findAllSort((short) 9);
-//        for (RdOptionItem r : rdiList) {
-//            this.operatorMenu.add(new SelectItem(r.getRdOptionItemPK().getItemCode(), r.getItemName()));
-//        }
-        // initial新增/編輯時資料範圍下拉選單
-        this.rdDataColumnOptionMenu = new ArrayList<SelectItem>();
-        this.allOptions = ejbRdDataColumnOptionFacade.findAll();
-        for (RdDataColumnOption op : allOptions) {
-            RdDataColumnOptionPK pk = op.getRdDataColumnOptionPK();
-            rdDataColumnOptionMenu.add(new SelectItem(pk.getOptionCode(), op.getOptionName()));
-        }
-
         this.tempItemDetails = new ArrayList<DataScopeDetail>();
     }
 
@@ -213,23 +125,16 @@ public class DataScopeSetController implements Serializable {
      * 新增資料條件(＋)
      */
     public void addDataScopeDetailList(ActionEvent event) {
+        DataScopeDetail de = new DataScopeDetail();
         if (StringUtils.isBlank(this.item.getScopeCode())) {// 新增
-            this.tempItemDetails.add(new DataScopeDetail());
-            if (this.item.getClassCode() != 0) {
-                changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
-            }
+            changeColumnMenuByClassCode(de, String.valueOf(this.item.getClassCode()));
+            this.tempItemDetails.add(de);
         } else if (null != this.item) {// 編輯
             this.tempItemDetails.add(new DataScopeDetail());
-            changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
+            changeColumnMenuByClassCode(de, String.valueOf(this.item.getClassCode()));
         } else {
             addMessage("請先選定資料類別!", "請先選定資料類別!");
         }
-        this.tempLogicList.add("");
-        this.tempLeftBracketList.add("");
-        this.tempColumnList.add(null == this.columnMenu ? "" : this.columnMenu.get(0).getValue().toString());
-        this.tempOpCodeList.add("");
-        this.tempOpValueList.add("");
-        this.tempRightBracketList.add("");
     }
 
     /*
@@ -281,6 +186,14 @@ public class DataScopeSetController implements Serializable {
     public void create() {
         this.item = new DataScopeMaster();
         this.editDialogLabel = "新增";
+        // initial資料類別下拉選單
+        this.init();
+        List<SelectItem> dataTypeMenu = new ArrayList<SelectItem>();
+        List<RdDataClass> rdcList = ejbRdDataClassFacade.findAllSort();
+        for (RdDataClass rdc : rdcList) {
+            dataTypeMenu.add(new SelectItem(rdc.getClassCode(), rdc.getClassName()));
+        }
+        this.item.setDataTypeMenu(dataTypeMenu);
     }
 
     /*
@@ -297,40 +210,30 @@ public class DataScopeSetController implements Serializable {
                     DataScopeDetail dd = new DataScopeDetail();
                     DataScopeDetailPK pk = new DataScopeDetailPK();
                     pk.setScopeCode(scopeCode);
-                    int no = i + 1;// Seq_No start from 1;
-                    pk.setSeqNo((short) no);
+                    pk.setSeqNo((short) i++);
                     dd.setDataScopeDetailPK(pk);
-                    dd.setLogic(tempLogicList.get(i));
-                    dd.setLeftBracket(tempLeftBracketList.get(i));
-                    String[] s = StringUtils.split(this.tempColumnList.get(i), "+");
+                    String[] s = StringUtils.split(tempItemDetails.get(i).getColumnValue(), "+");
                     dd.setTableName(s[0]);
                     dd.setColumnName(s[1]);
-                    dd.setOpCode(tempOpCodeList.get(i));
-                    dd.setOpValue(tempOpValueList.get(i));
-                    dd.setRightBracket(tempRightBracketList.get(i));
                     ejbDataScopeDetailFacade.create(dd);
                 }
             }
             ejbDataScopeMasterFacade.create(this.item);
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.DATA_CODE.toString());
             addMessage("新增成功", "新增成功");
+            getRenewMaster();
+            currentIndex = this.master.size() - 1;
         } else {// 編輯
             ejbDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
             for (int i = 0; i < this.tempItemDetails.size(); i++) {
                 DataScopeDetail dd = new DataScopeDetail();
                 DataScopeDetailPK pk = new DataScopeDetailPK();
                 pk.setScopeCode(this.item.getScopeCode());
-                int no = i + 1;// Seq_No start from 1;
-                pk.setSeqNo((short) no);
+                pk.setSeqNo((short) i++);
                 dd.setDataScopeDetailPK(pk);
-                dd.setLogic(tempLogicList.get(i));
-                dd.setLeftBracket(tempLeftBracketList.get(i));
-                String[] s = StringUtils.split(this.tempColumnList.get(i), "+");
+                String[] s = StringUtils.split(tempItemDetails.get(i).getColumnValue(), "+");
                 dd.setTableName(s[0]);
                 dd.setColumnName(s[1]);
-                dd.setOpCode(tempOpCodeList.get(i));
-                dd.setOpValue(tempOpValueList.get(i));
-                dd.setRightBracket(tempRightBracketList.get(i));
                 ejbDataScopeDetailFacade.create(dd);
             }
             this.item.setLogDttm(new Date());
@@ -338,8 +241,7 @@ public class DataScopeSetController implements Serializable {
             addMessage("更新成功", "更新成功");
         }
         this.tempItemDetails.clear();
-//        this.init();
-        clearTempList();
+        // this.init();
         this.currentItem = this.master.get(currentIndex);
         setItemDetail();
         create();
@@ -353,14 +255,15 @@ public class DataScopeSetController implements Serializable {
         this.item = this.currentItem;
         this.tempItemDetails = this.details;
         for (DataScopeDetail ds : this.details) {
-            this.tempLogicList.add(ds.getLogic());
-            this.tempLeftBracketList.add(ds.getLeftBracket());
-            this.tempColumnList.add(ds.getTableName() + "+" + ds.getColumnName());
-            this.tempOpCodeList.add(ds.getOpCode());
-            this.tempOpValueList.add(ds.getOpValue());
-            this.tempRightBracketList.add(ds.getRightBracket());
+            changeColumnMenuByClassCode(ds, String.valueOf(this.item.getClassCode()));
         }
-        changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
+        // initial資料類別下拉選單
+        List<SelectItem> dataTypeMenu = new ArrayList<SelectItem>();
+        List<RdDataClass> rdcList = ejbRdDataClassFacade.findAllSort();
+        for (RdDataClass rdc : rdcList) {
+            dataTypeMenu.add(new SelectItem(rdc.getClassCode(), rdc.getClassName()));
+        }
+        this.item.setDataTypeMenu(dataTypeMenu);
         setItemDetail();
     }
 
@@ -374,104 +277,43 @@ public class DataScopeSetController implements Serializable {
             addMessage("已是最後一筆無法刪除!", "已是最後一筆無法刪除!");
         } else {
             ejbDataScopeMasterFacade.remove(this.currentItem);
-            ejbDataScopeDetailFacade.removeByMaster(tempOpCode);
+            ejbDataScopeDetailFacade.removeByMaster(this.currentItem.getScopeCode());
             addMessage("刪除成功", "刪除成功");
         }
         this.init();
     }
 
     public void classCodeChange() {
-        changeColumnMenuByClassCode(String.valueOf(this.item.getClassCode()));
-    }
-
-    public void logicChange(int i) {
-        this.tempLogicList.set(i, this.tempLogic);
-    }
-
-    public void logicChangeForEdit(ValueChangeEvent e) {
-        if (null == e.getOldValue()) {
-            this.tempLogicList.add(0, e.getNewValue().toString());
-        } else {
-            int idx = this.tempLogicList.indexOf(e.getOldValue().toString());
-            this.tempLogicList.set(idx, e.getNewValue().toString());
+        for (DataScopeDetail dd : this.tempItemDetails) {
+            changeColumnMenuByClassCode(dd, String.valueOf(this.item.getClassCode()));
         }
-    }
-
-    public void columnChange(int i) {
-        this.tempColumnList.set(i, this.tempColumn);
     }
 
     public void columnChangeForEdit(ValueChangeEvent e) {
-        if (null == e.getOldValue()) {
-            this.tempColumnList.add(0, e.getNewValue().toString());
-        } else {
-            int idx = this.tempColumnList.indexOf(e.getOldValue().toString());
-            this.tempColumnList.set(idx, e.getNewValue().toString());
+        List<SelectItem> rdDataColumnOptionMenu = new ArrayList<SelectItem>();
+        String[] s = StringUtils.split(e.getNewValue().toString(), "+");
+        String tableName = s[0];
+        String columnName = s[1];
+        List<Object[]> optionList = ejbRdDataColumnOptionFacade.findByColumn(this.item.getClassCode(), tableName,
+            columnName);
+        for (Object[] op : optionList) {
+            rdDataColumnOptionMenu.add(new SelectItem(op[0], op[1].toString()));
+        }
+        for (int i = 0; i < this.tempItemDetails.size(); i++) {
+            DataScopeDetail d = this.tempItemDetails.get(i);
+            if (StringUtils.isBlank(d.getColumnValue())) {
+                d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
+                this.tempItemDetails.set(i, d);
+            } else if (d.getColumnValue().equals(e.getNewValue().toString())) {
+                d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
+                this.tempItemDetails.set(i, d);
+            }
         }
     }
 
-    public void opCodeChange(int i) {
-        this.tempOpCodeList.set(i, this.tempOpCode);
-    }
-
-    public void opCodeChangeForEdit(ValueChangeEvent e) {
-        if (null == e.getOldValue()) {
-            this.tempOpCodeList.add(0, e.getNewValue().toString());
-        } else {
-            int idx = this.tempOpCodeList.indexOf(e.getOldValue().toString());
-            this.tempOpCodeList.set(idx, e.getNewValue().toString());
-        }
-    }
-
-    public void opValueChange(int i) {
-        this.tempOpValueList.set(i, this.tempOpValue);
-    }
-
-    public void opValueChangeForEdit(ValueChangeEvent e) {
-        if (null == e.getOldValue()) {
-            this.tempOpValueList.add(0, e.getNewValue().toString());
-        } else {
-            int idx = this.tempOpValueList.indexOf(e.getOldValue().toString());
-            this.tempOpValueList.set(idx, e.getNewValue().toString());
-        }
-    }
-
-    public void leftBracketChange(int i) {
-        this.tempLeftBracketList.set(i, this.tempLeftBracket);
-    }
-
-    public void leftBracketChangeForEdit(ValueChangeEvent e) {
-        if (null == e.getOldValue()) {
-            this.tempLeftBracketList.add(0, e.getNewValue().toString());
-        } else {
-            int idx = this.tempLeftBracketList.indexOf(e.getOldValue().toString());
-            this.tempLeftBracketList.set(idx, e.getNewValue().toString());
-        }
-    }
-
-    public void rightBracketChange(int i) {
-        this.tempRightBracketList.set(i, this.tempRightBracket);
-    }
-
-    public void rightBracketChangeForEdit(ValueChangeEvent e) {
-        if (null == e.getOldValue()) {
-            this.tempRightBracketList.add(0, e.getNewValue().toString());
-        } else {
-            int idx = this.tempRightBracketList.indexOf(e.getOldValue().toString());
-            this.tempRightBracketList.set(idx, e.getNewValue().toString());
-        }
-    }
-
-    /*
-     * 清空暫存List
-     */
-    public void clearTempList() {
-        this.tempLogicList.clear();
-        this.tempLeftBracketList.clear();
-        this.tempColumnList.clear();
-        this.tempOpCodeList.clear();
-        this.tempOpValueList.clear();
-        this.tempRightBracketList.clear();
+    public void clearList() {
+        this.tempItemDetails.clear();
+        this.item = new DataScopeMaster();
     }
 
     public int getCurrentIndex() {
@@ -530,132 +372,12 @@ public class DataScopeSetController implements Serializable {
         this.itemDetails = itemDetails;
     }
 
-    public List<SelectItem> getDataTypeMenu() {
-        return dataTypeMenu;
-    }
-
-    public void setDataTypeMenu(List<SelectItem> dataTypeMenu) {
-        this.dataTypeMenu = dataTypeMenu;
-    }
-
-    public List<SelectItem> getOperatorMenu() {
-        return operatorMenu;
-    }
-
-    public void setOperatorMenu(List<SelectItem> operatorMenu) {
-        this.operatorMenu = operatorMenu;
-    }
-
     public List<DataScopeDetail> getTempItemDetails() {
         return tempItemDetails;
     }
 
     public void setTempItemDetails(List<DataScopeDetail> tempItemDetails) {
         this.tempItemDetails = tempItemDetails;
-    }
-
-    public String getTempLogic() {
-        return tempLogic;
-    }
-
-    public void setTempLogic(String tempLogic) {
-        this.tempLogic = tempLogic;
-    }
-
-    public String getTempOpCode() {
-        return tempOpCode;
-    }
-
-    public void setTempOpCode(String tempOpCode) {
-        this.tempOpCode = tempOpCode;
-    }
-
-    public String getTempLeftBracket() {
-        return tempLeftBracket;
-    }
-
-    public void setTempLeftBracket(String tempLeftBracket) {
-        this.tempLeftBracket = tempLeftBracket;
-    }
-
-    public String getTempRightBracket() {
-        return tempRightBracket;
-    }
-
-    public void setTempRightBracket(String tempRightBracket) {
-        this.tempRightBracket = tempRightBracket;
-    }
-
-    public List<String> getTempLogicList() {
-        return tempLogicList;
-    }
-
-    public void setTempLogicList(List<String> tempLogicList) {
-        this.tempLogicList = tempLogicList;
-    }
-
-    public List<String> getTempOpCodeList() {
-        return tempOpCodeList;
-    }
-
-    public void setTempOpCodeList(List<String> tempOpCodeList) {
-        this.tempOpCodeList = tempOpCodeList;
-    }
-
-    public List<String> getTempOpValueList() {
-        return tempOpValueList;
-    }
-
-    public void setTempOpValueList(List<String> tempOpValueList) {
-        this.tempOpValueList = tempOpValueList;
-    }
-
-    public List<String> getTempLeftBracketList() {
-        return tempLeftBracketList;
-    }
-
-    public void setTempLeftBracketList(List<String> tempLeftBracketList) {
-        this.tempLeftBracketList = tempLeftBracketList;
-    }
-
-    public List<String> getTempRightBracketList() {
-        return tempRightBracketList;
-    }
-
-    public void setTempRightBracketList(List<String> tempRightBracketList) {
-        this.tempRightBracketList = tempRightBracketList;
-    }
-
-    public String getTempOpValue() {
-        return tempOpValue;
-    }
-
-    public void setTempOpValue(String tempOpValue) {
-        this.tempOpValue = tempOpValue;
-    }
-
-    public String getTempColumn() {
-        return tempColumn;
-    }
-
-    public void setTempColumn(String tempColumn) {
-        this.tempColumn = tempColumn;
-    }
-
-    public List<String> getTempColumnList() {
-        return tempColumnList;
-    }
-
-    public void setTempColumnList(List<String> tempColumnList) {
-        this.tempColumnList = tempColumnList;
-    }
-
-    public List<SelectItem> getColumnMenu() {
-        return columnMenu;
-    }
-
-    public void setColumnMenu(List<SelectItem> columnMenu) {
-        this.columnMenu = columnMenu;
     }
 
     public List<SelectItem> getRdDataColumnOptionMenu() {
@@ -666,12 +388,8 @@ public class DataScopeSetController implements Serializable {
         this.rdDataColumnOptionMenu = rdDataColumnOptionMenu;
     }
 
-    public List<RdDataColumnOption> getAllOptions() {
-        return allOptions;
-    }
-
-    public void setAllOptions(List<RdDataColumnOption> allOptions) {
-        this.allOptions = allOptions;
+    private void getRenewMaster() {
+        this.master = ejbDataScopeMasterFacade.findAllSort();
     }
 
     /*
@@ -692,7 +410,6 @@ public class DataScopeSetController implements Serializable {
             dd.setColumnCHNName(
                 d.getTableName() + "/" + d.getColumnName() + ejbRdDataColumnFacade.getFieldCNNameMenu(vo));
             dd.setColumnValue(d.getTableName() + "+" + d.getColumnName());
-//            dd.setOpName(ejbRdOptionItemFacade.findItemNameByItemCode(d.getOpCode()));
             this.details.add(dd);
         }
     }
@@ -714,14 +431,15 @@ public class DataScopeSetController implements Serializable {
     /*
      * 資料類別下拉選單改變時重新載資料欄位下拉選單
      */
-    private void changeColumnMenuByClassCode(String classCode) {
-        this.columnMenu = new ArrayList<SelectItem>();
+    private void changeColumnMenuByClassCode(DataScopeDetail de, String classCode) {
+        List<SelectItem> columnMenu = new ArrayList<SelectItem>();
         List<RdDataColumn> rdcList = ejbRdDataColumnFacade.getColumnByClassCode(classCode);
         for (RdDataColumn rdc : rdcList) {
-            this.columnMenu.add(
+            columnMenu.add(
                 new SelectItem(rdc.getRdDataColumnPK().getTableName() + "+" + rdc.getRdDataColumnPK().getColumnName(),
                         rdc.getColumnChnName()));
         }
+        de.setColumnMenu(columnMenu);
     }
 
 }
