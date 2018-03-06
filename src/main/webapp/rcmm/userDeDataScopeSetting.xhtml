@@ -25,7 +25,8 @@
 							disabled="#{empty userDeDataScopeSetController.currentItem.scopeCode}"
 							actionListener="#{userDeDataScopeSetController.edit}"
 							oncomplete="PF('createDialog').show();"
-							update=":createDialog :dialogForm:dataTable :dialogForm:dataTable:selValue" process="@this" />
+							update=":createDialog :dialogForm:dataTable :dialogForm:dataTable:selValue"
+							process="@this" />
 						<p:commandButton value="刪除" style="width: 100%"
 							disabled="#{empty userDeDataScopeSetController.currentItem.scopeCode}"
 							onclick="PF('deleteConfirm').show()" />
@@ -119,7 +120,8 @@
 					<p:outputLabel value="資料類別" />
 					<p:selectOneMenu
 						value="#{userDeDataScopeSetController.item.classCode}"
-						valueChangeListener="#{userDeDataScopeSetController.genReturnFieldMenu}">
+						valueChangeListener="#{userDeDataScopeSetController.genReturnFieldMenu}"
+						required="true" label="資料類別">
 						<p:ajax event="change" immediate="true" update=":dialogForm" />
 						<f:selectItem itemValue="" itemLabel="" />
 						<f:selectItems
@@ -132,7 +134,8 @@
 					<p:outputLabel value="Method名稱" />
 					<p:selectOneMenu
 						value="#{userDeDataScopeSetController.item.methodName}"
-						valueChangeListener="#{userDeDataScopeSetController.onMethodMenuChange}">
+						valueChangeListener="#{userDeDataScopeSetController.onMethodMenuChange}"
+						required="true" label="Method名稱">
 						<p:ajax event="change" immediate="true"
 							update=":dialogForm:dataTable :dialogForm:textMethodNameDesc" />
 						<f:selectItem itemValue="" itemLabel="" />
@@ -160,22 +163,21 @@
 							<h:outputText value="#{detail.parameterDesc}" />
 						</p:column>
 						<p:column headerText="對應值" width="20%">
-							<p:selectOneMenu id="selValue"
-								value="#{detail.value}">
+							<p:selectOneMenu id="selValue" value="#{detail.value}">
 								<p:ajax
 									listener="#{userDeDataScopeSetController.tempValueChange(i)}"
 									update=":dialogForm:dataTable:textValueDesc" event="change" />
 								<f:selectItem itemValue="" itemLabel="" />
-								<f:selectItems
-									value="#{detail.itemRdOptionItemMenu}" />
-							</p:selectOneMenu>	
+								<f:selectItems value="#{detail.itemRdOptionItemMenu}" />
+							</p:selectOneMenu>
 						</p:column>
 						<p:column headerText="對應值說明" width="20%">
 							<h:outputText value="#{detail.valueDesc}" id="textValueDesc" />
 						</p:column>
 						<p:column headerText="自定義範圍" width="10%">
 							<p:selectOneMenu
-								value="#{userDeDataScopeSetController.tempUserDeField}" rendered="#{detail.parameterName!='CLIENT_ID'}">
+								value="#{userDeDataScopeSetController.tempUserDeField}"
+								rendered="#{detail.parameterName!='CLIENT_ID'}">
 								<p:ajax
 									listener="#{userDeDataScopeSetController.tempUserDeFieldChange(i)}"
 									update=":dialogForm:dataTable:textUdColumnName" event="change" />
@@ -183,10 +185,12 @@
 								<f:selectItems
 									value="#{userDeDataScopeSetController.userDeFieldScopeMenu}" />
 							</p:selectOneMenu>
-							<p:outputLabel value="#{detail.udColumnCode}" rendered="#{detail.parameterName=='CLIENT_ID'}"/>
+							<p:outputLabel value="#{detail.udColumnCode}"
+								rendered="#{detail.parameterName=='CLIENT_ID'}" />
 						</p:column>
 						<p:column headerText="範圍名稱" width="20%">
-							<h:outputText value="#{detail.udColumnName}" id="textUdColumnName" />
+							<h:outputText value="#{detail.udColumnName}"
+								id="textUdColumnName" />
 						</p:column>
 					</p:dataTable>
 					<p:panel>

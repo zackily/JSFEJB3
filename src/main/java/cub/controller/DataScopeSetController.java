@@ -207,12 +207,15 @@ public class DataScopeSetController implements Serializable {
             this.item.setLogDttm(new Date());
             if (null != tempItemDetails) {
                 for (int i = 0; i < tempItemDetails.size(); i++) {
-                    DataScopeDetail dd = new DataScopeDetail();
+                    DataScopeDetail dd = tempItemDetails.get(i);
                     DataScopeDetailPK pk = new DataScopeDetailPK();
                     pk.setScopeCode(scopeCode);
-                    pk.setSeqNo((short) i++);
+                    pk.setSeqNo((short) (i + 1));
+                    if (i == 0) {
+                        dd.setLogic("_");
+                    }
                     dd.setDataScopeDetailPK(pk);
-                    String[] s = StringUtils.split(tempItemDetails.get(i).getColumnValue(), "+");
+                    String[] s = StringUtils.split(dd.getColumnValue(), "+");
                     dd.setTableName(s[0]);
                     dd.setColumnName(s[1]);
                     ejbDataScopeDetailFacade.create(dd);
@@ -254,9 +257,6 @@ public class DataScopeSetController implements Serializable {
         this.editDialogLabel = "編輯";
         this.item = this.currentItem;
         this.tempItemDetails = this.details;
-        for (DataScopeDetail ds : this.details) {
-            changeColumnMenuByClassCode(ds, String.valueOf(this.item.getClassCode()));
-        }
         // initial資料類別下拉選單
         List<SelectItem> dataTypeMenu = new ArrayList<SelectItem>();
         List<RdDataClass> rdcList = ejbRdDataClassFacade.findAllSort();
@@ -264,7 +264,8 @@ public class DataScopeSetController implements Serializable {
             dataTypeMenu.add(new SelectItem(rdc.getClassCode(), rdc.getClassName()));
         }
         this.item.setDataTypeMenu(dataTypeMenu);
-        setItemDetail();
+        classCodeChange();
+        columnChangeForEdit();
     }
 
     /*
@@ -291,7 +292,8 @@ public class DataScopeSetController implements Serializable {
 
     public void columnChangeForEdit(ValueChangeEvent e) {
         List<SelectItem> rdDataColumnOptionMenu = new ArrayList<SelectItem>();
-        String[] s = StringUtils.split(e.getNewValue().toString(), "+");
+        String newValue = e.getNewValue().toString();
+        String[] s = StringUtils.split(newValue, "+");
         String tableName = s[0];
         String columnName = s[1];
         List<Object[]> optionList = ejbRdDataColumnOptionFacade.findByColumn(this.item.getClassCode(), tableName,
@@ -304,7 +306,7 @@ public class DataScopeSetController implements Serializable {
             if (StringUtils.isBlank(d.getColumnValue())) {
                 d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
                 this.tempItemDetails.set(i, d);
-            } else if (d.getColumnValue().equals(e.getNewValue().toString())) {
+            } else if (d.getColumnValue().equals(newValue)) {
                 d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
                 this.tempItemDetails.set(i, d);
             }
@@ -386,6 +388,21 @@ public class DataScopeSetController implements Serializable {
 
     public void setRdDataColumnOptionMenu(List<SelectItem> rdDataColumnOptionMenu) {
         this.rdDataColumnOptionMenu = rdDataColumnOptionMenu;
+    }
+
+    private void columnChangeForEdit() {
+        for (int i = 0; i < this.tempItemDetails.size(); i++) {
+            List<SelectItem> rdDataColumnOptionMenu = new ArrayList<SelectItem>();
+            DataScopeDetail d = this.tempItemDetails.get(i);
+            List<Object[]> optionList = ejbRdDataColumnOptionFacade.findByColumn(this.item.getClassCode(),
+                d.getTableName(),
+                d.getColumnName());
+            for (Object[] op : optionList) {
+                rdDataColumnOptionMenu.add(new SelectItem(op[0], op[1].toString()));
+            }
+            d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
+            this.tempItemDetails.set(i, d);
+        }
     }
 
     private void getRenewMaster() {

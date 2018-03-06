@@ -39,6 +39,7 @@ import cub.facade.UdDataScopeMasterFacade;
 import cub.facade.UdMethodDetailFacade;
 import cub.facade.UdMethodMasterFacade;
 import cub.facade.WorkSeqFacade;
+import cub.vo.QueryUdColumnScopeDetailVO;
 
 /**
  * @author F123669 自定義資料範圍設定作業(RCMM02)
@@ -272,6 +273,7 @@ public class UserDeDataScopeSetController implements Serializable {
         }
         addMessage("新增成功", "新增成功");
         this.currentItem = this.master.get(this.currentIndex);
+        this.init();
         setItemDetail();
         create();
     }
@@ -467,6 +469,15 @@ public class UserDeDataScopeSetController implements Serializable {
         genReturnFieldMenu(e.getNewValue().toString());
     }
 
+    private void genColumnCHNName() {
+        QueryUdColumnScopeDetailVO vo = new QueryUdColumnScopeDetailVO();
+        vo.setClassCode(this.currentItem.getClassCode());
+        vo.setTableName(this.currentItem.getTableName());
+        vo.setColumnName(this.currentItem.getColumnName());
+        String columnCHNName = ejbRdDataColumnFacade.getFieldCNNameMenu(vo);
+        this.currentItem.setColumnCHNName(columnCHNName);
+    }
+
     private void genReturnFieldMenu(String classCode) {
         this.itemReturnFieldMenu = new ArrayList<SelectItem>();
         List<RdDataColumn> list = ejbRdDataColumnFacade.getColumnByClassCode(classCode);
@@ -519,6 +530,7 @@ public class UserDeDataScopeSetController implements Serializable {
     private void setItemDetail() {
         String className = ejbRdDataClassFacade.getClassNameByClassCode(this.currentItem.getClassCode());
         this.currentItem.setClassName(className);
+        genColumnCHNName();
         this.detail = ejbUdDataScopeDetailFacade.findByScopeCode(this.currentItem.getScopeCode());
     }
 

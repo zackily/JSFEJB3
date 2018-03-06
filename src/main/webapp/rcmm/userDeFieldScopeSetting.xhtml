@@ -105,7 +105,8 @@
 						value="#{userDeFieldScopeSetController.item.udColumnCode}" />
 					<p:outputLabel value="自定義欄位範圍名稱" />
 					<p:inputText
-						value="#{userDeFieldScopeSetController.item.udColumnName}" />
+						value="#{userDeFieldScopeSetController.item.udColumnName}"
+						required="true" label="自定義欄位範圍名稱" />
 					<p:outputLabel value="欄位中文名稱" />
 					<p:outputLabel value="#{userDeFieldScopeSetController.fieldCNName}"
 						rendered="#{userDeFieldScopeSetController.editDialogLabel=='編輯'}" />
@@ -137,7 +138,8 @@
 						</p:column>
 						<p:column headerText="資料範圍">
 							<p:selectOneMenu
-								value="#{userDeFieldScopeSetController.tempOptionCode}">
+								value="#{userDeFieldScopeSetController.tempOptionCode}"
+								required="true" label="資料範圍">
 								<p:ajax
 									listener="#{userDeFieldScopeSetController.columnOptionChange(i)}"
 									event="change" />
