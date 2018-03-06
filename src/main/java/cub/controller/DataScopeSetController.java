@@ -130,8 +130,16 @@ public class DataScopeSetController implements Serializable {
             changeColumnMenuByClassCode(de, String.valueOf(this.item.getClassCode()));
             this.tempItemDetails.add(de);
         } else if (null != this.item) {// 編輯
-            this.tempItemDetails.add(new DataScopeDetail());
             changeColumnMenuByClassCode(de, String.valueOf(this.item.getClassCode()));
+            List<SelectItem> rdDataColumnOptionMenu = new ArrayList<SelectItem>();
+            List<Object[]> optionList = ejbRdDataColumnOptionFacade.findByColumn(this.item.getClassCode(),
+                de.getTableName(),
+                de.getColumnName());
+            for (Object[] op : optionList) {
+                rdDataColumnOptionMenu.add(new SelectItem(op[0], op[1].toString()));
+            }
+            de.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
+            this.tempItemDetails.add(de);
         } else {
             addMessage("請先選定資料類別!", "請先選定資料類別!");
         }
@@ -264,6 +272,7 @@ public class DataScopeSetController implements Serializable {
             dataTypeMenu.add(new SelectItem(rdc.getClassCode(), rdc.getClassName()));
         }
         this.item.setDataTypeMenu(dataTypeMenu);
+        setItemDetail();
         classCodeChange();
         columnChangeForEdit();
     }
@@ -293,6 +302,7 @@ public class DataScopeSetController implements Serializable {
     public void columnChangeForEdit(ValueChangeEvent e) {
         List<SelectItem> rdDataColumnOptionMenu = new ArrayList<SelectItem>();
         String newValue = e.getNewValue().toString();
+        String oldValue = null != e.getOldValue() ? e.getOldValue().toString() : "";
         String[] s = StringUtils.split(newValue, "+");
         String tableName = s[0];
         String columnName = s[1];
@@ -306,14 +316,14 @@ public class DataScopeSetController implements Serializable {
             if (StringUtils.isBlank(d.getColumnValue())) {
                 d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
                 this.tempItemDetails.set(i, d);
-            } else if (d.getColumnValue().equals(newValue)) {
+            } else if (d.getColumnValue().equals(oldValue)) {
                 d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
                 this.tempItemDetails.set(i, d);
             }
         }
     }
 
-    public void clearList() {
+    public void clearList(ActionEvent event) {
         this.tempItemDetails.clear();
         this.item = new DataScopeMaster();
     }

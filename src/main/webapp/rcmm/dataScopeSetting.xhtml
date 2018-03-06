@@ -145,7 +145,7 @@
                     </p:dataTable>
                     <p:panel>
                         <p:commandButton value="儲存" actionListener="#{dataScopeSetController.save}" update=":growl :mainForm :dialogForm" oncomplete="PF('createDialog').hide()"  />
-                        <p:commandButton value="取消" oncomplete="PF('createDialog').hide()" actionListener="#{dataScopeSetController.clearList}" />
+                        <p:commandButton value="取消" oncomplete="PF('createDialog').hide()" actionListener="#{dataScopeSetController.clearList}" update=":growl :mainForm :dialogForm" process="@this" />
                     </p:panel>
                 </p:panelGrid>
             </h:form>
