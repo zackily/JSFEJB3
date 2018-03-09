@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -36,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RuleList.findByRuleEngName", query = "SELECT r FROM RuleList r WHERE r.ruleEngName = :ruleEngName")
     , @NamedQuery(name = "RuleList.findByRtnMessage", query = "SELECT r FROM RuleList r WHERE r.rtnMessage = :rtnMessage")
     , @NamedQuery(name = "RuleList.findByCheckTiming", query = "SELECT r FROM RuleList r WHERE r.checkTiming = :checkTiming")
-    , @NamedQuery(name = "RuleList.findByCustomerAggregate", query = "SELECT r FROM RuleList r WHERE r.customerAggregate = :customerAggregate")
+    , @NamedQuery(name = "RuleList.findByClientAggregate", query = "SELECT r FROM RuleList r WHERE r.clientAggregate = :clientAggregate")
     , @NamedQuery(name = "RuleList.findByCheckColumn", query = "SELECT r FROM RuleList r WHERE r.checkColumn = :checkColumn")
     , @NamedQuery(name = "RuleList.findByDividendAggregate", query = "SELECT r FROM RuleList r WHERE r.dividendAggregate = :dividendAggregate")
     , @NamedQuery(name = "RuleList.findByDivisorSource", query = "SELECT r FROM RuleList r WHERE r.divisorSource = :divisorSource")
@@ -45,8 +46,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RuleList.findByEndDate", query = "SELECT r FROM RuleList r WHERE r.endDate = :endDate")
     , @NamedQuery(name = "RuleList.findByLimitCondition", query = "SELECT r FROM RuleList r WHERE r.limitCondition = :limitCondition")
     , @NamedQuery(name = "RuleList.findByLimitRate", query = "SELECT r FROM RuleList r WHERE r.limitRate = :limitRate")
-    , @NamedQuery(name = "RuleList.findByResult1", query = "SELECT r FROM RuleList r WHERE r.result1 = :result1")
-    , @NamedQuery(name = "RuleList.findByResult2", query = "SELECT r FROM RuleList r WHERE r.result2 = :result2")
     , @NamedQuery(name = "RuleList.findByLimitReaction", query = "SELECT r FROM RuleList r WHERE r.limitReaction = :limitReaction")
     , @NamedQuery(name = "RuleList.findByLogUserId", query = "SELECT r FROM RuleList r WHERE r.logUserId = :logUserId")
     , @NamedQuery(name = "RuleList.findByLogDttm", query = "SELECT r FROM RuleList r WHERE r.logDttm = :logDttm")
@@ -65,7 +64,7 @@ public class RuleList implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "RULE_CLASS")
-    private short ruleClass;
+    private Short ruleClass;
     @Size(max = 100)
     @Column(name = "RULE_CHN_NAME")
     private String ruleChnName;
@@ -78,9 +77,9 @@ public class RuleList implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "CHECK_TIMING")
-    private short checkTiming;
-    @Column(name = "CUSTOMER_AGGREGATE")
-    private Short customerAggregate;
+    private Short checkTiming;
+    @Column(name = "CLIENT_AGGREGATE")
+    private Short clientAggregate;
     @Column(name = "CHECK_COLUMN")
     private Short checkColumn;
     @Column(name = "DIVIDEND_AGGREGATE")
@@ -103,17 +102,11 @@ public class RuleList implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "LIMIT_CONDITION")
-    private short limitCondition;
+    private Short limitCondition;
     @Basic(optional = false)
     @NotNull
     @Column(name = "LIMIT_RATE")
     private BigDecimal limitRate;
-    @Size(max = 10)
-    @Column(name = "RESULT1")
-    private String result1;
-    @Size(max = 10)
-    @Column(name = "RESULT2")
-    private String result2;
     @Column(name = "LIMIT_REACTION")
     private Short limitReaction;
     @Size(max = 20)
@@ -125,7 +118,9 @@ public class RuleList implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "IS_LOCK")
-    private short isLock;
+    private Short isLock;
+    @Transient
+    private boolean lock;
     @Size(max = 20)
     @Column(name = "LOCK_USER_ID")
     private String lockUserId;
@@ -140,7 +135,7 @@ public class RuleList implements Serializable {
         this.ruleNo = ruleNo;
     }
 
-    public RuleList(String ruleNo, short ruleClass, short checkTiming, Date startDate, Date endDate, short limitCondition, BigDecimal limitRate, short isLock) {
+    public RuleList(String ruleNo, Short ruleClass, Short checkTiming, Date startDate, Date endDate, Short limitCondition, BigDecimal limitRate, Short isLock) {
         this.ruleNo = ruleNo;
         this.ruleClass = ruleClass;
         this.checkTiming = checkTiming;
@@ -159,11 +154,11 @@ public class RuleList implements Serializable {
         this.ruleNo = ruleNo;
     }
 
-    public short getRuleClass() {
+    public Short getRuleClass() {
         return ruleClass;
     }
 
-    public void setRuleClass(short ruleClass) {
+    public void setRuleClass(Short ruleClass) {
         this.ruleClass = ruleClass;
     }
 
@@ -191,20 +186,20 @@ public class RuleList implements Serializable {
         this.rtnMessage = rtnMessage;
     }
 
-    public short getCheckTiming() {
+    public Short getCheckTiming() {
         return checkTiming;
     }
 
-    public void setCheckTiming(short checkTiming) {
+    public void setCheckTiming(Short checkTiming) {
         this.checkTiming = checkTiming;
     }
 
-    public Short getCustomerAggregate() {
-        return customerAggregate;
+    public Short getClientAggregate() {
+        return clientAggregate;
     }
 
-    public void setCustomerAggregate(Short customerAggregate) {
-        this.customerAggregate = customerAggregate;
+    public void setClientAggregate(Short clientAggregate) {
+        this.clientAggregate = clientAggregate;
     }
 
     public Short getCheckColumn() {
@@ -255,11 +250,11 @@ public class RuleList implements Serializable {
         this.endDate = endDate;
     }
 
-    public short getLimitCondition() {
+    public Short getLimitCondition() {
         return limitCondition;
     }
 
-    public void setLimitCondition(short limitCondition) {
+    public void setLimitCondition(Short limitCondition) {
         this.limitCondition = limitCondition;
     }
 
@@ -269,22 +264,6 @@ public class RuleList implements Serializable {
 
     public void setLimitRate(BigDecimal limitRate) {
         this.limitRate = limitRate;
-    }
-
-    public String getResult1() {
-        return result1;
-    }
-
-    public void setResult1(String result1) {
-        this.result1 = result1;
-    }
-
-    public String getResult2() {
-        return result2;
-    }
-
-    public void setResult2(String result2) {
-        this.result2 = result2;
     }
 
     public Short getLimitReaction() {
@@ -311,12 +290,20 @@ public class RuleList implements Serializable {
         this.logDttm = logDttm;
     }
 
-    public short getIsLock() {
+    public Short getIsLock() {
         return isLock;
     }
 
-    public void setIsLock(short isLock) {
+    public void setIsLock(Short isLock) {
         this.isLock = isLock;
+    }
+
+    public boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
     }
 
     public String getLockUserId() {

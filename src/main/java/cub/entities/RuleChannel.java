@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "RuleChannel.findAll", query = "SELECT r FROM RuleChannel r")
     , @NamedQuery(name = "RuleChannel.findByRuleNo", query = "SELECT r FROM RuleChannel r WHERE r.ruleChannelPK.ruleNo = :ruleNo")
-    , @NamedQuery(name = "RuleChannel.findByChannel", query = "SELECT r FROM RuleChannel r WHERE r.ruleChannelPK.channel = :channel")
+    , @NamedQuery(name = "RuleChannel.findByChannel", query = "SELECT r FROM RuleChannel r WHERE r.ruleChannelPK.channelCode = :channelCode")
     , @NamedQuery(name = "RuleChannel.findByLogUserId", query = "SELECT r FROM RuleChannel r WHERE r.logUserId = :logUserId")
     , @NamedQuery(name = "RuleChannel.findByLogDttm", query = "SELECT r FROM RuleChannel r WHERE r.logDttm = :logDttm")})
 public class RuleChannel implements Serializable {

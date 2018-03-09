@@ -40,25 +40,19 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
         return query.getResultList();
     }
 
-    public List<RdOptionItem> findByClassCode(Short classCode) {
+    public List<Object[]> findByClassCode(Short classCode) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from RdOptionItem r where r.rdOptionItemPK.classCode =:classCode order by r.rdOptionItemPK.classCode asc");
+        jpql.append("select r.rdOptionItemPK.itemCode, r.itemName from RdOptionItem r where r.rdOptionItemPK.classCode =:classCode order by r.rdOptionItemPK.itemCode asc");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("classCode", classCode);
         return query.getResultList();
     }
-
-    public String findItemNameByItemCode(String itemCode) {
+    
+    public List<RdOptionItem> findAllSortByItemCode() {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("select r.itemName from RdOptionItem r")
-                .append(" where r.rdOptionItemPK.itemCode =:itemCode and r.rdOptionItemPK.classCode = 9");
+        jpql.append("from RdOptionItem r order by r.rdOptionItemPK.itemCode asc");
         Query query = em.createQuery(jpql.toString());
-        query.setParameter("itemCode", Short.valueOf(itemCode));
-        try {
-            return query.getSingleResult().toString();
-        } catch (NoResultException e) {
-            return null;
-        }
+        return query.getResultList();
     }
 
     public List<Object[]> findAllItemCodes(String columnName) {

@@ -13,7 +13,7 @@
         <h:form id="mainForm" style="width: 60%">
             <p:growl id="growl" life="2000" />
             <p:panel header="資料範圍設定作業(RCMM01)">
-                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-8" style="width:100%" layout="grid">
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-11" style="width:100%" layout="grid">
                     <p:panelGrid columns="1" style="width: 100%" layout="grid" >
                         <p:commandButton value="新增" style="width: 100%" actionListener="#{dataScopeSetController.create}" oncomplete="PF('createDialog').show();" update=":createDialog :dialogForm" process="@this" />
                         <p:commandButton value="編輯" style="width: 100%" disabled="#{empty dataScopeSetController.currentItem.scopeCode}" actionListener="#{dataScopeSetController.edit}" oncomplete="PF('createDialog').show();" update=":createDialog :dialogForm" process="@this" />
@@ -26,7 +26,7 @@
                             <p:commandButton value="&gt;" actionListener="#{dataScopeSetController.lookupMaster(1)}" style="width: 100%" update=":mainForm"/>
                             <p:commandButton value="&gt;&gt;" actionListener="#{dataScopeSetController.lookupMaster(dataScopeSetController.master.size())}" style="width: 100%" update=":mainForm"/>
                         </p:panelGrid>
-                        <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-4, ui-grid-col-6" style="width:100%;margin: 0 auto">
+                        <p:panelGrid columns="2" layout="grid" columnClasses="ui-grid-col-2, ui-grid-col-6" style="width:100%;margin: 0 auto">
                             <p:outputLabel value="資料範圍代碼"/>
                             <p:autoComplete value="#{dataScopeSetController.currentItem.scopeCode}" completeMethod="#{dataScopeSetController.searchDataScopeMaster}" >
                                 <p:ajax event="itemSelect" listener="#{dataScopeSetController.onItemSelect}" update=":mainForm"/>

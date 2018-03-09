@@ -26,15 +26,15 @@ public class RuleChannelPK implements Serializable {
     private String ruleNo;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "CHANNEL")
-    private short channel;
+    @Column(name = "CHANNEL_CODE")
+    private short channelCode;
 
     public RuleChannelPK() {
     }
 
-    public RuleChannelPK(String ruleNo, short channel) {
+    public RuleChannelPK(String ruleNo, short channelCode) {
         this.ruleNo = ruleNo;
-        this.channel = channel;
+        this.channelCode = channelCode;
     }
 
     public String getRuleNo() {
@@ -45,19 +45,19 @@ public class RuleChannelPK implements Serializable {
         this.ruleNo = ruleNo;
     }
 
-    public short getChannel() {
-        return channel;
+    public short getChannelCode() {
+        return channelCode;
     }
 
-    public void setChannel(short channel) {
-        this.channel = channel;
+    public void setChannelCode(short channelCode) {
+        this.channelCode = channelCode;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (ruleNo != null ? ruleNo.hashCode() : 0);
-        hash += (int) channel;
+        hash += (int) channelCode;
         return hash;
     }
 
@@ -71,7 +71,7 @@ public class RuleChannelPK implements Serializable {
         if ((this.ruleNo == null && other.ruleNo != null) || (this.ruleNo != null && !this.ruleNo.equals(other.ruleNo))) {
             return false;
         }
-        if (this.channel != other.channel) {
+        if (this.channelCode != other.channelCode) {
             return false;
         }
         return true;
@@ -79,7 +79,7 @@ public class RuleChannelPK implements Serializable {
 
     @Override
     public String toString() {
-        return "cub.entities.RuleChannelPK[ ruleNo=" + ruleNo + ", channel=" + channel + " ]";
+        return "cub.entities.RuleChannelPK[ ruleNo=" + ruleNo + ", channelCode=" + channelCode + " ]";
     }
     
 }
