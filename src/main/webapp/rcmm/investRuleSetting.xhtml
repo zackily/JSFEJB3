@@ -349,13 +349,13 @@
 							</p:dataTable>
 							<p:panelGrid columns="4" style="width: 100%">
 								<h:outputLabel value="法規生效期間" />
-								<p:calendar pattern="yyyyMMdd"
+								<p:calendar pattern="yyyyMMdd" required="true" label="法規生效期間起啟日"
 									value="#{investRuleSetController.item.startDate}">
 									<f:convertDateTime type="date" dateStyle="short"
 										pattern="yyyyMMdd" />
 								</p:calendar>
 								<h:outputLabel value="To" />
-								<p:calendar pattern="yyyyMMdd"
+								<p:calendar pattern="yyyyMMdd" required="true" label="法規生效期間結束日"
 									value="#{investRuleSetController.item.endDate}">
 									<f:convertDateTime type="date" dateStyle="short"
 										pattern="yyyyMMdd" />
