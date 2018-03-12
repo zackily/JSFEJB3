@@ -203,10 +203,10 @@ public class InvestRuleSetController implements Serializable {
         List<DataScopeMaster> dsm = ejbDataScopeMasterFacade.findAllSort();
         List<UdDataScopeMaster> udsm = ejbUdDataScopeMasterFacade.findAllSort();
         for (DataScopeMaster d : dsm) {
-            this.scopeCodeMenu.add(new SelectItem(d.getScopeCode(), d.getScopeName()));
+            this.scopeCodeMenu.add(new SelectItem(d.getScopeCode(), d.getScopeCode() + " " + d.getScopeName()));
         }
         for (UdDataScopeMaster d : udsm) {
-            this.scopeCodeMenu.add(new SelectItem(d.getScopeCode(), d.getScopeName()));
+            this.scopeCodeMenu.add(new SelectItem(d.getScopeCode(), d.getScopeCode() + " " + d.getScopeName()));
         }
     }
 

@@ -9,7 +9,6 @@ import javax.faces.convert.Converter;
 
 import cub.enums.SeqTypeEnum;
 import cub.facade.DataScopeMasterFacade;
-import cub.facade.RdDataColumnOptionFacade;
 import cub.facade.UdDataScopeMasterFacade;
 
 @ManagedBean(name = "scopeCodeConverter")
@@ -29,10 +28,10 @@ public class ScopeCodeConverter implements Converter {
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         String result = "";
         if (null != value) {
-            if (value.toString().indexOf(SeqTypeEnum.FUND_CODE.toString()) >= 0) {
-
-            }else if(value.toString().indexOf(SeqTypeEnum.DATA_CODE.toString()) >= 0) {
-                
+            if (value.toString().indexOf(SeqTypeEnum.UDDATA_CODE.getCode()) >= 0) {
+                result = ejbUdDataScopeMasterFacade.findScopeNameByCode(value.toString());
+            } else if (value.toString().indexOf(SeqTypeEnum.DATA_CODE.getCode()) >= 0) {
+                result = ejbDataScopeMasterFacade.findScopeNameByCode(value.toString());
             }
         }
         return result;

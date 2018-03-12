@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.facade;
 
@@ -44,5 +44,13 @@ public class UdDataScopeMasterFacade extends AbstractFacade<UdDataScopeMaster> {
         Query query = em.createQuery(jpql.toString());
         query.setParameter("code", code + "%");
         return query.getResultList();
+    }
+
+    public String findScopeNameByCode(String code) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select u.scopeName from UdDataScopeMaster u where u.scopeCode =:code");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("code", code);
+        return query.getSingleResult().toString();
     }
 }

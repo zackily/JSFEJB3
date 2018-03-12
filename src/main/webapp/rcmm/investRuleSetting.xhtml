@@ -129,14 +129,17 @@
 							<p:dataTable var="dividend"
 								value="#{investRuleSetController.ruleDividendList}"
 								scrollable="true" scrollHeight="100">
-								<p:column headerText="運算子">
+								<p:column headerText="運算子" width="20%" style="text-align:center">
 									<h:outputLabel value="#{dividend.opCode}" />
 								</p:column>
-								<p:column headerText="資料範圍">
+								<p:column headerText="資料範圍" width="30%"
+									style="text-align:center">
 									<h:outputLabel value="#{dividend.scopeCode}" />
 								</p:column>
-								<p:column headerText="範圍名稱">
-									<h:outputLabel value="#{dividend.scopeCode}" />
+								<p:column headerText="範圍名稱" width="50%"
+									style="text-align:center">
+									<h:outputLabel value="#{dividend.scopeCode}"
+										converter="#{scopeCodeConverter}" />
 								</p:column>
 							</p:dataTable>
 							<p:panelGrid columns="4" style="width: 100%">
@@ -171,14 +174,17 @@
 							<p:dataTable var="divisor"
 								value="#{investRuleSetController.ruleDivisorList}"
 								scrollable="true" scrollHeight="100">
-								<p:column headerText="運算子">
+								<p:column headerText="運算子" width="20%" style="text-align:center">
 									<h:outputLabel value="#{divisor.opCode}" />
 								</p:column>
-								<p:column headerText="資料範圍">
+								<p:column headerText="資料範圍" width="30%"
+									style="text-align:center">
 									<h:outputLabel value="#{divisor.scopeCode}" />
 								</p:column>
-								<p:column headerText="範圍名稱">
-									<h:outputLabel value="#{divisor.scopeCode}" />
+								<p:column headerText="範圍名稱" width="50%"
+									style="text-align:center">
+									<h:outputLabel value="#{divisor.scopeCode}"
+										converter="#{scopeCodeConverter}" />
 								</p:column>
 							</p:dataTable>
 							<p:panelGrid columns="4" style="width: 100%">
@@ -322,24 +328,23 @@
 							<p:dataTable var="dividend" id="dividendTable"
 								value="#{investRuleSetController.ruleDividendList}"
 								scrollable="true" scrollHeight="100">
-								<p:column>
+								<p:column width="15%" style="text-align:center">
 									<p:commandButton value="－"
 										actionListener="#{investRuleSetController.removeDividendList(dividend)}"
 										update=":dialogForm:dividendTable" process="@this" />
 								</p:column>
-								<p:column headerText="運算子">
+								<p:column headerText="運算子" width="30%" style="text-align:center">
 									<p:selectOneMenu value="#{dividend.opCode}">
 										<f:selectItem itemLabel="+" itemValue="+" />
 										<f:selectItem itemLabel="-" itemValue="-" />
 									</p:selectOneMenu>
 								</p:column>
-								<p:column headerText="資料範圍">
+								<p:column headerText="資料範圍" width="55%"
+									style="text-align:center">
 									<p:selectOneMenu value="#{dividend.scopeCode}">
-										<f:selectItems value="#{investRuleSetController.scopeCodeMenu" />
+										<f:selectItems
+											value="#{investRuleSetController.scopeCodeMenu}" />
 									</p:selectOneMenu>
-								</p:column>
-								<p:column headerText="範圍名稱">
-									<h:outputText converter="#{}" value="#{dividend.scopeCode}" />
 								</p:column>
 							</p:dataTable>
 							<p:panelGrid columns="4" style="width: 100%">
@@ -389,24 +394,23 @@
 							<p:dataTable var="divisor" id="divisorTable"
 								value="#{investRuleSetController.ruleDivisorList}"
 								scrollable="true" scrollHeight="100">
-								<p:column>
+								<p:column width="15%" style="text-align:center">
 									<p:commandButton value="－"
 										actionListener="#{investRuleSetController.removeDivisorList(divisor)}"
 										update=":dialogForm:divisorTable" process="@this" />
 								</p:column>
-								<p:column headerText="運算子">
+								<p:column headerText="運算子" width="30%" style="text-align:center">
 									<p:selectOneMenu value="#{divisor.opCode}">
 										<f:selectItem itemLabel="+" itemValue="+" />
 										<f:selectItem itemLabel="-" itemValue="-" />
 									</p:selectOneMenu>
 								</p:column>
-								<p:column headerText="資料範圍">
-									<p:selectOneMenu value="#{dividend.scopeCode}">
-										<f:selectItems value="#{investRuleSetController.scopeCodeMenu" />
+								<p:column headerText="資料範圍" width="55%"
+									style="text-align:center">
+									<p:selectOneMenu value="#{divisor.scopeCode}">
+										<f:selectItems
+											value="#{investRuleSetController.scopeCodeMenu}" />
 									</p:selectOneMenu>
-								</p:column>
-								<p:column headerText="範圍名稱">
-									<h:outputText converter="#{}" value="#{dividend.scopeCode}" />
 								</p:column>
 							</p:dataTable>
 							<p:panelGrid columns="4" style="width: 100%">
