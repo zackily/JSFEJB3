@@ -83,6 +83,8 @@ public class DataScopeDetail implements Serializable {
     private String columnValue;
     @Transient
     private String opName;
+    @Transient
+    private String tempOpValue;
     /*
      * 資料欄位下拉式選單
      */
@@ -207,6 +209,14 @@ public class DataScopeDetail implements Serializable {
 
     public void setRdDataColumnOptionMenu(List<SelectItem> rdDataColumnOptionMenu) {
         this.rdDataColumnOptionMenu = rdDataColumnOptionMenu;
+    }
+
+    public String getTempOpValue() {
+        return tempOpValue;
+    }
+
+    public void setTempOpValue(String tempOpValue) {
+        this.tempOpValue = tempOpValue;
     }
 
     @Override

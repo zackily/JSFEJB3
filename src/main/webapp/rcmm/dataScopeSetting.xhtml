@@ -86,7 +86,7 @@
 						<h:outputText value="#{items.opCode}" />
 					</p:column>
 					<p:column headerText="資料" width="25%">
-						<h:outputText value="#{items.opValue}"
+						<h:outputText value="#{items.tempOpValue}"
 							converter="#{opValueConverter}" />
 					</p:column>
 					<p:column headerText="）" width="5%">
@@ -159,7 +159,6 @@
 							<p:selectOneMenu id="selLeftBracket" value="#{op.leftBracket}"
 								required="true" label="LeftBracket">
 								<p:ajax event="change" immediate="true" process="@this" />
-								<f:selectItem itemValue="" itemLabel="" />
 								<f:selectItem itemValue="_" itemLabel="_" />
 								<f:selectItem itemValue="&#40;" itemLabel="&#40;" />
 							</p:selectOneMenu>
@@ -192,7 +191,6 @@
 							<p:selectOneMenu id="selRightBracket" value="#{op.rightBracket}"
 								required="true" label="RightBracket">
 								<p:ajax event="change" immediate="true" process="@this" />
-								<f:selectItem itemValue="" itemLabel="" />
 								<f:selectItem itemValue="_" itemLabel="_" />
 								<f:selectItem itemValue="&#41;" itemLabel="&#41;" />
 							</p:selectOneMenu>

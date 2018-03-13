@@ -219,7 +219,7 @@ public class DataScopeSetController implements Serializable {
                     DataScopeDetailPK pk = new DataScopeDetailPK();
                     pk.setScopeCode(scopeCode);
                     pk.setSeqNo((short) (i + 1));
-                    if (i == 0) {
+                    if (i == 1) {
                         dd.setLogic("_");
                     }
                     dd.setDataScopeDetailPK(pk);
@@ -437,6 +437,7 @@ public class DataScopeSetController implements Serializable {
             dd.setColumnCHNName(
                 d.getTableName() + "/" + d.getColumnName() + ejbRdDataColumnFacade.getFieldCNNameMenu(vo));
             dd.setColumnValue(d.getTableName() + "+" + d.getColumnName());
+            dd.setTempOpValue(d.getOpValue() + "+" + d.getTableName() + "+" + d.getColumnName());
             this.details.add(dd);
         }
     }

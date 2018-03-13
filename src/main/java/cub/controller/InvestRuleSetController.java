@@ -21,6 +21,8 @@ import cub.entities.DataScopeMaster;
 import cub.entities.RdOptionItem;
 import cub.entities.RuleChannel;
 import cub.entities.RuleChannelPK;
+import cub.entities.RuleChecktime;
+import cub.entities.RuleChecktimePK;
 import cub.entities.RuleDividend;
 import cub.entities.RuleDividendPK;
 import cub.entities.RuleDivisor;
@@ -35,6 +37,7 @@ import cub.enums.SeqTypeEnum;
 import cub.facade.DataScopeMasterFacade;
 import cub.facade.RdOptionItemFacade;
 import cub.facade.RuleChannelFacade;
+import cub.facade.RuleChecktimeFacade;
 import cub.facade.RuleDividendFacade;
 import cub.facade.RuleDivisorFacade;
 import cub.facade.RuleListFacade;
@@ -61,6 +64,8 @@ public class InvestRuleSetController implements Serializable {
     private RuleTradeTypeFacade ejbRuleTradeTypeFacade;
     @EJB
     private RuleChannelFacade ejbRuleChannelFacade;
+    @EJB
+    private RuleChecktimeFacade ejbRuleChecktimeFacade;
     @EJB
     private RdOptionItemFacade ejbRdOptionItemFacade;
     @EJB
@@ -110,7 +115,7 @@ public class InvestRuleSetController implements Serializable {
     /*
      * 檢核時點
      */
-    private List<SelectItem> checkTimingList;
+    private List<SelectItem> ruleChecktimeList;
     /*
      * 客戶統計條件
      */
@@ -148,6 +153,10 @@ public class InvestRuleSetController implements Serializable {
      */
     private Object[] tempRuleChannel;
     /*
+     * 檢核時點
+     */
+    private Object[] tempRuleCheckTime;
+    /*
      * 檢核商品
      */
     private String strTempRuleProduct;
@@ -159,6 +168,10 @@ public class InvestRuleSetController implements Serializable {
      * 檢核通路
      */
     private String strTempRuleChannel;
+    /*
+     * 檢核時點
+     */
+    private String strTempRuleCheckTime;
     /*
      * 分子標的
      */
@@ -191,7 +204,7 @@ public class InvestRuleSetController implements Serializable {
         this.ruleProductList = new ArrayList<SelectItem>();
         this.ruleTradeTypeList = new ArrayList<SelectItem>();
         this.ruleChannelList = new ArrayList<SelectItem>();
-        this.checkTimingList = new ArrayList<SelectItem>();
+        this.ruleChecktimeList = new ArrayList<SelectItem>();
         this.clientAggregateList = new ArrayList<SelectItem>();
         this.checkColumnList = new ArrayList<SelectItem>();
         this.dividendAggregateList = new ArrayList<SelectItem>();
@@ -294,63 +307,76 @@ public class InvestRuleSetController implements Serializable {
     public void create() {
         this.item = new RuleList();
         this.editDialogLabel = "新增";
-
+        ruleDividendList.clear();
+        ruleDivisorList.clear();
     }
 
     /*
      * 確認新增
      */
     public void save(ActionEvent event) {
-        if (StringUtils.isBlank(this.item.getRuleNo())) {// 新增
-            String ruleNo = getWorkSeq(SeqTypeEnum.FUND_CODE.toString());
-            updateRuleRelateTable(ruleNo);
-            this.item.setRuleNo(ruleNo);
-            this.item.setLogUserId("Gilbert");
-            this.item.setLogDttm(new Date());
-            this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
-            saveDivide();
-            ejbRuleListFacade.create(this.item);
-            ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.FUND_CODE.toString());
-            addMessage("新增成功", "新增成功");
-            getRenewMaster();
-            currentIndex = this.master.size() - 1;
-        } else {// 編輯
-            removeRuleRelateData();
-            updateRuleRelateTable(this.item.getRuleNo());
-            this.item.setLogUserId("Gilbert");
-            this.item.setLogDttm(new Date());
-            this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
-            saveDivide();
-            ejbRuleListFacade.edit(this.item);
-            addMessage("更新成功", "更新成功");
+        if (this.ruleDividendList.isEmpty()) {
+            addMessage("請新增最少一筆分子條件", "請新增最少一筆分子條件");
+        } else if (this.item.getDivisorSource().intValue() == 2 && this.ruleDivisorList.isEmpty()) {
+            addMessage("請新增最少一筆分母條件", "請新增最少一筆分母條件");
+        } else {
+            if (StringUtils.isBlank(this.item.getRuleNo())) {// 新增
+                String ruleNo = getWorkSeq(SeqTypeEnum.FUND_CODE.toString());
+                updateRuleRelateTable(ruleNo);
+                this.item.setRuleNo(ruleNo);
+                this.item.setLogUserId("Gilbert");
+                this.item.setLogDttm(new Date());
+                this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
+                saveDivide();
+                ejbRuleListFacade.create(this.item);
+                ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.FUND_CODE.toString());
+                addMessage("新增成功", "新增成功");
+                getRenewMaster();
+                currentIndex = this.master.size() - 1;
+            } else {// 編輯
+                removeRuleRelateData();
+                updateRuleRelateTable(this.item.getRuleNo());
+                this.item.setLogUserId("Gilbert");
+                this.item.setLogDttm(new Date());
+                this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
+                saveDivide();
+                ejbRuleListFacade.edit(this.item);
+                addMessage("更新成功", "更新成功");
+            }
+            this.currentItem = this.master.get(currentIndex);
         }
-        this.currentItem = this.master.get(currentIndex);
         genTempList();
     }
 
-    private void saveDivide() {
-        if (!this.ruleDividendList.isEmpty()) {
-            ejbRuleDividendFacade.removeByRuleNo(this.item.getRuleNo());
-            for (int i = 0; i < ruleDividendList.size(); i++) {
-                RuleDividendPK pk = new RuleDividendPK(this.item.getRuleNo(), (short) (i + 1));
-                RuleDividend entity = ruleDividendList.get(i);
-                entity.setRuleDividendPK(pk);
-                entity.setLogUserId("Gilbert");
-                entity.setLogDttm(new Date());
-                ejbRuleDividendFacade.save(entity);
-            }
+    public void selectAllRuleProduct(ActionEvent event) {
+        tempRuleProduct = new Object[ruleProductList.size()];
+        for (int i = 0; i < ruleProductList.size(); i++) {
+            tempRuleProduct[i] = ruleProductList.get(i).getValue();
         }
-        if (!this.ruleDivisorList.isEmpty()) {
-            ejbRuleDivisorFacade.removeByRuleNo(this.item.getRuleNo());
-            for (int i = 0; i < ruleDivisorList.size(); i++) {
-                RuleDivisorPK pk = new RuleDivisorPK(this.item.getRuleNo(), (short) (i + 1));
-                RuleDivisor entity = ruleDivisorList.get(i);
-                entity.setRuleDivisorPK(pk);
-                entity.setLogUserId("Gilbert");
-                entity.setLogDttm(new Date());
-                ejbRuleDivisorFacade.save(entity);
-            }
+    }
+
+    public void selectAllRuleTradeType(ActionEvent event) {
+        tempRuleTradeType = new Object[ruleTradeTypeList.size()];
+        for (int i = 0; i < ruleTradeTypeList.size(); i++) {
+            tempRuleTradeType[i] = ruleTradeTypeList.get(i).getValue();
         }
+
+    }
+
+    public void selectAllRuleChannel(ActionEvent event) {
+        tempRuleChannel = new Object[ruleChannelList.size()];
+        for (int i = 0; i < ruleChannelList.size(); i++) {
+            tempRuleChannel[i] = ruleChannelList.get(i).getValue();
+        }
+
+    }
+
+    public void selectAllRuleChecktime(ActionEvent event) {
+        tempRuleCheckTime = new Object[ruleChecktimeList.size()];
+        for (int i = 0; i < ruleChecktimeList.size(); i++) {
+            tempRuleCheckTime[i] = ruleChecktimeList.get(i).getValue();
+        }
+
     }
 
     /*
@@ -359,25 +385,8 @@ public class InvestRuleSetController implements Serializable {
     public void edit() {
         this.editDialogLabel = "編輯";
         this.item = this.currentItem;
+        genTempList();
         genRuleSelectItem();
-    }
-
-    private void genRuleSelectItem() {
-        List<Short> prdCodeList = ejbRuleProductFacade.findByRuleNo(this.item.getRuleNo());
-        List<Short> tradeTypeList = ejbRuleTradeTypeFacade.findByRuleNo(this.item.getRuleNo());
-        List<Short> channelCodeList = ejbRuleChannelFacade.findByRuleNo(this.item.getRuleNo());
-        tempRuleProduct = new Object[prdCodeList.size()];
-        for (int i = 0; i < prdCodeList.size(); i++) {
-            tempRuleProduct[i] = prdCodeList.get(i);
-        }
-        tempRuleTradeType = new Object[tradeTypeList.size()];
-        for (int i = 0; i < tradeTypeList.size(); i++) {
-            tempRuleTradeType[i] = tradeTypeList.get(i);
-        }
-        tempRuleChannel = new Object[channelCodeList.size()];
-        for (int i = 0; i < channelCodeList.size(); i++) {
-            tempRuleChannel[i] = channelCodeList.get(i);
-        }
     }
 
     /*
@@ -391,6 +400,11 @@ public class InvestRuleSetController implements Serializable {
 
     public void clearList(ActionEvent event) {
         this.item = new RuleList();
+        tempRuleProduct = new Object[0];
+        tempRuleTradeType = new Object[0];
+        tempRuleChannel = new Object[0];
+        tempRuleCheckTime = new Object[0];
+        this.init();
     }
 
     public int getCurrentIndex() {
@@ -465,12 +479,12 @@ public class InvestRuleSetController implements Serializable {
         this.ruleChannelList = ruleChannelList;
     }
 
-    public List<SelectItem> getCheckTimingList() {
-        return checkTimingList;
+    public List<SelectItem> getRuleChecktimeList() {
+        return ruleChecktimeList;
     }
 
-    public void setCheckTimingList(List<SelectItem> checkTimingList) {
-        this.checkTimingList = checkTimingList;
+    public void setRuleChecktimeList(List<SelectItem> ruleChecktimeList) {
+        this.ruleChecktimeList = ruleChecktimeList;
     }
 
     public List<SelectItem> getClientAggregateList() {
@@ -593,16 +607,82 @@ public class InvestRuleSetController implements Serializable {
         this.scopeCodeMenu = scopeCodeMenu;
     }
 
+    public Object[] getTempRuleCheckTime() {
+        return tempRuleCheckTime;
+    }
+
+    public void setTempRuleCheckTime(Object[] tempRuleCheckTime) {
+        this.tempRuleCheckTime = tempRuleCheckTime;
+    }
+
+    public String getStrTempRuleCheckTime() {
+        return strTempRuleCheckTime;
+    }
+
+    public void setStrTempRuleCheckTime(String strTempRuleCheckTime) {
+        this.strTempRuleCheckTime = strTempRuleCheckTime;
+    }
+
+    private void saveDivide() {
+        if (!this.ruleDividendList.isEmpty()) {
+            ejbRuleDividendFacade.removeByRuleNo(this.item.getRuleNo());
+            for (int i = 0; i < ruleDividendList.size(); i++) {
+                RuleDividendPK pk = new RuleDividendPK(this.item.getRuleNo(), (short) (i + 1));
+                RuleDividend entity = ruleDividendList.get(i);
+                entity.setRuleDividendPK(pk);
+                entity.setLogUserId("Gilbert");
+                entity.setLogDttm(new Date());
+                ejbRuleDividendFacade.save(entity);
+            }
+        }
+//        if (!this.ruleDivisorList.isEmpty()) {
+            ejbRuleDivisorFacade.removeByRuleNo(this.item.getRuleNo());
+            for (int i = 0; i < ruleDivisorList.size(); i++) {
+                RuleDivisorPK pk = new RuleDivisorPK(this.item.getRuleNo(), (short) (i + 1));
+                RuleDivisor entity = ruleDivisorList.get(i);
+                entity.setRuleDivisorPK(pk);
+                entity.setLogUserId("Gilbert");
+                entity.setLogDttm(new Date());
+                ejbRuleDivisorFacade.save(entity);
+            }
+//        }
+    }
+
     private void genTempList() {
         List<String> ruleProductList = ejbRuleProductFacade.findItemNameByRuleNo(this.currentItem.getRuleNo());
-        this.strTempRuleProduct = String.join(",", ruleProductList);
+        this.strTempRuleProduct = String.join(" ；　", ruleProductList);
         List<String> ruleTradeTypeList = ejbRuleTradeTypeFacade.findItemNameByRuleNo(this.currentItem.getRuleNo());
-        this.strTempRuleTradeType = String.join(",", ruleTradeTypeList);
+        this.strTempRuleTradeType = String.join(" ；　", ruleTradeTypeList);
         List<String> ruleChannelList = ejbRuleChannelFacade.findItemNameByRuleNo(this.currentItem.getRuleNo());
-        this.strTempRuleChannel = String.join(",", ruleChannelList);
+        this.strTempRuleChannel = String.join(" ；　", ruleChannelList);
+        List<String> ruleChecktimeList = ejbRuleChecktimeFacade.findItemNameByRuleNo(this.currentItem.getRuleNo());
+        this.strTempRuleCheckTime = String.join(" ；　", ruleChecktimeList);
         this.currentItem.setLock(this.currentItem.getIsLock() == 1 ? true : false);
         this.ruleDividendList = ejbRuleDividendFacade.findByRuleNo(this.currentItem.getRuleNo());
         this.ruleDivisorList = ejbRuleDivisorFacade.findByRuleNo(this.currentItem.getRuleNo());
+    }
+
+    private void genRuleSelectItem() {
+        List<Short> prdCodeList = ejbRuleProductFacade.findByRuleNo(this.item.getRuleNo());
+        List<Short> tradeTypeList = ejbRuleTradeTypeFacade.findByRuleNo(this.item.getRuleNo());
+        List<Short> channelCodeList = ejbRuleChannelFacade.findByRuleNo(this.item.getRuleNo());
+        List<Short> checktimeList = ejbRuleChecktimeFacade.findByRuleNo(this.item.getRuleNo());
+        tempRuleProduct = new Object[prdCodeList.size()];
+        for (int i = 0; i < prdCodeList.size(); i++) {
+            tempRuleProduct[i] = prdCodeList.get(i);
+        }
+        tempRuleTradeType = new Object[tradeTypeList.size()];
+        for (int i = 0; i < tradeTypeList.size(); i++) {
+            tempRuleTradeType[i] = tradeTypeList.get(i);
+        }
+        tempRuleChannel = new Object[channelCodeList.size()];
+        for (int i = 0; i < channelCodeList.size(); i++) {
+            tempRuleChannel[i] = channelCodeList.get(i);
+        }
+        tempRuleCheckTime = new Object[checktimeList.size()];
+        for (int i = 0; i < checktimeList.size(); i++) {
+            tempRuleCheckTime[i] = checktimeList.get(i);
+        }
     }
 
     private void getRenewMaster() {
@@ -613,6 +693,7 @@ public class InvestRuleSetController implements Serializable {
         ejbRuleProductFacade.removeByRuleNo(this.item.getRuleNo());
         ejbRuleTradeTypeFacade.removeByRuleNo(this.item.getRuleNo());
         ejbRuleChannelFacade.removeByRuleNo(this.item.getRuleNo());
+        ejbRuleChecktimeFacade.removeByRuleNo(this.item.getRuleNo());
     }
 
     private void updateRuleRelateTable(String ruleNo) {
@@ -640,6 +721,14 @@ public class InvestRuleSetController implements Serializable {
             rc.setLogUserId("Gilbert");
             ejbRuleChannelFacade.create(rc);
         }
+        for (Object o : tempRuleCheckTime) {
+            RuleChecktimePK pk = new RuleChecktimePK(ruleNo, Short.valueOf(o.toString()));
+            RuleChecktime rc = new RuleChecktime();
+            rc.setRuleChecktimePK(pk);
+            rc.setLogDttm(new Date());
+            rc.setLogUserId("Gilbert");
+            ejbRuleChecktimeFacade.create(rc);
+        }
     }
 
     private void genAllItemList(List<RdOptionItem> allItem) {
@@ -658,7 +747,7 @@ public class InvestRuleSetController implements Serializable {
                     this.ruleChannelList.add(new SelectItem(rd.getRdOptionItemPK().getItemCode(), rd.getItemName()));
                     break;
                 case 4:
-                    this.checkTimingList.add(new SelectItem(rd.getRdOptionItemPK().getItemCode(), rd.getItemName()));
+                    this.ruleChecktimeList.add(new SelectItem(rd.getRdOptionItemPK().getItemCode(), rd.getItemName()));
                     break;
                 case 5:
                     this.clientAggregateList

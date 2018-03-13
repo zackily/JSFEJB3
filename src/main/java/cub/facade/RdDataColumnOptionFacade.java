@@ -43,12 +43,16 @@ public class RdDataColumnOptionFacade extends AbstractFacade<RdDataColumnOption>
         return query.getResultList();
     }
 
-    public String getOpNameByCode(String optionCode) {
+    public String getOpNameByCode(String optionCode, String tableName, String columnName) {
         StringBuilder jpql = new StringBuilder(100);
         jpql.append("select r.optionName from RdDataColumnOption r")
-            .append(" where r.rdDataColumnOptionPK.optionCode =:optionCode");
+            .append(" where r.rdDataColumnOptionPK.optionCode =:optionCode ")
+            .append(" and r.rdDataColumnOptionPK.tableName =:tableName ")
+            .append(" and r.rdDataColumnOptionPK.columnName =:columnName ");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("optionCode", optionCode);
+        query.setParameter("tableName", tableName);
+        query.setParameter("columnName", columnName);
         try {
             return query.getSingleResult().toString();
         } catch (NoResultException e) {

@@ -36,7 +36,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "RuleList.findByRuleChnName", query = "SELECT r FROM RuleList r WHERE r.ruleChnName = :ruleChnName")
     , @NamedQuery(name = "RuleList.findByRuleEngName", query = "SELECT r FROM RuleList r WHERE r.ruleEngName = :ruleEngName")
     , @NamedQuery(name = "RuleList.findByRtnMessage", query = "SELECT r FROM RuleList r WHERE r.rtnMessage = :rtnMessage")
-    , @NamedQuery(name = "RuleList.findByCheckTiming", query = "SELECT r FROM RuleList r WHERE r.checkTiming = :checkTiming")
     , @NamedQuery(name = "RuleList.findByClientAggregate", query = "SELECT r FROM RuleList r WHERE r.clientAggregate = :clientAggregate")
     , @NamedQuery(name = "RuleList.findByCheckColumn", query = "SELECT r FROM RuleList r WHERE r.checkColumn = :checkColumn")
     , @NamedQuery(name = "RuleList.findByDividendAggregate", query = "SELECT r FROM RuleList r WHERE r.dividendAggregate = :dividendAggregate")
@@ -74,10 +73,6 @@ public class RuleList implements Serializable {
     @Size(max = 100)
     @Column(name = "RTN_MESSAGE")
     private String rtnMessage;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CHECK_TIMING")
-    private Short checkTiming;
     @Column(name = "CLIENT_AGGREGATE")
     private Short clientAggregate;
     @Column(name = "CHECK_COLUMN")
@@ -138,7 +133,6 @@ public class RuleList implements Serializable {
     public RuleList(String ruleNo, Short ruleClass, Short checkTiming, Date startDate, Date endDate, Short limitCondition, BigDecimal limitRate, Short isLock) {
         this.ruleNo = ruleNo;
         this.ruleClass = ruleClass;
-        this.checkTiming = checkTiming;
         this.startDate = startDate;
         this.endDate = endDate;
         this.limitCondition = limitCondition;
@@ -184,14 +178,6 @@ public class RuleList implements Serializable {
 
     public void setRtnMessage(String rtnMessage) {
         this.rtnMessage = rtnMessage;
-    }
-
-    public Short getCheckTiming() {
-        return checkTiming;
-    }
-
-    public void setCheckTiming(Short checkTiming) {
-        this.checkTiming = checkTiming;
     }
 
     public Short getClientAggregate() {

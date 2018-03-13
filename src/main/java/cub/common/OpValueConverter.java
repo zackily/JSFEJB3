@@ -7,6 +7,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
+import org.apache.commons.lang.StringUtils;
+
 import cub.facade.RdDataColumnOptionFacade;
 
 @ManagedBean(name = "opValueConverter")
@@ -24,7 +26,8 @@ public class OpValueConverter implements Converter {
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         String result = "";
         if (null != value) {
-            result = ejbRdDataColumnOptionFacade.getOpNameByCode(value.toString());
+            String[] split = StringUtils.split(value.toString(), "+");
+            result = ejbRdDataColumnOptionFacade.getOpNameByCode(split[0], split[1], split[2]);
         }
         return result;
     }

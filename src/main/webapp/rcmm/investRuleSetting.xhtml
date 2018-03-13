@@ -48,8 +48,9 @@
 						<p:panelGrid columns="1" layout="grid"
 							style="width:100%;margin: 0 auto">
 							<p:panelGrid columns="2" layout="grid" style="width:100%"
-								columnClasses="ui-grid-col-3, ui-grid-col-6">
-								<p:panelGrid columns="2" layout="grid">
+								columnClasses="ui-grid-col-6, ui-grid-col-6">
+								<p:panelGrid columns="2" layout="grid"
+									columnClasses="ui-grid-col-2, ui-grid-col-4">
 									<h:outputLabel value="投資限制代碼" />
 									<p:autoComplete
 										value="#{investRuleSetController.currentItem.ruleNo}"
@@ -60,70 +61,74 @@
 									</p:autoComplete>
 								</p:panelGrid>
 								<p:panelGrid columns="2" layout="grid"
-									columnClasses="ui-grid-col-3, ui-grid-col-6">
+									columnClasses="ui-grid-col-2, ui-grid-col-4">
 									<h:outputLabel value="代碼類別" />
-									<h:outputText converter="#{ruleClassConverter}"
+									<h:inputText converter="#{ruleClassConverter}" readonly="true"
 										value="#{investRuleSetController.currentItem.ruleClass}" />
 								</p:panelGrid>
 							</p:panelGrid>
-							<p:panelGrid columns="2" layout="grid">
+							<p:panelGrid columns="2" layout="grid"
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
 								<h:outputLabel value="投資限制中文說明" />
-								<h:outputText
+								<h:inputText readonly="true" size="150"
 									value="#{investRuleSetController.currentItem.ruleChnName}" />
 							</p:panelGrid>
-							<p:panelGrid columns="2" layout="grid">
+							<p:panelGrid columns="2" layout="grid"
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
 								<h:outputLabel value="投資限制英文說明" />
-								<h:outputText
+								<h:inputText readonly="true" size="150"
 									value="#{investRuleSetController.currentItem.ruleEngName}" />
 							</p:panelGrid>
-							<p:panelGrid columns="2" layout="grid">
+							<p:panelGrid columns="2" layout="grid"
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
 								<h:outputLabel value="違規警示訊息" />
-								<h:outputText
+								<h:inputText readonly="true" size="150"
 									value="#{investRuleSetController.currentItem.rtnMessage}" />
 							</p:panelGrid>
-							<p:panelGrid columns="3" layout="grid"
-								columnClasses="ui-grid-col-5, ui-grid-col-5, ui-grid-col-5">
-								<p:panelGrid columns="2" style="width:100%">
-									<h:outputLabel value="檢核商品" />
-									<h:outputText
-										value="#{investRuleSetController.strTempRuleProduct}" />
-								</p:panelGrid>
-								<p:panelGrid columns="2" style="width:100%">
-									<h:outputLabel value="交易類別" />
-									<h:outputText
-										value="#{investRuleSetController.strTempRuleTradeType}" />
-								</p:panelGrid>
-								<p:panelGrid columns="2" style="width:100%">
-									<h:outputLabel value="檢核通路" />
-									<h:outputText
-										value="#{investRuleSetController.strTempRuleChannel}" />
-								</p:panelGrid>
+							<p:panelGrid columns="2" layout="grid"
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
+								<h:outputLabel value="檢核商品" />
+								<h:inputText readonly="true" size="150"
+									value="#{investRuleSetController.strTempRuleProduct}" />
 							</p:panelGrid>
 							<p:panelGrid columns="2" layout="grid"
-								columnClasses="ui-grid-col-3, ui-grid-col-4">
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
+								<h:outputLabel value="交易類別" />
+								<h:inputText readonly="true" size="150"
+									value="#{investRuleSetController.strTempRuleTradeType}" />
+							</p:panelGrid>
+							<p:panelGrid columns="2" layout="grid"
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
+								<h:outputLabel value="檢核通路" />
+								<h:inputText readonly="true" size="150"
+									value="#{investRuleSetController.strTempRuleChannel}" />
+							</p:panelGrid>
+							<p:panelGrid columns="2" layout="grid"
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
 								<h:outputLabel value="檢核時點" />
-								<h:outputText converter="#{checkTimingConverter}"
-									value="#{investRuleSetController.currentItem.checkTiming}" />
+								<h:inputText readonly="true" size="150"
+									value="#{investRuleSetController.strTempRuleCheckTime}" />
 							</p:panelGrid>
 						</p:panelGrid>
 
 					</p:panelGrid>
 				</p:panelGrid>
 				<p:panelGrid columns="2" style="width: 100%">
-					<p:fieldset>
+					<p:panel>
 						<p:panelGrid columns="3" style="width: 100%">
 							<h:outputLabel value="檢核結果計算邏輯" />
-							<h:outputLabel value="客戶統計條件(單選)" />
-							<h:outputText converter="#{clientAggregateConverter}"
+							<h:outputLabel value="客戶統計條件" />
+							<h:inputText converter="#{clientAggregateConverter}"
+								readonly="true"
 								value="#{investRuleSetController.currentItem.clientAggregate}" />
 						</p:panelGrid>
 						<p:panelGrid columns="1" style="width: 100%">
 							<f:facet name="header">
 								<h:outputLabel value="分子條件設定區" />
 							</f:facet>
-							<p:panelGrid columns="2" style="width: 100%">
+							<p:panelGrid columns="2">
 								<h:outputLabel value="分子標的合計方式" />
-								<h:outputText converter="#{checkColumnConverter}"
+								<h:inputText converter="#{checkColumnConverter}" readonly="true"
 									value="#{investRuleSetController.currentItem.checkColumn}" />
 							</p:panelGrid>
 							<p:dataTable var="dividend"
@@ -144,31 +149,37 @@
 							</p:dataTable>
 							<p:panelGrid columns="4" style="width: 100%">
 								<h:outputLabel value="法規生效期間" />
-								<h:outputText
-									value="#{investRuleSetController.currentItem.startDate}" />
+								<h:inputText readonly="true"
+									value="#{investRuleSetController.currentItem.startDate}">
+									<f:convertDateTime pattern="yyyy/MM/dd" />
+								</h:inputText>
 								<h:outputLabel value="To" />
-								<h:outputText
-									value="#{investRuleSetController.currentItem.endDate}" />
+								<h:inputText readonly="true"
+									value="#{investRuleSetController.currentItem.endDate}">
+									<f:convertDateTime pattern="yyyy/MM/dd" />
+								</h:inputText>
 							</p:panelGrid>
 
 						</p:panelGrid>
-					</p:fieldset>
-					<p:fieldset>
+					</p:panel>
+					<p:panel>
 						<p:panelGrid columns="2" style="width: 100%">
 							<h:outputLabel value="檢核資料欄位" />
-							<h:outputText converter="#{dividendAggregateConverter}"
+							<h:inputText converter="#{dividendAggregateConverter}"
+								readonly="true"
 								value="#{investRuleSetController.currentItem.dividendAggregate}" />
 						</p:panelGrid>
 						<p:panelGrid columns="1" style="width: 100%">
 							<f:facet name="header">
 								<h:outputLabel value="分母條件設定區" />
 							</f:facet>
-							<p:panelGrid columns="4" style="width: 100%">
+							<p:panelGrid columns="4">
 								<h:outputLabel value="分母數值抓取方式" />
-								<h:outputText converter="#{divisorSourceConverter}"
+								<h:inputText converter="#{divisorSourceConverter}"
+									readonly="true"
 									value="#{investRuleSetController.currentItem.divisorSource}" />
 								<h:outputLabel value="分母固定值" />
-								<h:outputText
+								<h:inputText readonly="true"
 									value="#{investRuleSetController.currentItem.divisorValue}" />
 							</p:panelGrid>
 							<p:dataTable var="divisor"
@@ -189,19 +200,20 @@
 							</p:dataTable>
 							<p:panelGrid columns="4" style="width: 100%">
 								<h:outputLabel value="超限條件" />
-								<h:outputText converter="#{limitConditionConverter}"
+								<h:inputText converter="#{limitConditionConverter}"
+									readonly="true"
 									value="#{investRuleSetController.currentItem.limitCondition}" />
 								<h:outputLabel value="超限值%" />
-								<h:outputText
+								<h:inputText readonly="true"
 									value="#{investRuleSetController.currentItem.limitRate}" />
 							</p:panelGrid>
 						</p:panelGrid>
-					</p:fieldset>
+					</p:panel>
 
 
 					<p:panelGrid columns="4" style="width: 100%">
 						<h:outputLabel value="超限處理" />
-						<h:outputText converter="#{limitReactionConverter}"
+						<h:inputText converter="#{limitReactionConverter}" readonly="true"
 							value="#{investRuleSetController.currentItem.limitReaction}" />
 						<h:outputLabel value="鎖定註記" />
 						<p:selectBooleanCheckbox disabled="true"
@@ -247,23 +259,30 @@
 								</p:selectOneRadio>
 							</p:panelGrid>
 						</p:panelGrid>
-						<p:panelGrid columns="2" layout="grid">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-8">
 							<h:outputLabel value="投資限制中文說明" />
-							<h:inputText value="#{investRuleSetController.item.ruleChnName}" />
+							<h:inputText value="#{investRuleSetController.item.ruleChnName}"
+								size="120" />
 						</p:panelGrid>
-						<p:panelGrid columns="2" layout="grid">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-8">
 							<h:outputLabel value="投資限制英文說明" />
-							<h:inputText value="#{investRuleSetController.item.ruleEngName}" />
+							<h:inputText value="#{investRuleSetController.item.ruleEngName}"
+								size="120" />
 						</p:panelGrid>
-						<p:panelGrid columns="2" layout="grid">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-8">
 							<h:outputLabel value="違規警示訊息" />
-							<h:inputText value="#{investRuleSetController.item.rtnMessage}" />
+							<h:inputText value="#{investRuleSetController.item.rtnMessage}"
+								size="120" />
 						</p:panelGrid>
 						<p:panelGrid columns="3" layout="grid"
 							columnClasses="ui-grid-col-5, ui-grid-col-5, ui-grid-col-5">
 							<p:panelGrid columns="2" style="width:100%">
 								<h:outputLabel value="檢核商品" />
 								<p:selectManyCheckbox layout="grid" columns="2"
+									id="selRuleProduct"
 									value="#{investRuleSetController.tempRuleProduct}">
 									<f:selectItems
 										value="#{investRuleSetController.ruleProductList}" />
@@ -272,6 +291,7 @@
 							<p:panelGrid columns="2" style="width:100%">
 								<h:outputLabel value="交易類別" />
 								<p:selectManyCheckbox layout="grid" columns="2"
+									id="selRuleTradeType"
 									value="#{investRuleSetController.tempRuleTradeType}">
 									<f:selectItems
 										value="#{investRuleSetController.ruleTradeTypeList}" />
@@ -280,26 +300,36 @@
 							<p:panelGrid columns="2" style="width:100%">
 								<h:outputLabel value="檢核通路" />
 								<p:selectManyCheckbox layout="grid" columns="2"
+									id="selRuleChannel"
 									value="#{investRuleSetController.tempRuleChannel}">
 									<f:selectItems
 										value="#{investRuleSetController.ruleChannelList}" />
 								</p:selectManyCheckbox>
 							</p:panelGrid>
+							<p:commandButton value="全選"
+								actionListener="#{investRuleSetController.selectAllRuleProduct}"
+								update=":growl :mainForm :dialogForm:selRuleProduct" />
+							<p:commandButton value="全選"
+								actionListener="#{investRuleSetController.selectAllRuleTradeType}"
+								update=":growl :mainForm :dialogForm:selRuleTradeType" />
+							<p:commandButton value="全選"
+								actionListener="#{investRuleSetController.selectAllRuleChannel}"
+								update=":growl :mainForm :dialogForm:selRuleChannel" />
 						</p:panelGrid>
 						<p:panelGrid columns="2" layout="grid"
 							columnClasses="ui-grid-col-1, ui-grid-col-9">
 							<h:outputLabel value="檢核時點" />
-							<p:selectOneMenu label="檢核時點" required="true"
-								value="#{investRuleSetController.item.checkTiming}">
+							<p:selectManyCheckbox label="檢核時點" required="true"
+								value="#{investRuleSetController.tempRuleCheckTime}">
 								<f:selectItems
-									value="#{investRuleSetController.checkTimingList}" />
-							</p:selectOneMenu>
+									value="#{investRuleSetController.ruleChecktimeList}" />
+							</p:selectManyCheckbox>
 						</p:panelGrid>
 					</p:panelGrid>
 
 				</p:panelGrid>
 				<p:panelGrid columns="2" style="width: 100%">
-					<p:fieldset>
+					<p:panel>
 						<p:panelGrid columns="5" style="width: 100%">
 							<h:outputLabel value="檢核結果計算邏輯" />
 							<p:commandButton value="＋"
@@ -363,8 +393,8 @@
 							</p:panelGrid>
 
 						</p:panelGrid>
-					</p:fieldset>
-					<p:fieldset>
+					</p:panel>
+					<p:panel>
 						<p:panelGrid columns="4" style="width: 100%">
 							<h:outputLabel value="檢核資料欄位" />
 							<p:commandButton value="＋"
@@ -384,11 +414,14 @@
 								<h:outputLabel value="分母數值抓取方式" />
 								<p:selectOneMenu
 									value="#{investRuleSetController.item.divisorSource}">
+									<p:ajax event="change" update=":dialogForm:divisorValue" />
+									<f:selectItem itemValue="_" itemLabel="_"/>
 									<f:selectItems
 										value="#{investRuleSetController.dividsorSourceList}" />
 								</p:selectOneMenu>
 								<h:outputLabel value="分母固定值" />
-								<h:inputText
+								<h:inputText id="divisorValue" label="分母固定值"
+									required="#{investRuleSetController.item.divisorSource==1}"
 									value="#{investRuleSetController.item.divisorValue}" />
 							</p:panelGrid>
 							<p:dataTable var="divisor" id="divisorTable"
@@ -424,10 +457,8 @@
 								<h:inputText label="超限值%" required="true"
 									value="#{investRuleSetController.item.limitRate}" />
 							</p:panelGrid>
-
 						</p:panelGrid>
-
-					</p:fieldset>
+					</p:panel>
 
 
 					<p:panelGrid columns="4" style="width: 100%">
