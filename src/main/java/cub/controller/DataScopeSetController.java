@@ -61,23 +61,23 @@ public class DataScopeSetController implements Serializable {
      */
     private List<DataScopeDetail> details;
     /*
-     * 新增/編輯
+     * 新增/修改
      */
     private DataScopeMaster item;
     /*
-     * 待編輯資料範圍設定
+     * 待修改資料範圍設定
      */
     private DataScopeMaster currentItem;
     /*
-     * 新增/編輯資料條件設定區
+     * 新增/修改資料條件設定區
      */
     private List<DataScopeDetail> itemDetails;
     /*
-     * 新增/編輯暫存資料條件設定區
+     * 新增/修改暫存資料條件設定區
      */
     private List<DataScopeDetail> tempItemDetails;
     /*
-     * 新增/編輯資料範圍下拉選單
+     * 新增/修改資料範圍下拉選單
      */
     private List<SelectItem> rdDataColumnOptionMenu;
     /*
@@ -85,7 +85,7 @@ public class DataScopeSetController implements Serializable {
      */
     private int currentIndex;
     /*
-     * 新增/編輯Dialog CommandButton value
+     * 新增/修改Dialog CommandButton value
      */
     private String editDialogLabel = "新增";
 
@@ -129,7 +129,7 @@ public class DataScopeSetController implements Serializable {
         if (StringUtils.isBlank(this.item.getScopeCode())) {// 新增
             changeColumnMenuByClassCode(de, String.valueOf(this.item.getClassCode()));
             this.tempItemDetails.add(de);
-        } else if (null != this.item) {// 編輯
+        } else if (null != this.item) {// 修改
             changeColumnMenuByClassCode(de, String.valueOf(this.item.getClassCode()));
             List<SelectItem> rdDataColumnOptionMenu = new ArrayList<SelectItem>();
             List<Object[]> optionList = ejbRdDataColumnOptionFacade.findByColumn(this.item.getClassCode(),
@@ -214,45 +214,21 @@ public class DataScopeSetController implements Serializable {
             this.item.setLogUserId("Gilbert");
             this.item.setLogDttm(new Date());
             if (null != tempItemDetails) {
-                for (int i = 0; i < tempItemDetails.size(); i++) {
-                    DataScopeDetail dd = tempItemDetails.get(i);
-                    DataScopeDetailPK pk = new DataScopeDetailPK();
-                    pk.setScopeCode(scopeCode);
-                    pk.setSeqNo((short) (i + 1));
-                    if (i == 1) {
-                        dd.setLogic("_");
-                    }
-                    dd.setDataScopeDetailPK(pk);
-                    String[] s = StringUtils.split(dd.getColumnValue(), "+");
-                    dd.setTableName(s[0]);
-                    dd.setColumnName(s[1]);
-                    ejbDataScopeDetailFacade.create(dd);
-                }
+                genDataScopeDetail(scopeCode);
             }
             ejbDataScopeMasterFacade.create(this.item);
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.DATA_CODE.toString());
             addMessage("新增成功", "新增成功");
             getRenewMaster();
             currentIndex = this.master.size() - 1;
-        } else {// 編輯
+        } else {// 修改
             ejbDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
-            for (int i = 0; i < this.tempItemDetails.size(); i++) {
-                DataScopeDetail dd = new DataScopeDetail();
-                DataScopeDetailPK pk = new DataScopeDetailPK();
-                pk.setScopeCode(this.item.getScopeCode());
-                pk.setSeqNo((short) i++);
-                dd.setDataScopeDetailPK(pk);
-                String[] s = StringUtils.split(tempItemDetails.get(i).getColumnValue(), "+");
-                dd.setTableName(s[0]);
-                dd.setColumnName(s[1]);
-                ejbDataScopeDetailFacade.create(dd);
-            }
+            genDataScopeDetail(this.item.getScopeCode());
             this.item.setLogDttm(new Date());
             ejbDataScopeMasterFacade.edit(this.item);
             addMessage("更新成功", "更新成功");
         }
         this.tempItemDetails.clear();
-        // this.init();
         this.currentItem = this.master.get(currentIndex);
         setItemDetail();
         create();
@@ -262,7 +238,7 @@ public class DataScopeSetController implements Serializable {
      * 點擊修改
      */
     public void edit() {
-        this.editDialogLabel = "編輯";
+        this.editDialogLabel = "修改";
         this.item = this.currentItem;
         this.tempItemDetails = this.details;
         // initial資料類別下拉選單
@@ -398,6 +374,23 @@ public class DataScopeSetController implements Serializable {
 
     public void setRdDataColumnOptionMenu(List<SelectItem> rdDataColumnOptionMenu) {
         this.rdDataColumnOptionMenu = rdDataColumnOptionMenu;
+    }
+
+    private void genDataScopeDetail(String scopeCode) {
+        for (int i = 0; i < tempItemDetails.size(); i++) {
+            DataScopeDetail dd = tempItemDetails.get(i);
+            DataScopeDetailPK pk = new DataScopeDetailPK();
+            pk.setScopeCode(scopeCode);
+            pk.setSeqNo((short) (i + 1));
+            if (i == 0) {
+                dd.setLogic("_");
+            }
+            dd.setDataScopeDetailPK(pk);
+            String[] s = StringUtils.split(dd.getColumnValue(), "+");
+            dd.setTableName(s[0]);
+            dd.setColumnName(s[1]);
+            ejbDataScopeDetailFacade.create(dd);
+        }
     }
 
     private void columnChangeForEdit() {

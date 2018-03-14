@@ -21,7 +21,7 @@
 							actionListener="#{userDeFieldScopeSetController.create}"
 							oncomplete="PF('createDialog').show();" update=":dialogForm"
 							process="@this" />
-						<p:commandButton value="編輯" style="width: 100%"
+						<p:commandButton value="修改" style="width: 100%"
 							disabled="#{empty userDeFieldScopeSetController.currentItem.udColumnCode}"
 							actionListener="#{userDeFieldScopeSetController.edit}"
 							oncomplete="PF('createDialog').show();"
@@ -109,10 +109,10 @@
 						required="true" label="自定義欄位範圍名稱" />
 					<p:outputLabel value="欄位中文名稱" />
 					<p:outputLabel value="#{userDeFieldScopeSetController.fieldCNName}"
-						rendered="#{userDeFieldScopeSetController.editDialogLabel=='編輯'}" />
+						rendered="#{userDeFieldScopeSetController.editDialogLabel=='修改'}" />
 					<p:selectOneMenu
 						value="#{userDeFieldScopeSetController.itemDataColumn}"
-						rendered="#{userDeFieldScopeSetController.editDialogLabel!='編輯'}">
+						rendered="#{userDeFieldScopeSetController.editDialogLabel!='修改'}">
 						<f:selectItems
 							value="#{userDeFieldScopeSetController.itemFieldCNNameMenu}"
 							var="item" />
@@ -152,7 +152,7 @@
 					<p:dataTable id="columnOptionDataTable2"
 						value="#{userDeFieldScopeSetController.itemColumnOptionList}"
 						var="op" rowIndexVar="i" rows="10"
-						rendered="#{userDeFieldScopeSetController.editDialogLabel=='編輯'}">
+						rendered="#{userDeFieldScopeSetController.editDialogLabel=='修改'}">
 						<p:column headerText="" width="10%">
 							<p:commandButton value="－"
 								actionListener="#{userDeFieldScopeSetController.removeColumnOptionList(op)}"

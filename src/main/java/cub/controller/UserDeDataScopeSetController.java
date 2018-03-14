@@ -78,23 +78,23 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     private List<UdDataScopeDetail> detail;
     /*
-     * 新增/編輯
+     * 新增/修改
      */
     private UdDataScopeMaster item;
     /*
-     * 新增/編輯
+     * 新增/修改
      */
     private List<UdDataScopeDetail> itemDetail;
     /*
-     * 新增/編輯資料類別下拉選單
+     * 新增/修改資料類別下拉選單
      */
     private List<SelectItem> itemDataTypeMenu;
     /*
-     * 新增/編輯Method名稱下拉選單
+     * 新增/修改Method名稱下拉選單
      */
     private List<SelectItem> itemMethodNameMenu;
     /*
-     * 新增/編輯回傳欄位下拉選單
+     * 新增/修改回傳欄位下拉選單
      */
     private List<SelectItem> itemReturnFieldMenu;
     /*
@@ -102,7 +102,7 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     private Map<String, String> allItemCodeMap;
     /*
-     * 待編輯自定義欄位範圍
+     * 待修改自定義欄位範圍
      */
     private UdDataScopeMaster currentItem;
     /*
@@ -110,7 +110,7 @@ public class UserDeDataScopeSetController implements Serializable {
      */
     private int currentIndex;
     /*
-     * 新增/編輯Dialog CommandButton value
+     * 新增/修改Dialog CommandButton value
      */
     private String editDialogLabel = "新增";
     /*
@@ -151,11 +151,11 @@ public class UserDeDataScopeSetController implements Serializable {
         }
         // 頁面載入自定義欄位this.master的index
         currentIndex = 0;
-        // initial新增/編輯時資料類別下拉選單
+        // initial新增/修改時資料類別下拉選單
         genDataTypeMenu();
-        // initial新增/編輯時Method名稱下拉選單
+        // initial新增/修改時Method名稱下拉選單
         genMethodNameMenu();
-        // initial新增/編輯時自定義欄位範圍(代碼)下拉選單
+        // initial新增/修改時自定義欄位範圍(代碼)下拉選單
         genUdFieldScopeMasterMenu();
         // 載入this.currentItem內容
         setItemDetail();
@@ -282,7 +282,7 @@ public class UserDeDataScopeSetController implements Serializable {
      * 點擊修改
      */
     public void edit() {
-        this.editDialogLabel = "編輯";
+        this.editDialogLabel = "修改";
         this.item = this.currentItem;
         this.itemDetail = ejbUdDataScopeDetailFacade.findByScopeCode(this.item.getScopeCode());
         genReturnFieldMenu(String.valueOf(this.item.getClassCode()));

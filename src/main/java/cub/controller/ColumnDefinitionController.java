@@ -42,15 +42,15 @@ public class ColumnDefinitionController implements Serializable {
      */
     private List<RdDataColumn> master;
     /*
-     * 新增/編輯
+     * 新增/修改
      */
     private RdDataColumn item;
     /*
-     * 待編輯欄位定義設定
+     * 待修改欄位定義設定
      */
     private RdDataColumn currentItem;
     /*
-     * 新增/編輯Dialog CommandButton value
+     * 新增/修改Dialog CommandButton value
      */
     private String editDialogLabel = "新增";
     /*
@@ -195,7 +195,7 @@ public class ColumnDefinitionController implements Serializable {
             this.item.setLogDttm(new Date());
             ejbRdDataColumnFacade.create(this.item);
             addMessage("新增成功", "新增成功");
-        } else {// 編輯
+        } else {// 修改
             // ejbRdDataColumnFacade.edit(this.currentItem);
             addMessage("此欄位範圍已存在", "此欄位範圍已存在");
         }
@@ -208,7 +208,7 @@ public class ColumnDefinitionController implements Serializable {
     // * 點擊修改
     // */
     // public void edit() {
-    // this.editDialogLabel = "編輯";
+    // this.editDialogLabel = "修改";
     // this.item = this.currentItem;
     // this.tempClassCode = this.item.getRdDataColumnPK().getClassCode();
     // this.tempTableName = this.item.getRdDataColumnPK().getTableName();

@@ -65,32 +65,32 @@ public class UserDeFieldScopeSetController implements Serializable {
      */
     private List<RdDataColumnOption> detail;
     /*
-     * 新增/編輯
+     * 新增/修改
      */
     private UdColumnScopeMaster item;
     /*
-     * 新增/編輯
+     * 新增/修改
      */
     private UdColumnScopeDetail itemDetail;
     /*
-     * 新增/編輯資料範圍列表,內容組成(RdDataColumnOptionPK.getOptionCode())
+     * 新增/修改資料範圍列表,內容組成(RdDataColumnOptionPK.getOptionCode())
      */
     private Map<Integer, String> tempList = new HashMap<Integer, String>();
     /*
-     * 新增/編輯資料範圍列表,內容組成(RdDataColumnOptionPK.getOptionCode())
+     * 新增/修改資料範圍列表,內容組成(RdDataColumnOptionPK.getOptionCode())
      */
     private List<String> itemColumnOptionList = new ArrayList<String>();
     /*
-     * 新增/編輯欄位中文名稱下拉選單
+     * 新增/修改欄位中文名稱下拉選單
      */
     private List<SelectItem> itemFieldCNNameMenu;
     /*
-     * 新增/編輯欄位中文名稱,內容組成(RdDataColumnPK.getClassCode() + "+" +
+     * 新增/修改欄位中文名稱,內容組成(RdDataColumnPK.getClassCode() + "+" +
      * RdDataColumnPK.getTableName() + "+" + RdDataColumnPK.getColumnName())
      */
     private String itemDataColumn;
     /*
-     * 待編輯自定義欄位範圍
+     * 待修改自定義欄位範圍
      */
     private UdColumnScopeMaster currentItem;
     /*
@@ -110,7 +110,7 @@ public class UserDeFieldScopeSetController implements Serializable {
      */
     private String fieldCNName;
     /*
-     * 新增/編輯資料範圍下拉選單
+     * 新增/修改資料範圍下拉選單
      */
     private List<SelectItem> rdDataColumnOptionMenu;
     /*
@@ -118,11 +118,11 @@ public class UserDeFieldScopeSetController implements Serializable {
      */
     private List<RdDataColumnOption> allOptions;
     /*
-     * 新增/編輯資料範圍暫存選項
+     * 新增/修改資料範圍暫存選項
      */
     private String tempOptionCode = "";
     /*
-     * 新增/編輯Dialog CommandButton value
+     * 新增/修改Dialog CommandButton value
      */
     private String editDialogLabel = "新增";
 
@@ -140,7 +140,7 @@ public class UserDeFieldScopeSetController implements Serializable {
         }
         // 頁面載入自定義欄位this.master的index
         currentIndex = 0;
-        // initial新增/編輯時欄位中文名稱下拉選單
+        // initial新增/修改時欄位中文名稱下拉選單
         this.itemFieldCNNameMenu = new ArrayList<SelectItem>();
         List<RdDataColumn> allRdDataColumn = ejbRdDataColumnFacade.findAll();
         for (RdDataColumn rd : allRdDataColumn) {
@@ -148,7 +148,7 @@ public class UserDeFieldScopeSetController implements Serializable {
             itemFieldCNNameMenu.add(new SelectItem(
                     pk.getClassCode() + "+" + pk.getTableName() + "+" + pk.getColumnName(), rd.getColumnChnName()));
         }
-        // initial新增/編輯時資料範圍下拉選單
+        // initial新增/修改時資料範圍下拉選單
         this.rdDataColumnOptionMenu = new ArrayList<SelectItem>();
         this.allOptions = ejbRdDataColumnOptionFacade.findAll();
         for (RdDataColumnOption op : allOptions) {
@@ -283,7 +283,7 @@ public class UserDeFieldScopeSetController implements Serializable {
             }
             ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.UDFIELD_CODE.toString());
             addMessage("新增成功", "新增成功");
-        } else {// 編輯
+        } else {// 修改
             if (itemColumnOptionList.size() > 0) {
                 ejbUdColumnScopeDetailFacade.removeByColumnCode(this.item.getUdColumnCode());
                 for (String s : itemColumnOptionList) {
@@ -309,7 +309,7 @@ public class UserDeFieldScopeSetController implements Serializable {
      */
     public void edit() {
         this.itemColumnOptionList.clear();
-        this.editDialogLabel = "編輯";
+        this.editDialogLabel = "修改";
         this.item = this.currentItem;
         this.detail = ejbRdDataColumnOptionFacade.findByMasterCode(this.currentItem.getUdColumnCode());
         for (RdDataColumnOption op : this.detail) {

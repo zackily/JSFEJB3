@@ -21,7 +21,7 @@
 							actionListener="#{dataScopeSetController.create}"
 							oncomplete="PF('createDialog').show();"
 							update=":createDialog :dialogForm" process="@this" />
-						<p:commandButton value="編輯" style="width: 100%"
+						<p:commandButton value="修改" style="width: 100%"
 							disabled="#{empty dataScopeSetController.currentItem.scopeCode}"
 							actionListener="#{dataScopeSetController.edit}"
 							oncomplete="PF('createDialog').show();"
@@ -150,7 +150,6 @@
 								disabled="#{i==0}" required="#{i>0}" label="邏輯">
 								<p:ajax event="change" immediate="true" process="@this" />
 								<f:selectItem itemValue="" itemLabel="" />
-								<f:selectItem itemValue="_" itemLabel="_" />
 								<f:selectItem itemValue="OR" itemLabel="OR" />
 								<f:selectItem itemValue="AND" itemLabel="AND" />
 							</p:selectOneMenu>

@@ -81,11 +81,11 @@ public class InvestRuleSetController implements Serializable {
      */
     private List<RuleList> master;
     /*
-     * 新增/編輯
+     * 新增/修改
      */
     private RuleList item;
     /*
-     * 待編輯資料範圍設定
+     * 待修改資料範圍設定
      */
     private RuleList currentItem;
     /*
@@ -93,7 +93,7 @@ public class InvestRuleSetController implements Serializable {
      */
     private int currentIndex;
     /*
-     * 新增/編輯Dialog CommandButton value
+     * 新增/修改Dialog CommandButton value
      */
     private String editDialogLabel = "新增";
     /*
@@ -333,7 +333,7 @@ public class InvestRuleSetController implements Serializable {
                 addMessage("新增成功", "新增成功");
                 getRenewMaster();
                 currentIndex = this.master.size() - 1;
-            } else {// 編輯
+            } else {// 修改
                 removeRuleRelateData();
                 updateRuleRelateTable(this.item.getRuleNo());
                 this.item.setLogUserId("Gilbert");
@@ -383,7 +383,7 @@ public class InvestRuleSetController implements Serializable {
      * 點擊修改
      */
     public void edit() {
-        this.editDialogLabel = "編輯";
+        this.editDialogLabel = "修改";
         this.item = this.currentItem;
         genTempList();
         genRuleSelectItem();
