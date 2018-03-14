@@ -1,22 +1,29 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -26,33 +33,35 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ORDER_INFO")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrderInfo.findAll", query = "SELECT o FROM OrderInfo o")
-    , @NamedQuery(name = "OrderInfo.findByOrderNo", query = "SELECT o FROM OrderInfo o WHERE o.orderNo = :orderNo")
-    , @NamedQuery(name = "OrderInfo.findByOrderDttm", query = "SELECT o FROM OrderInfo o WHERE o.orderDttm = :orderDttm")
-    , @NamedQuery(name = "OrderInfo.findByPrdCode", query = "SELECT o FROM OrderInfo o WHERE o.prdCode = :prdCode")
-    , @NamedQuery(name = "OrderInfo.findByTradeType", query = "SELECT o FROM OrderInfo o WHERE o.tradeType = :tradeType")
-    , @NamedQuery(name = "OrderInfo.findByChannelCode", query = "SELECT o FROM OrderInfo o WHERE o.channelCode = :channelCode")
-    , @NamedQuery(name = "OrderInfo.findByCheckTiming", query = "SELECT o FROM OrderInfo o WHERE o.checkTiming = :checkTiming")
-    , @NamedQuery(name = "OrderInfo.findByClientId", query = "SELECT o FROM OrderInfo o WHERE o.clientId = :clientId")
-    , @NamedQuery(name = "OrderInfo.findBySecCode", query = "SELECT o FROM OrderInfo o WHERE o.secCode = :secCode")
-    , @NamedQuery(name = "OrderInfo.findByClientIdSwitchIn", query = "SELECT o FROM OrderInfo o WHERE o.clientIdSwitchIn = :clientIdSwitchIn")
-    , @NamedQuery(name = "OrderInfo.findBySecCodeSwitchIn", query = "SELECT o FROM OrderInfo o WHERE o.secCodeSwitchIn = :secCodeSwitchIn")
-    , @NamedQuery(name = "OrderInfo.findByOrderQty", query = "SELECT o FROM OrderInfo o WHERE o.orderQty = :orderQty")
-    , @NamedQuery(name = "OrderInfo.findByOrderPrice", query = "SELECT o FROM OrderInfo o WHERE o.orderPrice = :orderPrice")
-    , @NamedQuery(name = "OrderInfo.findByOrderAmt", query = "SELECT o FROM OrderInfo o WHERE o.orderAmt = :orderAmt")})
+        @NamedQuery(name = "OrderInfo.findAll", query = "SELECT o FROM OrderInfo o"),
+        @NamedQuery(name = "OrderInfo.findByOrderNo", query = "SELECT o FROM OrderInfo o WHERE o.orderNo = :orderNo"),
+        @NamedQuery(name = "OrderInfo.findByOrderDttm", query = "SELECT o FROM OrderInfo o WHERE o.orderDttm = :orderDttm"),
+        @NamedQuery(name = "OrderInfo.findByPrdCode", query = "SELECT o FROM OrderInfo o WHERE o.prdCode = :prdCode"),
+        @NamedQuery(name = "OrderInfo.findByTradeType", query = "SELECT o FROM OrderInfo o WHERE o.tradeType = :tradeType"),
+        @NamedQuery(name = "OrderInfo.findByChannelCode", query = "SELECT o FROM OrderInfo o WHERE o.channelCode = :channelCode"),
+        @NamedQuery(name = "OrderInfo.findByCheckTiming", query = "SELECT o FROM OrderInfo o WHERE o.checkTiming = :checkTiming"),
+        @NamedQuery(name = "OrderInfo.findByClientId", query = "SELECT o FROM OrderInfo o WHERE o.clientId = :clientId"),
+        @NamedQuery(name = "OrderInfo.findBySecCode", query = "SELECT o FROM OrderInfo o WHERE o.secCode = :secCode"),
+        @NamedQuery(name = "OrderInfo.findByClientIdSwitchIn", query = "SELECT o FROM OrderInfo o WHERE o.clientIdSwitchIn = :clientIdSwitchIn"),
+        @NamedQuery(name = "OrderInfo.findBySecCodeSwitchIn", query = "SELECT o FROM OrderInfo o WHERE o.secCodeSwitchIn = :secCodeSwitchIn"),
+        @NamedQuery(name = "OrderInfo.findByOrderQty", query = "SELECT o FROM OrderInfo o WHERE o.orderQty = :orderQty"),
+        @NamedQuery(name = "OrderInfo.findByOrderPrice", query = "SELECT o FROM OrderInfo o WHERE o.orderPrice = :orderPrice"),
+        @NamedQuery(name = "OrderInfo.findByOrderAmt", query = "SELECT o FROM OrderInfo o WHERE o.orderAmt = :orderAmt") })
 public class OrderInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
+    @Size(min = 1, max = 20)
     @Column(name = "ORDER_NO")
+    @SequenceGenerator(name = "ORDER_INFO_SEQ", sequenceName = "ORDER_INFO_SEQ", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_INFO_SEQ")
     private String orderNo;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ORDER_DTTM")
-    private short orderDttm;
+    private Date orderDttm;
     @Basic(optional = false)
     @NotNull
     @Column(name = "PRD_CODE")
@@ -89,32 +98,18 @@ public class OrderInfo implements Serializable {
     @Size(min = 1, max = 12)
     @Column(name = "SEC_CODE_SWITCH_IN")
     private String secCodeSwitchIn;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    // @Max(value=?) @Min(value=?)//if you know range of your decimal fields
+    // consider using these annotations to enforce field validation
     @Column(name = "ORDER_QTY")
     private BigDecimal orderQty;
     @Column(name = "ORDER_PRICE")
     private BigDecimal orderPrice;
     @Column(name = "ORDER_AMT")
     private BigDecimal orderAmt;
+    @Column(name = "ORDER_CUR")
+    private String orderCur;
 
     public OrderInfo() {
-    }
-
-    public OrderInfo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public OrderInfo(String orderNo, short orderDttm, short prdCode, short tradeType, short channelCode, short checkTiming, String clientId, String secCode, String clientIdSwitchIn, String secCodeSwitchIn) {
-        this.orderNo = orderNo;
-        this.orderDttm = orderDttm;
-        this.prdCode = prdCode;
-        this.tradeType = tradeType;
-        this.channelCode = channelCode;
-        this.checkTiming = checkTiming;
-        this.clientId = clientId;
-        this.secCode = secCode;
-        this.clientIdSwitchIn = clientIdSwitchIn;
-        this.secCodeSwitchIn = secCodeSwitchIn;
     }
 
     public String getOrderNo() {
@@ -122,14 +117,14 @@ public class OrderInfo implements Serializable {
     }
 
     public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+        this.orderNo = "TR" + StringUtils.leftPad(orderNo, 8, "0");
     }
 
-    public short getOrderDttm() {
+    public Date getOrderDttm() {
         return orderDttm;
     }
 
-    public void setOrderDttm(short orderDttm) {
+    public void setOrderDttm(Date orderDttm) {
         this.orderDttm = orderDttm;
     }
 
@@ -221,6 +216,14 @@ public class OrderInfo implements Serializable {
         this.orderAmt = orderAmt;
     }
 
+    public String getOrderCur() {
+        return orderCur;
+    }
+
+    public void setOrderCur(String orderCur) {
+        this.orderCur = orderCur;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -235,7 +238,8 @@ public class OrderInfo implements Serializable {
             return false;
         }
         OrderInfo other = (OrderInfo) object;
-        if ((this.orderNo == null && other.orderNo != null) || (this.orderNo != null && !this.orderNo.equals(other.orderNo))) {
+        if ((this.orderNo == null && other.orderNo != null)
+                || (this.orderNo != null && !this.orderNo.equals(other.orderNo))) {
             return false;
         }
         return true;
@@ -245,5 +249,5 @@ public class OrderInfo implements Serializable {
     public String toString() {
         return "cub.entities.OrderInfo[ orderNo=" + orderNo + " ]";
     }
-    
+
 }
