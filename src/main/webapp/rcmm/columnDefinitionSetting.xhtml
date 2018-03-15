@@ -11,7 +11,7 @@
 
 	<ui:define name="body">
 		<h:form id="mainForm" style="width: 60%">
-			<p:growl id="growl" life="2000" />
+			<p:growl id="growl" sticky="true" />
 			<p:panel header="欄位定義作業(RCMM99)">
 				<p:panelGrid columns="2"
 					columnClasses="ui-grid-col-2, ui-grid-col-11" style="width:100%"
@@ -84,7 +84,7 @@
 					<p:selectOneMenu
 						value="#{columnDefinitionController.tempClassCode}"
 						valueChangeListener="#{columnDefinitionController.genTableMenu}"
-						required="true" label="資料類別代碼">
+						required="true" requiredMessage="請選擇資料類別代碼" label="資料類別代碼">
 						<p:ajax event="change" immediate="true" process="@this"
 							update=":dialogForm:tempTableName" />
 						<f:selectItem noSelectionOption="true" />
@@ -94,7 +94,7 @@
 					<p:selectOneMenu id="tempTableName"
 						value="#{columnDefinitionController.tempTableName}"
 						valueChangeListener="#{columnDefinitionController.genColumnMenu}"
-						required="true" label="Table名稱">
+						required="true" requiredMessage="請選擇Table名稱" label="Table名稱">
 						<p:ajax event="change" immediate="true" process="@this"
 							update=":dialogForm:tempColumnName" />
 						<f:selectItem noSelectionOption="true" />
@@ -104,7 +104,7 @@
 					<p:selectOneMenu id="tempColumnName"
 						value="#{columnDefinitionController.tempColumnName}"
 						valueChangeListener="#{columnDefinitionController.genColumnDesc}"
-						required="true" label="Column名稱">
+						required="true" requiredMessage="請選擇Column名稱" label="Column名稱">
 						<p:ajax event="change" immediate="true" process="@this"
 							update=":dialogForm:outputColumnChnName" />
 						<f:selectItem noSelectionOption="true" />

@@ -11,7 +11,7 @@
 
 	<ui:define name="body">
 		<h:form id="mainForm" style="width: 60%">
-			<p:growl id="growl" life="2000" />
+			<p:growl id="growl" sticky="true" />
 			<p:panel header="資料範圍設定作業(RCMM01)">
 				<p:panelGrid columns="2"
 					columnClasses="ui-grid-col-2, ui-grid-col-11" style="width:100%"
@@ -119,7 +119,7 @@
 					<p:outputLabel value="#{dataScopeSetController.item.scopeCode}" />
 					<p:outputLabel value="資料類別" />
 					<p:selectOneMenu value="#{dataScopeSetController.item.classCode}"
-						required="true" label="資料類別">
+						required="true" requiredMessage="請選擇資料類別" label="資料類別">
 						<p:ajax listener="#{dataScopeSetController.classCodeChange}"
 							event="change" update=":dialogForm:dataScopeDetailTable" />
 						<f:selectItem itemValue="" itemLabel="" />
@@ -128,7 +128,7 @@
 					<p:outputLabel value="資料範圍名稱" />
 					<p:inputTextarea maxlength="100" rows="5"
 						value="#{dataScopeSetController.item.scopeName}" required="true"
-						label="資料範圍名稱" />
+						requiredMessage="請填入資料範圍名稱" label="資料範圍名稱" />
 				</p:panelGrid>
 				<p:panelGrid columns="1">
 					<p:panelGrid columns="2">
@@ -147,7 +147,8 @@
 						</p:column>
 						<p:column headerText="邏輯" width="15%">
 							<p:selectOneMenu id="selLogic" value="#{op.logic}"
-								disabled="#{i==0}" required="#{i>0}" label="邏輯">
+								disabled="#{i==0}" required="#{i>0}" requiredMessage="請撰擇邏輯"
+								label="邏輯">
 								<p:ajax event="change" immediate="true" process="@this" />
 								<f:selectItem itemValue="" itemLabel="" />
 								<f:selectItem itemValue="OR" itemLabel="OR" />
@@ -156,7 +157,7 @@
 						</p:column>
 						<p:column headerText="（" width="10%">
 							<p:selectOneMenu id="selLeftBracket" value="#{op.leftBracket}"
-								required="true" label="LeftBracket">
+								required="true" requiredMessage="請選擇左括號" label="LeftBracket">
 								<p:ajax event="change" immediate="true" process="@this" />
 								<f:selectItem itemValue="_" itemLabel="_" />
 								<f:selectItem itemValue="&#40;" itemLabel="&#40;" />
@@ -165,7 +166,8 @@
 						<p:column headerText="資料欄位" width="20%">
 							<p:selectOneMenu value="#{op.columnValue}"
 								valueChangeListener="#{dataScopeSetController.columnChangeForEdit}"
-								id="columnValue" required="true" label="資料欄位">
+								id="columnValue" required="true" requiredMessage="請選擇資料欄位"
+								label="資料欄位">
 								<p:ajax event="change" immediate="true" process="@this"
 									update=":dialogForm:dataScopeDetailTable:opValue" />
 								<f:selectItem itemValue="" itemLabel="" />
@@ -174,7 +176,7 @@
 						</p:column>
 						<p:column headerText="關係" width="10%">
 							<p:selectOneMenu id="selOpCode" value="#{op.opCode}"
-								required="true" label="關係">
+								required="true" requiredMessage="請撰擇關係" label="關係">
 								<p:ajax event="change" immediate="true" process="@this" />
 								<f:selectItem itemValue="&#61;" itemLabel="&#61;" />
 								<f:selectItem itemValue="&#60;&#62;" itemLabel="&#60;&#62;" />
@@ -188,7 +190,7 @@
 						</p:column>
 						<p:column headerText="）" width="10%">
 							<p:selectOneMenu id="selRightBracket" value="#{op.rightBracket}"
-								required="true" label="RightBracket">
+								required="true" requiredMessage="請撰擇右括號" label="RightBracket">
 								<p:ajax event="change" immediate="true" process="@this" />
 								<f:selectItem itemValue="_" itemLabel="_" />
 								<f:selectItem itemValue="&#41;" itemLabel="&#41;" />

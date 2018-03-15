@@ -11,7 +11,7 @@
 
 	<ui:define name="body">
 		<h:form id="mainForm" style="width: 80%">
-			<p:growl id="growl" life="2000" />
+			<p:growl id="growl" sticky="true" />
 			<p:panel header="投資限制條文設定作業(RCMM03)">
 				<p:panelGrid columns="2" style="width: 100%"
 					columnClasses="ui-grid-col-2, ui-grid-col-11" layout="grid">
@@ -254,7 +254,7 @@
 								<h:outputLabel value="代碼類別" />
 								<p:selectOneRadio columns="3" layout="grid"
 									value="#{investRuleSetController.item.ruleClass}" label="代碼類別"
-									style="width:100%" required="true">
+									style="width:100%" required="true" requiredMessage="請選擇代碼類別">
 									<f:selectItems value="#{investRuleSetController.ruleClassList}" />
 								</p:selectOneRadio>
 							</p:panelGrid>
@@ -306,20 +306,21 @@
 										value="#{investRuleSetController.ruleChannelList}" />
 								</p:selectManyCheckbox>
 							</p:panelGrid>
-							<p:commandButton value="全選"
+							<p:commandButton value="全選" process="@this"
 								actionListener="#{investRuleSetController.selectAllRuleProduct}"
 								update=":growl :mainForm :dialogForm:selRuleProduct" />
-							<p:commandButton value="全選"
+							<p:commandButton value="全選" process="@this"
 								actionListener="#{investRuleSetController.selectAllRuleTradeType}"
 								update=":growl :mainForm :dialogForm:selRuleTradeType" />
-							<p:commandButton value="全選"
+							<p:commandButton value="全選" process="@this"
 								actionListener="#{investRuleSetController.selectAllRuleChannel}"
 								update=":growl :mainForm :dialogForm:selRuleChannel" />
 						</p:panelGrid>
 						<p:panelGrid columns="2" layout="grid"
 							columnClasses="ui-grid-col-1, ui-grid-col-9">
 							<h:outputLabel value="檢核時點" />
-							<p:selectManyCheckbox label="檢核時點" required="true"
+							<p:selectManyCheckbox label="檢核時點" requiredMessage="請選擇檢核時點"
+								required="true"
 								value="#{investRuleSetController.tempRuleCheckTime}">
 								<f:selectItems
 									value="#{investRuleSetController.ruleChecktimeList}" />
@@ -379,13 +380,15 @@
 							</p:dataTable>
 							<p:panelGrid columns="4" style="width: 100%">
 								<h:outputLabel value="法規生效期間" />
-								<p:calendar pattern="yyyyMMdd" required="true" label="法規生效期間起啟日"
+								<p:calendar pattern="yyyyMMdd" required="true"
+									requiredMessage="請填入法規生效期間起啟日" label="法規生效期間起啟日"
 									value="#{investRuleSetController.item.startDate}">
 									<f:convertDateTime type="date" dateStyle="short"
 										pattern="yyyyMMdd" />
 								</p:calendar>
 								<h:outputLabel value="To" />
-								<p:calendar pattern="yyyyMMdd" required="true" label="法規生效期間結束日"
+								<p:calendar pattern="yyyyMMdd" required="true"
+									requiredMessage="請填入法規生效期間結束日" label="法規生效期間結束日"
 									value="#{investRuleSetController.item.endDate}">
 									<f:convertDateTime type="date" dateStyle="short"
 										pattern="yyyyMMdd" />
@@ -412,15 +415,16 @@
 							</f:facet>
 							<p:panelGrid columns="4" style="width: 100%">
 								<h:outputLabel value="分母數值抓取方式" />
-								<p:selectOneMenu
+								<p:selectOneMenu label="分母數值抓取方式"
 									value="#{investRuleSetController.item.divisorSource}">
 									<p:ajax event="change" update=":dialogForm:divisorValue" />
-									<f:selectItem itemValue="_" itemLabel="_"/>
+									<f:selectItem itemValue="_" itemLabel="_" />
 									<f:selectItems
 										value="#{investRuleSetController.dividsorSourceList}" />
 								</p:selectOneMenu>
 								<h:outputLabel value="分母固定值" />
 								<h:inputText id="divisorValue" label="分母固定值"
+									requiredMessage="請填入分母固定值"
 									required="#{investRuleSetController.item.divisorSource==1}"
 									value="#{investRuleSetController.item.divisorValue}" />
 							</p:panelGrid>
@@ -449,12 +453,14 @@
 							<p:panelGrid columns="4" style="width: 100%">
 								<h:outputLabel value="超限條件" />
 								<p:selectOneMenu label="超限條件" required="true"
+									requiredMessage="請選擇超限條件"
 									value="#{investRuleSetController.item.limitCondition}">
 									<f:selectItems
 										value="#{investRuleSetController.limitConditionList}" />
 								</p:selectOneMenu>
 								<h:outputLabel value="超限值%" />
 								<h:inputText label="超限值%" required="true"
+									requiredMessage="請填入超限值%"
 									value="#{investRuleSetController.item.limitRate}" />
 							</p:panelGrid>
 						</p:panelGrid>
@@ -469,7 +475,7 @@
 								value="#{investRuleSetController.limitReactionList}" />
 						</p:selectOneMenu>
 						<h:outputLabel value="鎖定註記" />
-						<p:selectBooleanCheckbox label="鎖定註記" required="true"
+						<p:selectBooleanCheckbox label="鎖定註記"
 							value="#{investRuleSetController.item.lock}" />
 					</p:panelGrid>
 				</p:panelGrid>
