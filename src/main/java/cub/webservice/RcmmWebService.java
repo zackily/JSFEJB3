@@ -1,6 +1,7 @@
 package cub.webservice;
 
 import java.time.LocalDateTime;
+import java.util.Calendar;
 
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
@@ -26,7 +27,13 @@ public class RcmmWebService {
     @Produces("application/json")
     public RcmmResponseObject getResponsePost(RcmmRequestObject request) {
         OrderInfo orderInfo = new OrderInfo();
-        orderInfo.setChannelCode(request.getChannelCode());
+        String orderInfoSeq = orderInfoFacade.getOrderInfoSeq();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(request.getOrderDttm());
+        String orderNo = "TR" + cal.get(Calendar.YEAR) + orderInfoSeq.substring(1, orderInfoSeq.length());
+        orderInfo.setOrderNo(orderNo);
+        Short channelCode = orderInfoFacade.getChannelCode(request.getAPID());
+        orderInfo.setChannelCode(channelCode);
         orderInfo.setCheckTiming(request.getCheckTiming());
         orderInfo.setClientId(request.getClientId());
         orderInfo.setClientIdSwitchIn(request.getClientIdSwitchIn());
@@ -40,11 +47,10 @@ public class RcmmWebService {
         orderInfo.setSecCodeSwitchIn(request.getSecCodeSwitchIn());
         orderInfo.setTradeType(request.getTradeType());
         orderInfoFacade.create(orderInfo);
-        System.out.println(orderInfoFacade.findAll().size());
         RcmmResponseObject rcmmResponseObject = new RcmmResponseObject();
-        rcmmResponseObject.setReturnMessage("");
+        rcmmResponseObject.setReturnMessage("Success");
         rcmmResponseObject.setReturnCode("0000");
-        rcmmResponseObject.setOrderNumber("201801291118001");
+        rcmmResponseObject.setOrderNumber(orderNo);
         rcmmResponseObject.setUpdateTime(LocalDateTime.now());
         return rcmmResponseObject;
     }

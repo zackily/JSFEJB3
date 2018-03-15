@@ -10,7 +10,6 @@ public class RcmmRequestObject {
     private Date orderDttm;
     private short prdCode;
     private short tradeType;
-    private short channelCode;
     private short checkTiming;
     private String clientId;
     private String secCode;
@@ -59,14 +58,6 @@ public class RcmmRequestObject {
 
     public void setTradeType(short tradeType) {
         this.tradeType = tradeType;
-    }
-
-    public short getChannelCode() {
-        return channelCode;
-    }
-
-    public void setChannelCode(short channelCode) {
-        this.channelCode = channelCode;
     }
 
     public short getCheckTiming() {
