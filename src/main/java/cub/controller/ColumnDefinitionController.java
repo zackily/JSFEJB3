@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -23,14 +24,16 @@ import cub.entities.RdDataColumnPK;
 import cub.facade.AllCommentsFacade;
 import cub.facade.RdDataClassFacade;
 import cub.facade.RdDataColumnFacade;
+import cub.sso.UserSession;
 
 /**
  * @author F123669 欄位定義作業(RCMM99)
  */
 @ManagedBean(name = "columnDefinitionController")
 @ViewScoped
-public class ColumnDefinitionController implements Serializable {
-
+public class ColumnDefinitionController extends AbstractController implements Serializable {
+    @ManagedProperty("#{userSession}")
+    private UserSession userSession;
     @EJB
     private RdDataColumnFacade ejbRdDataColumnFacade;
     @EJB
@@ -86,6 +89,7 @@ public class ColumnDefinitionController implements Serializable {
 
     @PostConstruct
     public void init() {
+        this.checkSession(userSession);
         this.master = new ArrayList<RdDataColumn>();
         this.master = ejbRdDataColumnFacade.findAllSort();
         this.item = new RdDataColumn();
@@ -332,6 +336,14 @@ public class ColumnDefinitionController implements Serializable {
 
     public void setTempColumnName(String tempColumnName) {
         this.tempColumnName = tempColumnName;
+    }
+
+    public UserSession getUserSession() {
+        return userSession;
+    }
+
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
     }
 
     private void addMessage(String summary, String detail) {

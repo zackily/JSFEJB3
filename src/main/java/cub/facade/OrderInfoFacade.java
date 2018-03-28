@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 import cub.entities.OrderInfo;
 
@@ -49,5 +50,10 @@ public class OrderInfoFacade extends AbstractFacade<OrderInfo> {
         } catch (NoResultException e) {
             return 0;
         }
+    }
+    
+    public Object getRtnFactorValue(String str) {
+        StoredProcedureQuery spQuery = em.createStoredProcedureQuery("", str);
+        return spQuery.getResultList();
     }
 }

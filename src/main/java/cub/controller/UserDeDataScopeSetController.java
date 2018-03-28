@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -39,6 +40,7 @@ import cub.facade.UdDataScopeMasterFacade;
 import cub.facade.UdMethodDetailFacade;
 import cub.facade.UdMethodMasterFacade;
 import cub.facade.WorkSeqFacade;
+import cub.sso.UserSession;
 import cub.vo.QueryUdColumnScopeDetailVO;
 
 /**
@@ -47,8 +49,9 @@ import cub.vo.QueryUdColumnScopeDetailVO;
  */
 @ManagedBean(name = "userDeDataScopeSetController")
 @ViewScoped
-public class UserDeDataScopeSetController implements Serializable {
-
+public class UserDeDataScopeSetController extends AbstractController implements Serializable {
+    @ManagedProperty("#{userSession}")
+    private UserSession userSession;
     @EJB
     private WorkSeqFacade ejbWorkSeqFacade;
     @EJB
@@ -140,6 +143,7 @@ public class UserDeDataScopeSetController implements Serializable {
 
     @PostConstruct
     public void init() {
+        this.checkSession(userSession);
         this.master = new ArrayList<UdDataScopeMaster>();
         this.master = ejbUdDataScopeMasterFacade.findAllSort();
         this.currentItem = new UdDataScopeMaster();
@@ -463,6 +467,14 @@ public class UserDeDataScopeSetController implements Serializable {
 
     public void setAllItemCodeMap(Map<String, String> allItemCodeMap) {
         this.allItemCodeMap = allItemCodeMap;
+    }
+
+    public UserSession getUserSession() {
+        return userSession;
+    }
+
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
     }
 
     public void genReturnFieldMenu(ValueChangeEvent e) {

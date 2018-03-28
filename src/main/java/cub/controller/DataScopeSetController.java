@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -30,6 +31,7 @@ import cub.facade.RdDataClassFacade;
 import cub.facade.RdDataColumnFacade;
 import cub.facade.RdDataColumnOptionFacade;
 import cub.facade.WorkSeqFacade;
+import cub.sso.UserSession;
 import cub.vo.QueryUdColumnScopeDetailVO;
 
 /**
@@ -38,8 +40,9 @@ import cub.vo.QueryUdColumnScopeDetailVO;
  */
 @ManagedBean(name = "dataScopeSetController")
 @ViewScoped
-public class DataScopeSetController implements Serializable {
-
+public class DataScopeSetController extends AbstractController implements Serializable {
+    @ManagedProperty("#{userSession}")
+    private UserSession userSession;
     @EJB
     private WorkSeqFacade ejbWorkSeqFacade;
     @EJB
@@ -91,6 +94,7 @@ public class DataScopeSetController implements Serializable {
 
     @PostConstruct
     public void init() {
+        this.checkSession(userSession);
         this.master = new ArrayList<DataScopeMaster>();
         getRenewMaster();
         this.item = new DataScopeMaster();
@@ -374,6 +378,14 @@ public class DataScopeSetController implements Serializable {
 
     public void setRdDataColumnOptionMenu(List<SelectItem> rdDataColumnOptionMenu) {
         this.rdDataColumnOptionMenu = rdDataColumnOptionMenu;
+    }
+
+    public UserSession getUserSession() {
+        return userSession;
+    }
+
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
     }
 
     private void genDataScopeDetail(String scopeCode) {

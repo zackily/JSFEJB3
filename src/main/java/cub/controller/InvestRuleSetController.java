@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -45,6 +46,7 @@ import cub.facade.RuleProductFacade;
 import cub.facade.RuleTradeTypeFacade;
 import cub.facade.UdDataScopeMasterFacade;
 import cub.facade.WorkSeqFacade;
+import cub.sso.UserSession;
 
 /**
  * @author F123669 投資限制條文 設定作業(RCMM03)
@@ -52,8 +54,9 @@ import cub.facade.WorkSeqFacade;
  */
 @ManagedBean(name = "investRuleSetController")
 @ViewScoped
-public class InvestRuleSetController implements Serializable {
-
+public class InvestRuleSetController extends AbstractController implements Serializable {
+    @ManagedProperty("#{userSession}")
+    private UserSession userSession;
     @EJB
     private WorkSeqFacade ejbWorkSeqFacade;
     @EJB
@@ -185,6 +188,7 @@ public class InvestRuleSetController implements Serializable {
 
     @PostConstruct
     public void init() {
+        this.checkSession(userSession);
         this.master = new ArrayList<RuleList>();
         getRenewMaster();
         this.item = new RuleList();
@@ -623,6 +627,14 @@ public class InvestRuleSetController implements Serializable {
         this.strTempRuleCheckTime = strTempRuleCheckTime;
     }
 
+    public UserSession getUserSession() {
+        return userSession;
+    }
+
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
+    }
+
     private void saveDivide() {
         if (!this.ruleDividendList.isEmpty()) {
             ejbRuleDividendFacade.removeByRuleNo(this.item.getRuleNo());
@@ -635,17 +647,17 @@ public class InvestRuleSetController implements Serializable {
                 ejbRuleDividendFacade.save(entity);
             }
         }
-//        if (!this.ruleDivisorList.isEmpty()) {
-            ejbRuleDivisorFacade.removeByRuleNo(this.item.getRuleNo());
-            for (int i = 0; i < ruleDivisorList.size(); i++) {
-                RuleDivisorPK pk = new RuleDivisorPK(this.item.getRuleNo(), (short) (i + 1));
-                RuleDivisor entity = ruleDivisorList.get(i);
-                entity.setRuleDivisorPK(pk);
-                entity.setLogUserId("Gilbert");
-                entity.setLogDttm(new Date());
-                ejbRuleDivisorFacade.save(entity);
-            }
-//        }
+        // if (!this.ruleDivisorList.isEmpty()) {
+        ejbRuleDivisorFacade.removeByRuleNo(this.item.getRuleNo());
+        for (int i = 0; i < ruleDivisorList.size(); i++) {
+            RuleDivisorPK pk = new RuleDivisorPK(this.item.getRuleNo(), (short) (i + 1));
+            RuleDivisor entity = ruleDivisorList.get(i);
+            entity.setRuleDivisorPK(pk);
+            entity.setLogUserId("Gilbert");
+            entity.setLogDttm(new Date());
+            ejbRuleDivisorFacade.save(entity);
+        }
+        // }
     }
 
     private void genTempList() {

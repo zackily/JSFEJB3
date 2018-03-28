@@ -11,6 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -34,6 +35,7 @@ import cub.facade.UdColumnScopeDetailFacade;
 import cub.facade.UdColumnScopeMasterFacade;
 import cub.facade.UdDataScopeDetailFacade;
 import cub.facade.WorkSeqFacade;
+import cub.sso.UserSession;
 import cub.vo.QueryUdColumnScopeDetailVO;
 
 /**
@@ -42,8 +44,9 @@ import cub.vo.QueryUdColumnScopeDetailVO;
  */
 @ManagedBean(name = "userDeFieldScopeSetController")
 @ViewScoped
-public class UserDeFieldScopeSetController implements Serializable {
-
+public class UserDeFieldScopeSetController extends AbstractController implements Serializable {
+    @ManagedProperty("#{userSession}")
+    private UserSession userSession;
     @EJB
     private WorkSeqFacade ejbWorkSeqFacade;
     @EJB
@@ -128,6 +131,7 @@ public class UserDeFieldScopeSetController implements Serializable {
 
     @PostConstruct
     public void init() {
+        this.checkSession(userSession);
         this.master = new ArrayList<UdColumnScopeMaster>();
         this.master = ejbUdColumnScopeMasterFacade.findAllSort();
         this.item = new UdColumnScopeMaster();
@@ -475,6 +479,14 @@ public class UserDeFieldScopeSetController implements Serializable {
 
     public void setEditDialogLabel(String editDialogLabel) {
         this.editDialogLabel = editDialogLabel;
+    }
+
+    public UserSession getUserSession() {
+        return userSession;
+    }
+
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
     }
 
     /*
