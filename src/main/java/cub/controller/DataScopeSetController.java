@@ -41,6 +41,7 @@ import cub.vo.QueryUdColumnScopeDetailVO;
 @ManagedBean(name = "dataScopeSetController")
 @ViewScoped
 public class DataScopeSetController extends AbstractController implements Serializable {
+    
     @ManagedProperty("#{userSession}")
     private UserSession userSession;
     @EJB

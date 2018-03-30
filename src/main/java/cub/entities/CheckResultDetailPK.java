@@ -1,32 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cub.entities;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
- *
- * @author NT48810
+ * The primary key class for the CHECK_RESULT_DETAIL database table.
+ * 
  */
 @Embeddable
 public class CheckResultDetailPK implements Serializable {
+    // default serial version id, required for serializable classes.
+    private static final long serialVersionUID = 1L;
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
     @Column(name = "ORDER_NO")
     private String orderNo;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
+
     @Column(name = "RULE_NO")
     private String ruleNo;
 
@@ -34,12 +24,13 @@ public class CheckResultDetailPK implements Serializable {
     }
 
     public CheckResultDetailPK(String orderNo, String ruleNo) {
+        super();
         this.orderNo = orderNo;
         this.ruleNo = ruleNo;
     }
 
     public String getOrderNo() {
-        return orderNo;
+        return this.orderNo;
     }
 
     public void setOrderNo(String orderNo) {
@@ -47,40 +38,31 @@ public class CheckResultDetailPK implements Serializable {
     }
 
     public String getRuleNo() {
-        return ruleNo;
+        return this.ruleNo;
     }
 
     public void setRuleNo(String ruleNo) {
         this.ruleNo = ruleNo;
     }
 
-    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof CheckResultDetailPK)) {
+            return false;
+        }
+        CheckResultDetailPK castOther = (CheckResultDetailPK) other;
+        return this.orderNo.equals(castOther.orderNo)
+                && this.ruleNo.equals(castOther.ruleNo);
+    }
+
     public int hashCode() {
-        int hash = 0;
-        hash += (orderNo != null ? orderNo.hashCode() : 0);
-        hash += (ruleNo != null ? ruleNo.hashCode() : 0);
+        final int prime = 31;
+        int hash = 17;
+        hash = hash * prime + this.orderNo.hashCode();
+        hash = hash * prime + this.ruleNo.hashCode();
+
         return hash;
     }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CheckResultDetailPK)) {
-            return false;
-        }
-        CheckResultDetailPK other = (CheckResultDetailPK) object;
-        if ((this.orderNo == null && other.orderNo != null) || (this.orderNo != null && !this.orderNo.equals(other.orderNo))) {
-            return false;
-        }
-        if ((this.ruleNo == null && other.ruleNo != null) || (this.ruleNo != null && !this.ruleNo.equals(other.ruleNo))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "cub.entities.CheckResultDetailPK[ orderNo=" + orderNo + ", ruleNo=" + ruleNo + " ]";
-    }
-    
 }

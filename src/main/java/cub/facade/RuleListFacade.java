@@ -66,7 +66,7 @@ public class RuleListFacade extends AbstractFacade<RuleList> {
             .append(" WHERE A.START_DATE <=?")
             .append(" and A.END_DATE>=?")
             .append(" and IS_LOCK=1");
-        Query query = em.createNativeQuery(sql.toString());
+        Query query = em.createNativeQuery(sql.toString(), RuleList.class);
         query.setParameter(1, request.getPrdCode());
         query.setParameter(2, request.getTradeType());
         query.setParameter(3, channelCode);

@@ -5,9 +5,13 @@ import java.io.IOException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import cub.sso.UserSession;
 
 public abstract class AbstractController {
+    private static Logger logger = LoggerFactory.getLogger(AbstractController.class);
 
     public AbstractController() {
     }
@@ -21,7 +25,7 @@ public abstract class AbstractController {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("emp id = " + session.getUser().getEmpId());
+            logger.debug("emp id = " + session.getUser().getEmpId());
         }
     }
 
