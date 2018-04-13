@@ -117,6 +117,8 @@ public class UserDeDataScopeSetController extends AbstractController implements 
      */
     private String editDialogLabel = "新增";
 
+    private int tempVar;
+
     @PostConstruct
     public void init() {
         this.checkSession(userSession);
@@ -156,20 +158,19 @@ public class UserDeDataScopeSetController extends AbstractController implements 
      */
     public void onParaMenuChange(ValueChangeEvent e) {
         String newId = e.getNewValue().toString();
-        String oldId = null == e.getOldValue() ? "" : e.getOldValue().toString();
-        for (int i = 0; i < this.itemDetail.size(); i++) {
-            UdDataScopeDetail de = this.itemDetail.get(i);
-            if (StringUtils.isBlank(de.getParameterName())
-                    || de.getParameterName().equals(StringUtils.split(oldId, "+")[0])) {
-                de.setParameterName(StringUtils.split(newId, "+")[0]);
-                String desc = ejbTrParameterInfoFacade.findDescByParaName(StringUtils.split(newId, "+")[1]);
+        UdDataScopeDetail de = this.itemDetail.get(this.tempVar);
+        de.setParameterName(StringUtils.split(newId, "+")[0]);
+        String desc = ejbTrParameterInfoFacade.findDescByParaName(StringUtils.split(newId, "+")[1]);
+        genOpValueMenu(de, newId);
+        de.setParameterDesc(desc);
+        this.itemDetail.set(this.tempVar, de);
+    }
 
-                genOpValueMenu(de, newId);
-
-                de.setParameterDesc(desc);
-                this.itemDetail.set(i, de);
-            }
-        }
+    /*
+     * 參數名稱變更時連動參數說明
+     */
+    public void onParaMenuChangeByVar(int i) {
+        this.tempVar = i;
     }
 
     private void genOpValueMenu(UdDataScopeDetail de, String newId) {
@@ -177,7 +178,7 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         List<TrOptionItem> allItem = ejbTrOptionItemFacade.findByCodeName(id[0], id[1]);
         List<SelectItem> selItem = new ArrayList<SelectItem>();
         for (TrOptionItem tr : allItem) {
-            selItem.add(new SelectItem(tr.getId().getItemCode(), tr.getItemName()));
+            selItem.add(new SelectItem(tr.getId().getItemCode(), tr.getId().getItemCode()));
         }
         de.setOpValueMenu(selItem);
     }
@@ -291,6 +292,10 @@ public class UserDeDataScopeSetController extends AbstractController implements 
             ud.setParaMenu(this.itemParaMenu);
             String name = ejbTrParameterInfoFacade.findNameByCodeDesc(ud.getParameterName(), ud.getParameterDesc());
             ud.setParaId(ud.getParameterName() + "+" + name);
+            genOpValueMenu(ud, ud.getParaId());
+            TrOptionItemPK id = new TrOptionItemPK(ud.getParameterName(), name, ud.getOpValue());
+            TrOptionItem desc = ejbTrOptionItemFacade.find(id);
+            ud.setOpValueDesc(desc.getItemName());
         }
     }
 
@@ -436,6 +441,14 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.rtnType = rtnType;
     }
 
+    public int getTempVar() {
+        return tempVar;
+    }
+
+    public void setTempVar(int tempVar) {
+        this.tempVar = tempVar;
+    }
+
     private void refreshTrCode(String apiCode) {
         ApiMaster apiMaster = ejbApiMasterFacade.find(apiCode);
         TrMaster tm = ejbTrMasterFacade.findByTrCode(apiMaster.getOutputTrCode());
@@ -517,6 +530,12 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         String className = ejbRdDataClassFacade.getClassNameByClassCode(this.currentItem.getClassCode());
         this.currentItem.setClassName(className);
         this.detail = ejbUdDataScopeDetailFacade.findByScopeCode(this.currentItem.getScopeCode());
+        for (UdDataScopeDetail ud : this.detail) {
+            String name = ejbTrParameterInfoFacade.findNameByCodeDesc(ud.getParameterName(), ud.getParameterDesc());
+            TrOptionItemPK id = new TrOptionItemPK(ud.getParameterName(), name, ud.getOpValue());
+            TrOptionItem desc = ejbTrOptionItemFacade.find(id);
+            ud.setOpValueDesc(desc.getItemName());
+        }
     }
 
     /*

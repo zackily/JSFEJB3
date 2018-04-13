@@ -191,10 +191,11 @@
 							</p:selectOneMenu>
 						</p:column>
 						<p:column headerText="參數名稱" width="20%">
-							<p:selectOneMenu value="#{detail.paraId}"
+							<p:selectOneMenu value="#{detail.paraId}" required="true"
 								valueChangeListener="#{userDeDataScopeSetController.onParaMenuChange}"
-								required="true" requiredMessage="請選擇參數名稱" label="參數名稱">
+								requiredMessage="請選擇參數名稱" label="參數名稱">
 								<p:ajax event="change" immediate="true"
+									listener="#{userDeDataScopeSetController.onParaMenuChangeByVar(i)}"
 									update=":dialogForm:dataTable :dialogForm:dataTable:textParaDesc" />
 								<f:selectItem itemValue="" itemLabel="" />
 								<f:selectItems
