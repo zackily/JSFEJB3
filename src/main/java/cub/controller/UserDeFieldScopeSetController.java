@@ -2,6 +2,7 @@ package cub.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -275,6 +276,8 @@ public class UserDeFieldScopeSetController extends AbstractController implements
             this.item.setColumnName(strArray[2]);
             String udColumnCode = getWorkSeq(SeqTypeEnum.UDFIELD_CODE.toString());
             this.item.setUdColumnCode(udColumnCode);
+            this.item.setLogDttm(new Date());
+            this.item.setLogUserId(this.userSession.getUser().getEmpId());
             ejbUdColumnScopeMasterFacade.create(this.item);
             if (null != tempList) {
                 Set<Integer> set = tempList.keySet();
@@ -297,6 +300,8 @@ public class UserDeFieldScopeSetController extends AbstractController implements
                     ejbUdColumnScopeDetailFacade.create(d);
                 }
             }
+            this.item.setLogDttm(new Date());
+            this.item.setLogUserId(this.userSession.getUser().getEmpId());
             ejbUdColumnScopeMasterFacade.edit(item);
             addMessage("更新成功", "更新成功");
         }

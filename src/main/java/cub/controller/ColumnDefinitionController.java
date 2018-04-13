@@ -195,7 +195,7 @@ public class ColumnDefinitionController extends AbstractController implements Se
         RdDataColumnPK pk = new RdDataColumnPK(this.tempClassCode, this.tempTableName, this.tempColumnName);
         if (null == ejbRdDataColumnFacade.find(pk)) {// 新增
             this.item.setRdDataColumnPK(pk);
-            this.item.setLogUserId("Gilbert");
+            this.item.setLogUserId(this.userSession.getUser().getEmpId());
             this.item.setLogDttm(new Date());
             ejbRdDataColumnFacade.create(this.item);
             addMessage("新增成功", "新增成功");

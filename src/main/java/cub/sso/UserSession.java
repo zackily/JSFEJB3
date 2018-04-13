@@ -7,6 +7,9 @@ package cub.sso;
 
 import cub.dev.themes.ThemeSwitcherView;
 import cub.enums.Roles;
+
+import java.io.Serializable;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -17,7 +20,7 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean(name = "userSession")
 @SessionScoped
-public class UserSession {
+public class UserSession implements Serializable {
     private CubSSOOutputDto user;
 
     private Roles[] roleList;

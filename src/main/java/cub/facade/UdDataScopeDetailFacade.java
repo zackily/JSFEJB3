@@ -46,7 +46,7 @@ public class UdDataScopeDetailFacade extends AbstractFacade<UdDataScopeDetail> {
 
     public List<UdDataScopeDetail> findByScopeCode(String code) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from UdDataScopeDetail d where d.udDataScopeDetailPK.scopeCode=:code");
+        jpql.append("from UdDataScopeDetail d where d.id.scopeCode=:code");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("code", code);
         return query.getResultList();
@@ -54,7 +54,7 @@ public class UdDataScopeDetailFacade extends AbstractFacade<UdDataScopeDetail> {
 
     public void removeByMaster(String scopeCode) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("delete from UdDataScopeDetail d where d.udDataScopeDetailPK.scopeCode =:scopeCode");
+        jpql.append("delete from UdDataScopeDetail d where d.id.scopeCode =:scopeCode");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("scopeCode", scopeCode);
         query.executeUpdate();

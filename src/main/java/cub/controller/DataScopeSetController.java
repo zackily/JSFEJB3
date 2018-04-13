@@ -216,7 +216,7 @@ public class DataScopeSetController extends AbstractController implements Serial
         if (StringUtils.isBlank(this.item.getScopeCode())) {// 新增
             String scopeCode = getWorkSeq(SeqTypeEnum.DATA_CODE.toString());
             this.item.setScopeCode(scopeCode);
-            this.item.setLogUserId("Gilbert");
+            this.item.setLogUserId(this.userSession.getUser().getEmpId());
             this.item.setLogDttm(new Date());
             if (null != tempItemDetails) {
                 genDataScopeDetail(scopeCode);
@@ -229,6 +229,7 @@ public class DataScopeSetController extends AbstractController implements Serial
         } else {// 修改
             ejbDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
             genDataScopeDetail(this.item.getScopeCode());
+            this.item.setLogUserId(this.userSession.getUser().getEmpId());
             this.item.setLogDttm(new Date());
             ejbDataScopeMasterFacade.edit(this.item);
             addMessage("更新成功", "更新成功");
@@ -294,10 +295,7 @@ public class DataScopeSetController extends AbstractController implements Serial
         }
         for (int i = 0; i < this.tempItemDetails.size(); i++) {
             DataScopeDetail d = this.tempItemDetails.get(i);
-            if (StringUtils.isBlank(d.getColumnValue())) {
-                d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
-                this.tempItemDetails.set(i, d);
-            } else if (d.getColumnValue().equals(oldValue)) {
+            if (StringUtils.isBlank(d.getColumnValue()) || d.getColumnValue().equals(oldValue)) {
                 d.setRdDataColumnOptionMenu(rdDataColumnOptionMenu);
                 this.tempItemDetails.set(i, d);
             }

@@ -1,166 +1,190 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates and open the template
- * in the editor.
- */
 package cub.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.model.SelectItem;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
- * @author NT48810
+ * The persistent class for the UD_DATA_SCOPE_DETAIL database table.
+ * 
  */
 @Entity
 @Table(name = "UD_DATA_SCOPE_DETAIL")
-@XmlRootElement
-@NamedQueries({
-        @NamedQuery(name = "UdDataScopeDetail.findAll", query = "SELECT u FROM UdDataScopeDetail u"),
-        @NamedQuery(name = "UdDataScopeDetail.findByScopeCode", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udDataScopeDetailPK.scopeCode = :scopeCode"),
-        @NamedQuery(name = "UdDataScopeDetail.findBySeqNo", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udDataScopeDetailPK.seqNo = :seqNo"),
-        @NamedQuery(name = "UdDataScopeDetail.findByParameterName", query = "SELECT u FROM UdDataScopeDetail u WHERE u.parameterName = :parameterName"),
-        @NamedQuery(name = "UdDataScopeDetail.findByParameterDesc", query = "SELECT u FROM UdDataScopeDetail u WHERE u.parameterDesc = :parameterDesc"),
-        @NamedQuery(name = "UdDataScopeDetail.findByValue", query = "SELECT u FROM UdDataScopeDetail u WHERE u.value = :value"),
-        @NamedQuery(name = "UdDataScopeDetail.findByValueDesc", query = "SELECT u FROM UdDataScopeDetail u WHERE u.valueDesc = :valueDesc"),
-        @NamedQuery(name = "UdDataScopeDetail.findByUdColumnCode", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udColumnCode = :udColumnCode"),
-        @NamedQuery(name = "UdDataScopeDetail.findByUdColumnName", query = "SELECT u FROM UdDataScopeDetail u WHERE u.udColumnName = :udColumnName") })
+@NamedQuery(name = "UdDataScopeDetail.findAll", query = "SELECT u FROM UdDataScopeDetail u")
 public class UdDataScopeDetail implements Serializable {
-
     private static final long serialVersionUID = 1L;
+
     @EmbeddedId
-    protected UdDataScopeDetailPK udDataScopeDetailPK;
-    @Size(max = 20)
-    @Column(name = "PARAMETER_NAME")
-    private String parameterName;
-    @Size(max = 50)
+    private UdDataScopeDetailPK id;
+
+    @Column(name = "LEFT_BRACKET")
+    private String leftBracket;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "LOG_DTTM")
+    private Date logDttm;
+
+    @Column(name = "LOG_USER_ID")
+    private String logUserId;
+
+    private String logic;
+
+    @Column(name = "OP_CODE")
+    private String opCode;
+
+    @Column(name = "OP_VALUE")
+    private String opValue;
+
     @Column(name = "PARAMETER_DESC")
     private String parameterDesc;
-    @Size(max = 50)
-    @Column(name = "VALUE")
-    private String value;
-    @Size(max = 50)
-    @Column(name = "VALUE_DESC")
-    private String valueDesc;
-    @Size(max = 6)
-    @Column(name = "UD_COLUMN_CODE")
-    private String udColumnCode;
-    @Size(max = 50)
-    @Column(name = "UD_COLUMN_NAME")
-    private String udColumnName;
+
+    @Column(name = "PARAMETER_NAME")
+    private String parameterName;
+
+    @Column(name = "RIGHT_BRACKET")
+    private String rightBracket;
     @Transient
-    private List<SelectItem> itemRdOptionItemMenu;
+    private String opValueDesc;
+    @Transient
+    private List<SelectItem> paraMenu;
+    @Transient
+    private List<SelectItem> opCodeMenu;
+    @Transient
+    private String paraId;
+    @Transient
+    private List<SelectItem> opValueMenu;
 
     public UdDataScopeDetail() {
     }
 
-    public UdDataScopeDetail(UdDataScopeDetailPK udDataScopeDetailPK) {
-        this.udDataScopeDetailPK = udDataScopeDetailPK;
+    public UdDataScopeDetailPK getId() {
+        return this.id;
     }
 
-    public UdDataScopeDetail(String scopeCode, short seqNo) {
-        this.udDataScopeDetailPK = new UdDataScopeDetailPK(scopeCode, seqNo);
+    public void setId(UdDataScopeDetailPK id) {
+        this.id = id;
     }
 
-    public UdDataScopeDetailPK getUdDataScopeDetailPK() {
-        return udDataScopeDetailPK;
+    public String getLeftBracket() {
+        return this.leftBracket;
     }
 
-    public void setUdDataScopeDetailPK(UdDataScopeDetailPK udDataScopeDetailPK) {
-        this.udDataScopeDetailPK = udDataScopeDetailPK;
+    public void setLeftBracket(String leftBracket) {
+        this.leftBracket = leftBracket;
     }
 
-    public String getParameterName() {
-        return parameterName;
+    public Date getLogDttm() {
+        return this.logDttm;
     }
 
-    public void setParameterName(String parameterName) {
-        this.parameterName = parameterName;
+    public void setLogDttm(Date logDttm) {
+        this.logDttm = logDttm;
+    }
+
+    public String getLogUserId() {
+        return this.logUserId;
+    }
+
+    public void setLogUserId(String logUserId) {
+        this.logUserId = logUserId;
+    }
+
+    public String getLogic() {
+        return this.logic;
+    }
+
+    public void setLogic(String logic) {
+        this.logic = logic;
+    }
+
+    public String getOpCode() {
+        return this.opCode;
+    }
+
+    public void setOpCode(String opCode) {
+        this.opCode = opCode;
+    }
+
+    public String getOpValue() {
+        return this.opValue;
+    }
+
+    public void setOpValue(String opValue) {
+        this.opValue = opValue;
     }
 
     public String getParameterDesc() {
-        return parameterDesc;
+        return this.parameterDesc;
     }
 
     public void setParameterDesc(String parameterDesc) {
         this.parameterDesc = parameterDesc;
     }
 
-    public String getValue() {
-        return value;
+    public String getParameterName() {
+        return this.parameterName;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setParameterName(String parameterName) {
+        this.parameterName = parameterName;
     }
 
-    public String getValueDesc() {
-        return valueDesc;
+    public String getRightBracket() {
+        return this.rightBracket;
     }
 
-    public void setValueDesc(String valueDesc) {
-        this.valueDesc = valueDesc;
+    public void setRightBracket(String rightBracket) {
+        this.rightBracket = rightBracket;
     }
 
-    public String getUdColumnCode() {
-        return udColumnCode;
+    public String getOpValueDesc() {
+        return opValueDesc;
     }
 
-    public void setUdColumnCode(String udColumnCode) {
-        this.udColumnCode = udColumnCode;
+    public void setOpValueDesc(String opValueDesc) {
+        this.opValueDesc = opValueDesc;
     }
 
-    public String getUdColumnName() {
-        return udColumnName;
+    public List<SelectItem> getParaMenu() {
+        return paraMenu;
     }
 
-    public void setUdColumnName(String udColumnName) {
-        this.udColumnName = udColumnName;
+    public void setParaMenu(List<SelectItem> paraMenu) {
+        this.paraMenu = paraMenu;
     }
 
-    public List<SelectItem> getItemRdOptionItemMenu() {
-        return itemRdOptionItemMenu;
+    public List<SelectItem> getOpCodeMenu() {
+        return opCodeMenu;
     }
 
-    public void setItemRdOptionItemMenu(List<SelectItem> itemRdOptionItemMenu) {
-        this.itemRdOptionItemMenu = itemRdOptionItemMenu;
+    public void setOpCodeMenu(List<SelectItem> opCodeMenu) {
+        this.opCodeMenu = opCodeMenu;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (udDataScopeDetailPK != null ? udDataScopeDetailPK.hashCode() : 0);
-        return hash;
+    public String getParaId() {
+        return paraId;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UdDataScopeDetail)) {
-            return false;
-        }
-        UdDataScopeDetail other = (UdDataScopeDetail) object;
-        if ((this.udDataScopeDetailPK == null && other.udDataScopeDetailPK != null)
-                || (this.udDataScopeDetailPK != null && !this.udDataScopeDetailPK.equals(other.udDataScopeDetailPK))) {
-            return false;
-        }
-        return true;
+    public void setParaId(String paraId) {
+        this.paraId = paraId;
     }
 
-    @Override
-    public String toString() {
-        return "cub.entities.UdDataScopeDetail[ udDataScopeDetailPK=" + udDataScopeDetailPK + " ]";
+    public List<SelectItem> getOpValueMenu() {
+        return opValueMenu;
+    }
+
+    public void setOpValueMenu(List<SelectItem> opValueMenu) {
+        this.opValueMenu = opValueMenu;
     }
 
 }

@@ -1,10 +1,10 @@
 package cub.controller;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -20,28 +20,26 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
 
+import cub.entities.ApiMaster;
 import cub.entities.RdDataClass;
-import cub.entities.RdDataColumn;
-import cub.entities.RdDataColumnPK;
-import cub.entities.UdColumnScopeMaster;
+import cub.entities.TrMaster;
+import cub.entities.TrOptionItem;
+import cub.entities.TrOptionItemPK;
+import cub.entities.TrParameterInfo;
 import cub.entities.UdDataScopeDetail;
 import cub.entities.UdDataScopeDetailPK;
 import cub.entities.UdDataScopeMaster;
-import cub.entities.UdMethodDetail;
-import cub.entities.UdMethodMaster;
 import cub.enums.SeqTypeEnum;
-import cub.facade.DataScopeMasterFacade;
+import cub.facade.ApiMasterFacade;
 import cub.facade.RdDataClassFacade;
-import cub.facade.RdDataColumnFacade;
 import cub.facade.RdOptionItemFacade;
-import cub.facade.UdColumnScopeMasterFacade;
+import cub.facade.TrMasterFacade;
+import cub.facade.TrOptionItemFacade;
+import cub.facade.TrParameterInfoFacade;
 import cub.facade.UdDataScopeDetailFacade;
 import cub.facade.UdDataScopeMasterFacade;
-import cub.facade.UdMethodDetailFacade;
-import cub.facade.UdMethodMasterFacade;
 import cub.facade.WorkSeqFacade;
 import cub.sso.UserSession;
-import cub.vo.QueryUdColumnScopeDetailVO;
 
 /**
  * @author F123669 自定義資料範圍設定作業(RCMM02)
@@ -61,17 +59,15 @@ public class UserDeDataScopeSetController extends AbstractController implements 
     @EJB
     private RdDataClassFacade ejbRdDataClassFacade;
     @EJB
-    private UdMethodMasterFacade ejbUdMethodMasterFacade;
+    private TrMasterFacade ejbTrMasterFacade;
     @EJB
-    private UdMethodDetailFacade ejbUdMethodDetailFacade;
+    private ApiMasterFacade ejbApiMasterFacade;
     @EJB
-    private DataScopeMasterFacade ejbDataScopeMasterFacade;
-    @EJB
-    private RdDataColumnFacade ejbRdDataColumnFacade;
-    @EJB
-    private UdColumnScopeMasterFacade ejbUdColumnScopeMasterFacade;
+    private TrParameterInfoFacade ejbTrParameterInfoFacade;
     @EJB
     private RdOptionItemFacade ejbRdOptionItemFacade;
+    @EJB
+    private TrOptionItemFacade ejbTrOptionItemFacade;
     /*
      * 自定義資料範圍列表
      */
@@ -93,21 +89,25 @@ public class UserDeDataScopeSetController extends AbstractController implements 
      */
     private List<SelectItem> itemDataTypeMenu;
     /*
-     * 新增/修改Method名稱下拉選單
+     * 新增/修改API名稱下拉選單
      */
-    private List<SelectItem> itemMethodNameMenu;
+    private List<SelectItem> itemApiMasterMenu;
     /*
-     * 新增/修改回傳欄位下拉選單
+     * 參數名稱下拉選單
      */
-    private List<SelectItem> itemReturnFieldMenu;
+    private List<SelectItem> itemParaMenu;
     /*
-     * 對應值/對應值說明
+     * 關係下拉選單
      */
-    private Map<String, String> allItemCodeMap;
+    private List<SelectItem> itemOpCodeMenu;
     /*
      * 待修改自定義欄位範圍
      */
     private UdDataScopeMaster currentItem;
+    /*
+     * API型態
+     */
+    private BigDecimal rtnType;
     /*
      * 自定義欄位範圍索引
      */
@@ -116,30 +116,6 @@ public class UserDeDataScopeSetController extends AbstractController implements 
      * 新增/修改Dialog CommandButton value
      */
     private String editDialogLabel = "新增";
-    /*
-     * Method名稱暫存
-     */
-    private String tempMethodName;
-    /*
-     * 資料條件細節暫存
-     */
-    private List<String> tempDetailList;
-    /*
-     * 自定義欄位範圍(代碼)Menu
-     */
-    private List<SelectItem> userDeFieldScopeMenu;
-    /*
-     * 自定義欄位範圍暫存List
-     */
-    private List<String> tempUserDeFieldList;
-    /*
-     * 自定義欄位範圍暫存
-     */
-    private String tempUserDeField;
-    /*
-     * 回傳欄位暫存
-     */
-    private String tempRTNField;
 
     @PostConstruct
     public void init() {
@@ -152,42 +128,78 @@ public class UserDeDataScopeSetController extends AbstractController implements 
             this.master.add(this.item);
         } else {
             this.currentItem = this.master.get(0);
+            refreshTrCode(this.currentItem.getApiCode());
         }
         // 頁面載入自定義欄位this.master的index
         currentIndex = 0;
         // initial新增/修改時資料類別下拉選單
         genDataTypeMenu();
-        // initial新增/修改時Method名稱下拉選單
-        genMethodNameMenu();
-        // initial新增/修改時自定義欄位範圍(代碼)下拉選單
-        genUdFieldScopeMasterMenu();
+        // initial新增/修改時API下拉選單
+        genAPIMasterMenu();
+
+        // initial新增/修改時關係下拉選單
+        genOpCodeMenu();
         // 載入this.currentItem內容
         setItemDetail();
     }
 
     /*
-     * Method名稱改變時連動資料條件設定區
+     * API代碼名稱改變時連動資料條件設定區
      */
-    public void onMethodMenuChange(ValueChangeEvent e) {
-        this.itemDetail.clear();
-        String name = e.getNewValue().toString();
-        List<UdMethodDetail> methodDetail = ejbUdMethodDetailFacade.findByMethodName(name);
-        this.allItemCodeMap = new HashMap<String, String>();
-        for (UdMethodDetail dt : methodDetail) {
-            UdDataScopeDetail de = new UdDataScopeDetail();
-            de.setParameterName(dt.getParameterName());// 參數名稱
-            de.setParameterDesc(dt.getParameterDesc());// 參數說明
-            genRdOptionItemMenu(de);
-            this.itemDetail.add(de);
-        }
-        this.item.setMethodNameDesc(ejbUdMethodMasterFacade.findDescByName(name));
+    public void onAPIMenuChange(ValueChangeEvent e) {
+        String apiCode = e.getNewValue().toString();
+        refreshTrCode(apiCode);
     }
 
     /*
-     * 資料類別改變時連動回傳欄位
+     * 參數名稱變更時連動參數說明
      */
-    public void onDataTypeMenuChange() {
+    public void onParaMenuChange(ValueChangeEvent e) {
+        String newId = e.getNewValue().toString();
+        String oldId = null == e.getOldValue() ? "" : e.getOldValue().toString();
+        for (int i = 0; i < this.itemDetail.size(); i++) {
+            UdDataScopeDetail de = this.itemDetail.get(i);
+            if (StringUtils.isBlank(de.getParameterName())
+                    || de.getParameterName().equals(StringUtils.split(oldId, "+")[0])) {
+                de.setParameterName(StringUtils.split(newId, "+")[0]);
+                String desc = ejbTrParameterInfoFacade.findDescByParaName(StringUtils.split(newId, "+")[1]);
 
+                genOpValueMenu(de, newId);
+
+                de.setParameterDesc(desc);
+                this.itemDetail.set(i, de);
+            }
+        }
+    }
+
+    private void genOpValueMenu(UdDataScopeDetail de, String newId) {
+        String[] id = StringUtils.split(newId, "+");
+        List<TrOptionItem> allItem = ejbTrOptionItemFacade.findByCodeName(id[0], id[1]);
+        List<SelectItem> selItem = new ArrayList<SelectItem>();
+        for (TrOptionItem tr : allItem) {
+            selItem.add(new SelectItem(tr.getId().getItemCode(), tr.getItemName()));
+        }
+        de.setOpValueMenu(selItem);
+    }
+
+    public void onOpValueChange(ValueChangeEvent e) {
+        String newValue = e.getNewValue().toString();
+        String oldValue = null == e.getOldValue() ? "" : e.getOldValue().toString();
+        for (int i = 0; i < this.itemDetail.size(); i++) {
+            UdDataScopeDetail de = this.itemDetail.get(i);
+            if (StringUtils.isBlank(de.getOpValue())
+                    || de.getOpValue().equals(oldValue)) {
+                if (StringUtils.isNotBlank(de.getParaId())) {
+                    String[] split = StringUtils.split(de.getParaId(), "+");
+                    TrOptionItemPK id = new TrOptionItemPK(split[0], split[1], newValue);
+                    TrOptionItem desc = ejbTrOptionItemFacade.find(id);
+                    de.setOpValueDesc(desc.getItemName());
+                    this.itemDetail.set(i, de);
+                } else {
+                    addMessage("請先輸入API代碼/名稱或參數名稱", "請先輸入API代碼/名稱或參數名稱");
+                }
+            }
+        }
     }
 
     /*
@@ -256,30 +268,15 @@ public class UserDeDataScopeSetController extends AbstractController implements 
      * 確認新增
      */
     public void save(ActionEvent event) {
-        if (StringUtils.isBlank(this.item.getScopeCode())) {// 新增
-            String scopeCode = getWorkSeq(SeqTypeEnum.UDDATA_CODE.toString());
-            this.item.setScopeCode(scopeCode);
-            ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.UDDATA_CODE.toString());
+        if ((null != this.rtnType) && (this.rtnType.compareTo(new BigDecimal("1")) == 0)) {
+            if (this.itemDetail.isEmpty()) {
+                addMessage("TR回傳參數至少需要一筆", "TR回傳參數至少需要一筆");
+            } else {
+                saveMethod();
+            }
+        } else if ((null != this.rtnType) && (this.rtnType.compareTo(new BigDecimal("1")) != 0)) {
+            saveMethod();
         }
-        if (StringUtils.isNotBlank(this.tempRTNField)) {
-            String[] split = this.tempRTNField.split("-");
-            this.item.setTableName(split[1]);
-            this.item.setColumnName(split[2]);
-        }
-        ejbUdDataScopeMasterFacade.save(this.item);
-        ejbUdDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
-        short i = 1;
-        for (UdDataScopeDetail d : this.itemDetail) {
-            UdDataScopeDetailPK pk = new UdDataScopeDetailPK(this.item.getScopeCode(), i);
-            d.setUdDataScopeDetailPK(pk);
-            ejbUdDataScopeDetailFacade.create(d);
-            i++;
-        }
-        addMessage("新增成功", "新增成功");
-        this.currentItem = this.master.get(this.currentIndex);
-        this.init();
-        setItemDetail();
-        create();
     }
 
     /*
@@ -289,10 +286,11 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.editDialogLabel = "修改";
         this.item = this.currentItem;
         this.itemDetail = ejbUdDataScopeDetailFacade.findByScopeCode(this.item.getScopeCode());
-        genReturnFieldMenu(String.valueOf(this.item.getClassCode()));
-        this.allItemCodeMap = new HashMap<String, String>();
         for (UdDataScopeDetail ud : this.itemDetail) {
-            genRdOptionItemMenu(ud);
+            ud.setOpCodeMenu(this.itemOpCodeMenu);
+            ud.setParaMenu(this.itemParaMenu);
+            String name = ejbTrParameterInfoFacade.findNameByCodeDesc(ud.getParameterName(), ud.getParameterDesc());
+            ud.setParaId(ud.getParameterName() + "+" + name);
         }
     }
 
@@ -300,30 +298,31 @@ public class UserDeDataScopeSetController extends AbstractController implements 
      * 點擊刪除
      */
     public void delete() {
-        if (ejbDataScopeMasterFacade.checkRuleNoExistByScopeCode(this.currentItem.getScopeCode())) {
-            addMessage("此欄位範圍已經被引用,請移除該引用才可進行刪除!", "此欄位範圍已經被引用,請移除該引用才可進行刪除!");
-        } else if (this.master.size() == 1) {
-            addMessage("已是最後一筆無法刪除!", "已是最後一筆無法刪除!");
-        } else {
-            ejbUdDataScopeMasterFacade.remove(this.currentItem);
-            ejbUdDataScopeDetailFacade.removeByMaster(this.currentItem.getScopeCode());
-            addMessage("刪除成功", "刪除成功");
-        }
+        ejbUdDataScopeMasterFacade.remove(this.currentItem);
+        ejbUdDataScopeDetailFacade.removeByMaster(this.currentItem.getScopeCode());
+        addMessage("刪除成功", "刪除成功");
         this.init();
     }
 
-    public void tempUserDeFieldChange(int i) {
-        UdDataScopeDetail de = this.itemDetail.get(i);
-        String[] split = this.tempUserDeField.split("-");
-        de.setUdColumnCode(split[0]);
-        de.setUdColumnName(split[1]);
-        this.itemDetail.set(i, de);
+    /*
+     * 新增資料範圍(＋)
+     */
+    public void addDetail(ActionEvent event) {
+        if (null == this.itemParaMenu || this.itemParaMenu.isEmpty()) {
+            addMessage("請先選定API代碼/名稱", "請先選定API代碼/名稱");
+        } else {
+            UdDataScopeDetail tempDetail = new UdDataScopeDetail();
+            tempDetail.setOpCodeMenu(this.itemOpCodeMenu);
+            tempDetail.setParaMenu(this.itemParaMenu);
+            this.itemDetail.add(tempDetail);
+        }
     }
 
-    public void tempValueChange(int i) {
-        UdDataScopeDetail de = this.itemDetail.get(i);
-        de.setValueDesc(this.allItemCodeMap.get(de.getValue()));
-        this.itemDetail.set(i, de);
+    /*
+     * 移除資料範圍(－)
+     */
+    public void removeDetail(UdDataScopeDetail d) {
+        this.itemDetail.remove(d);
     }
 
     /*
@@ -381,20 +380,12 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.itemDetail = itemDetail;
     }
 
-    public List<SelectItem> getItemMethodNameMenu() {
-        return itemMethodNameMenu;
+    public List<SelectItem> getItemApiMasterMenu() {
+        return itemApiMasterMenu;
     }
 
-    public void setItemMethodNameMenu(List<SelectItem> itemMethodNameMenu) {
-        this.itemMethodNameMenu = itemMethodNameMenu;
-    }
-
-    public List<SelectItem> getItemReturnFieldMenu() {
-        return itemReturnFieldMenu;
-    }
-
-    public void setItemReturnFieldMenu(List<SelectItem> itemReturnFieldMenu) {
-        this.itemReturnFieldMenu = itemReturnFieldMenu;
+    public void setItemApiMasterMenu(List<SelectItem> itemApiMasterMenu) {
+        this.itemApiMasterMenu = itemApiMasterMenu;
     }
 
     public List<SelectItem> getItemDataTypeMenu() {
@@ -413,62 +404,6 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.editDialogLabel = editDialogLabel;
     }
 
-    public String getTempMethodName() {
-        return tempMethodName;
-    }
-
-    public void setTempMethodName(String tempMethodName) {
-        this.tempMethodName = tempMethodName;
-    }
-
-    public List<String> getTempDetailList() {
-        return tempDetailList;
-    }
-
-    public void setTempDetailList(List<String> tempDetailList) {
-        this.tempDetailList = tempDetailList;
-    }
-
-    public List<SelectItem> getUserDeFieldScopeMenu() {
-        return userDeFieldScopeMenu;
-    }
-
-    public void setUserDeFieldScopeMenu(List<SelectItem> userDeFieldScopeMenu) {
-        this.userDeFieldScopeMenu = userDeFieldScopeMenu;
-    }
-
-    public List<String> getTempUserDeFieldList() {
-        return tempUserDeFieldList;
-    }
-
-    public void setTempUserDeFieldList(List<String> tempUserDeFieldList) {
-        this.tempUserDeFieldList = tempUserDeFieldList;
-    }
-
-    public String getTempUserDeField() {
-        return tempUserDeField;
-    }
-
-    public void setTempUserDeField(String tempUserDeField) {
-        this.tempUserDeField = tempUserDeField;
-    }
-
-    public String getTempRTNField() {
-        return tempRTNField;
-    }
-
-    public void setTempRTNField(String tempRTNField) {
-        this.tempRTNField = tempRTNField;
-    }
-
-    public Map<String, String> getAllItemCodeMap() {
-        return allItemCodeMap;
-    }
-
-    public void setAllItemCodeMap(Map<String, String> allItemCodeMap) {
-        this.allItemCodeMap = allItemCodeMap;
-    }
-
     public UserSession getUserSession() {
         return userSession;
     }
@@ -477,44 +412,93 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.userSession = userSession;
     }
 
-    public void genReturnFieldMenu(ValueChangeEvent e) {
-        genReturnFieldMenu(e.getNewValue().toString());
+    public List<SelectItem> getItemParaMenu() {
+        return itemParaMenu;
     }
 
-    private void genColumnCHNName() {
-        QueryUdColumnScopeDetailVO vo = new QueryUdColumnScopeDetailVO();
-        vo.setClassCode(this.currentItem.getClassCode());
-        vo.setTableName(this.currentItem.getTableName());
-        vo.setColumnName(this.currentItem.getColumnName());
-        String columnCHNName = ejbRdDataColumnFacade.getFieldCNNameMenu(vo);
-        this.currentItem.setColumnCHNName(columnCHNName);
+    public void setItemParaMenu(List<SelectItem> itemParaMenu) {
+        this.itemParaMenu = itemParaMenu;
     }
 
-    private void genReturnFieldMenu(String classCode) {
-        this.itemReturnFieldMenu = new ArrayList<SelectItem>();
-        List<RdDataColumn> list = ejbRdDataColumnFacade.getColumnByClassCode(classCode);
-        for (RdDataColumn rd : list) {
-            RdDataColumnPK pk = rd.getRdDataColumnPK();
-            this.itemReturnFieldMenu
-                .add(new SelectItem(pk.getClassCode() + "-" + pk.getTableName()
-                        + "-" + pk.getColumnName(), rd.getColumnChnName()));
+    public List<SelectItem> getItemOpCodeMenu() {
+        return itemOpCodeMenu;
+    }
+
+    public void setItemOpCodeMenu(List<SelectItem> itemOpCodeMenu) {
+        this.itemOpCodeMenu = itemOpCodeMenu;
+    }
+
+    public BigDecimal getRtnType() {
+        return rtnType;
+    }
+
+    public void setRtnType(BigDecimal rtnType) {
+        this.rtnType = rtnType;
+    }
+
+    private void refreshTrCode(String apiCode) {
+        ApiMaster apiMaster = ejbApiMasterFacade.find(apiCode);
+        TrMaster tm = ejbTrMasterFacade.findByTrCode(apiMaster.getOutputTrCode());
+        this.item.setApiName(apiMaster.getApiDesc());
+        this.item.setTrCode(tm.getTrCode());
+        this.item.setTrDesc(tm.getTrDesc());
+        this.currentItem.setApiName(apiMaster.getApiDesc());
+        this.currentItem.setTrCode(tm.getTrCode());
+        this.currentItem.setTrDesc(tm.getTrDesc());
+        this.rtnType = apiMaster.getRtnType();
+        // initial新增/修改時參數名稱下拉選單
+        genParaNameMenu();
+    }
+
+    private void saveMethod() {
+        if (StringUtils.isBlank(this.item.getScopeCode())) {// 新增
+            String scopeCode = getWorkSeq(SeqTypeEnum.UDDATA_CODE.toString());
+            this.item.setScopeCode(scopeCode);
+            ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.UDDATA_CODE.toString());
+        }
+        this.item.setLogDttm(new Date());
+        this.item.setLogUserId(this.userSession.getUser().getEmpId());
+        ejbUdDataScopeMasterFacade.save(this.item);
+        ejbUdDataScopeDetailFacade.removeByMaster(this.item.getScopeCode());
+        short i = 1;
+        for (UdDataScopeDetail d : this.itemDetail) {
+            UdDataScopeDetailPK pk = new UdDataScopeDetailPK(this.item.getScopeCode(), i);
+            d.setId(pk);
+            d.setLogDttm(new Date());
+            d.setLogUserId(this.userSession.getUser().getEmpId());
+            ejbUdDataScopeDetailFacade.create(d);
+            i++;
+        }
+        addMessage("新增成功", "新增成功");
+        this.currentItem = this.master.get(this.currentIndex);
+        this.init();
+        setItemDetail();
+        create();
+    }
+
+    private void genAPIMasterMenu() {
+        this.itemApiMasterMenu = new ArrayList<SelectItem>();
+        List<ApiMaster> allApiMaster = ejbApiMasterFacade.findAll();
+        for (ApiMaster m : allApiMaster) {
+            this.itemApiMasterMenu.add(new SelectItem(m.getApiCode(), m.getApiDesc()));
         }
     }
 
-    private void genUdFieldScopeMasterMenu() {
-        this.userDeFieldScopeMenu = new ArrayList<SelectItem>();
-        List<UdColumnScopeMaster> allUdColumnMaster = ejbUdColumnScopeMasterFacade.findAllSort();
-        for (UdColumnScopeMaster m : allUdColumnMaster) {
-            this.userDeFieldScopeMenu
-                .add(new SelectItem(m.getUdColumnCode() + "-" + m.getUdColumnName(), m.getUdColumnCode()));
+    private void genOpCodeMenu() {
+        this.itemOpCodeMenu = new ArrayList<SelectItem>();
+        List<Object[]> roi = ejbRdOptionItemFacade.findByClassCode((short) 9);
+        for (Object[] o : roi) {
+            this.itemOpCodeMenu.add(new SelectItem(o[0], o[1].toString()));
         }
     }
 
-    private void genMethodNameMenu() {
-        this.itemMethodNameMenu = new ArrayList<SelectItem>();
-        List<UdMethodMaster> allMethodMaster = ejbUdMethodMasterFacade.findAllSort();
-        for (UdMethodMaster m : allMethodMaster) {
-            this.itemMethodNameMenu.add(new SelectItem(m.getMethodName(), m.getMethodName()));
+    private void genParaNameMenu() {
+        this.itemParaMenu = new ArrayList<SelectItem>();
+        List<TrParameterInfo> allTpInfo = ejbTrParameterInfoFacade.findByTrCode(this.item.getTrCode());
+        for (TrParameterInfo tp : allTpInfo) {
+            this.itemParaMenu.add(
+                new SelectItem(tp.getId().getTrCode() + "+" + tp.getId().getParameterName(),
+                        tp.getId().getParameterName()));
         }
     }
 
@@ -526,23 +510,12 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         }
     }
 
-    private void genRdOptionItemMenu(UdDataScopeDetail de) {
-        List<SelectItem> itemRdOptionItemMenu = new ArrayList<SelectItem>();
-        List<Object[]> allItemCodes = ejbRdOptionItemFacade.findAllItemCodes(de.getParameterName());
-        for (Object[] o : allItemCodes) {
-            itemRdOptionItemMenu.add(new SelectItem(o[0].toString(), o[0].toString() + ". " + o[1].toString()));
-            allItemCodeMap.put(o[0].toString(), o[1].toString());
-        }
-        de.setItemRdOptionItemMenu(itemRdOptionItemMenu);
-    }
-
     /*
      * 載入detail
      */
     private void setItemDetail() {
         String className = ejbRdDataClassFacade.getClassNameByClassCode(this.currentItem.getClassCode());
         this.currentItem.setClassName(className);
-        genColumnCHNName();
         this.detail = ejbUdDataScopeDetailFacade.findByScopeCode(this.currentItem.getScopeCode());
     }
 

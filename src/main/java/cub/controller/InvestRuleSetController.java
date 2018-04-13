@@ -328,7 +328,7 @@ public class InvestRuleSetController extends AbstractController implements Seria
                 String ruleNo = getWorkSeq(SeqTypeEnum.FUND_CODE.toString());
                 updateRuleRelateTable(ruleNo);
                 this.item.setRuleNo(ruleNo);
-                this.item.setLogUserId("Gilbert");
+                this.item.setLogUserId(this.userSession.getUser().getEmpId());
                 this.item.setLogDttm(new Date());
                 this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
                 saveDivide();
@@ -340,7 +340,7 @@ public class InvestRuleSetController extends AbstractController implements Seria
             } else {// 修改
                 removeRuleRelateData();
                 updateRuleRelateTable(this.item.getRuleNo());
-                this.item.setLogUserId("Gilbert");
+                this.item.setLogUserId(this.userSession.getUser().getEmpId());
                 this.item.setLogDttm(new Date());
                 this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
                 saveDivide();

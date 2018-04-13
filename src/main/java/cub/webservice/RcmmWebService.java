@@ -270,7 +270,7 @@ public class RcmmWebService {
      */
     private static BigDecimal rtnFactorValue(OrderInfo orderInfo, RuleList rl, int checkFactor) {
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

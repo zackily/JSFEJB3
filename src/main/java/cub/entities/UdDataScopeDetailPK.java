@@ -1,86 +1,66 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cub.entities;
 
 import java.io.Serializable;
-
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
 
 /**
- *
- * @author NT48810
+ * The primary key class for the UD_DATA_SCOPE_DETAIL database table.
+ * 
  */
 @Embeddable
 public class UdDataScopeDetailPK implements Serializable {
+    // default serial version id, required for serializable classes.
+    private static final long serialVersionUID = 1L;
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
     @Column(name = "SCOPE_CODE")
     private String scopeCode;
-    @Basic(optional = false)
-    @NotNull
+
     @Column(name = "SEQ_NO")
-    private short seqNo;
+    private long seqNo;
 
     public UdDataScopeDetailPK() {
     }
 
-    public UdDataScopeDetailPK(String scopeCode, short seqNo) {
+    public UdDataScopeDetailPK(String scopeCode, long seqNo) {
+        super();
         this.scopeCode = scopeCode;
         this.seqNo = seqNo;
     }
 
     public String getScopeCode() {
-        return scopeCode;
+        return this.scopeCode;
     }
 
     public void setScopeCode(String scopeCode) {
         this.scopeCode = scopeCode;
     }
 
-    public short getSeqNo() {
-        return seqNo;
+    public long getSeqNo() {
+        return this.seqNo;
     }
 
-    public void setSeqNo(short seqNo) {
+    public void setSeqNo(long seqNo) {
         this.seqNo = seqNo;
     }
 
-    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof UdDataScopeDetailPK)) {
+            return false;
+        }
+        UdDataScopeDetailPK castOther = (UdDataScopeDetailPK) other;
+        return this.scopeCode.equals(castOther.scopeCode)
+                && (this.seqNo == castOther.seqNo);
+    }
+
     public int hashCode() {
-        int hash = 0;
-        hash += (scopeCode != null ? scopeCode.hashCode() : 0);
-        hash += (int) seqNo;
+        final int prime = 31;
+        int hash = 17;
+        hash = hash * prime + this.scopeCode.hashCode();
+        hash = hash * prime + ((int) (this.seqNo ^ (this.seqNo >>> 32)));
+
         return hash;
     }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof UdDataScopeDetailPK)) {
-            return false;
-        }
-        UdDataScopeDetailPK other = (UdDataScopeDetailPK) object;
-        if ((this.scopeCode == null && other.scopeCode != null) || (this.scopeCode != null && !this.scopeCode.equals(other.scopeCode))) {
-            return false;
-        }
-        if (this.seqNo != other.seqNo) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "cub.entities.UdDataScopeDetailPK[ scopeCode=" + scopeCode + ", seqNo=" + seqNo + " ]";
-    }
-    
 }
