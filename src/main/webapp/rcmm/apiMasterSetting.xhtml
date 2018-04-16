@@ -46,9 +46,9 @@
 						</p:panelGrid>
 
 						<p:panelGrid columns="2" layout="grid"
-							columnClasses="ui-grid-col-2, ui-grid-col-6">
+							columnClasses="ui-grid-col-3, ui-grid-col-12">
 							<p:outputLabel value="API代碼" />
-							<p:autoComplete
+							<p:autoComplete  size="50"
 								value="#{apiMasterSetController.currentItem.apiCode}"
 								completeMethod="#{apiMasterSetController.searchApiMaster}">
 								<p:ajax event="itemSelect"
@@ -56,22 +56,22 @@
 									update=":mainForm" />
 							</p:autoComplete>
 							<p:outputLabel value="API說明" />
-							<p:outputLabel
+							<p:outputLabel size="50"
 								value="#{apiMasterSetController.currentItem.apiDesc}" />
 							<p:outputLabel value="API類型" />
-							<p:outputLabel
+							<p:outputLabel size="50"
 								value="#{apiMasterSetController.currentItem.rtnType}"
 								converter="#{rtnTypeConverter}" />
 							<p:outputLabel value="回傳電文代碼" />
-							<p:outputLabel
+							<p:outputLabel size="50"
 								value="#{apiMasterSetController.currentItem.outputTrCode}"
 								converter="#{trCodeConverter}" />
 							<p:outputLabel value="資料類別" />
-							<p:outputLabel
+							<p:outputLabel size="50"
 								value="#{apiMasterSetController.currentItem.classCode}"
 								converter="#{classCodeConverter}" />
 							<p:outputLabel value="系統代碼" />
-							<p:outputLabel
+							<p:outputLabel size="50"
 								value="#{apiMasterSetController.currentItem.systemCode}"
 								converter="#{systemCodeConverter}" />
 						</p:panelGrid>
@@ -98,9 +98,9 @@
 			appendTo="@(body)">
 			<h:form id="dialogForm">
 				<p:panelGrid columns="2" layout="grid"
-					columnClasses="ui-grid-col-4, ui-grid-col-8">
+					columnClasses="ui-grid-col-3, ui-grid-col-12">
 					<p:outputLabel value="API代碼" />
-					<p:inputText
+					<p:inputText size="50"
 						rendered="#{apiMasterSetController.editDialogLabel=='新增'}"
 						value="#{apiMasterSetController.item.apiCode}" />
 					<p:outputLabel
@@ -108,7 +108,7 @@
 						value="#{apiMasterSetController.item.apiCode}" />
 
 					<p:outputLabel value="API說明" />
-					<p:inputText value="#{apiMasterSetController.item.apiDesc}" />
+					<p:inputText size="50" value="#{apiMasterSetController.item.apiDesc}" />
 
 					<p:outputLabel value="API類型" />
 					<p:selectOneMenu value="#{apiMasterSetController.item.rtnType}">
@@ -124,6 +124,7 @@
 						requiredMessage="請選擇回傳電文代碼" label="回傳電文代碼"
 						disabled="#{apiMasterSetController.item.rtnType==2}"
 						value="#{apiMasterSetController.item.outputTrCode}">
+						<f:selectItem itemLabel="" itemValue="" />
 						<f:selectItems value="#{apiMasterSetController.trCodeMenu}" />
 					</p:selectOneMenu>
 

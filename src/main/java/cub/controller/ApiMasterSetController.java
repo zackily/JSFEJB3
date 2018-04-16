@@ -162,6 +162,7 @@ public class ApiMasterSetController extends AbstractController implements Serial
         ejbApiMasterFacade.save(this.item);
         addMessage("新增成功", "新增成功");
         this.currentItem = this.master.get(this.currentIndex);
+        init();
         create();
     }
 
