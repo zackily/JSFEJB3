@@ -5,9 +5,12 @@
  */
 package cub.facade;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import cub.entities.ApiMaster;
 
@@ -28,6 +31,14 @@ public class ApiMasterFacade extends AbstractFacade<ApiMaster> {
     
     public ApiMasterFacade() {
         super(ApiMaster.class);
+    }
+
+    public List<String> findByCode(String code) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select a.apiCode from ApiMaster a where a.apiCode like :code");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("code", code + "%");
+        return query.getResultList();
     }
     
 }

@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/template.xhtml">
+
+
+	<ui:define name="title">
+		<h:outputText value="API基本資料設定作業(RCMM05)" />
+	</ui:define>
+
+	<ui:define name="body">
+		<h:form id="mainForm" style="width: 60%">
+			<p:growl id="growl" sticky="true" />
+			<p:panel header="API基本資料設定作業(RCMM05)">
+				<p:panelGrid columns="2"
+					columnClasses="ui-grid-col-2, ui-grid-col-11" style="width:100%"
+					layout="grid">
+					<p:panelGrid columns="1" style="width: 100%" layout="grid">
+						<p:commandButton value="新增" style="width: 100%"
+							actionListener="#{apiMasterSetController.create}"
+							oncomplete="PF('createDialog').show();" update=":dialogForm"
+							process="@this" />
+						<p:commandButton value="修改" style="width: 100%"
+							disabled="#{empty apiMasterSetController.currentItem.apiCode}"
+							actionListener="#{apiMasterSetController.edit}"
+							oncomplete="PF('createDialog').show();"
+							update=":createDialog :dialogForm" process="@this" />
+						<p:commandButton value="刪除" style="width: 100%"
+							onclick="PF('deleteConfirm').show()" />
+					</p:panelGrid>
+					<p:panelGrid columns="1" style="width:100%" layout="grid">
+						<p:panelGrid columns="4" style="width: 100%" layout="grid">
+							<p:commandButton value="&lt;&lt;"
+								actionListener="#{apiMasterSetController.lookupMaster(0)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&lt;"
+								actionListener="#{apiMasterSetController.lookupMaster(-1)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&gt;"
+								actionListener="#{apiMasterSetController.lookupMaster(1)}"
+								style="width: 100%" update=":mainForm" />
+							<p:commandButton value="&gt;&gt;"
+								actionListener="#{apiMasterSetController.lookupMaster(apiMasterSetController.master.size())}"
+								style="width: 80%" update=":mainForm" />
+						</p:panelGrid>
+
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-6">
+							<p:outputLabel value="API代碼" />
+							<p:autoComplete
+								value="#{apiMasterSetController.currentItem.apiCode}"
+								completeMethod="#{apiMasterSetController.searchApiMaster}">
+								<p:ajax event="itemSelect"
+									listener="#{apiMasterSetController.onItemSelect}"
+									update=":mainForm" />
+							</p:autoComplete>
+							<p:outputLabel value="API說明" />
+							<p:outputLabel
+								value="#{apiMasterSetController.currentItem.apiDesc}" />
+							<p:outputLabel value="API類型" />
+							<p:outputLabel
+								value="#{apiMasterSetController.currentItem.rtnType}"
+								converter="#{rtnTypeConverter}" />
+							<p:outputLabel value="回傳電文代碼" />
+							<p:outputLabel
+								value="#{apiMasterSetController.currentItem.outputTrCode}"
+								converter="#{trCodeConverter}" />
+							<p:outputLabel value="資料類別" />
+							<p:outputLabel
+								value="#{apiMasterSetController.currentItem.classCode}"
+								converter="#{classCodeConverter}" />
+							<p:outputLabel value="系統代碼" />
+							<p:outputLabel
+								value="#{apiMasterSetController.currentItem.systemCode}"
+								converter="#{systemCodeConverter}" />
+						</p:panelGrid>
+					</p:panelGrid>
+				</p:panelGrid>
+			</p:panel>
+			<p:confirmDialog header="刪除API基本資料" widgetVar="deleteConfirm"
+				appendTo="@(body)">
+				<f:facet name="message">
+					<h:outputText value="是否確定要刪除?" />
+				</f:facet>
+				<p:commandButton title="GDelYesButton" value="Yes"
+					actionListener="#{apiMasterSetController.delete}"
+					oncomplete="PF('deleteConfirm').hide()" process="@this"
+					update=":mainForm :mainForm:growl" />
+				<p:commandButton title="GDelNoButton" value="No"
+					oncomplete="PF('deleteConfirm').hide()" />
+			</p:confirmDialog>
+
+		</h:form>
+		<p:dialog id="createDialog"
+			header="#{apiMasterSetController.editDialogLabel}"
+			widgetVar="createDialog" modal="true" height="600" width="600"
+			appendTo="@(body)">
+			<h:form id="dialogForm">
+				<p:panelGrid columns="2" layout="grid"
+					columnClasses="ui-grid-col-4, ui-grid-col-8">
+					<p:outputLabel value="API代碼" />
+					<p:inputText
+						rendered="#{apiMasterSetController.editDialogLabel=='新增'}"
+						value="#{apiMasterSetController.item.apiCode}" />
+					<p:outputLabel
+						rendered="#{apiMasterSetController.editDialogLabel!='新增'}"
+						value="#{apiMasterSetController.item.apiCode}" />
+
+					<p:outputLabel value="API說明" />
+					<p:inputText value="#{apiMasterSetController.item.apiDesc}" />
+
+					<p:outputLabel value="API類型" />
+					<p:selectOneMenu value="#{apiMasterSetController.item.rtnType}">
+						<p:ajax event="change" immediate="true"
+							update="dialogForm:selRtnType" process="@this" />
+						<f:selectItem itemLabel="呼叫TR" itemValue="1" />
+						<f:selectItem itemLabel="自行產生" itemValue="2" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="回傳電文代碼" />
+					<p:selectOneMenu id="selRtnType"
+						required="#{apiMasterSetController.item.rtnType==1}"
+						requiredMessage="請選擇回傳電文代碼" label="回傳電文代碼"
+						disabled="#{apiMasterSetController.item.rtnType==2}"
+						value="#{apiMasterSetController.item.outputTrCode}">
+						<f:selectItems value="#{apiMasterSetController.trCodeMenu}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="資料類別" />
+					<p:selectOneMenu value="#{apiMasterSetController.item.classCode}">
+						<f:selectItems value="#{apiMasterSetController.classCodeMenu}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel value="系統代碼" />
+					<p:selectOneMenu value="#{apiMasterSetController.item.systemCode}">
+						<f:selectItems value="#{apiMasterSetController.systemCodeMenu}" />
+					</p:selectOneMenu>
+				</p:panelGrid>
+				<p:panelGrid columns="1">
+					<p:panel>
+						<p:commandButton value="儲存"
+							actionListener="#{apiMasterSetController.save}"
+							update=":mainForm :dialogForm"
+							oncomplete="PF('createDialog').hide()" />
+						<p:commandButton value="取消" onclick="PF('createDialog').hide()" />
+					</p:panel>
+				</p:panelGrid>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

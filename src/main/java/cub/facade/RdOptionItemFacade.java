@@ -82,4 +82,18 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
             return null;
         }
     }
+    public String findSystemNameByItemCode(Short value) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select r.itemName")
+        .append(" from RdOptionItem r")
+        .append(" where r.rdOptionItemPK.classCode = 2")
+        .append(" and r.rdOptionItemPK.itemCode =:value");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("value", value);
+        try {
+            return query.getSingleResult().toString();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

@@ -5,6 +5,8 @@
  */
 package cub.facade;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -38,6 +40,21 @@ public class TrMasterFacade extends AbstractFacade<TrMaster> {
         Query query = em.createQuery(jpql.toString());
         query.setParameter("trCode", trCode);
         return (TrMaster) query.getSingleResult();
+    }
+
+    public List<TrMaster> findAllSort() {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("from TrMaster tr order by tr.trCode asc");
+        Query query = em.createQuery(jpql.toString());
+        return query.getResultList();
+    }
+
+    public String findNameByTrCode(String trCode) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select m.trDesc from TrMaster m where m.trCode =:trCode");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("trCode", trCode);
+        return (String) query.getSingleResult();
     }
     
 }

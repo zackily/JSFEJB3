@@ -173,16 +173,6 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.tempVar = i;
     }
 
-    private void genOpValueMenu(UdDataScopeDetail de, String newId) {
-        String[] id = StringUtils.split(newId, "+");
-        List<TrOptionItem> allItem = ejbTrOptionItemFacade.findByCodeName(id[0], id[1]);
-        List<SelectItem> selItem = new ArrayList<SelectItem>();
-        for (TrOptionItem tr : allItem) {
-            selItem.add(new SelectItem(tr.getId().getItemCode(), tr.getId().getItemCode()));
-        }
-        de.setOpValueMenu(selItem);
-    }
-
     public void onOpValueChange(ValueChangeEvent e) {
         String newValue = e.getNewValue().toString();
         String oldValue = null == e.getOldValue() ? "" : e.getOldValue().toString();
@@ -447,6 +437,16 @@ public class UserDeDataScopeSetController extends AbstractController implements 
 
     public void setTempVar(int tempVar) {
         this.tempVar = tempVar;
+    }
+
+    private void genOpValueMenu(UdDataScopeDetail de, String newId) {
+        String[] id = StringUtils.split(newId, "+");
+        List<TrOptionItem> allItem = ejbTrOptionItemFacade.findByCodeName(id[0], id[1]);
+        List<SelectItem> selItem = new ArrayList<SelectItem>();
+        for (TrOptionItem tr : allItem) {
+            selItem.add(new SelectItem(tr.getId().getItemCode(), tr.getId().getItemCode()));
+        }
+        de.setOpValueMenu(selItem);
     }
 
     private void refreshTrCode(String apiCode) {
