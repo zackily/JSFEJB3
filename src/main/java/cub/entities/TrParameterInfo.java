@@ -40,6 +40,9 @@ public class TrParameterInfo implements Serializable {
 	@Column(name="PARAMETER_DESC")
 	private String parameterDesc;
 
+	@Column(name="PARAMETER_NAME")
+	private String parameterName;
+
 	public TrParameterInfo() {
 	}
 
@@ -105,6 +108,14 @@ public class TrParameterInfo implements Serializable {
 
 	public void setParameterDesc(String parameterDesc) {
 		this.parameterDesc = parameterDesc;
+	}
+
+	public String getParameterName() {
+		return this.parameterName;
+	}
+
+	public void setParameterName(String parameterName) {
+		this.parameterName = parameterName;
 	}
 
 }

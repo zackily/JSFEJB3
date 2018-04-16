@@ -1,7 +1,7 @@
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template file, choose Tools | Templates and open the template
+ * in the editor.
  */
 package cub.facade;
 
@@ -14,22 +14,21 @@ import javax.persistence.Query;
 
 import cub.entities.TrMaster;
 
-
 /**
  *
  * @author NT48810
  */
 @Stateless
 public class TrMasterFacade extends AbstractFacade<TrMaster> {
-    
+
     @PersistenceContext(unitName = "cub_invest-commons-ui_war_1.0-SNAPSHOTPU")
     private EntityManager em;
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     public TrMasterFacade() {
         super(TrMaster.class);
     }
@@ -56,5 +55,13 @@ public class TrMasterFacade extends AbstractFacade<TrMaster> {
         query.setParameter("trCode", trCode);
         return (String) query.getSingleResult();
     }
-    
+
+    public List<String> findByCode(String code) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select tr.trCode from TrMaster tr where a.trCode like :code");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("code", code + "%");
+        return query.getResultList();
+    }
+
 }

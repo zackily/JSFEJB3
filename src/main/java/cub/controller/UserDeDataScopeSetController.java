@@ -159,7 +159,7 @@ public class UserDeDataScopeSetController extends AbstractController implements 
     public void onParaMenuChange(ValueChangeEvent e) {
         String newId = e.getNewValue().toString();
         UdDataScopeDetail de = this.itemDetail.get(this.tempVar);
-        de.setParameterName(StringUtils.split(newId, "+")[0]);
+        de.setParameterName(StringUtils.split(newId, "+")[1]);
         String desc = ejbTrParameterInfoFacade.findDescByParaName(StringUtils.split(newId, "+")[1]);
         genOpValueMenu(de, newId);
         de.setParameterDesc(desc);
@@ -280,10 +280,10 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         for (UdDataScopeDetail ud : this.itemDetail) {
             ud.setOpCodeMenu(this.itemOpCodeMenu);
             ud.setParaMenu(this.itemParaMenu);
-            String name = ejbTrParameterInfoFacade.findNameByCodeDesc(ud.getParameterName(), ud.getParameterDesc());
-            ud.setParaId(ud.getParameterName() + "+" + name);
+            String name = ejbTrParameterInfoFacade.findNameByCodeDesc(this.item.getTrCode(), ud.getParameterDesc());
+            ud.setParaId(this.item.getTrCode() + "+" + name);
             genOpValueMenu(ud, ud.getParaId());
-            TrOptionItemPK id = new TrOptionItemPK(ud.getParameterName(), name, ud.getOpValue());
+            TrOptionItemPK id = new TrOptionItemPK(this.item.getTrCode(), name, ud.getOpValue());
             TrOptionItem desc = ejbTrOptionItemFacade.find(id);
             ud.setOpValueDesc(desc.getItemName());
         }
@@ -510,8 +510,8 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         List<TrParameterInfo> allTpInfo = ejbTrParameterInfoFacade.findByTrCode(this.item.getTrCode());
         for (TrParameterInfo tp : allTpInfo) {
             this.itemParaMenu.add(
-                new SelectItem(tp.getId().getTrCode() + "+" + tp.getId().getParameterName(),
-                        tp.getId().getParameterName()));
+                new SelectItem(tp.getId().getTrCode() + "+" + tp.getParameterName(),
+                        tp.getParameterName()));
         }
     }
 
@@ -531,8 +531,8 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.currentItem.setClassName(className);
         this.detail = ejbUdDataScopeDetailFacade.findByScopeCode(this.currentItem.getScopeCode());
         for (UdDataScopeDetail ud : this.detail) {
-            String name = ejbTrParameterInfoFacade.findNameByCodeDesc(ud.getParameterName(), ud.getParameterDesc());
-            TrOptionItemPK id = new TrOptionItemPK(ud.getParameterName(), name, ud.getOpValue());
+            String name = ejbTrParameterInfoFacade.findNameByCodeDesc(this.item.getTrCode(), ud.getParameterDesc());
+            TrOptionItemPK id = new TrOptionItemPK(this.item.getTrCode(), name, ud.getOpValue());
             TrOptionItem desc = ejbTrOptionItemFacade.find(id);
             ud.setOpValueDesc(desc.getItemName());
         }

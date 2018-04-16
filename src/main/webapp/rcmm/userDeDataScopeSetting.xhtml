@@ -82,29 +82,29 @@
 				<p:dataTable var="detail"
 					value="#{userDeDataScopeSetController.detail}" scrollable="true"
 					scrollHeight="300" rows="10" rowHover="true">
-					<p:column headerText="邏輯" width="10%">
+					<p:column headerText="邏輯" width="8%">
 						<h:outputText value="#{detail.logic}" />
 					</p:column>
-					<p:column headerText="(" width="10%">
+					<p:column headerText="(" width="5%">
 						<h:outputText value="#{detail.leftBracket}" />
 					</p:column>
-					<p:column headerText="參數名稱" width="10%">
+					<p:column headerText="參數名稱" width="18%">
 						<h:outputText value="#{detail.parameterName}" />
 					</p:column>
-					<p:column headerText="參數說明" width="20%">
+					<p:column headerText="參數說明" width="18%">
 						<h:outputText value="#{detail.parameterDesc}" />
 					</p:column>
-					<p:column headerText="關係" width="20%">
+					<p:column headerText="關係" width="10%">
 						<h:outputText value="#{detail.opCode}"
 							converter="#{opCodeConverter}" />
 					</p:column>
-					<p:column headerText="條件值" width="20%">
+					<p:column headerText="條件值" width="18%">
 						<h:outputText value="#{detail.opValue}" />
 					</p:column>
-					<p:column headerText="條件值說明" width="10%">
+					<p:column headerText="條件值說明" width="18%">
 						<h:outputText value="#{detail.opValueDesc}" />
 					</p:column>
-					<p:column headerText=")" width="20%">
+					<p:column headerText=")" width="5%">
 						<h:outputText value="#{detail.rightBracket}" />
 					</p:column>
 				</p:dataTable>

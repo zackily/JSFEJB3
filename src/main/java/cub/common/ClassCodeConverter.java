@@ -1,7 +1,5 @@
 package cub.common;
 
-import java.math.BigDecimal;
-
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -26,7 +24,7 @@ public class ClassCodeConverter implements Converter {
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         String result = "";
         if (null != value) {
-            short s = Short.parseShort(((BigDecimal) value).toString());
+            short s = Short.parseShort(value.toString());
             result = ejbRdDataClassFacade.getClassNameByClassCode(s);
         }
         return value + "." + result;

@@ -41,4 +41,12 @@ public class ApiMasterFacade extends AbstractFacade<ApiMaster> {
         return query.getResultList();
     }
     
+    public List<ApiMaster> findByTrCode(String code) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("from ApiMaster a where a.outputTrCode =:code");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("code", code);
+        return query.getResultList();
+    }
+    
 }

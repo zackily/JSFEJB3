@@ -15,8 +15,8 @@ public class TrParameterInfoPK implements Serializable {
 	@Column(name="TR_CODE")
 	private String trCode;
 
-	@Column(name="PARAMETER_NAME")
-	private String parameterName;
+	@Column(name="SEQ_NO")
+	private long seqNo;
 
 	public TrParameterInfoPK() {
 	}
@@ -26,11 +26,11 @@ public class TrParameterInfoPK implements Serializable {
 	public void setTrCode(String trCode) {
 		this.trCode = trCode;
 	}
-	public String getParameterName() {
-		return this.parameterName;
+	public long getSeqNo() {
+		return this.seqNo;
 	}
-	public void setParameterName(String parameterName) {
-		this.parameterName = parameterName;
+	public void setSeqNo(long seqNo) {
+		this.seqNo = seqNo;
 	}
 
 	public boolean equals(Object other) {
@@ -43,14 +43,14 @@ public class TrParameterInfoPK implements Serializable {
 		TrParameterInfoPK castOther = (TrParameterInfoPK)other;
 		return 
 			this.trCode.equals(castOther.trCode)
-			&& this.parameterName.equals(castOther.parameterName);
+			&& (this.seqNo == castOther.seqNo);
 	}
 
 	public int hashCode() {
 		final int prime = 31;
 		int hash = 17;
 		hash = hash * prime + this.trCode.hashCode();
-		hash = hash * prime + this.parameterName.hashCode();
+		hash = hash * prime + ((int) (this.seqNo ^ (this.seqNo >>> 32)));
 		
 		return hash;
 	}
