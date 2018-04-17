@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CommonCurrencyViewDlg" widgetVar="CommonCurrencyViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewCommonCurrencyTitle}">
+            <h:form id="CommonCurrencyViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{commonCurrencyController.selected != null}">
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_id}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.id}" title="#{bundle.ViewCommonCurrencyTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_currencyCode}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.currencyCode}" title="#{bundle.ViewCommonCurrencyTitle_currencyCode}"/>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_currencyId}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.currencyId}" title="#{bundle.ViewCommonCurrencyTitle_currencyId}"/>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_currencyDesc}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.currencyDesc}" title="#{bundle.ViewCommonCurrencyTitle_currencyDesc}"/>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_currencyStatus}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.currencyStatus}" title="#{bundle.ViewCommonCurrencyTitle_currencyStatus}"/>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_tradeCode}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.tradeCode}" title="#{bundle.ViewCommonCurrencyTitle_tradeCode}"/>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_currDecimal}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.currDecimal}" title="#{bundle.ViewCommonCurrencyTitle_currDecimal}"/>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_crtDate}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.crtDate}" title="#{bundle.ViewCommonCurrencyTitle_crtDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_crtUserId}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.crtUserId}" title="#{bundle.ViewCommonCurrencyTitle_crtUserId}"/>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_updDate}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.updDate}" title="#{bundle.ViewCommonCurrencyTitle_updDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewCommonCurrencyLabel_updUserId}"/>
+                        <h:outputText value="#{commonCurrencyController.selected.updUserId}" title="#{bundle.ViewCommonCurrencyTitle_updUserId}"/>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="CommonCurrencyViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
