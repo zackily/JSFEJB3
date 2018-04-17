@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang.StringUtils;
@@ -110,6 +111,12 @@ public class ApiMasterSetController extends AbstractController implements Serial
         this.currentItem = ejbApiMasterFacade.find(event.getObject().toString());
     }
 
+    public void rtnTypeChange(ValueChangeEvent event) {
+        if (event.getNewValue().toString().equals("2")) {
+            this.item.setOutputTrCode("");
+        }
+    }
+
     /*
      * 遍歷Master
      */
@@ -157,13 +164,14 @@ public class ApiMasterSetController extends AbstractController implements Serial
      * 確認新增
      */
     public void save(ActionEvent event) {
-        this.item.setLogDttm(new Date());
-        this.item.setLogUserId(this.userSession.getUser().getEmpId());
-        ejbApiMasterFacade.save(this.item);
-        addMessage("新增成功", "新增成功");
-        this.currentItem = this.master.get(this.currentIndex);
-        init();
-        create();
+        if (this.item.getRtnType().toString().equals("1") && null != this.item.getOutputTrCode()) {
+            this.item.setLogDttm(new Date());
+            this.item.setLogUserId(this.userSession.getUser().getEmpId());
+            ejbApiMasterFacade.save(this.item);
+            addMessage("新增成功", "新增成功");
+            this.currentItem = this.master.get(this.currentIndex);
+            create();
+        }
     }
 
     /*

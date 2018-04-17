@@ -7,6 +7,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 
+import org.apache.commons.lang.StringUtils;
+
 import cub.facade.TrMasterFacade;
 
 @ManagedBean(name = "trCodeConverter")
@@ -23,7 +25,7 @@ public class TrCodeConverter implements Converter {
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         String result = "";
-        if (null != value) {
+        if (null != value && StringUtils.isNotBlank(value.toString())) {
             result = ejbTrMasterFacade.findNameByTrCode(value.toString());
         }
         return result;

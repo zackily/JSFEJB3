@@ -307,7 +307,6 @@ public class UserDeFieldScopeSetController extends AbstractController implements
         }
         this.itemColumnOptionList.clear();
         this.tempList.clear();
-//        this.init();
         this.currentItem = this.master.get(this.currentIndex);
         setItemDetail();
         create();

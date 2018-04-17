@@ -48,7 +48,7 @@
 						<p:panelGrid columns="2" layout="grid"
 							columnClasses="ui-grid-col-3, ui-grid-col-12">
 							<p:outputLabel value="API代碼" />
-							<p:autoComplete  size="50"
+							<p:autoComplete size="50"
 								value="#{apiMasterSetController.currentItem.apiCode}"
 								completeMethod="#{apiMasterSetController.searchApiMaster}">
 								<p:ajax event="itemSelect"
@@ -108,10 +108,12 @@
 						value="#{apiMasterSetController.item.apiCode}" />
 
 					<p:outputLabel value="API說明" />
-					<p:inputText size="50" value="#{apiMasterSetController.item.apiDesc}" />
+					<p:inputText size="50"
+						value="#{apiMasterSetController.item.apiDesc}" />
 
 					<p:outputLabel value="API類型" />
-					<p:selectOneMenu value="#{apiMasterSetController.item.rtnType}">
+					<p:selectOneMenu value="#{apiMasterSetController.item.rtnType}"
+						valueChangeListener="#{apiMasterSetController.rtnTypeChange}">
 						<p:ajax event="change" immediate="true"
 							update="dialogForm:selRtnType" process="@this" />
 						<f:selectItem itemLabel="呼叫TR" itemValue="1" />

@@ -58,7 +58,7 @@ public class TrMasterFacade extends AbstractFacade<TrMaster> {
 
     public List<String> findByCode(String code) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("select tr.trCode from TrMaster tr where a.trCode like :code");
+        jpql.append("select m.trCode from TrMaster m where m.trCode like :code");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("code", code + "%");
         return query.getResultList();

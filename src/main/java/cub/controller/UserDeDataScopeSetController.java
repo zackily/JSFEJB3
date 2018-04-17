@@ -265,8 +265,6 @@ public class UserDeDataScopeSetController extends AbstractController implements 
             } else {
                 saveMethod();
             }
-        } else if ((null != this.rtnType) && (this.rtnType.compareTo(new BigDecimal("1")) != 0)) {
-            saveMethod();
         }
     }
 
@@ -451,7 +449,10 @@ public class UserDeDataScopeSetController extends AbstractController implements 
 
     private void refreshTrCode(String apiCode) {
         ApiMaster apiMaster = ejbApiMasterFacade.find(apiCode);
-        TrMaster tm = ejbTrMasterFacade.findByTrCode(apiMaster.getOutputTrCode());
+        TrMaster tm = new TrMaster();
+        if (StringUtils.isNotBlank(apiMaster.getOutputTrCode())) {
+            tm = ejbTrMasterFacade.findByTrCode(apiMaster.getOutputTrCode());
+        }
         this.item.setApiName(apiMaster.getApiDesc());
         this.item.setTrCode(tm.getTrCode());
         this.item.setTrDesc(tm.getTrDesc());
@@ -484,7 +485,6 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         }
         addMessage("新增成功", "新增成功");
         this.currentItem = this.master.get(this.currentIndex);
-        this.init();
         setItemDetail();
         create();
     }
@@ -531,10 +531,13 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.currentItem.setClassName(className);
         this.detail = ejbUdDataScopeDetailFacade.findByScopeCode(this.currentItem.getScopeCode());
         for (UdDataScopeDetail ud : this.detail) {
-            String name = ejbTrParameterInfoFacade.findNameByCodeDesc(this.item.getTrCode(), ud.getParameterDesc());
-            TrOptionItemPK id = new TrOptionItemPK(this.item.getTrCode(), name, ud.getOpValue());
-            TrOptionItem desc = ejbTrOptionItemFacade.find(id);
-            ud.setOpValueDesc(desc.getItemName());
+            if (null != this.currentItem.getTrCode()) {
+                String name = ejbTrParameterInfoFacade.findNameByCodeDesc(this.currentItem.getTrCode(),
+                    ud.getParameterDesc());
+                TrOptionItemPK id = new TrOptionItemPK(this.item.getTrCode(), name, ud.getOpValue());
+                TrOptionItem desc = ejbTrOptionItemFacade.find(id);
+                ud.setOpValueDesc(desc.getItemName());
+            }
         }
     }
 

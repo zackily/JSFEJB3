@@ -200,10 +200,8 @@ public class ColumnDefinitionController extends AbstractController implements Se
             ejbRdDataColumnFacade.create(this.item);
             addMessage("新增成功", "新增成功");
         } else {// 修改
-            // ejbRdDataColumnFacade.edit(this.currentItem);
             addMessage("此欄位範圍已存在", "此欄位範圍已存在");
         }
-//        this.init();
         this.currentItem = this.master.get(this.currentIndex);
         create();
     }

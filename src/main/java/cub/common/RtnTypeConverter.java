@@ -1,5 +1,7 @@
 package cub.common;
 
+import java.math.BigDecimal;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
@@ -18,7 +20,7 @@ public class RtnTypeConverter implements Converter {
     @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         String result = "";
-        result = value.equals("1") ? "1.呼叫TR" : "2.自行產生";
+        result = ((BigDecimal) value).toString().equals("1") ? "1.呼叫TR" : "2.自行產生";
         return result;
     }
 

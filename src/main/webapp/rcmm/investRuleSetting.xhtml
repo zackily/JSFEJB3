@@ -351,9 +351,9 @@
 							<p:panelGrid columns="2" style="width: 100%">
 								<h:outputLabel value="分子標的合計方式" />
 								<p:selectOneMenu
-									value="#{investRuleSetController.item.checkColumn}">
+									value="#{investRuleSetController.item.dividendAggregate}">
 									<f:selectItems
-										value="#{investRuleSetController.checkColumnList}" />
+										value="#{investRuleSetController.dividendAggregateList}" />
 								</p:selectOneMenu>
 							</p:panelGrid>
 							<p:dataTable var="dividend" id="dividendTable"
@@ -404,9 +404,9 @@
 								actionListener="#{investRuleSetController.addDivisorList}"
 								update=":dialogForm:divisorTable" process="@this" />
 							<p:selectOneMenu
-								value="#{investRuleSetController.item.dividendAggregate}">
+								value="#{investRuleSetController.item.checkColumn}">
 								<f:selectItems
-									value="#{investRuleSetController.dividendAggregateList}" />
+									value="#{investRuleSetController.checkColumnList}" />
 							</p:selectOneMenu>
 						</p:panelGrid>
 						<p:panelGrid columns="1" style="width: 100%">

@@ -44,7 +44,7 @@ public class TrParameterInfoFacade extends AbstractFacade<TrParameterInfo> {
 
     public String findDescByParaName(String newName) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("select tr.parameterDesc from TrParameterInfo tr where tr.id.parameterName=:newName");
+        jpql.append("select tr.parameterDesc from TrParameterInfo tr where tr.parameterName=:newName");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("newName", newName);
         try {
@@ -57,7 +57,7 @@ public class TrParameterInfoFacade extends AbstractFacade<TrParameterInfo> {
     public String findNameByCodeDesc(String parameterName, String parameterDesc) {
         StringBuilder jpql = new StringBuilder(100);
         jpql.append(
-            "select tr.id.parameterName from TrParameterInfo tr where tr.id.trCode=:parameterName and tr.parameterDesc=:parameterDesc");
+            "select tr.parameterName from TrParameterInfo tr where tr.id.trCode=:parameterName and tr.parameterDesc=:parameterDesc");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("parameterName", parameterName);
         query.setParameter("parameterDesc", parameterDesc);

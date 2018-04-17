@@ -173,7 +173,6 @@ public class TrMasterSetController extends AbstractController implements Seriali
         }
         ejbTrMasterFacade.save(this.item);
         addMessage("新增成功", "新增成功");
-        init();
         create();
     }
 
