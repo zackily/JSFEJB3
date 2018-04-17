@@ -86,10 +86,6 @@ public class TrMasterSetController extends AbstractController implements Seriali
         setItemDetail();
     }
 
-    private void setItemDetail() {
-        this.detail = ejbTrParameterInfoFacade.findByTrCode(this.currentItem.getTrCode());
-    }
-
     /*
      * TrMaster代碼autocomplete
      */
@@ -272,6 +268,10 @@ public class TrMasterSetController extends AbstractController implements Seriali
 
     public void setUserSession(UserSession userSession) {
         this.userSession = userSession;
+    }
+
+    private void setItemDetail() {
+        this.detail = ejbTrParameterInfoFacade.findByTrCode(this.currentItem.getTrCode());
     }
 
     private void addMessage(String summary, String detail) {

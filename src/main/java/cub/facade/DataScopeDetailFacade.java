@@ -33,7 +33,7 @@ public class DataScopeDetailFacade extends AbstractFacade<DataScopeDetail> {
 
     public List<DataScopeDetail> findByMasterCode(String code) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from DataScopeDetail d where d.dataScopeDetailPK.scopeCode =:code");
+        jpql.append("from DataScopeDetail d where d.dataScopeDetailPK.scopeCode =:code order by d.dataScopeDetailPK.scopeCode");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("code", code);
         return query.getResultList();

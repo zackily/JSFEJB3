@@ -18,12 +18,12 @@
   <!-- </properties> -->
   <!-- </persistence-unit> -->
   <!-- postgres -->
-  <!--	<persistence-unit name="cub_invest-commons-ui_war_1.0-SNAPSHOTPU"
-		transaction-type="JTA">
-		<jta-data-source>java:app/postgres</jta-data-source>
-		<exclude-unlisted-classes>false</exclude-unlisted-classes>
-		<properties />
-	</persistence-unit>-->
+<!--   <persistence-unit name="cub_invest-commons-ui_war_1.0-SNAPSHOTPU" -->
+<!-- 		transaction-type="JTA"> -->
+<!-- 		<jta-data-source>java:app/postgres</jta-data-source> -->
+<!-- 		<exclude-unlisted-classes>false</exclude-unlisted-classes> -->
+<!-- 		<properties /> -->
+<!-- 	</persistence-unit> -->
   <persistence-unit name="cub_invest-commons-ui_war_1.0-SNAPSHOTPU" transaction-type="JTA">
     <jta-data-source>java:app/rcmm</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>

@@ -46,7 +46,7 @@ public class UdDataScopeDetailFacade extends AbstractFacade<UdDataScopeDetail> {
 
     public List<UdDataScopeDetail> findByScopeCode(String code) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from UdDataScopeDetail d where d.id.scopeCode=:code");
+        jpql.append("from UdDataScopeDetail d where d.id.scopeCode=:code order by d.id.scopeCode");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("code", code);
         return query.getResultList();
