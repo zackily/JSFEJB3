@@ -20,6 +20,7 @@ import org.primefaces.event.SelectEvent;
 import cub.entities.ApiMaster;
 import cub.entities.TrMaster;
 import cub.entities.TrParameterInfo;
+import cub.entities.TrParameterInfoPK;
 import cub.facade.ApiMasterFacade;
 import cub.facade.TrMasterFacade;
 import cub.facade.TrParameterInfoFacade;
@@ -86,7 +87,7 @@ public class TrMasterSetController extends AbstractController implements Seriali
     }
 
     private void setItemDetail() {
-        this.itemDetail = ejbTrParameterInfoFacade.findByTrCode(this.currentItem.getTrCode());
+        this.detail = ejbTrParameterInfoFacade.findByTrCode(this.currentItem.getTrCode());
     }
 
     /*
@@ -151,6 +152,7 @@ public class TrMasterSetController extends AbstractController implements Seriali
                 this.currentItem = this.master.get(nextIndex);
                 currentIndex = nextIndex;
         }
+        setItemDetail();
     }
 
     /*
@@ -165,14 +167,16 @@ public class TrMasterSetController extends AbstractController implements Seriali
      * 確認新增
      */
     public void save(ActionEvent event) {
-        for (TrParameterInfo tri : this.itemDetail) {
+        for (int i = 0; i < this.itemDetail.size(); i++) {
+            TrParameterInfo tri = this.itemDetail.get(i);
             tri.setLogDttm(new Date());
             tri.setLogUserId(this.userSession.getUser().getEmpId());
+            TrParameterInfoPK id = new TrParameterInfoPK(this.item.getTrCode(), i + 1);
+            tri.setId(id);
             ejbTrParameterInfoFacade.save(tri);
         }
         ejbTrMasterFacade.save(this.item);
         addMessage("新增成功", "新增成功");
-        this.currentItem = this.master.get(this.currentIndex);
         init();
         create();
     }
@@ -183,7 +187,7 @@ public class TrMasterSetController extends AbstractController implements Seriali
     public void edit() {
         this.editDialogLabel = "修改";
         this.item = this.currentItem;
-
+        this.itemDetail = this.detail;
     }
 
     /*
@@ -193,7 +197,7 @@ public class TrMasterSetController extends AbstractController implements Seriali
         List<ApiMaster> trCodeList = ejbApiMasterFacade.findByTrCode(this.currentItem.getTrCode());
         if (trCodeList.isEmpty()) {
             ejbTrMasterFacade.remove(this.currentItem);
-            for (TrParameterInfo tri : this.itemDetail) {
+            for (TrParameterInfo tri : this.detail) {
                 ejbTrParameterInfoFacade.remove(tri);
             }
             this.init();
