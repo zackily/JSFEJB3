@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CommonCurrencyEditDlg" widgetVar="CommonCurrencyEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditCommonCurrencyTitle}">
+            <h:form id="CommonCurrencyEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{commonCurrencyController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{commonCurrencyController.selected.id}" title="#{bundle.EditCommonCurrencyTitle_id}" required="true" requiredMessage="#{bundle.EditCommonCurrencyRequiredMessage_id}"/>
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_currencyCode}" for="currencyCode" />
+                        <p:inputText id="currencyCode" value="#{commonCurrencyController.selected.currencyCode}" title="#{bundle.EditCommonCurrencyTitle_currencyCode}" />
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_currencyId}" for="currencyId" />
+                        <p:inputText id="currencyId" value="#{commonCurrencyController.selected.currencyId}" title="#{bundle.EditCommonCurrencyTitle_currencyId}" />
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_currencyDesc}" for="currencyDesc" />
+                        <p:inputText id="currencyDesc" value="#{commonCurrencyController.selected.currencyDesc}" title="#{bundle.EditCommonCurrencyTitle_currencyDesc}" />
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_currencyStatus}" for="currencyStatus" />
+                        <p:inputText id="currencyStatus" value="#{commonCurrencyController.selected.currencyStatus}" title="#{bundle.EditCommonCurrencyTitle_currencyStatus}" />
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_tradeCode}" for="tradeCode" />
+                        <p:inputText id="tradeCode" value="#{commonCurrencyController.selected.tradeCode}" title="#{bundle.EditCommonCurrencyTitle_tradeCode}" />
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_currDecimal}" for="currDecimal" />
+                        <p:inputText id="currDecimal" value="#{commonCurrencyController.selected.currDecimal}" title="#{bundle.EditCommonCurrencyTitle_currDecimal}" />
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_crtDate}" for="crtDate" />
+                        <p:calendar id="crtDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{commonCurrencyController.selected.crtDate}" title="#{bundle.EditCommonCurrencyTitle_crtDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_crtUserId}" for="crtUserId" />
+                        <p:inputText id="crtUserId" value="#{commonCurrencyController.selected.crtUserId}" title="#{bundle.EditCommonCurrencyTitle_crtUserId}" />
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_updDate}" for="updDate" />
+                        <p:calendar id="updDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{commonCurrencyController.selected.updDate}" title="#{bundle.EditCommonCurrencyTitle_updDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditCommonCurrencyLabel_updUserId}" for="updUserId" />
+                        <p:inputText id="updUserId" value="#{commonCurrencyController.selected.updUserId}" title="#{bundle.EditCommonCurrencyTitle_updUserId}" />
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{commonCurrencyController.update}" value="#{bundle.Save}" update="display,:CommonCurrencyListForm:datalist,:growl" oncomplete="handleSubmit(args, 'CommonCurrencyEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="CommonCurrencyEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
