@@ -95,8 +95,7 @@
 						<h:outputText value="#{detail.parameterDesc}" />
 					</p:column>
 					<p:column headerText="關係" width="10%">
-						<h:outputText value="#{detail.opCode}"
-							converter="#{opCodeConverter}" />
+						<h:outputText value="#{detail.opCode}" />
 					</p:column>
 					<p:column headerText="條件值" width="18%">
 						<h:outputText value="#{detail.opValue}" />
@@ -125,7 +124,7 @@
 		</h:form>
 		<p:dialog id="createDialog"
 			header="#{userDeDataScopeSetController.editDialogLabel}"
-			widgetVar="createDialog" modal="true" height="600" width="1000"
+			widgetVar="createDialog" modal="true" height="400" width="1000"
 			appendTo="@(body)">
 			<h:form id="dialogForm">
 				<p:panelGrid columns="3" layout="grid"
@@ -169,7 +168,7 @@
 					</p:panelGrid>
 					<p:dataTable id="dataTable" var="detail" rowIndexVar="i"
 						value="#{userDeDataScopeSetController.itemDetail}"
-						scrollable="true" scrollHeight="300" rows="10" rowHover="true">
+						scrollable="true" scrollHeight="100" rows="10" rowHover="true">
 						<p:column headerText="" width="7%">
 							<p:commandButton value="－"
 								actionListener="#{userDeDataScopeSetController.removeDetail(detail)}"
@@ -235,8 +234,7 @@
 					<p:panel>
 						<p:commandButton value="儲存"
 							actionListener="#{userDeDataScopeSetController.save}"
-							update=":mainForm :dialogForm"
-							oncomplete="PF('createDialog').hide()" />
+							update=":mainForm :dialogForm" />
 						<p:commandButton value="取消" onclick="PF('createDialog').hide()" />
 					</p:panel>
 				</p:panelGrid>

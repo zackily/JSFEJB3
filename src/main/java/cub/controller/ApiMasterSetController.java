@@ -169,7 +169,9 @@ public class ApiMasterSetController extends AbstractController implements Serial
             this.item.setLogUserId(this.userSession.getUser().getEmpId());
             ejbApiMasterFacade.save(this.item);
             addMessage("新增成功", "新增成功");
+            this.master = ejbApiMasterFacade.findAll();
             this.currentItem = this.master.get(this.currentIndex);
+            closeDialog();
             create();
         }
     }
@@ -265,7 +267,7 @@ public class ApiMasterSetController extends AbstractController implements Serial
 
     private void genSystemCodeMenu() {
         this.systemCodeMenu = new ArrayList<>();
-        List<RdOptionItem> allRoi = ejbRdOptionItemFacade.findAllSortByItemCode();
+        List<RdOptionItem> allRoi = ejbRdOptionItemFacade.findAllSystemCode();
         for (RdOptionItem roi : allRoi) {
             this.systemCodeMenu.add(new SelectItem(roi.getRdOptionItemPK().getItemCode(), roi.getItemName()));
         }

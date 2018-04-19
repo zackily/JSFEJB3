@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,4 +30,8 @@ public abstract class AbstractController {
         }
     }
 
+    public void closeDialog() {
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("PF('createDialog').hide();");
+    }
 }

@@ -41,10 +41,10 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
     // return query.getResultList();
     // }
 
-    public List<Object[]> findByClassCode(Short classCode) {
+    public List<String> findByClassCode(Short classCode) {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append(
-            "select r.rdOptionItemPK.itemCode, r.itemName from RdOptionItem r where r.rdOptionItemPK.classCode =:classCode order by r.rdOptionItemPK.itemCode asc");
+        jpql.append("select r.itemName from RdOptionItem r where r.rdOptionItemPK.classCode =:classCode")
+            .append(" order by r.rdOptionItemPK.itemCode asc");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("classCode", classCode);
         return query.getResultList();
@@ -53,6 +53,14 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
     public List<RdOptionItem> findAllSortByItemCode() {
         StringBuilder jpql = new StringBuilder(100);
         jpql.append("from RdOptionItem r order by r.rdOptionItemPK.itemCode asc");
+        Query query = em.createQuery(jpql.toString());
+        return query.getResultList();
+    }
+
+    public List<RdOptionItem> findAllSystemCode() {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("from RdOptionItem r where r.rdOptionItemPK.classCode = 13")
+            .append(" order by r.rdOptionItemPK.itemCode asc");
         Query query = em.createQuery(jpql.toString());
         return query.getResultList();
     }
@@ -82,12 +90,13 @@ public class RdOptionItemFacade extends AbstractFacade<RdOptionItem> {
             return null;
         }
     }
+
     public String findSystemNameByItemCode(Short value) {
         StringBuilder jpql = new StringBuilder(100);
         jpql.append("select r.itemName")
-        .append(" from RdOptionItem r")
-        .append(" where r.rdOptionItemPK.classCode = 2")
-        .append(" and r.rdOptionItemPK.itemCode =:value");
+            .append(" from RdOptionItem r")
+            .append(" where r.rdOptionItemPK.classCode = 13")
+            .append(" and r.rdOptionItemPK.itemCode =:value");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("value", value);
         try {

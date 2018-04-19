@@ -5,6 +5,8 @@
  */
 package cub.facade;
 
+import java.math.BigDecimal;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -40,18 +42,18 @@ public class OrderInfoFacade extends AbstractFacade<OrderInfo> {
         return query.getSingleResult().toString();
     }
 
-    public Short getChannelCode(String apid) {
+    public BigDecimal getChannelCode(String apid) {
         StringBuilder sql = new StringBuilder(100);
         sql.append("select channel_code from CHANNEL_APID_MAPPING where APID=?");
         Query query = em.createNativeQuery(sql.toString());
         query.setParameter(1, apid);
         try {
-            return Short.valueOf(query.getSingleResult().toString());
+            return (BigDecimal) query.getSingleResult();
         } catch (NoResultException e) {
-            return 0;
+            return BigDecimal.ZERO;
         }
     }
-    
+
     public Object getRtnFactorValue(String str) {
         StoredProcedureQuery spQuery = em.createStoredProcedureQuery("", str);
         return spQuery.getResultList();

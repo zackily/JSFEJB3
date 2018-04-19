@@ -264,6 +264,7 @@ public class UserDeDataScopeSetController extends AbstractController implements 
                 addMessage("TR回傳參數至少需要一筆", "TR回傳參數至少需要一筆");
             } else {
                 saveMethod();
+                closeDialog();
             }
         }
     }
@@ -484,6 +485,7 @@ public class UserDeDataScopeSetController extends AbstractController implements 
             i++;
         }
         addMessage("新增成功", "新增成功");
+        this.master = ejbUdDataScopeMasterFacade.findAllSort();
         this.currentItem = this.master.get(this.currentIndex);
         setItemDetail();
         create();
@@ -493,15 +495,15 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         this.itemApiMasterMenu = new ArrayList<SelectItem>();
         List<ApiMaster> allApiMaster = ejbApiMasterFacade.findAll();
         for (ApiMaster m : allApiMaster) {
-            this.itemApiMasterMenu.add(new SelectItem(m.getApiCode(), m.getApiDesc()));
+            this.itemApiMasterMenu.add(new SelectItem(m.getApiCode(), m.getApiCode() + " " + m.getApiDesc()));
         }
     }
 
     private void genOpCodeMenu() {
         this.itemOpCodeMenu = new ArrayList<SelectItem>();
-        List<Object[]> roi = ejbRdOptionItemFacade.findByClassCode((short) 9);
-        for (Object[] o : roi) {
-            this.itemOpCodeMenu.add(new SelectItem(o[0], o[1].toString()));
+        List<String> roi = ejbRdOptionItemFacade.findByClassCode((short) 9);
+        for (String o : roi) {
+            this.itemOpCodeMenu.add(new SelectItem(o, o));
         }
     }
 

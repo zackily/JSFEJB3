@@ -307,7 +307,9 @@ public class UserDeFieldScopeSetController extends AbstractController implements
         }
         this.itemColumnOptionList.clear();
         this.tempList.clear();
+        this.master = ejbUdColumnScopeMasterFacade.findAllSort();
         this.currentItem = this.master.get(this.currentIndex);
+        closeDialog();
         setItemDetail();
         create();
     }

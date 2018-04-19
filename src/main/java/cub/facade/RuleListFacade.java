@@ -5,6 +5,7 @@
  */
 package cub.facade;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -49,7 +50,7 @@ public class RuleListFacade extends AbstractFacade<RuleList> {
         return query.getResultList();
     }
 
-    public List<RuleList> joinRuleList(RcmmRequestObject request, Short channelCode) {
+    public List<RuleList> joinRuleList(RcmmRequestObject request, BigDecimal channelCode) {
         StringBuilder sql = new StringBuilder(200);
         sql.append("select A.RULE_NO, A.RULE_CHN_NAME, A.RTN_MESSAGE,")
             .append(" A.CLIENT_AGGREGATE, A.CHECK_COLUMN, A.DIVIDEND_AGGREGATE,")

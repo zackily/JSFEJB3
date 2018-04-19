@@ -108,11 +108,11 @@
 				<p:panelGrid columns="2" layout="grid"
 					columnClasses="ui-grid-col-4, ui-grid-col-10">
 					<p:outputLabel value="TR電文代碼" />
-					<p:inputText value="#{trMasterSetController.currentItem.trCode}"
+					<p:inputText value="#{trMasterSetController.item.trCode}"
 						maxlength="50" />
 					<p:outputLabel value="電文用途說明" />
 					<p:inputTextarea
-						value="#{trMasterSetController.currentItem.trDesc}" cols="10"
+						value="#{trMasterSetController.item.trDesc}" cols="10"
 						maxlength="100" />
 				</p:panelGrid>
 				<p:panelGrid columns="1">
@@ -129,13 +129,13 @@
 								actionListener="#{trMasterSetController.removeDetail(detail)}"
 								update=":dialogForm:dataTable" process="@this" />
 						</p:column>
-						<p:column headerText="欄位名稱" width="16%">
-							<p:inputText value="#{detail.parameterName}" maxlength="50" />
+						<p:column headerText="欄位名稱" width="20%">
+							<p:inputText value="#{detail.parameterName}" size="20" maxlength="50" />
 						</p:column>
-						<p:column headerText="欄位說明" width="16%">
-							<p:inputText value="#{detail.parameterDesc}" maxlength="100" />
+						<p:column headerText="欄位說明" width="20%">
+							<p:inputText value="#{detail.parameterDesc}" size="20" maxlength="100" />
 						</p:column>
-						<p:column headerText="欄位型態" width="16%">
+						<p:column headerText="欄位型態" width="8%">
 							<p:selectOneMenu value="#{detail.parameterDataType}">
 								<p:ajax event="change" process="@this"
 									update=":dialogForm:dataTable:txtDecDigit" immediate="true" />
@@ -144,24 +144,23 @@
 								<f:selectItem itemValue="9" itemLabel="9" />
 							</p:selectOneMenu>
 						</p:column>
-						<p:column headerText="欄位長度" width="16%">
-							<p:inputNumber minValue="1" maxValue="99"
+						<p:column headerText="欄位長度" width="8%">
+							<p:inputNumber size="2" minValue="1" maxValue="99"
 								value="#{detail.parameterDataTotalDigit}" />
 						</p:column>
-						<p:column headerText="小數位數" width="16%">
-							<p:inputText id="txtDecDigit" minValue="1" maxlength="2"
+						<p:column headerText="小數位數" width="8%">
+							<p:inputText id="txtDecDigit"  size="2" minValue="1" maxlength="2"
 								value="#{detail.parameterDataDecDigit}"
 								disabled="#{detail.parameterDataType=='X'}" />
 						</p:column>
 						<p:column headerText="欄位定義說明" width="20%">
-							<p:inputText value="#{detail.memo}" maxlength="100" />
+							<p:inputText value="#{detail.memo}" size="20" maxlength="100" />
 						</p:column>
 					</p:dataTable>
 					<p:panel>
 						<p:commandButton value="儲存"
 							actionListener="#{trMasterSetController.save}"
-							update=":mainForm :dialogForm"
-							oncomplete="PF('createDialog').hide()" />
+							update=":mainForm :dialogForm" />
 						<p:commandButton value="取消" onclick="PF('createDialog').hide()" />
 					</p:panel>
 				</p:panelGrid>

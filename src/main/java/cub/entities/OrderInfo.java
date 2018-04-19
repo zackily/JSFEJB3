@@ -1,246 +1,222 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates and open the template
- * in the editor.
- */
 package cub.entities;
 
 import java.io.Serializable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
- * @author NT48810
+ * The persistent class for the ORDER_INFO database table.
+ * 
  */
 @Entity
-@Table(name = "ORDER_INFO")
-@XmlRootElement
-@NamedQueries({
-        @NamedQuery(name = "OrderInfo.findAll", query = "SELECT o FROM OrderInfo o"),
-        @NamedQuery(name = "OrderInfo.findByOrderNo", query = "SELECT o FROM OrderInfo o WHERE o.orderNo = :orderNo"),
-        @NamedQuery(name = "OrderInfo.findByOrderDttm", query = "SELECT o FROM OrderInfo o WHERE o.orderDttm = :orderDttm"),
-        @NamedQuery(name = "OrderInfo.findByPrdCode", query = "SELECT o FROM OrderInfo o WHERE o.prdCode = :prdCode"),
-        @NamedQuery(name = "OrderInfo.findByTradeType", query = "SELECT o FROM OrderInfo o WHERE o.tradeType = :tradeType"),
-        @NamedQuery(name = "OrderInfo.findByChannelCode", query = "SELECT o FROM OrderInfo o WHERE o.channelCode = :channelCode"),
-        @NamedQuery(name = "OrderInfo.findByCheckTiming", query = "SELECT o FROM OrderInfo o WHERE o.checkTiming = :checkTiming"),
-        @NamedQuery(name = "OrderInfo.findByClientId", query = "SELECT o FROM OrderInfo o WHERE o.clientId = :clientId"),
-        @NamedQuery(name = "OrderInfo.findBySecCode", query = "SELECT o FROM OrderInfo o WHERE o.secCode = :secCode"),
-        @NamedQuery(name = "OrderInfo.findByClientIdSwitchIn", query = "SELECT o FROM OrderInfo o WHERE o.clientIdSwitchIn = :clientIdSwitchIn"),
-        @NamedQuery(name = "OrderInfo.findBySecCodeSwitchIn", query = "SELECT o FROM OrderInfo o WHERE o.secCodeSwitchIn = :secCodeSwitchIn"),
-        @NamedQuery(name = "OrderInfo.findByOrderQty", query = "SELECT o FROM OrderInfo o WHERE o.orderQty = :orderQty"),
-        @NamedQuery(name = "OrderInfo.findByOrderPrice", query = "SELECT o FROM OrderInfo o WHERE o.orderPrice = :orderPrice"),
-        @NamedQuery(name = "OrderInfo.findByOrderAmt", query = "SELECT o FROM OrderInfo o WHERE o.orderAmt = :orderAmt") })
+@Table(name="ORDER_INFO")
+@NamedQuery(name="OrderInfo.findAll", query="SELECT o FROM OrderInfo o")
 public class OrderInfo implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "ORDER_NO")
-    private String orderNo;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ORDER_DTTM")
-    private Date orderDttm;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "PRD_CODE")
-    private short prdCode;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "TRADE_TYPE")
-    private short tradeType;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CHANNEL_CODE")
-    private short channelCode;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CHECK_TIMING")
-    private short checkTiming;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "CLIENT_ID")
-    private String clientId;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 12)
-    @Column(name = "SEC_CODE")
-    private String secCode;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "CLIENT_ID_SWITCH_IN")
-    private String clientIdSwitchIn;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 12)
-    @Column(name = "SEC_CODE_SWITCH_IN")
-    private String secCodeSwitchIn;
-    // @Max(value=?) @Min(value=?)//if you know range of your decimal fields
-    // consider using these annotations to enforce field validation
-    @Column(name = "ORDER_QTY")
-    private BigDecimal orderQty;
-    @Column(name = "ORDER_PRICE")
-    private BigDecimal orderPrice;
-    @Column(name = "ORDER_AMT")
-    private BigDecimal orderAmt;
-    @Column(name = "ORDER_CUR")
-    private String orderCur;
+	@Id
+	@Column(name="ORDER_NO")
+	private String orderNo;
 
-    public OrderInfo() {
-    }
+	@Column(name="AMERICAN_DECLARE")
+	private String americanDeclare;
 
-    public String getOrderNo() {
-        return orderNo;
-    }
+	@Column(name="BRANCH_ID")
+	private BigDecimal branchId;
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
+	@Column(name="CHANNEL_CODE")
+	private BigDecimal channelCode;
 
-    public Date getOrderDttm() {
-        return orderDttm;
-    }
+	@Column(name="CHECK_TIMING")
+	private BigDecimal checkTiming;
 
-    public void setOrderDttm(Date orderDttm) {
-        this.orderDttm = orderDttm;
-    }
+	@Column(name="CLIENT_ID")
+	private String clientId;
 
-    public short getPrdCode() {
-        return prdCode;
-    }
+	@Column(name="CLIENT_ID_SWITCH_IN")
+	private String clientIdSwitchIn;
 
-    public void setPrdCode(short prdCode) {
-        this.prdCode = prdCode;
-    }
+	@Column(name="MASTER_ORDER_NO")
+	private String masterOrderNo;
 
-    public short getTradeType() {
-        return tradeType;
-    }
+	@Column(name="ORDER_AMT")
+	private BigDecimal orderAmt;
 
-    public void setTradeType(short tradeType) {
-        this.tradeType = tradeType;
-    }
+	@Column(name="ORDER_CUR")
+	private String orderCur;
 
-    public short getChannelCode() {
-        return channelCode;
-    }
+	@Temporal(TemporalType.DATE)
+	@Column(name="ORDER_DTTM")
+	private Date orderDttm;
 
-    public void setChannelCode(short channelCode) {
-        this.channelCode = channelCode;
-    }
+	@Column(name="ORDER_PRICE")
+	private BigDecimal orderPrice;
 
-    public short getCheckTiming() {
-        return checkTiming;
-    }
+	@Column(name="ORDER_QTY")
+	private BigDecimal orderQty;
 
-    public void setCheckTiming(short checkTiming) {
-        this.checkTiming = checkTiming;
-    }
+	@Column(name="PRD_CODE")
+	private BigDecimal prdCode;
 
-    public String getClientId() {
-        return clientId;
-    }
+	@Column(name="SEC_CODE")
+	private String secCode;
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
+	@Column(name="SEC_CODE_SWITCH_IN")
+	private String secCodeSwitchIn;
 
-    public String getSecCode() {
-        return secCode;
-    }
+	@Column(name="TELLER_ID")
+	private BigDecimal tellerId;
 
-    public void setSecCode(String secCode) {
-        this.secCode = secCode;
-    }
+	@Column(name="TRADE_TYPE")
+	private BigDecimal tradeType;
 
-    public String getClientIdSwitchIn() {
-        return clientIdSwitchIn;
-    }
+	public OrderInfo() {
+	}
 
-    public void setClientIdSwitchIn(String clientIdSwitchIn) {
-        this.clientIdSwitchIn = clientIdSwitchIn;
-    }
+	public String getOrderNo() {
+		return this.orderNo;
+	}
 
-    public String getSecCodeSwitchIn() {
-        return secCodeSwitchIn;
-    }
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
+	}
 
-    public void setSecCodeSwitchIn(String secCodeSwitchIn) {
-        this.secCodeSwitchIn = secCodeSwitchIn;
-    }
+	public String getAmericanDeclare() {
+		return this.americanDeclare;
+	}
 
-    public BigDecimal getOrderQty() {
-        return orderQty;
-    }
+	public void setAmericanDeclare(String americanDeclare) {
+		this.americanDeclare = americanDeclare;
+	}
 
-    public void setOrderQty(BigDecimal orderQty) {
-        this.orderQty = orderQty;
-    }
+	public BigDecimal getBranchId() {
+		return this.branchId;
+	}
 
-    public BigDecimal getOrderPrice() {
-        return orderPrice;
-    }
+	public void setBranchId(BigDecimal branchId) {
+		this.branchId = branchId;
+	}
 
-    public void setOrderPrice(BigDecimal orderPrice) {
-        this.orderPrice = orderPrice;
-    }
+	public BigDecimal getChannelCode() {
+		return this.channelCode;
+	}
 
-    public BigDecimal getOrderAmt() {
-        return orderAmt;
-    }
+	public void setChannelCode(BigDecimal channelCode) {
+		this.channelCode = channelCode;
+	}
 
-    public void setOrderAmt(BigDecimal orderAmt) {
-        this.orderAmt = orderAmt;
-    }
+	public BigDecimal getCheckTiming() {
+		return this.checkTiming;
+	}
 
-    public String getOrderCur() {
-        return orderCur;
-    }
+	public void setCheckTiming(BigDecimal checkTiming) {
+		this.checkTiming = checkTiming;
+	}
 
-    public void setOrderCur(String orderCur) {
-        this.orderCur = orderCur;
-    }
+	public String getClientId() {
+		return this.clientId;
+	}
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (orderNo != null ? orderNo.hashCode() : 0);
-        return hash;
-    }
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OrderInfo)) {
-            return false;
-        }
-        OrderInfo other = (OrderInfo) object;
-        if ((this.orderNo == null && other.orderNo != null)
-                || (this.orderNo != null && !this.orderNo.equals(other.orderNo))) {
-            return false;
-        }
-        return true;
-    }
+	public String getClientIdSwitchIn() {
+		return this.clientIdSwitchIn;
+	}
 
-    @Override
-    public String toString() {
-        return "cub.entities.OrderInfo[ orderNo=" + orderNo + " ]";
-    }
+	public void setClientIdSwitchIn(String clientIdSwitchIn) {
+		this.clientIdSwitchIn = clientIdSwitchIn;
+	}
+
+	public String getMasterOrderNo() {
+		return this.masterOrderNo;
+	}
+
+	public void setMasterOrderNo(String masterOrderNo) {
+		this.masterOrderNo = masterOrderNo;
+	}
+
+	public BigDecimal getOrderAmt() {
+		return this.orderAmt;
+	}
+
+	public void setOrderAmt(BigDecimal orderAmt) {
+		this.orderAmt = orderAmt;
+	}
+
+	public String getOrderCur() {
+		return this.orderCur;
+	}
+
+	public void setOrderCur(String orderCur) {
+		this.orderCur = orderCur;
+	}
+
+	public Date getOrderDttm() {
+		return this.orderDttm;
+	}
+
+	public void setOrderDttm(Date orderDttm) {
+		this.orderDttm = orderDttm;
+	}
+
+	public BigDecimal getOrderPrice() {
+		return this.orderPrice;
+	}
+
+	public void setOrderPrice(BigDecimal orderPrice) {
+		this.orderPrice = orderPrice;
+	}
+
+	public BigDecimal getOrderQty() {
+		return this.orderQty;
+	}
+
+	public void setOrderQty(BigDecimal orderQty) {
+		this.orderQty = orderQty;
+	}
+
+	public BigDecimal getPrdCode() {
+		return this.prdCode;
+	}
+
+	public void setPrdCode(BigDecimal prdCode) {
+		this.prdCode = prdCode;
+	}
+
+	public String getSecCode() {
+		return this.secCode;
+	}
+
+	public void setSecCode(String secCode) {
+		this.secCode = secCode;
+	}
+
+	public String getSecCodeSwitchIn() {
+		return this.secCodeSwitchIn;
+	}
+
+	public void setSecCodeSwitchIn(String secCodeSwitchIn) {
+		this.secCodeSwitchIn = secCodeSwitchIn;
+	}
+
+	public BigDecimal getTellerId() {
+		return this.tellerId;
+	}
+
+	public void setTellerId(BigDecimal tellerId) {
+		this.tellerId = tellerId;
+	}
+
+	public BigDecimal getTradeType() {
+		return this.tradeType;
+	}
+
+	public void setTradeType(BigDecimal tradeType) {
+		this.tradeType = tradeType;
+	}
 
 }

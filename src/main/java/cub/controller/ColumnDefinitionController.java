@@ -202,7 +202,9 @@ public class ColumnDefinitionController extends AbstractController implements Se
         } else {// 修改
             addMessage("此欄位範圍已存在", "此欄位範圍已存在");
         }
+        this.master = ejbRdDataColumnFacade.findAllSort();
         this.currentItem = this.master.get(this.currentIndex);
+        closeDialog();
         create();
     }
     //

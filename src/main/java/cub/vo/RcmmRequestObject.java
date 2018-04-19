@@ -5,12 +5,12 @@ import java.util.Date;
 
 public class RcmmRequestObject {
 
-    private String APID;
+    private String apid;
     private String orderNo;
     private Date orderDttm;
-    private short prdCode;
-    private short tradeType;
-    private short checkTiming;
+    private BigDecimal prdCode;
+    private BigDecimal tradeType;
+    private BigDecimal checkTiming;
     private String clientId;
     private String secCode;
     private String clientIdSwitchIn;
@@ -18,14 +18,18 @@ public class RcmmRequestObject {
     private BigDecimal orderQty;
     private BigDecimal orderPrice;
     private BigDecimal orderAmt;
-    private String orderCur;
+    private String orderCurrency;
+    private String masterOrderNo;
+    private String americanDeclare;
+    private BigDecimal branchId;
+    private BigDecimal tellerId;
 
-    public String getAPID() {
-        return APID;
+    public String getApid() {
+        return apid;
     }
 
-    public void setAPID(String aPID) {
-        APID = aPID;
+    public void setApid(String apid) {
+        this.apid = apid;
     }
 
     public String getOrderNo() {
@@ -44,27 +48,27 @@ public class RcmmRequestObject {
         this.orderDttm = orderDttm;
     }
 
-    public short getPrdCode() {
+    public BigDecimal getPrdCode() {
         return prdCode;
     }
 
-    public void setPrdCode(short prdCode) {
+    public void setPrdCode(BigDecimal prdCode) {
         this.prdCode = prdCode;
     }
 
-    public short getTradeType() {
+    public BigDecimal getTradeType() {
         return tradeType;
     }
 
-    public void setTradeType(short tradeType) {
+    public void setTradeType(BigDecimal tradeType) {
         this.tradeType = tradeType;
     }
 
-    public short getCheckTiming() {
+    public BigDecimal getCheckTiming() {
         return checkTiming;
     }
 
-    public void setCheckTiming(short checkTiming) {
+    public void setCheckTiming(BigDecimal checkTiming) {
         this.checkTiming = checkTiming;
     }
 
@@ -124,12 +128,44 @@ public class RcmmRequestObject {
         this.orderAmt = orderAmt;
     }
 
-    public String getOrderCur() {
-        return orderCur;
+    public String getOrderCurrency() {
+        return orderCurrency;
     }
 
-    public void setOrderCur(String orderCur) {
-        this.orderCur = orderCur;
+    public void setOrderCurrency(String orderCurrency) {
+        this.orderCurrency = orderCurrency;
+    }
+
+    public String getMasterOrderNo() {
+        return masterOrderNo;
+    }
+
+    public void setMasterOrderNo(String masterOrderNo) {
+        this.masterOrderNo = masterOrderNo;
+    }
+
+    public String getAmericanDeclare() {
+        return americanDeclare;
+    }
+
+    public void setAmericanDeclare(String americanDeclare) {
+        this.americanDeclare = americanDeclare;
+    }
+
+    public BigDecimal getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(BigDecimal branchId) {
+        this.branchId = branchId;
+    }
+
+    public BigDecimal getTellerId() {
+        return tellerId;
+    }
+
+    public void setTellerId(BigDecimal tellerId) {
+        this.tellerId = tellerId;
     }
 
 }

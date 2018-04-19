@@ -235,7 +235,9 @@ public class DataScopeSetController extends AbstractController implements Serial
             addMessage("更新成功", "更新成功");
         }
         this.tempItemDetails.clear();
+        getRenewMaster();
         this.currentItem = this.master.get(currentIndex);
+        closeDialog();
         setItemDetail();
         create();
     }

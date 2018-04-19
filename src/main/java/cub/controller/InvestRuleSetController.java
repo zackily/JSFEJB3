@@ -347,7 +347,9 @@ public class InvestRuleSetController extends AbstractController implements Seria
                 ejbRuleListFacade.edit(this.item);
                 addMessage("更新成功", "更新成功");
             }
+            getRenewMaster();
             this.currentItem = this.master.get(currentIndex);
+            closeDialog();
         }
         genTempList();
     }

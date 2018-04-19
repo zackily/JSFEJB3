@@ -61,7 +61,7 @@ public class RcmmWebService {
     @POST
     @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
     public RcmmResponseObject getResponsePost(RcmmRequestObject request) {
-        Short channelCode = orderInfoFacade.getChannelCode(request.getAPID());
+        BigDecimal channelCode = orderInfoFacade.getChannelCode(request.getApid());
         OrderInfo orderInfo = genOrderInfo(request, channelCode);
         // 3.GEN_APPLIED_RULE 產生下單適用法規檔
         List<RuleList> ruleList_T = ruleListFacade.joinRuleList(request, channelCode);
@@ -102,7 +102,7 @@ public class RcmmWebService {
     /*
      * 2.建立下單資料檔
      */
-    private OrderInfo genOrderInfo(RcmmRequestObject request, Short channelCode) {
+    private OrderInfo genOrderInfo(RcmmRequestObject request, BigDecimal channelCode) {
         OrderInfo orderInfo = new OrderInfo();
         String orderInfoSeq = orderInfoFacade.getOrderInfoSeq();
         Calendar cal = Calendar.getInstance();
@@ -114,7 +114,7 @@ public class RcmmWebService {
         orderInfo.setClientId(request.getClientId());
         orderInfo.setClientIdSwitchIn(request.getClientIdSwitchIn());
         orderInfo.setOrderAmt(request.getOrderAmt());
-        orderInfo.setOrderCur(request.getOrderCur());
+        orderInfo.setOrderCur(request.getOrderCurrency());
         orderInfo.setOrderDttm(request.getOrderDttm());
         orderInfo.setOrderPrice(request.getOrderPrice());
         orderInfo.setOrderQty(request.getOrderQty());
