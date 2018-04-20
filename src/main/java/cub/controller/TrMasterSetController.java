@@ -98,6 +98,7 @@ public class TrMasterSetController extends AbstractController implements Seriali
      */
     public void onItemSelect(SelectEvent event) {
         this.currentItem = ejbTrMasterFacade.find(event.getObject().toString());
+        setItemDetail();
     }
 
     /*
