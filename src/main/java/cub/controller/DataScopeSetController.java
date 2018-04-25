@@ -1,5 +1,6 @@
 package cub.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,7 +96,11 @@ public class DataScopeSetController extends AbstractController implements Serial
 
     @PostConstruct
     public void init() {
-        this.checkSession(userSession);
+        try {
+            this.checkSession(userSession);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.master = new ArrayList<DataScopeMaster>();
         getRenewMaster();
         this.item = new DataScopeMaster();

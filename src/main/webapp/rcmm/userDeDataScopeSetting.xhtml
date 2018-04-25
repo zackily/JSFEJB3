@@ -11,7 +11,7 @@
 
 	<ui:define name="body">
 		<h:form id="mainForm" style="width: 60%">
-			<p:growl id="growl" sticky="true" />
+			<p:growl id="growl" life="5000" />
 			<p:panel header="自定義資料範圍設定作業(RCMM02)">
 				<p:panelGrid columns="2"
 					columnClasses="ui-grid-col-2, ui-grid-col-11" style="width:100%"
@@ -124,7 +124,7 @@
 		</h:form>
 		<p:dialog id="createDialog"
 			header="#{userDeDataScopeSetController.editDialogLabel}"
-			widgetVar="createDialog" modal="true" height="400" width="1000"
+			widgetVar="createDialog" modal="true" height="600" width="1000"
 			appendTo="@(body)">
 			<h:form id="dialogForm">
 				<p:panelGrid columns="3" layout="grid"
@@ -168,7 +168,7 @@
 					</p:panelGrid>
 					<p:dataTable id="dataTable" var="detail" rowIndexVar="i"
 						value="#{userDeDataScopeSetController.itemDetail}"
-						scrollable="true" scrollHeight="100" rows="10" rowHover="true">
+						scrollable="true" scrollHeight="200" rowHover="true">
 						<p:column headerText="" width="7%">
 							<p:commandButton value="－"
 								actionListener="#{userDeDataScopeSetController.removeDetail(detail)}"

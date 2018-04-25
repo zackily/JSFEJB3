@@ -28,7 +28,7 @@ public class TrCodeConverter implements Converter {
         if (null != value && StringUtils.isNotBlank(value.toString())) {
             result = ejbTrMasterFacade.findNameByTrCode(value.toString());
         }
-        return result;
+        return value + "_" + result;
     }
 
 }

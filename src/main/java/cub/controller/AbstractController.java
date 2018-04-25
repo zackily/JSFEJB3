@@ -17,14 +17,11 @@ public abstract class AbstractController {
     public AbstractController() {
     }
 
-    public void checkSession(UserSession session) {
+    public void checkSession(UserSession session) throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if (null == session.getUser()) {
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-            try {
-                ec.redirect(ec.getRequestContextPath() + "/faces/error.xhtml");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ec.redirect(ec.getRequestContextPath());
+            ec.redirect(ec.getRequestContextPath() + "/faces/error.xhtml");
         } else {
             logger.debug("emp id = " + session.getUser().getEmpId());
         }

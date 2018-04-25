@@ -1,5 +1,6 @@
 package cub.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -89,7 +90,11 @@ public class ColumnDefinitionController extends AbstractController implements Se
 
     @PostConstruct
     public void init() {
-        this.checkSession(userSession);
+        try {
+            this.checkSession(userSession);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.master = new ArrayList<RdDataColumn>();
         this.master = ejbRdDataColumnFacade.findAllSort();
         this.item = new RdDataColumn();

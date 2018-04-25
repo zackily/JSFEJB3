@@ -45,10 +45,8 @@ public class FakeCubSSOServlet extends HttpServlet {
                 user.setUser(person);
                 HttpSession session = req.getSession(true);
                 UserSession userSession = (UserSession) session.getAttribute("userSession");
-                if (userSession == null) {
-                    userSession = new UserSession();
-                    userSession.setUser(person);
-                }
+                userSession = new UserSession();
+                userSession.setUser(person);
                 session.setAttribute("userSession", userSession);
                 resp.sendRedirect("/invest-commons-ui/faces/rcmm/dataScopeSetting.xhtml");
             }

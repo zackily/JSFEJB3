@@ -68,4 +68,12 @@ public class TrParameterInfoFacade extends AbstractFacade<TrParameterInfo> {
         }
     }
 
+    public void removeByTrCode(String trCode) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from TrParameterInfo tr where tr.id.trCode=:trCode");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("trCode", trCode);
+        query.executeUpdate();
+    }
+
 }

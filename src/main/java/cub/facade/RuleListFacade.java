@@ -77,11 +77,49 @@ public class RuleListFacade extends AbstractFacade<RuleList> {
         return query.getResultList();
     }
 
-    public void removeCascade(RuleList currentItem) {
-        remove(currentItem);
-        removeRuleProductByRuleNo(currentItem.getRuleNo());
-        removeRuleTradeTypeByRuleNo(currentItem.getRuleNo());
-        removeRuleChannelByRuleNo(currentItem.getRuleNo());
+    public void removeCascade(String ruleNo, boolean deleteAll) {
+        if (deleteAll) {
+            removeRuleListByRuleNo(ruleNo);
+        }
+        removeRuleProductByRuleNo(ruleNo);
+        removeRuleTradeTypeByRuleNo(ruleNo);
+        removeRuleChannelByRuleNo(ruleNo);
+        removeRuleCheckTimeByRuleNo(ruleNo);
+        removeRuleDividendByRuleNo(ruleNo);
+        removeRuleDivisorByRuleNo(ruleNo);
+
+    }
+
+    private void removeRuleDivisorByRuleNo(String ruleNo) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from RuleDivisor r where r.ruleDivisorPK.ruleNo =:ruleNo");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("ruleNo", ruleNo);
+        query.executeUpdate();
+    }
+
+    private void removeRuleDividendByRuleNo(String ruleNo) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from RuleDividend r where r.ruleDividendPK.ruleNo =:ruleNo");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("ruleNo", ruleNo);
+        query.executeUpdate();
+    }
+
+    private void removeRuleListByRuleNo(String ruleNo) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from RuleList r where r.ruleNo =:ruleNo");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("ruleNo", ruleNo);
+        query.executeUpdate();
+    }
+
+    private void removeRuleCheckTimeByRuleNo(String ruleNo) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from RuleChecktime r where r.ruleChecktimePK.ruleNo =:ruleNo");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("ruleNo", ruleNo);
+        query.executeUpdate();
     }
 
     private void removeRuleProductByRuleNo(String ruleNo) {

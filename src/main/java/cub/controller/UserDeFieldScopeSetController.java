@@ -1,5 +1,6 @@
 package cub.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -132,7 +133,11 @@ public class UserDeFieldScopeSetController extends AbstractController implements
 
     @PostConstruct
     public void init() {
-        this.checkSession(userSession);
+        try {
+            this.checkSession(userSession);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.master = new ArrayList<UdColumnScopeMaster>();
         this.master = ejbUdColumnScopeMasterFacade.findAllSort();
         this.item = new UdColumnScopeMaster();

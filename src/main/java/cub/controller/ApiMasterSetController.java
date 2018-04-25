@@ -1,9 +1,13 @@
 package cub.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -20,10 +24,13 @@ import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
 
 import cub.entities.ApiMaster;
+import cub.entities.ApiParameterInfo;
+import cub.entities.ApiParameterInfoPK;
 import cub.entities.RdDataClass;
 import cub.entities.RdOptionItem;
 import cub.entities.TrMaster;
 import cub.facade.ApiMasterFacade;
+import cub.facade.ApiParameterInfoFacade;
 import cub.facade.RdDataClassFacade;
 import cub.facade.RdOptionItemFacade;
 import cub.facade.TrMasterFacade;
@@ -45,10 +52,17 @@ public class ApiMasterSetController extends AbstractController implements Serial
     private RdOptionItemFacade ejbRdOptionItemFacade;
     @EJB
     private TrMasterFacade ejbTrMasterFacade;
+    @EJB
+    private ApiParameterInfoFacade ejbApiParameterInfoFacade;
+
     /*
      * ApiMaster列表
      */
     private List<ApiMaster> master;
+    /*
+     * 回傳參數資料設定區
+     */
+    private List<ApiParameterInfo> detail;
     /*
      * 新增/修改
      */
@@ -57,6 +71,10 @@ public class ApiMasterSetController extends AbstractController implements Serial
      * 待修改ApiMaster
      */
     private ApiMaster currentItem;
+    /*
+     * 待修改ApiParameterInfo
+     */
+    private List<ApiParameterInfo> itemDetail;
     /*
      * 新增/修改Dialog CommandButton value
      */
@@ -78,9 +96,19 @@ public class ApiMasterSetController extends AbstractController implements Serial
      */
     private List<SelectItem> systemCodeMenu;
 
+    private int tempVar;
+
+    private Set<String> tempParaName;
+
+    private List<ApiParameterInfo> tempDetail;
+
     @PostConstruct
     public void init() {
-        this.checkSession(userSession);
+        try {
+            this.checkSession(userSession);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.master = new ArrayList<>();
         this.master = ejbApiMasterFacade.findAll();
         this.item = new ApiMaster();
@@ -95,6 +123,7 @@ public class ApiMasterSetController extends AbstractController implements Serial
         genTrCodeMenu();
         genClassCodeMenu();
         genSystemCodeMenu();
+        setItemDetail();
     }
 
     /*
@@ -115,6 +144,21 @@ public class ApiMasterSetController extends AbstractController implements Serial
         if (event.getNewValue().toString().equals("2")) {
             this.item.setOutputTrCode("");
         }
+    }
+
+    /*
+     * 新增資料範圍(＋)
+     */
+    public void addDetail(ActionEvent event) {
+        ApiParameterInfo tempDetail = new ApiParameterInfo();
+        this.itemDetail.add(tempDetail);
+    }
+
+    /*
+     * 移除資料範圍(－)
+     */
+    public void removeDetail(ApiParameterInfo d) {
+        this.itemDetail.remove(d);
     }
 
     /*
@@ -150,6 +194,7 @@ public class ApiMasterSetController extends AbstractController implements Serial
                 this.currentItem = this.master.get(nextIndex);
                 currentIndex = nextIndex;
         }
+        setItemDetail();
     }
 
     /*
@@ -157,6 +202,7 @@ public class ApiMasterSetController extends AbstractController implements Serial
      */
     public void create() {
         this.item = new ApiMaster();
+        this.itemDetail = new ArrayList<>();
         this.editDialogLabel = "新增";
     }
 
@@ -164,15 +210,37 @@ public class ApiMasterSetController extends AbstractController implements Serial
      * 確認新增
      */
     public void save(ActionEvent event) {
+        this.tempParaName = new HashSet<>();
+        this.tempDetail = new ArrayList<>();
         if (this.item.getRtnType().toString().equals("1") && null != this.item.getOutputTrCode()) {
             this.item.setLogDttm(new Date());
             this.item.setLogUserId(this.userSession.getUser().getEmpId());
-            ejbApiMasterFacade.save(this.item);
-            addMessage("新增成功", "新增成功");
-            this.master = ejbApiMasterFacade.findAll();
-            this.currentItem = this.master.get(this.currentIndex);
-            closeDialog();
-            create();
+            if (this.currentItem.getRtnType().compareTo(BigDecimal.ONE) == 0) {
+                for (int i = 0; i < this.itemDetail.size(); i++) {
+                    ApiParameterInfo tri = this.itemDetail.get(i);
+                    tri.setLogDttm(new Date());
+                    tri.setLogUserId(this.userSession.getUser().getEmpId());
+                    ApiParameterInfoPK id = new ApiParameterInfoPK(this.item.getApiCode(), i + 1);
+                    tri.setId(id);
+                    this.tempParaName.add(tri.getParameterName());
+                    this.tempDetail.add(tri);
+                }
+            }
+            if (this.tempDetail.size() == this.tempParaName.size()) {
+                ejbApiParameterInfoFacade.removeByApiCode(this.item.getApiCode());
+                for (ApiParameterInfo tri : tempDetail) {
+                    ejbApiParameterInfoFacade.save(tri);
+                }
+                ejbApiMasterFacade.save(this.item);
+                addMessage("新增成功", "新增成功");
+                this.master = ejbApiMasterFacade.findAll();
+                this.currentItem = this.master.get(this.currentIndex);
+                closeDialog();
+                create();
+            } else {
+                addMessage("欄位名稱重覆,請重新輸入!", "欄位名稱重覆,請重新輸入!");
+                setItemDetail();
+            }
         }
     }
 
@@ -182,7 +250,7 @@ public class ApiMasterSetController extends AbstractController implements Serial
     public void edit() {
         this.editDialogLabel = "修改";
         this.item = this.currentItem;
-
+        this.itemDetail = this.detail;
     }
 
     /*
@@ -190,7 +258,43 @@ public class ApiMasterSetController extends AbstractController implements Serial
      */
     public void delete() {
         ejbApiMasterFacade.remove(this.currentItem);
+        for (ApiParameterInfo tri : this.detail) {
+            ejbApiParameterInfoFacade.remove(tri);
+        }
         this.init();
+    }
+
+    public void onParaNameChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onParaDescChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onParaDataChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onParaTypeChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onParaMemoChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onDataTypeChangeByVar(int i) {
+        this.tempVar = i;
+    }
+
+    public void onDataTypeChange(ValueChangeEvent e) {
+        String newValue = null == e.getNewValue() ? "" : e.getNewValue().toString();
+        ApiParameterInfo info = this.itemDetail.get(this.tempVar);
+        if (newValue.equals("X")) {
+            info.setParameterDataDecDigit(0);
+            this.itemDetail.set(this.tempVar, info);
+        }
     }
 
     public int getCurrentIndex() {
@@ -265,6 +369,30 @@ public class ApiMasterSetController extends AbstractController implements Serial
         this.userSession = userSession;
     }
 
+    public List<ApiParameterInfo> getDetail() {
+        return detail;
+    }
+
+    public void setDetail(List<ApiParameterInfo> detail) {
+        this.detail = detail;
+    }
+
+    public List<ApiParameterInfo> getItemDetail() {
+        return itemDetail;
+    }
+
+    public void setItemDetail(List<ApiParameterInfo> itemDetail) {
+        this.itemDetail = itemDetail;
+    }
+
+    public int getTempVar() {
+        return tempVar;
+    }
+
+    public void setTempVar(int tempVar) {
+        this.tempVar = tempVar;
+    }
+
     private void genSystemCodeMenu() {
         this.systemCodeMenu = new ArrayList<>();
         List<RdOptionItem> allRoi = ejbRdOptionItemFacade.findAllSystemCode();
@@ -285,7 +413,13 @@ public class ApiMasterSetController extends AbstractController implements Serial
         this.trCodeMenu = new ArrayList<>();
         List<TrMaster> allTr = ejbTrMasterFacade.findAllSort();
         for (TrMaster tr : allTr) {
-            this.trCodeMenu.add(new SelectItem(tr.getTrCode(), tr.getTrDesc()));
+            this.trCodeMenu.add(new SelectItem(tr.getTrCode(), tr.getTrCode() + "_" + tr.getTrDesc()));
+        }
+    }
+
+    private void setItemDetail() {
+        if (this.currentItem.getRtnType().compareTo(BigDecimal.ONE) == 0) {
+            this.detail = ejbApiParameterInfoFacade.findByApiCode(this.currentItem.getApiCode());
         }
     }
 

@@ -1,9 +1,12 @@
 package cub.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -13,6 +16,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
 
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
@@ -69,9 +73,19 @@ public class TrMasterSetController extends AbstractController implements Seriali
      */
     private int currentIndex;
 
+    private int tempVar;
+
+    private Set<String> tempParaName;
+
+    private List<TrParameterInfo> tempDetail;
+
     @PostConstruct
     public void init() {
-        this.checkSession(userSession);
+        try {
+            this.checkSession(userSession);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.master = new ArrayList<>();
         this.master = ejbTrMasterFacade.findAll();
         this.item = new TrMaster();
@@ -165,20 +179,32 @@ public class TrMasterSetController extends AbstractController implements Seriali
      * 確認新增
      */
     public void save(ActionEvent event) {
+        this.tempParaName = new HashSet<>();
+        this.tempDetail = new ArrayList<>();
         for (int i = 0; i < this.itemDetail.size(); i++) {
             TrParameterInfo tri = this.itemDetail.get(i);
             tri.setLogDttm(new Date());
             tri.setLogUserId(this.userSession.getUser().getEmpId());
             TrParameterInfoPK id = new TrParameterInfoPK(this.item.getTrCode(), i + 1);
             tri.setId(id);
-            ejbTrParameterInfoFacade.save(tri);
+            this.tempParaName.add(tri.getParameterName());
+            this.tempDetail.add(tri);
         }
-        ejbTrMasterFacade.save(this.item);
-        addMessage("新增成功", "新增成功");
-        closeDialog();
-        this.master = ejbTrMasterFacade.findAll();
-        this.currentItem = this.master.get(this.currentIndex);
-        create();
+        if (this.tempDetail.size() == this.tempParaName.size()) {
+            ejbTrParameterInfoFacade.removeByTrCode(this.item.getTrCode());
+            for (TrParameterInfo tri : tempDetail) {
+                ejbTrParameterInfoFacade.save(tri);
+            }
+            ejbTrMasterFacade.save(this.item);
+            addMessage("新增成功", "新增成功");
+            closeDialog();
+            this.master = ejbTrMasterFacade.findAll();
+            this.currentItem = this.master.get(this.currentIndex);
+            create();
+        } else {
+            addMessage("欄位名稱重覆,請重新輸入!", "欄位名稱重覆,請重新輸入!");
+            setItemDetail();
+        }
     }
 
     /*
@@ -207,6 +233,39 @@ public class TrMasterSetController extends AbstractController implements Seriali
                 sb.append(am.getApiCode()).append(", ");
             }
             addMessage("此筆電文已被下列API引用" + sb.toString(), "此筆電文已被下列API引用" + sb.toString());
+        }
+    }
+
+    public void onParaNameChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onParaDescChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onParaDataChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onParaTypeChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onParaMemoChangeByVar(int i) {
+        // for inputText box binding value
+    }
+
+    public void onDataTypeChangeByVar(int i) {
+        this.tempVar = i;
+    }
+
+    public void onDataTypeChange(ValueChangeEvent e) {
+        String newValue = null == e.getNewValue() ? "" : e.getNewValue().toString();
+        TrParameterInfo info = this.itemDetail.get(this.tempVar);
+        if (newValue.equals("X")) {
+            info.setParameterDataDecDigit(0);
+            this.itemDetail.set(this.tempVar, info);
         }
     }
 
@@ -276,6 +335,14 @@ public class TrMasterSetController extends AbstractController implements Seriali
 
     private void setItemDetail() {
         this.detail = ejbTrParameterInfoFacade.findByTrCode(this.currentItem.getTrCode());
+    }
+
+    public int getTempVar() {
+        return tempVar;
+    }
+
+    public void setTempVar(int tempVar) {
+        this.tempVar = tempVar;
     }
 
     private void addMessage(String summary, String detail) {

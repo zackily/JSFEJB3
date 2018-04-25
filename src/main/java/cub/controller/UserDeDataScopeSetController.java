@@ -1,5 +1,6 @@
 package cub.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -121,7 +122,11 @@ public class UserDeDataScopeSetController extends AbstractController implements 
 
     @PostConstruct
     public void init() {
-        this.checkSession(userSession);
+        try {
+            this.checkSession(userSession);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.master = new ArrayList<UdDataScopeMaster>();
         this.master = ejbUdDataScopeMasterFacade.findAllSort();
         this.currentItem = new UdDataScopeMaster();
@@ -130,7 +135,6 @@ public class UserDeDataScopeSetController extends AbstractController implements 
             this.master.add(this.item);
         } else {
             this.currentItem = this.master.get(0);
-            refreshTrCode(this.currentItem.getApiCode());
         }
         // 頁面載入自定義欄位this.master的index
         currentIndex = 0;
@@ -138,7 +142,6 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         genDataTypeMenu();
         // initial新增/修改時API下拉選單
         genAPIMasterMenu();
-
         // initial新增/修改時關係下拉選單
         genOpCodeMenu();
         // 載入this.currentItem內容
@@ -529,6 +532,7 @@ public class UserDeDataScopeSetController extends AbstractController implements 
      * 載入detail
      */
     private void setItemDetail() {
+        refreshTrCode(this.currentItem.getApiCode());
         String className = ejbRdDataClassFacade.getClassNameByClassCode(this.currentItem.getClassCode());
         this.currentItem.setClassName(className);
         this.detail = ejbUdDataScopeDetailFacade.findByScopeCode(this.currentItem.getScopeCode());

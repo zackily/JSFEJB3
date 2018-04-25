@@ -28,7 +28,7 @@ public class TrParameterInfo implements Serializable {
     private String memo;
 
     @Column(name = "PARAMETER_DATA_DEC_DIGIT")
-    private BigDecimal parameterDataDecDigit;
+    private int parameterDataDecDigit;
 
     @Column(name = "PARAMETER_DATA_TOTAL_DIGIT")
     private BigDecimal parameterDataTotalDigit;
@@ -77,11 +77,11 @@ public class TrParameterInfo implements Serializable {
         this.memo = memo;
     }
 
-    public BigDecimal getParameterDataDecDigit() {
+    public int getParameterDataDecDigit() {
         return this.parameterDataDecDigit;
     }
 
-    public void setParameterDataDecDigit(BigDecimal parameterDataDecDigit) {
+    public void setParameterDataDecDigit(int parameterDataDecDigit) {
         this.parameterDataDecDigit = parameterDataDecDigit;
     }
 

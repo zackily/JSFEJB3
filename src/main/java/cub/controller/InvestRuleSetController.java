@@ -1,5 +1,6 @@
 package cub.controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -188,7 +189,11 @@ public class InvestRuleSetController extends AbstractController implements Seria
 
     @PostConstruct
     public void init() {
-        this.checkSession(userSession);
+        try {
+            this.checkSession(userSession);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.master = new ArrayList<RuleList>();
         getRenewMaster();
         this.item = new RuleList();
@@ -326,27 +331,20 @@ public class InvestRuleSetController extends AbstractController implements Seria
         } else {
             if (StringUtils.isBlank(this.item.getRuleNo())) {// 新增
                 String ruleNo = getWorkSeq(SeqTypeEnum.FUND_CODE.toString());
-                updateRuleRelateTable(ruleNo);
                 this.item.setRuleNo(ruleNo);
-                this.item.setLogUserId(this.userSession.getUser().getEmpId());
-                this.item.setLogDttm(new Date());
-                this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
-                saveDivide();
-                ejbRuleListFacade.create(this.item);
                 ejbWorkSeqFacade.updateWorkSeq(SeqTypeEnum.FUND_CODE.toString());
                 addMessage("新增成功", "新增成功");
-                getRenewMaster();
                 currentIndex = this.master.size() - 1;
             } else {// 修改
-                removeRuleRelateData();
-                updateRuleRelateTable(this.item.getRuleNo());
-                this.item.setLogUserId(this.userSession.getUser().getEmpId());
-                this.item.setLogDttm(new Date());
-                this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
-                saveDivide();
-                ejbRuleListFacade.edit(this.item);
                 addMessage("更新成功", "更新成功");
             }
+            ejbRuleListFacade.removeCascade(this.item.getRuleNo(), false);
+            updateRuleRelateTable(this.item.getRuleNo());
+            this.item.setLogUserId(this.userSession.getUser().getEmpId());
+            this.item.setLogDttm(new Date());
+            this.item.setIsLock((short) (this.item.isLock() ? 1 : 0));
+            saveDivide();
+            ejbRuleListFacade.save(this.item);
             getRenewMaster();
             this.currentItem = this.master.get(currentIndex);
             closeDialog();
@@ -399,8 +397,12 @@ public class InvestRuleSetController extends AbstractController implements Seria
      * 點擊刪除
      */
     public void delete() {
-        ejbRuleListFacade.removeCascade(this.currentItem);
+        ejbRuleListFacade.removeCascade(this.currentItem.getRuleNo(), true);
         addMessage("刪除成功", "刪除成功");
+        this.strTempRuleChannel = "";
+        this.strTempRuleCheckTime = "";
+        this.strTempRuleProduct = "";
+        this.strTempRuleTradeType = "";
         this.init();
     }
 
@@ -644,22 +646,20 @@ public class InvestRuleSetController extends AbstractController implements Seria
                 RuleDividendPK pk = new RuleDividendPK(this.item.getRuleNo(), (short) (i + 1));
                 RuleDividend entity = ruleDividendList.get(i);
                 entity.setRuleDividendPK(pk);
-                entity.setLogUserId("Gilbert");
+                entity.setLogUserId(this.userSession.getUser().getEmpId());
                 entity.setLogDttm(new Date());
                 ejbRuleDividendFacade.save(entity);
             }
         }
-        // if (!this.ruleDivisorList.isEmpty()) {
         ejbRuleDivisorFacade.removeByRuleNo(this.item.getRuleNo());
         for (int i = 0; i < ruleDivisorList.size(); i++) {
             RuleDivisorPK pk = new RuleDivisorPK(this.item.getRuleNo(), (short) (i + 1));
             RuleDivisor entity = ruleDivisorList.get(i);
             entity.setRuleDivisorPK(pk);
-            entity.setLogUserId("Gilbert");
+            entity.setLogUserId(this.userSession.getUser().getEmpId());
             entity.setLogDttm(new Date());
             ejbRuleDivisorFacade.save(entity);
         }
-        // }
     }
 
     private void genTempList() {
@@ -703,20 +703,13 @@ public class InvestRuleSetController extends AbstractController implements Seria
         this.master = ejbRuleListFacade.findAllSort();
     }
 
-    private void removeRuleRelateData() {
-        ejbRuleProductFacade.removeByRuleNo(this.item.getRuleNo());
-        ejbRuleTradeTypeFacade.removeByRuleNo(this.item.getRuleNo());
-        ejbRuleChannelFacade.removeByRuleNo(this.item.getRuleNo());
-        ejbRuleChecktimeFacade.removeByRuleNo(this.item.getRuleNo());
-    }
-
     private void updateRuleRelateTable(String ruleNo) {
         for (Object o : tempRuleProduct) {
             RuleProductPK pk = new RuleProductPK(ruleNo, Short.valueOf(o.toString()));
             RuleProduct rp = new RuleProduct();
             rp.setRuleProductPK(pk);
             rp.setLogDttm(new Date());
-            rp.setLogUserId("Gilbert");
+            rp.setLogUserId(this.userSession.getUser().getEmpId());
             ejbRuleProductFacade.create(rp);
         }
         for (Object o : tempRuleTradeType) {
@@ -724,7 +717,7 @@ public class InvestRuleSetController extends AbstractController implements Seria
             RuleTradeType rt = new RuleTradeType();
             rt.setRuleTradeTypePK(pk);
             rt.setLogDttm(new Date());
-            rt.setLogUserId("Gilbert");
+            rt.setLogUserId(this.userSession.getUser().getEmpId());
             ejbRuleTradeTypeFacade.create(rt);
         }
         for (Object o : tempRuleChannel) {
@@ -732,7 +725,7 @@ public class InvestRuleSetController extends AbstractController implements Seria
             RuleChannel rc = new RuleChannel();
             rc.setRuleChannelPK(pk);
             rc.setLogDttm(new Date());
-            rc.setLogUserId("Gilbert");
+            rc.setLogUserId(this.userSession.getUser().getEmpId());
             ejbRuleChannelFacade.create(rc);
         }
         for (Object o : tempRuleCheckTime) {
@@ -740,7 +733,7 @@ public class InvestRuleSetController extends AbstractController implements Seria
             RuleChecktime rc = new RuleChecktime();
             rc.setRuleChecktimePK(pk);
             rc.setLogDttm(new Date());
-            rc.setLogUserId("Gilbert");
+            rc.setLogUserId(this.userSession.getUser().getEmpId());
             ejbRuleChecktimeFacade.create(rc);
         }
     }
