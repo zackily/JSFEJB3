@@ -14,7 +14,6 @@ import javax.persistence.Query;
 
 import cub.entities.RuleDividend;
 
-
 /**
  *
  * @author NT48810
@@ -42,12 +41,21 @@ public class RuleDividendFacade extends AbstractFacade<RuleDividend> {
         return query.getResultList();
     }
 
+    public List<String[]> findCodeByRuleNo(String ruleNo) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select case when r.opCode=='' then '+' else r.opCode end,")
+            .append(" r.scopeCode from RuleDividend r where r.ruleDividendPK.ruleNo =:ruleNo");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("ruleNo", ruleNo);
+        return query.getResultList();
+    }
+
     public void removeByRuleNo(String ruleNo) {
         StringBuilder jpql = new StringBuilder(100);
         jpql.append("delete from RuleDividend r where r.ruleDividendPK.ruleNo =:ruleNo");
         Query query = em.createQuery(jpql.toString());
         query.setParameter("ruleNo", ruleNo);
-        query.executeUpdate(); 
+        query.executeUpdate();
     }
 
 }

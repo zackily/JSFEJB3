@@ -446,7 +446,8 @@ public class UserDeDataScopeSetController extends AbstractController implements 
         List<TrOptionItem> allItem = ejbTrOptionItemFacade.findByCodeName(id[0], id[1]);
         List<SelectItem> selItem = new ArrayList<SelectItem>();
         for (TrOptionItem tr : allItem) {
-            selItem.add(new SelectItem(tr.getId().getItemCode(), tr.getId().getItemCode()));
+            selItem.add(
+                new SelectItem(tr.getId().getItemCode(), tr.getId().getItemCode() + "_" + tr.getItemName()));
         }
         de.setOpValueMenu(selItem);
     }

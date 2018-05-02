@@ -3,6 +3,7 @@ package cub.webservice;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +33,8 @@ import cub.entities.OrderInfo;
 import cub.entities.RuleList;
 import cub.facade.CheckResultDetailFacade;
 import cub.facade.OrderInfoFacade;
+import cub.facade.RuleDividendFacade;
+import cub.facade.RuleDivisorFacade;
 import cub.facade.RuleListFacade;
 import cub.log.LogAspect;
 import cub.vo.RcmmRequestObject;
@@ -52,6 +55,10 @@ public class RcmmWebService {
     private RuleListFacade ruleListFacade;
     @EJB
     private CheckResultDetailFacade checkResultDetailFacade;
+    @EJB
+    private static RuleDividendFacade ruleDividendFacade;
+    @EJB
+    private static RuleDivisorFacade ruleDivisorFacade;
     private static BigDecimal ratio = null;
     private static Short resultCode = null;
     private static BigDecimal div = null;
@@ -266,15 +273,59 @@ public class RcmmWebService {
     }
 
     /*
-     * 4.2
+     * 4.2 RTN_FACTOR_VALUE
      */
     private static BigDecimal rtnFactorValue(OrderInfo orderInfo, RuleList rl, int checkFactor) {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        BigDecimal scopeValue = new BigDecimal("0");
+        if (checkFactor == 2 && rl.getDivisorSource().intValue() == 1) {
+            scopeValue = rl.getDivisorValue();
+        } else {
+            List<String[]> dividendList = ruleDividendFacade.findCodeByRuleNo(rl.getRuleNo());
+            List<String[]> divisorList = ruleDivisorFacade.findCodeByRuleNo(rl.getRuleNo());
+            List<String[]> newList = new ArrayList<>();
+            newList.addAll(dividendList);
+            newList.addAll(divisorList);
+            // sa[0]:op_code;sa[1]:scope_code
+            for (String[] sa : newList) {
+                BigDecimal ss;
+                ss = rtnScopeValue(sa[1], orderInfo, rl);
+                String opCode = sa[0];
+                if (opCode.equals("+") || opCode.equals("")) {
+                    scopeValue = scopeValue.add(ss);
+                } else {
+                    scopeValue = scopeValue.subtract(ss);
+                }
+            }
+            BigDecimal orderQty;
+            String column = rl.getCheckColumn().toString();
+            if (!column.equals("3")) {
+                if (orderInfo.getPrdCode().toString().equals("3") && column.equals("1")
+                        && orderInfo.getOrderCur().equals("USD")) {
+                    orderQty = orderInfo.getOrderQty().multiply(new BigDecimal("31.1"));
+                } else {
+                    orderQty = orderInfo.getOrderQty();
+                }
+                if (column.equals("1")) {
+                    scopeValue = scopeValue.add(orderQty);
+                } else {
+                    scopeValue = scopeValue.add(orderInfo.getOrderAmt());
+                }
+            }
         }
-        return BigDecimal.ONE;
+
+        return scopeValue;
+    }
+
+    /*
+     * 4.3 RTN_SCOPE_VALUE
+     */
+    private static BigDecimal rtnScopeValue(String scopeCode, OrderInfo orderInfo, RuleList rl) {
+        if (scopeCode.startsWith("DF")) {
+
+        } else {
+
+        }
+        return null;
     }
 
     private static final class PrimerTask implements Callable<Boolean> {
