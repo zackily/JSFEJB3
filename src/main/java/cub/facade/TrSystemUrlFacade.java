@@ -5,12 +5,15 @@
  */
 package cub.facade;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
+import cub.entities.TrMaster;
 import cub.entities.TrSystemUrl;
-
 
 /**
  *
@@ -31,4 +34,11 @@ public class TrSystemUrlFacade extends AbstractFacade<TrSystemUrl> {
         super(TrSystemUrl.class);
     }
 
+    public List<String> findByCode(String code) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("select m.systemCode from TrSystemUrl m where m.systemCode like :code");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("code", code + "%");
+        return query.getResultList();
+    }
 }
