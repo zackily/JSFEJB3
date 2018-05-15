@@ -3,6 +3,7 @@ package cub.controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -133,6 +134,8 @@ public class TrSystemUrlSetController extends AbstractController implements Seri
      * 確認新增
      */
     public void save(ActionEvent event) {
+        this.item.setLogDttm(new Date());
+        this.item.setLogUserId(this.userSession.getUser().getEmpId());
         ejbTrSystemUrlFacade.save(this.item);
         addMessage("新增成功", "新增成功");
         this.master = ejbTrSystemUrlFacade.findAll();
