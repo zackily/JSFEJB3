@@ -30,6 +30,10 @@ import cub.entities.RuleDividendPK;
 import cub.entities.RuleDivisor;
 import cub.entities.RuleDivisorPK;
 import cub.entities.RuleList;
+import cub.entities.RuleOrderColumn;
+import cub.entities.RuleOrderColumnPK;
+import cub.entities.RuleOrderPage;
+import cub.entities.RuleOrderPagePK;
 import cub.entities.RuleProduct;
 import cub.entities.RuleProductPK;
 import cub.entities.RuleTradeType;
@@ -40,6 +44,8 @@ import cub.facade.DataScopeMasterFacade;
 import cub.facade.RdOptionItemFacade;
 import cub.facade.RuleChannelFacade;
 import cub.facade.RuleChecktimeFacade;
+import cub.facade.RuleOrderPageFacade;
+import cub.facade.RuleOrderColumnFacade;
 import cub.facade.RuleDividendFacade;
 import cub.facade.RuleDivisorFacade;
 import cub.facade.RuleListFacade;
@@ -70,6 +76,10 @@ public class InvestRuleSetController extends AbstractController implements Seria
     private RuleChannelFacade ejbRuleChannelFacade;
     @EJB
     private RuleChecktimeFacade ejbRuleChecktimeFacade;
+    @EJB
+    private RuleOrderPageFacade ejbRuleOrderPageFacade;
+    @EJB
+    private RuleOrderColumnFacade ejbRuleOrderColumnFacade;
     @EJB
     private RdOptionItemFacade ejbRdOptionItemFacade;
     @EJB
@@ -121,6 +131,14 @@ public class InvestRuleSetController extends AbstractController implements Seria
      */
     private List<SelectItem> ruleChecktimeList;
     /*
+     * 檢核頁面
+     */
+    private List<SelectItem> ruleOrderPageList;
+    /*
+     * 檢核欄位
+     */
+    private List<SelectItem> ruleOrderColumnList;
+    /*
      * 客戶統計條件
      */
     private List<SelectItem> clientAggregateList;
@@ -161,6 +179,14 @@ public class InvestRuleSetController extends AbstractController implements Seria
      */
     private Object[] tempRuleCheckTime;
     /*
+     * 檢核頁面
+     */
+    private Object[] tempRuleOrderPage;
+    /*
+     * 檢核欄位
+     */
+    private Object[] tempRuleOrderColumn;
+    /*
      * 檢核商品
      */
     private String strTempRuleProduct;
@@ -176,6 +202,14 @@ public class InvestRuleSetController extends AbstractController implements Seria
      * 檢核時點
      */
     private String strTempRuleCheckTime;
+    /*
+     * 檢核頁面
+     */
+    private String strTempRuleOrderPage;
+    /*
+     * 檢核欄位
+     */
+    private String strTempRuleOrderColumn;
     /*
      * 分子標的
      */
@@ -214,6 +248,8 @@ public class InvestRuleSetController extends AbstractController implements Seria
         this.ruleTradeTypeList = new ArrayList<SelectItem>();
         this.ruleChannelList = new ArrayList<SelectItem>();
         this.ruleChecktimeList = new ArrayList<SelectItem>();
+        this.ruleOrderPageList = new ArrayList<SelectItem>();
+        this.ruleOrderColumnList = new ArrayList<SelectItem>();
         this.clientAggregateList = new ArrayList<SelectItem>();
         this.checkColumnList = new ArrayList<SelectItem>();
         this.dividendAggregateList = new ArrayList<SelectItem>();
@@ -374,14 +410,14 @@ public class InvestRuleSetController extends AbstractController implements Seria
         }
 
     }
-
-    public void selectAllRuleChecktime(ActionEvent event) {
-        tempRuleCheckTime = new Object[ruleChecktimeList.size()];
-        for (int i = 0; i < ruleChecktimeList.size(); i++) {
-            tempRuleCheckTime[i] = ruleChecktimeList.get(i).getValue();
-        }
-
-    }
+    //
+    // public void selectAllRuleChecktime(ActionEvent event) {
+    // tempRuleCheckTime = new Object[ruleChecktimeList.size()];
+    // for (int i = 0; i < ruleChecktimeList.size(); i++) {
+    // tempRuleCheckTime[i] = ruleChecktimeList.get(i).getValue();
+    // }
+    //
+    // }
 
     /*
      * 點擊修改
@@ -401,6 +437,8 @@ public class InvestRuleSetController extends AbstractController implements Seria
         addMessage("刪除成功", "刪除成功");
         this.strTempRuleChannel = "";
         this.strTempRuleCheckTime = "";
+        this.strTempRuleOrderPage = "";
+        this.strTempRuleOrderColumn = "";
         this.strTempRuleProduct = "";
         this.strTempRuleTradeType = "";
         this.init();
@@ -412,23 +450,17 @@ public class InvestRuleSetController extends AbstractController implements Seria
         tempRuleTradeType = new Object[0];
         tempRuleChannel = new Object[0];
         tempRuleCheckTime = new Object[0];
+        tempRuleOrderPage = new Object[0];
+        tempRuleOrderColumn = new Object[0];
         this.init();
     }
 
-    public int getCurrentIndex() {
-        return currentIndex;
+    public UserSession getUserSession() {
+        return userSession;
     }
 
-    public void setCurrentIndex(int currentIndex) {
-        this.currentIndex = currentIndex;
-    }
-
-    public String getEditDialogLabel() {
-        return editDialogLabel;
-    }
-
-    public void setEditDialogLabel(String editDialogLabel) {
-        this.editDialogLabel = editDialogLabel;
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
     }
 
     public List<RuleList> getMaster() {
@@ -453,6 +485,22 @@ public class InvestRuleSetController extends AbstractController implements Seria
 
     public void setCurrentItem(RuleList currentItem) {
         this.currentItem = currentItem;
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
+    }
+
+    public String getEditDialogLabel() {
+        return editDialogLabel;
+    }
+
+    public void setEditDialogLabel(String editDialogLabel) {
+        this.editDialogLabel = editDialogLabel;
     }
 
     public List<SelectItem> getRuleClassList() {
@@ -493,6 +541,22 @@ public class InvestRuleSetController extends AbstractController implements Seria
 
     public void setRuleChecktimeList(List<SelectItem> ruleChecktimeList) {
         this.ruleChecktimeList = ruleChecktimeList;
+    }
+
+    public List<SelectItem> getRuleOrderPageList() {
+        return ruleOrderPageList;
+    }
+
+    public void setRuleOrderPageList(List<SelectItem> ruleOrderPageList) {
+        this.ruleOrderPageList = ruleOrderPageList;
+    }
+
+    public List<SelectItem> getRuleOrderColumnList() {
+        return ruleOrderColumnList;
+    }
+
+    public void setRuleOrderColumnList(List<SelectItem> ruleOrderColumnList) {
+        this.ruleOrderColumnList = ruleOrderColumnList;
     }
 
     public List<SelectItem> getClientAggregateList() {
@@ -567,6 +631,30 @@ public class InvestRuleSetController extends AbstractController implements Seria
         this.tempRuleChannel = tempRuleChannel;
     }
 
+    public Object[] getTempRuleCheckTime() {
+        return tempRuleCheckTime;
+    }
+
+    public void setTempRuleCheckTime(Object[] tempRuleCheckTime) {
+        this.tempRuleCheckTime = tempRuleCheckTime;
+    }
+
+    public Object[] getTempRuleOrderPage() {
+        return tempRuleOrderPage;
+    }
+
+    public void setTempRuleOrderPage(Object[] tempRuleOrderPage) {
+        this.tempRuleOrderPage = tempRuleOrderPage;
+    }
+
+    public Object[] getTempRuleOrderColumn() {
+        return tempRuleOrderColumn;
+    }
+
+    public void setTempRuleOrderColumn(Object[] tempRuleOrderColumn) {
+        this.tempRuleOrderColumn = tempRuleOrderColumn;
+    }
+
     public String getStrTempRuleProduct() {
         return strTempRuleProduct;
     }
@@ -591,6 +679,30 @@ public class InvestRuleSetController extends AbstractController implements Seria
         this.strTempRuleChannel = strTempRuleChannel;
     }
 
+    public String getStrTempRuleCheckTime() {
+        return strTempRuleCheckTime;
+    }
+
+    public void setStrTempRuleCheckTime(String strTempRuleCheckTime) {
+        this.strTempRuleCheckTime = strTempRuleCheckTime;
+    }
+
+    public String getStrTempRuleOrderPage() {
+        return strTempRuleOrderPage;
+    }
+
+    public void setStrTempRuleOrderPage(String strTempRuleOrderPage) {
+        this.strTempRuleOrderPage = strTempRuleOrderPage;
+    }
+
+    public String getStrTempRuleOrderColumn() {
+        return strTempRuleOrderColumn;
+    }
+
+    public void setStrTempRuleOrderColumn(String strTempRuleOrderColumn) {
+        this.strTempRuleOrderColumn = strTempRuleOrderColumn;
+    }
+
     public List<RuleDividend> getRuleDividendList() {
         return ruleDividendList;
     }
@@ -613,30 +725,6 @@ public class InvestRuleSetController extends AbstractController implements Seria
 
     public void setScopeCodeMenu(List<SelectItem> scopeCodeMenu) {
         this.scopeCodeMenu = scopeCodeMenu;
-    }
-
-    public Object[] getTempRuleCheckTime() {
-        return tempRuleCheckTime;
-    }
-
-    public void setTempRuleCheckTime(Object[] tempRuleCheckTime) {
-        this.tempRuleCheckTime = tempRuleCheckTime;
-    }
-
-    public String getStrTempRuleCheckTime() {
-        return strTempRuleCheckTime;
-    }
-
-    public void setStrTempRuleCheckTime(String strTempRuleCheckTime) {
-        this.strTempRuleCheckTime = strTempRuleCheckTime;
-    }
-
-    public UserSession getUserSession() {
-        return userSession;
-    }
-
-    public void setUserSession(UserSession userSession) {
-        this.userSession = userSession;
     }
 
     private void saveDivide() {
@@ -671,6 +759,10 @@ public class InvestRuleSetController extends AbstractController implements Seria
         this.strTempRuleChannel = String.join(" ；　", ruleChannelList);
         List<String> ruleChecktimeList = ejbRuleChecktimeFacade.findItemNameByRuleNo(this.currentItem.getRuleNo());
         this.strTempRuleCheckTime = String.join(" ；　", ruleChecktimeList);
+        List<String> ruleOrderPageList = ejbRuleOrderPageFacade.findItemNameByRuleNo(this.currentItem.getRuleNo());
+        this.strTempRuleOrderPage = String.join(" ；　", ruleOrderPageList);
+        List<String> ruleOrderColumnList = ejbRuleOrderColumnFacade.findItemNameByRuleNo(this.currentItem.getRuleNo());
+        this.strTempRuleOrderColumn = String.join(" ；　", ruleOrderColumnList);
         this.currentItem.setLock(this.currentItem.getIsLock() == 1 ? true : false);
         this.ruleDividendList = ejbRuleDividendFacade.findByRuleNo(this.currentItem.getRuleNo());
         this.ruleDivisorList = ejbRuleDivisorFacade.findByRuleNo(this.currentItem.getRuleNo());
@@ -681,6 +773,8 @@ public class InvestRuleSetController extends AbstractController implements Seria
         List<Short> tradeTypeList = ejbRuleTradeTypeFacade.findByRuleNo(this.item.getRuleNo());
         List<Short> channelCodeList = ejbRuleChannelFacade.findByRuleNo(this.item.getRuleNo());
         List<Short> checktimeList = ejbRuleChecktimeFacade.findByRuleNo(this.item.getRuleNo());
+        List<Short> orderPageList = ejbRuleOrderPageFacade.findByRuleNo(this.item.getRuleNo());
+        List<Short> orderColumnList = ejbRuleOrderColumnFacade.findByRuleNo(this.item.getRuleNo());
         tempRuleProduct = new Object[prdCodeList.size()];
         for (int i = 0; i < prdCodeList.size(); i++) {
             tempRuleProduct[i] = prdCodeList.get(i);
@@ -696,6 +790,14 @@ public class InvestRuleSetController extends AbstractController implements Seria
         tempRuleCheckTime = new Object[checktimeList.size()];
         for (int i = 0; i < checktimeList.size(); i++) {
             tempRuleCheckTime[i] = checktimeList.get(i);
+        }
+        tempRuleOrderPage = new Object[orderPageList.size()];
+        for (int i = 0; i < orderPageList.size(); i++) {
+            tempRuleOrderPage[i] = orderPageList.get(i);
+        }
+        tempRuleOrderColumn = new Object[orderColumnList.size()];
+        for (int i = 0; i < orderColumnList.size(); i++) {
+            tempRuleOrderColumn[i] = orderColumnList.get(i);
         }
     }
 
@@ -736,6 +838,22 @@ public class InvestRuleSetController extends AbstractController implements Seria
             rc.setLogUserId(this.userSession.getUser().getEmpId());
             ejbRuleChecktimeFacade.create(rc);
         }
+        for (Object o : tempRuleOrderPage) {
+            RuleOrderPagePK pk = new RuleOrderPagePK(ruleNo, Short.valueOf(o.toString()));
+            RuleOrderPage rc = new RuleOrderPage();
+            rc.setId(pk);
+            rc.setLogDttm(new Date());
+            rc.setLogUserId(this.userSession.getUser().getEmpId());
+            ejbRuleOrderPageFacade.create(rc);
+        }
+        for (Object o : tempRuleOrderColumn) {
+            RuleOrderColumnPK pk = new RuleOrderColumnPK(ruleNo, Short.valueOf(o.toString()));
+            RuleOrderColumn rc = new RuleOrderColumn();
+            rc.setId(pk);
+            rc.setLogDttm(new Date());
+            rc.setLogUserId(this.userSession.getUser().getEmpId());
+            ejbRuleOrderColumnFacade.create(rc);
+        }
     }
 
     private void genAllItemList(List<RdOptionItem> allItem) {
@@ -755,6 +873,13 @@ public class InvestRuleSetController extends AbstractController implements Seria
                     break;
                 case 4:
                     this.ruleChecktimeList.add(new SelectItem(rd.getRdOptionItemPK().getItemCode(), rd.getItemName()));
+                    break;
+                case 14:
+                    this.ruleOrderPageList.add(new SelectItem(rd.getRdOptionItemPK().getItemCode(), rd.getItemName()));
+                    break;
+                case 15:
+                    this.ruleOrderColumnList
+                        .add(new SelectItem(rd.getRdOptionItemPK().getItemCode(), rd.getItemName()));
                     break;
                 case 5:
                     this.clientAggregateList

@@ -109,6 +109,18 @@
 								<h:inputText readonly="true" size="150"
 									value="#{investRuleSetController.strTempRuleCheckTime}" />
 							</p:panelGrid>
+							<p:panelGrid columns="2" layout="grid"
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
+								<h:outputLabel value="檢核頁面" />
+								<h:inputText readonly="true" size="150"
+									value="#{investRuleSetController.strTempRuleOrderPage}" />
+							</p:panelGrid>
+							<p:panelGrid columns="2" layout="grid"
+								columnClasses="ui-grid-col-2, ui-grid-col-12">
+								<h:outputLabel value="檢核欄位" />
+								<h:inputText readonly="true" size="150"
+									value="#{investRuleSetController.strTempRuleOrderColumn}" />
+							</p:panelGrid>
 						</p:panelGrid>
 
 					</p:panelGrid>
@@ -316,14 +328,28 @@
 								actionListener="#{investRuleSetController.selectAllRuleChannel}"
 								update=":growl :mainForm :dialogForm:selRuleChannel" />
 						</p:panelGrid>
-						<p:panelGrid columns="2" layout="grid"
-							columnClasses="ui-grid-col-1, ui-grid-col-9">
+						<p:panelGrid columns="6" layout="grid"
+							columnClasses="ui-grid-col-1, ui-grid-col-4,ui-grid-col-1, ui-grid-col-4,ui-grid-col-1, ui-grid-col-4">
 							<h:outputLabel value="檢核時點" />
 							<p:selectManyCheckbox label="檢核時點" requiredMessage="請選擇檢核時點"
 								required="true"
 								value="#{investRuleSetController.tempRuleCheckTime}">
 								<f:selectItems
 									value="#{investRuleSetController.ruleChecktimeList}" />
+							</p:selectManyCheckbox>
+							<h:outputLabel value="檢核頁面" />
+							<p:selectManyCheckbox label="檢核頁面" requiredMessage="請選擇檢核頁面"
+								required="true"
+								value="#{investRuleSetController.tempRuleOrderPage}">
+								<f:selectItems
+									value="#{investRuleSetController.ruleOrderPageList}" />
+							</p:selectManyCheckbox>
+							<h:outputLabel value="檢核欄位" />
+							<p:selectManyCheckbox label="檢核欄位" requiredMessage="請選擇檢核欄位"
+								required="true"
+								value="#{investRuleSetController.tempRuleOrderColumn}">
+								<f:selectItems
+									value="#{investRuleSetController.ruleOrderColumnList}" />
 							</p:selectManyCheckbox>
 						</p:panelGrid>
 					</p:panelGrid>

@@ -85,9 +85,27 @@ public class RuleListFacade extends AbstractFacade<RuleList> {
         removeRuleTradeTypeByRuleNo(ruleNo);
         removeRuleChannelByRuleNo(ruleNo);
         removeRuleCheckTimeByRuleNo(ruleNo);
+        removeRuleOrderPageByRuleNo(ruleNo);
+        removeRuleOrderColumnByRuleNo(ruleNo);
         removeRuleDividendByRuleNo(ruleNo);
         removeRuleDivisorByRuleNo(ruleNo);
 
+    }
+
+    private void removeRuleOrderPageByRuleNo(String ruleNo) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from RuleOrderPage rp where rp.id.ruleNo=:ruleNo");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("ruleNo", ruleNo);
+        query.executeUpdate();
+    }
+
+    private void removeRuleOrderColumnByRuleNo(String ruleNo) {
+        StringBuilder jpql = new StringBuilder(100);
+        jpql.append("delete from RuleOrderColumn rp where rp.id.ruleNo=:ruleNo");
+        Query query = em.createQuery(jpql.toString());
+        query.setParameter("ruleNo", ruleNo);
+        query.executeUpdate();
     }
 
     private void removeRuleDivisorByRuleNo(String ruleNo) {
