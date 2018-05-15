@@ -17,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.SelectEvent;
@@ -25,9 +26,11 @@ import cub.entities.ApiMaster;
 import cub.entities.TrMaster;
 import cub.entities.TrParameterInfo;
 import cub.entities.TrParameterInfoPK;
+import cub.entities.TrSystemUrl;
 import cub.facade.ApiMasterFacade;
 import cub.facade.TrMasterFacade;
 import cub.facade.TrParameterInfoFacade;
+import cub.facade.TrSystemUrlFacade;
 import cub.sso.UserSession;
 
 /**
@@ -44,6 +47,8 @@ public class TrMasterSetController extends AbstractController implements Seriali
     private TrParameterInfoFacade ejbTrParameterInfoFacade;
     @EJB
     private ApiMasterFacade ejbApiMasterFacade;
+    @EJB
+    private TrSystemUrlFacade ejbTrSystemUrlFacade;
     /*
      * TrMaster列表
      */
@@ -79,6 +84,8 @@ public class TrMasterSetController extends AbstractController implements Seriali
 
     private List<TrParameterInfo> tempDetail;
 
+    private List<SelectItem> selTrSystemUrl;
+
     @PostConstruct
     public void init() {
         try {
@@ -86,6 +93,7 @@ public class TrMasterSetController extends AbstractController implements Seriali
         } catch (IOException e) {
             e.printStackTrace();
         }
+        genTrSystemUrlMenu();
         this.master = new ArrayList<>();
         this.master = ejbTrMasterFacade.findAll();
         this.item = new TrMaster();
@@ -203,8 +211,8 @@ public class TrMasterSetController extends AbstractController implements Seriali
             create();
         } else {
             addMessage("欄位名稱重覆,請重新輸入!", "欄位名稱重覆,請重新輸入!");
-            setItemDetail();
         }
+        setItemDetail();
     }
 
     /*
@@ -214,6 +222,8 @@ public class TrMasterSetController extends AbstractController implements Seriali
         this.editDialogLabel = "修改";
         this.item = this.currentItem;
         this.itemDetail = this.detail;
+        TrSystemUrl entity = this.ejbTrSystemUrlFacade.find(this.currentItem.getSystemCode());
+        this.item.setSystemUrl(entity.getSystemUrl());
     }
 
     /*
@@ -267,6 +277,12 @@ public class TrMasterSetController extends AbstractController implements Seriali
             info.setParameterDataDecDigit(0);
             this.itemDetail.set(this.tempVar, info);
         }
+    }
+
+    public void onTrSystemUrlChange(ValueChangeEvent e) {
+        String scode = e.getNewValue().toString();
+        TrSystemUrl entity = this.ejbTrSystemUrlFacade.find(scode);
+        this.item.setSystemUrl(entity.getSystemUrl());
     }
 
     public int getCurrentIndex() {
@@ -333,16 +349,35 @@ public class TrMasterSetController extends AbstractController implements Seriali
         this.userSession = userSession;
     }
 
-    private void setItemDetail() {
-        this.detail = ejbTrParameterInfoFacade.findByTrCode(this.currentItem.getTrCode());
-    }
-
     public int getTempVar() {
         return tempVar;
     }
 
     public void setTempVar(int tempVar) {
         this.tempVar = tempVar;
+    }
+
+    public List<SelectItem> getSelTrSystemUrl() {
+        return selTrSystemUrl;
+    }
+
+    public void setSelTrSystemUrl(List<SelectItem> selTrSystemUrl) {
+        this.selTrSystemUrl = selTrSystemUrl;
+    }
+
+    private void genTrSystemUrlMenu() {
+        this.selTrSystemUrl = new ArrayList<>();
+        List<TrSystemUrl> allUrl = ejbTrSystemUrlFacade.findAll();
+        for (TrSystemUrl tsu : allUrl) {
+            this.selTrSystemUrl.add(new SelectItem(tsu.getSystemCode(), tsu.getSystemName()));
+        }
+    }
+
+    private void setItemDetail() {
+        this.detail = ejbTrParameterInfoFacade.findByTrCode(this.currentItem.getTrCode());
+        TrSystemUrl entity = this.ejbTrSystemUrlFacade.find(this.currentItem.getSystemCode());
+        this.currentItem.setSystemName(entity.getSystemName());
+        this.currentItem.setSystemUrl(entity.getSystemUrl());
     }
 
     private void addMessage(String summary, String detail) {

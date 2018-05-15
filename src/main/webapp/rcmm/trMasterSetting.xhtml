@@ -59,7 +59,12 @@
 							<p:outputLabel value="電文用途說明" />
 							<p:outputLabel
 								value="#{trMasterSetController.currentItem.trDesc}" />
-							<p:outputLabel />
+							<p:outputLabel value="TR電文規屬系統" />
+							<p:outputLabel
+								value="#{trMasterSetController.currentItem.systemName}" />
+							<p:outputLabel value="TR電文URL" />
+							<p:outputLabel
+								value="#{trMasterSetController.currentItem.systemUrl}" />
 						</p:panelGrid>
 					</p:panelGrid>
 				</p:panelGrid>
@@ -106,15 +111,26 @@
 			appendTo="@(body)">
 			<h:form id="dialogForm">
 				<p:panelGrid columns="2" layout="grid"
-					columnClasses="ui-grid-col-4, ui-grid-col-10">
+					columnClasses="ui-grid-col-2, ui-grid-col-10">
 					<p:outputLabel value="TR電文代碼" />
 					<p:inputText value="#{trMasterSetController.item.trCode}"
 						maxlength="50" label="TR電文代碼" required="true"
-						requiredMessage="請輸入TR電文代碼" />
+						requiredMessage="請輸入TR電文代碼" size="20" />
 					<p:outputLabel value="電文用途說明" />
 					<p:inputTextarea value="#{trMasterSetController.item.trDesc}"
-						cols="20" maxlength="100" label="電文用途說明" required="true"
+						cols="40" maxlength="100" label="電文用途說明" required="true"
 						requiredMessage="請輸入電文用途說明" />
+					<p:outputLabel value="TR電文規屬系統" />
+					<p:selectOneMenu value="#{trMasterSetController.item.systemCode}"
+						label="欄位型態"
+						valueChangeListener="#{trMasterSetController.onTrSystemUrlChange}">
+						<p:ajax event="change" process="@this"
+							update=":dialogForm:lelSystemUrl" immediate="true" />
+						<f:selectItems value="#{trMasterSetController.selTrSystemUrl}" />
+					</p:selectOneMenu>
+					<p:outputLabel value="TR電文URL" />
+					<p:outputLabel id="lelSystemUrl"
+						value="#{trMasterSetController.item.systemUrl}" />
 				</p:panelGrid>
 				<p:panelGrid columns="1">
 					<p:panelGrid columns="2">
@@ -167,7 +183,7 @@
 							</p:inputNumber>
 						</p:column>
 						<p:column headerText="小數位數" width="8%">
-							<p:inputNumber id="txtDecDigit" size="2" minValue="1" 
+							<p:inputNumber id="txtDecDigit" size="2" minValue="1"
 								maxValue="99" value="#{detail.parameterDataDecDigit}"
 								rendered="#{detail.parameterDataType=='9'}" label="小數位數"
 								required="#{detail.parameterDataType=='9'}"
