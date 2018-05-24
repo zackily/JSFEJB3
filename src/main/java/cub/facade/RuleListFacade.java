@@ -64,6 +64,10 @@ public class RuleListFacade extends AbstractFacade<RuleList> {
             .append(" on D.RULE_NO=A.RULE_NO and D.CHANNEL_CODE=?")
             .append(" join RULE_CHECKTIME E")
             .append(" on E.RULE_NO=A.RULE_NO and E.CHECK_TIME=?")
+            .append(" join RULE_ORDER_PAGE F")
+            .append(" on F.RULE_NO=A.RULE_NO and (F.ORDER_PAGE =? or ?=0)")
+            .append(" join RULE_ORDER_COLUMN G")
+            .append(" on G.RULE_NO=A.RULE_NO and (G.ORDER_COLUMN =? or ?=0)")
             .append(" WHERE A.START_DATE <=?")
             .append(" and A.END_DATE>=?")
             .append(" and IS_LOCK=1");
@@ -72,8 +76,12 @@ public class RuleListFacade extends AbstractFacade<RuleList> {
         query.setParameter(2, request.getTradeType());
         query.setParameter(3, channelCode);
         query.setParameter(4, request.getCheckTiming());
-        query.setParameter(5, request.getOrderDttm());
-        query.setParameter(6, request.getOrderDttm());
+        query.setParameter(5, request.getOrderPage());
+        query.setParameter(6, request.getOrderPage());
+        query.setParameter(7, request.getOrderColumn());
+        query.setParameter(8, request.getOrderColumn());
+        query.setParameter(9, request.getOrderDttm());
+        query.setParameter(10, request.getOrderDttm());
         return query.getResultList();
     }
 

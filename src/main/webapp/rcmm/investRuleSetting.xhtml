@@ -249,7 +249,7 @@
 		</h:form>
 		<p:dialog id="createDialog"
 			header="#{investRuleSetController.editDialogLabel}"
-			widgetVar="createDialog" modal="true" height="950" width="1100"
+			widgetVar="createDialog" modal="true" height="800" width="1100"
 			appendTo="@(body)">
 			<h:form id="dialogForm">
 				<p:panelGrid columns="1" style="width: 100%">
@@ -328,8 +328,8 @@
 								actionListener="#{investRuleSetController.selectAllRuleChannel}"
 								update=":growl :mainForm :dialogForm:selRuleChannel" />
 						</p:panelGrid>
-						<p:panelGrid columns="6" layout="grid"
-							columnClasses="ui-grid-col-1, ui-grid-col-4,ui-grid-col-1, ui-grid-col-4,ui-grid-col-1, ui-grid-col-4">
+						<p:panelGrid columns="4" layout="grid"
+							columnClasses="ui-grid-col-1, ui-grid-col-5,ui-grid-col-1, ui-grid-col-5">
 							<h:outputLabel value="檢核時點" />
 							<p:selectManyCheckbox label="檢核時點" requiredMessage="請選擇檢核時點"
 								required="true"
@@ -338,15 +338,13 @@
 									value="#{investRuleSetController.ruleChecktimeList}" />
 							</p:selectManyCheckbox>
 							<h:outputLabel value="檢核頁面" />
-							<p:selectManyCheckbox label="檢核頁面" requiredMessage="請選擇檢核頁面"
-								required="true"
+							<p:selectManyCheckbox label="檢核頁面"
 								value="#{investRuleSetController.tempRuleOrderPage}">
 								<f:selectItems
 									value="#{investRuleSetController.ruleOrderPageList}" />
 							</p:selectManyCheckbox>
 							<h:outputLabel value="檢核欄位" />
-							<p:selectManyCheckbox label="檢核欄位" requiredMessage="請選擇檢核欄位"
-								required="true"
+							<p:selectManyCheckbox label="檢核欄位"
 								value="#{investRuleSetController.tempRuleOrderColumn}">
 								<f:selectItems
 									value="#{investRuleSetController.ruleOrderColumnList}" />

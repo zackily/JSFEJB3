@@ -9,58 +9,57 @@ import javax.persistence.*;
  */
 @Embeddable
 public class RuleOrderPagePK implements Serializable {
-    // default serial version id, required for serializable classes.
-    private static final long serialVersionUID = 1L;
+	// default serial version id, required for serializable classes.
+	private static final long serialVersionUID = 1L;
 
-    @Column(name = "RULE_NO")
-    private String ruleNo;
+	@Column(name = "RULE_NO")
+	private String ruleNo;
 
-    @Column(name = "CHECK_PAGE")
-    private long checkPage;
+	@Column(name = "ORDER_PAGE")
+	private long orderPage;
 
-    public RuleOrderPagePK() {
-    }
+	public RuleOrderPagePK(String ruleNo, long orderPage) {
+		super();
+		this.ruleNo = ruleNo;
+		this.orderPage = orderPage;
+	}
 
-    public RuleOrderPagePK(String ruleNo, long checkPage) {
-        super();
-        this.ruleNo = ruleNo;
-        this.checkPage = checkPage;
-    }
+	public RuleOrderPagePK() {
+	}
 
-    public String getRuleNo() {
-        return this.ruleNo;
-    }
+	public String getRuleNo() {
+		return this.ruleNo;
+	}
 
-    public void setRuleNo(String ruleNo) {
-        this.ruleNo = ruleNo;
-    }
+	public void setRuleNo(String ruleNo) {
+		this.ruleNo = ruleNo;
+	}
 
-    public long getCheckPage() {
-        return this.checkPage;
-    }
+	public long getOrderPage() {
+		return this.orderPage;
+	}
 
-    public void setCheckPage(long checkPage) {
-        this.checkPage = checkPage;
-    }
+	public void setOrderPage(long orderPage) {
+		this.orderPage = orderPage;
+	}
 
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (!(other instanceof RuleOrderPagePK)) {
-            return false;
-        }
-        RuleOrderPagePK castOther = (RuleOrderPagePK) other;
-        return this.ruleNo.equals(castOther.ruleNo)
-                && (this.checkPage == castOther.checkPage);
-    }
+	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
+		if (!(other instanceof RuleOrderPagePK)) {
+			return false;
+		}
+		RuleOrderPagePK castOther = (RuleOrderPagePK) other;
+		return this.ruleNo.equals(castOther.ruleNo) && (this.orderPage == castOther.orderPage);
+	}
 
-    public int hashCode() {
-        final int prime = 31;
-        int hash = 17;
-        hash = hash * prime + this.ruleNo.hashCode();
-        hash = hash * prime + ((int) (this.checkPage ^ (this.checkPage >>> 32)));
+	public int hashCode() {
+		final int prime = 31;
+		int hash = 17;
+		hash = hash * prime + this.ruleNo.hashCode();
+		hash = hash * prime + ((int) (this.orderPage ^ (this.orderPage >>> 32)));
 
-        return hash;
-    }
+		return hash;
+	}
 }

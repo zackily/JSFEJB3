@@ -4,23 +4,19 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 	<h:head>
-		<title><ui:insert name="title">Invalid user name or password.</ui:insert></title>
+		<title><ui:insert name="title">Oops......</ui:insert></title>
 		<h:outputStylesheet library="css" name="jsfcrud.css" />
 		<h:outputScript library="js" name="jsfcrud.js" />
 	</h:head>
 	<p:growl id="growl" life="3000" />
 	<p:layout fullPage="true">
 		<p:layoutUnit position="center">
-
+			<h2>Oops...</h2>
 			<h:form id="mainForm" style="width: 50%">
-				<p:panel header="Invalid user name or password."
-					style="align: center">
-					<p:panelGrid columns="1" layout="grid">
-						<p:outputLabel
-							value="Please enter a user name or password that is authorized to access this application." />
-						<p:link outcome="index" value="Return to login page" />
-					</p:panelGrid>
-				</p:panel>
+				<p:panelGrid columns="1" layout="grid">
+					<h3>請重新回到登入頁</h3>
+					<p:link outcome="index" value="回登入貢" />
+				</p:panelGrid>
 			</h:form>
 		</p:layoutUnit>
 

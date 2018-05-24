@@ -20,7 +20,6 @@ public abstract class AbstractController {
     public void checkSession(UserSession session) throws IOException {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         if (null == session.getUser()) {
-            ec.redirect(ec.getRequestContextPath());
             ec.redirect(ec.getRequestContextPath() + "/faces/error.xhtml");
         } else {
             logger.debug("emp id = " + session.getUser().getEmpId());

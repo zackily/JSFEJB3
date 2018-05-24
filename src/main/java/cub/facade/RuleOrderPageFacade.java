@@ -35,7 +35,7 @@ public class RuleOrderPageFacade extends AbstractFacade<RuleOrderPage> {
 
     public List<RuleOrderPage> findAllSort() {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from RuleOrderPage r order by r.id.ruleNo r.id.checkPage asc");
+        jpql.append("from RuleOrderPage r order by r.id.ruleNo r.id.orderPage asc");
         Query query = em.createQuery(jpql.toString());
         return query.getResultList();
     }
@@ -44,7 +44,7 @@ public class RuleOrderPageFacade extends AbstractFacade<RuleOrderPage> {
         StringBuilder jpql = new StringBuilder(100);
         jpql.append("select rdi.ITEM_NAME from RD_OPTION_ITEM rdi ")
             .append("right join RULE_ORDER_PAGE rp on rdi.ITEM_CODE = ")
-            .append("rp.CHECK_PAGE where rp.RULE_NO=? and rdi.CLASS_CODE=14");
+            .append("rp.ORDER_PAGE where rp.RULE_NO=? and rdi.CLASS_CODE=14");
         Query query = em.createNativeQuery(jpql.toString());
         query.setParameter(1, ruleNo);
         return query.getResultList();

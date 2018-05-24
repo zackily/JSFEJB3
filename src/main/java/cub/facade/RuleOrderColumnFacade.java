@@ -36,7 +36,7 @@ public class RuleOrderColumnFacade extends AbstractFacade<RuleOrderColumn> {
 
     public List<RuleOrderColumn> findAllSort() {
         StringBuilder jpql = new StringBuilder(100);
-        jpql.append("from RuleOrderColumn r order by r.id.ruleNo r.id.checkColumn asc");
+        jpql.append("from RuleOrderColumn r order by r.id.ruleNo r.id.orderColumn asc");
         Query query = em.createQuery(jpql.toString());
         return query.getResultList();
     }
@@ -45,7 +45,7 @@ public class RuleOrderColumnFacade extends AbstractFacade<RuleOrderColumn> {
         StringBuilder jpql = new StringBuilder(100);
         jpql.append("select rdi.ITEM_NAME from RD_OPTION_ITEM rdi ")
             .append("right join RULE_ORDER_COLUMN rp on rdi.ITEM_CODE = ")
-            .append("rp.CHECK_COLUMN where rp.RULE_NO=? and rdi.CLASS_CODE=15");
+            .append("rp.ORDER_COLUMN where rp.RULE_NO=? and rdi.CLASS_CODE=15");
         Query query = em.createNativeQuery(jpql.toString());
         query.setParameter(1, ruleNo);
         return query.getResultList();

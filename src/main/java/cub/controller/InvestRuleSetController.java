@@ -44,11 +44,11 @@ import cub.facade.DataScopeMasterFacade;
 import cub.facade.RdOptionItemFacade;
 import cub.facade.RuleChannelFacade;
 import cub.facade.RuleChecktimeFacade;
-import cub.facade.RuleOrderPageFacade;
-import cub.facade.RuleOrderColumnFacade;
 import cub.facade.RuleDividendFacade;
 import cub.facade.RuleDivisorFacade;
 import cub.facade.RuleListFacade;
+import cub.facade.RuleOrderColumnFacade;
+import cub.facade.RuleOrderPageFacade;
 import cub.facade.RuleProductFacade;
 import cub.facade.RuleTradeTypeFacade;
 import cub.facade.UdDataScopeMasterFacade;
@@ -839,7 +839,7 @@ public class InvestRuleSetController extends AbstractController implements Seria
             ejbRuleChecktimeFacade.create(rc);
         }
         for (Object o : tempRuleOrderPage) {
-            RuleOrderPagePK pk = new RuleOrderPagePK(ruleNo, Short.valueOf(o.toString()));
+            RuleOrderPagePK pk = new RuleOrderPagePK(ruleNo, Long.valueOf(o.toString()));
             RuleOrderPage rc = new RuleOrderPage();
             rc.setId(pk);
             rc.setLogDttm(new Date());
